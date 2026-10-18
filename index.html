@@ -2069,6 +2069,43 @@
     font-size: .8rem;
     font-weight: 800;
   }
+
+  /* ── BAIOO Computer Diagnostics Hub (#repair 전용 스타일) ── */
+  #repair {
+    --ai-cyan: #10B981;
+    --ai-indigo: #0EA5E9;
+    --ai-emerald: #34D399;
+    --ai-glow: rgba(16, 185, 129, .18);
+  }
+  #repair .ai-lead-sub,
+  #repair .pet-diary-subhead h3,
+  #repair .ai-result-count {
+    color: #E2E8F0;
+  }
+  #repair .tag.repair {
+    background: rgba(16, 185, 129, .24);
+    color: #6EE7B7;
+  }
+  #repair .ai-card:hover {
+    border-color: rgba(16, 185, 129, .5);
+  }
+  .rp-cmd-pill {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 7px 12px;
+    border-radius: 10px;
+    background: #0F172A;
+    border: 1px solid rgba(16, 185, 129, .32);
+    color: #34D399;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: .78rem;
+    font-weight: 800;
+  }
 </style>
 </head>
 <body>
@@ -2373,19 +2410,81 @@
     <a href="#home" class="back-btn">← 홈으로</a>
 
     <div class="sec-head">
-      <span class="tag repair">REPAIR</span>
-      <h2>컴퓨터 고장 수리 & 상담</h2>
-      <button type="button" class="section-add-btn repair-add" data-category="repair">＋ 새 글 등록</button>
+      <span class="tag repair">COMPUTER DIAGNOSTICS</span>
+      <h2>Computer Diagnostics &amp; Tuning</h2>
+      <p class="ai-lead-sub">느려진 PC 원클릭 자가진단 명령어부터 블루스크린 해결, 로컬 AI 구동용 하드웨어 최적화 가이드를 배포합니다</p>
     </div>
 
-    <div class="user-post-grid" id="repairUserPosts"></div>
-
-    <div class="cat-grid">
-      <div class="cat">
-        <div class="icon-large">⚙️</div>
-        <h3>느려진 PC 포맷·</h3>
+    <div class="ai-hero-banner">
+      <div class="ai-banner-left">
+        <span class="ai-banner-badge">🛠️ BAIOO SYSTEM DIAGNOSTICS</span>
+        <h3>복잡한 PC 고장과 성능 저하, 검증된 명령어로 즉시 진단하세요</h3>
+        <p>윈도우 시스템 파일 복구, 부팅 불량·블루스크린 원인 판독, VRAM/메모리 최적화, 네트워크 리셋 스크립트를 원클릭으로 복사해 실행할 수 있습니다.</p>
+        <div class="ai-banner-actions">
+          <button type="button" class="ai-btn-primary" id="rpOpenAddBtn">✨ 새 진단 레시피 배포</button>
+          <button type="button" class="ai-btn-ghost" id="rpFilterBookmarkedBtn">♥ 관심 진단법 모아보기</button>
+          <button type="button" class="ai-btn-ghost section-add-btn" data-category="repair" style="margin:0;color:var(--text-strong);">📝 수리·상담 글 등록</button>
+        </div>
+      </div>
+      <div class="ai-stats-grid">
+        <div class="ai-stat-box">
+          <span class="ai-stat-num" id="rpStatTotal">6</span>
+          <span class="ai-stat-label">배포된 진단 솔루션</span>
+        </div>
+        <div class="ai-stat-box">
+          <span class="ai-stat-num" id="rpStatLive">6</span>
+          <span class="ai-stat-label">실전 검증 스크립트</span>
+        </div>
+        <div class="ai-stat-box">
+          <span class="ai-stat-num" id="rpStatLikes">0</span>
+          <span class="ai-stat-label">누적 해결·저장</span>
+        </div>
       </div>
     </div>
+
+    <div class="ai-toolbar">
+      <div class="ai-toolbar-top">
+        <div class="ai-search-wrap">
+          <span class="ai-search-icon" aria-hidden="true">🔍</span>
+          <input type="search" id="rpSearchInput" class="ai-search-input" placeholder="포맷, 블루스크린, 느려짐, DISM, 그래픽카드, 네트워크 검색..." aria-label="진단 솔루션 검색">
+        </div>
+        <div class="ai-select-group">
+          <select id="rpStatusSelect" class="ai-select" aria-label="상태 필터">
+            <option value="all">모든 등급 (All)</option>
+            <option value="live">⚡ LIVE 즉시실행</option>
+            <option value="beta">🧪 PRO 고급튜닝</option>
+            <option value="concept">📐 GUIDE 점검표</option>
+          </select>
+          <select id="rpSortSelect" class="ai-select" aria-label="정렬 기준">
+            <option value="newest">최신 등록순</option>
+            <option value="popular">인기·해결순</option>
+            <option value="title">이름순 (가나다)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="ai-cat-bar" id="rpCategoryBar" role="tablist" aria-label="진단 카테고리 필터">
+        <button type="button" class="ai-cat-btn active" data-cat="all">전체 보기</button>
+        <button type="button" class="ai-cat-btn" data-cat="speed">⚡ 윈도우·속도 최적화</button>
+        <button type="button" class="ai-cat-btn" data-cat="bsod">🛠️ 부팅·블루스크린</button>
+        <button type="button" class="ai-cat-btn" data-cat="hw">🖥️ GPU·로컬AI 튜닝</button>
+        <button type="button" class="ai-cat-btn" data-cat="net">🌐 네트워크·포트 점검</button>
+        <button type="button" class="ai-cat-btn" data-cat="clean">🔒 클린 포맷·백업</button>
+      </div>
+    </div>
+
+    <div class="ai-status-bar">
+      <div class="ai-active-chips" id="rpActiveChips"></div>
+      <div class="ai-result-count" id="rpResultCount">총 6개의 진단 솔루션</div>
+    </div>
+
+    <div class="ai-idea-grid" id="rpIdeaGrid"></div>
+
+    <div class="pet-diary-subhead">
+      <h3>📝 사용자 수리·상담 기록</h3>
+      <button type="button" class="section-add-btn repair-add" data-category="repair" style="margin:0;">＋ 새 글 등록</button>
+    </div>
+    <div class="user-post-grid" id="repairUserPosts"></div>
   </div>
 </section>
 
@@ -5631,6 +5730,440 @@
       customTrips.unshift(newItem);
       saveJson(STORAGE_CUSTOM, customTrips);
       showToast("🧭 새 여행 코스가 배포되었습니다!");
+      renderAll();
+    });
+  }
+
+  if (catBar) {
+    $$(".ai-cat-btn", catBar).forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        state.category = btn.getAttribute("data-cat") || "all";
+        syncControls(); renderAll();
+      });
+    });
+  }
+  if (statusSelect) statusSelect.addEventListener("change", function () { state.status = statusSelect.value || "all"; renderAll(); });
+  if (sortSelect) sortSelect.addEventListener("change", function () { state.sort = sortSelect.value || "newest"; renderAll(); });
+  if (searchInput) searchInput.addEventListener("input", function () { state.query = searchInput.value || ""; renderAll(); });
+  if (bookmarkBtn) bookmarkBtn.addEventListener("click", function () { state.bookmarkedOnly = !state.bookmarkedOnly; syncControls(); renderAll(); });
+
+  renderAll();
+})();
+
+/* ===== BAIOO Computer Diagnostics & Tuning Hub (#repair 필터·검색·명령어복사·등록) ===== */
+(function () {
+  "use strict";
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+
+  var STORAGE_CUSTOM = "baioo_rp_custom_v1";
+  var STORAGE_LIKES = "baioo_rp_likes_v1";
+
+  var CAT_META = {
+    speed: { label: "윈도우·속도 최적화", emoji: "⚡", gradient: "linear-gradient(135deg, #10B981 0%, #059669 100%)" },
+    bsod:  { label: "부팅·블루스크린",    emoji: "🛠️", gradient: "linear-gradient(135deg, #F43F5E 0%, #E11D48 100%)" },
+    hw:    { label: "GPU·로컬AI 튜닝",    emoji: "🖥️", gradient: "linear-gradient(135deg, #0EA5E9 0%, #2563EB 100%)" },
+    net:   { label: "네트워크·포트 점검", emoji: "🌐", gradient: "linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)" },
+    clean: { label: "클린 포맷·백업",     emoji: "🔒", gradient: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)" }
+  };
+
+  var STATUS_META = {
+    live:    { label: "⚡ LIVE 즉시실행", cls: "live" },
+    beta:    { label: "🧪 PRO 고급튜닝",  cls: "beta" },
+    concept: { label: "📐 GUIDE 점검표",  cls: "concept" }
+  };
+
+  var SEED_DIAGS = [
+    {
+      id: "rp-seed-1",
+      code: "DIAG-001",
+      version: "v2.2",
+      status: "live",
+      category: "bsod",
+      cmd: "DISM /Online /Cleanup-Image /RestoreHealth && sfc /scannow",
+      title: "윈도우 시스템 손상·프리징 원클릭 무결성 복구",
+      summary: "포맷하기 전에 가장 먼저 실행해야 할 필수 공식 복구 명령어. 깨진 윈도우 커널 파일과 업데이트 캐시를 자동으로 검증하고 치료합니다.",
+      tags: ["SFC", "DISM", "블루스크린", "프리징해결"],
+      date: "2026-10-19",
+      baseLikes: 58,
+      prompt: "# 관리자 권한 PowerShell 또는 CMD에서 복사·실행\nDISM.exe /Online /Cleanup-image /Restorehealth\nsfc /scannow\n\n# 완료 후 재부팅하면 손상된 시스템 파일이 원본으로 자동 복구됩니다."
+    },
+    {
+      id: "rp-seed-2",
+      code: "DIAG-002",
+      version: "v1.9",
+      status: "live",
+      category: "speed",
+      cmd: "powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61",
+      title: "느려진 PC 체감 속도 200% 향상 & 최고의 성능 활성화",
+      summary: "숨겨진 윈도우 '최고의 성능(Ultimate Performance)' 전원 옵션을 깨우고 불필요한 백그라운드 시작프로그램과 임시 캐시를 정리하는 패키지.",
+      tags: ["속도최적화", "최고의성능", "렉제거", "윈도우튜닝"],
+      date: "2026-10-19",
+      baseLikes: 51,
+      prompt: "[PC 속도 즉시 향상 3단계 스크립트]\n1. 최고의 성능 전원 플랜 잠금 해제:\npowercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61\n2. 임시 파일 일괄 정리: Win + R → %temp% 삭제\n3. 작업 관리자(Ctrl+Shift+Esc) → 시작프로그램 불필요 항목 '사용 안 함'"
+    },
+    {
+      id: "rp-seed-3",
+      code: "DIAG-003",
+      version: "v1.6",
+      status: "live",
+      category: "hw",
+      cmd: "nvidia-smi -l 2  |  winget upgrade --all",
+      title: "로컬 AI(LLM) 구동용 GPU VRAM & 프로세스 최적화",
+      summary: "Ollama, llama.cpp 등 로컬 AI 모델 실행 시 VRAM 부족으로 속도가 급락할 때 백그라운드 GPU 점유 앱을 찾아 정리하는 실전 가이드.",
+      tags: ["GPU진단", "VRAM최적화", "로컬AI", "NVIDIA"],
+      date: "2026-10-18",
+      baseLikes: 45,
+      prompt: "[로컬 AI 구동 전 GPU/포트 클린 체크]\n1. 실시간 VRAM 점유 프로세스 확인:\nnvidia-smi\n2. 포트 충돌(8080 / 11434) 프로세스 확인:\nnetstat -ano | findstr :11434\n3. 브라우저 하드웨어 가속 일시 해제로 가용 VRAM 1~2GB 추가 확보"
+    },
+    {
+      id: "rp-seed-4",
+      code: "DIAG-004",
+      version: "v1.4",
+      status: "live",
+      category: "net",
+      cmd: "ipconfig /flushdns && netsh winsock reset",
+      title: "인터넷 끊김·특정 사이트 접속 불가 10초 초기화",
+      summary: "공유기는 정상인데 특정 웹페이지가 안 열리거나 핑이 튈 때 DNS 캐시와 꼬인 윈속(Winsock) 네트워크 스택을 깨끗하게 리셋합니다.",
+      tags: ["네트워크초기화", "DNS리셋", "인터넷끊김", "핑안정화"],
+      date: "2026-10-18",
+      baseLikes: 39,
+      prompt: "# 관리자 권한 CMD/PowerShell 네트워크 4종 리셋\nipconfig /release\nipconfig /renew\nipconfig /flushdns\nnetsh winsock reset\nnetsh int ip reset"
+    },
+    {
+      id: "rp-seed-5",
+      code: "DIAG-005",
+      version: "v1.2",
+      status: "beta",
+      category: "bsod",
+      cmd: "chkdsk C: /f /r  |  mdsched.exe",
+      title: "전원 켜짐 불량·재부팅 무한루프 하드웨어 자가진단",
+      summary: "컴퓨터 전원은 들어오는데 화면이 안 나올 때(No Signal) 램(RAM) 접촉 불량 클리닝부터 SSD 배드섹터·파워 점검까지 순서대로 잡는 표준 매뉴얼.",
+      tags: ["부팅불량", "램접촉불량", "SSD점검", "하드웨어진단"],
+      date: "2026-10-17",
+      baseLikes: 42,
+      prompt: "[화면 안 나옴 / 부팅 불량 3분 응급 처치]\n1순위 (성공률 70%): 전원 코드 분리 → RAM(메모리) 탈거 후 금도금 단자를 지우개로 문지른 뒤 '딸깍' 소리 나게 재장착\n2순위: 그래픽카드 보조전원 케이블 및 DP/HDMI가 메인보드가 아닌 그래픽카드 단자에 꽂혔는지 확인\n3순위: 윈도우 진입 시 mdsched.exe(메모리 진단) 실행"
+    },
+    {
+      id: "rp-seed-6",
+      code: "DIAG-006",
+      version: "v1.0",
+      status: "concept",
+      category: "clean",
+      cmd: "winget export -o my_apps.json",
+      title: "데이터 손실 0% 클린 포맷 & 10분 원상복구 체크리스트",
+      summary: "포맷 전 놓치기 쉬운 공인인증서·브라우저 프로필·설치 프로그램 목록을 파일 하나로 백업하고 클린 설치 후 한 번에 복원하는 비법.",
+      tags: ["클린포맷", "백업체크리스트", "Winget", "초기화"],
+      date: "2026-10-16",
+      baseLikes: 37,
+      prompt: "[후회 없는 클린 포맷 사전 백업 공식]\n1. 설치된 모든 프로그램 목록 추출:\nwinget export -o C:\\backup_apps.json\n2. 필수 백업 폴더 3대장: 바탕화면, 문서(Documents), 다운로드, 브라우저 북마크 동기화 확인\n3. 포맷 후 일괄 재설치:\nwinget import -i C:\\backup_apps.json"
+    }
+  ];
+
+  var state = { category: "all", status: "all", sort: "newest", query: "", bookmarkedOnly: false };
+
+  function loadJson(k, fb) { try { var r = localStorage.getItem(k); return r ? JSON.parse(r) : fb; } catch (e) { return fb; } }
+  function saveJson(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+  var customDiags = loadJson(STORAGE_CUSTOM, []);
+  if (!Array.isArray(customDiags)) customDiags = [];
+  var likedMap = loadJson(STORAGE_LIKES, {});
+  if (!likedMap || typeof likedMap !== "object") likedMap = {};
+
+  function getAll() { return customDiags.concat(SEED_DIAGS); }
+  function getLikes(item) { return Number(item.baseLikes || 0) + (likedMap[item.id] ? 1 : 0); }
+
+  var gridEl = $("#rpIdeaGrid");
+  var searchInput = $("#rpSearchInput");
+  var statusSelect = $("#rpStatusSelect");
+  var sortSelect = $("#rpSortSelect");
+  var catBar = $("#rpCategoryBar");
+  var chipsEl = $("#rpActiveChips");
+  var countEl = $("#rpResultCount");
+  var statTotalEl = $("#rpStatTotal");
+  var statLiveEl = $("#rpStatLive");
+  var statLikesEl = $("#rpStatLikes");
+  var bookmarkBtn = $("#rpFilterBookmarkedBtn");
+  var openAddBtn = $("#rpOpenAddBtn");
+  var toastEl = $("#aiToast");
+
+  function showToast(msg) {
+    if (!toastEl) return;
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    setTimeout(function () { toastEl.classList.remove("show"); }, 2300);
+  }
+
+  function copyText(text, msg) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { showToast(msg); });
+    } else {
+      showToast(msg);
+    }
+  }
+
+  function openDiagDetail(item) {
+    var dlg = $("#aiDetailDialog");
+    if (!dlg) return;
+    var sMeta = STATUS_META[item.status] || STATUS_META.live;
+    var st = $("#aiDetailStatus");
+    if (st) { st.className = "ai-status-pill " + sMeta.cls; st.textContent = sMeta.label; }
+    var cd = $("#aiDetailCode");
+    if (cd) cd.textContent = (item.code || "DIAG") + " · " + (item.version || "v1.0");
+    var dt = $("#aiDetailDate");
+    if (dt) dt.textContent = "🗓 " + (item.date || "2026-10-19");
+    var tt = $("#aiDetailTitle");
+    if (tt) tt.textContent = item.title;
+    var sm = $("#aiDetailSummary");
+    if (sm) sm.textContent = (item.cmd ? "[핵심 명령어: " + item.cmd + "] " : "") + item.summary;
+    var tgWrap = $("#aiDetailTags");
+    if (tgWrap) {
+      tgWrap.textContent = "";
+      (item.tags || []).forEach(function (t) {
+        var s = document.createElement("span");
+        s.className = "ai-tag-item";
+        s.textContent = "#" + t;
+        tgWrap.appendChild(s);
+      });
+    }
+    var pr = $("#aiDetailPrompt");
+    if (pr) pr.textContent = item.prompt || item.summary;
+    var delBtn = $("#aiDeleteCustomBtn");
+    if (delBtn) delBtn.hidden = true;
+    if (!dlg.open) dlg.showModal();
+  }
+
+  function syncControls() {
+    if (searchInput && searchInput.value !== state.query) searchInput.value = state.query;
+    if (statusSelect) statusSelect.value = state.status;
+    if (sortSelect) sortSelect.value = state.sort;
+    if (bookmarkBtn) bookmarkBtn.classList.toggle("active", state.bookmarkedOnly);
+    if (catBar) {
+      $$(".ai-cat-btn", catBar).forEach(function (b) {
+        b.classList.toggle("active", b.getAttribute("data-cat") === state.category);
+      });
+    }
+  }
+
+  function renderAll() {
+    if (!gridEl) return;
+    var all = getAll();
+    var liveCnt = 0, likeCnt = 0;
+    all.forEach(function (x) {
+      if (x.status === "live") liveCnt++;
+      likeCnt += getLikes(x);
+    });
+    if (statTotalEl) statTotalEl.textContent = String(all.length);
+    if (statLiveEl) statLiveEl.textContent = String(liveCnt);
+    if (statLikesEl) statLikesEl.textContent = String(likeCnt);
+
+    if (chipsEl) {
+      chipsEl.textContent = "";
+      function addChip(txt, fn) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "ai-chip";
+        b.textContent = txt + " ×";
+        b.addEventListener("click", fn);
+        chipsEl.appendChild(b);
+      }
+      if (state.category !== "all") {
+        addChip("카테고리: " + (CAT_META[state.category] ? CAT_META[state.category].label : state.category), function () {
+          state.category = "all"; syncControls(); renderAll();
+        });
+      }
+      if (state.status !== "all") {
+        addChip("등급: " + (STATUS_META[state.status] ? STATUS_META[state.status].label : state.status), function () {
+          state.status = "all"; syncControls(); renderAll();
+        });
+      }
+      if (state.bookmarkedOnly) {
+        addChip("♥ 관심 진단법", function () {
+          state.bookmarkedOnly = false; syncControls(); renderAll();
+        });
+      }
+      if (state.query.trim()) {
+        addChip("검색: \"" + state.query.trim() + "\"", function () {
+          state.query = ""; syncControls(); renderAll();
+        });
+      }
+    }
+
+    var q = state.query.trim().toLowerCase();
+    var list = all.filter(function (item) {
+      if (state.category !== "all" && item.category !== state.category) return false;
+      if (state.status !== "all" && item.status !== state.status) return false;
+      if (state.bookmarkedOnly && !likedMap[item.id]) return false;
+      if (q) {
+        var hay = [item.title, item.summary, item.cmd, (item.tags || []).join(" ")].join(" ").toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+
+    list.sort(function (a, b) {
+      if (state.sort === "popular") return getLikes(b) - getLikes(a);
+      if (state.sort === "title") return String(a.title).localeCompare(String(b.title), "ko");
+      return String(b.date || "").localeCompare(String(a.date || ""));
+    });
+
+    if (countEl) countEl.textContent = "총 " + list.length + "개의 진단 솔루션";
+    gridEl.textContent = "";
+
+    if (!list.length) {
+      var emp = document.createElement("div");
+      emp.className = "ai-empty-state";
+      emp.innerHTML = "<p>조건에 맞는 진단 솔루션이 없습니다.</p>";
+      var rb = document.createElement("button");
+      rb.type = "button";
+      rb.className = "ai-btn-primary";
+      rb.textContent = "필터 전체 초기화";
+      rb.addEventListener("click", function () {
+        state.category = "all"; state.status = "all"; state.query = ""; state.bookmarkedOnly = false;
+        syncControls(); renderAll();
+      });
+      emp.appendChild(rb);
+      gridEl.appendChild(emp);
+      return;
+    }
+
+    list.forEach(function (item) {
+      var card = document.createElement("article");
+      card.className = "ai-card";
+      card.tabIndex = 0;
+      card.addEventListener("mousemove", function (e) {
+        var r = card.getBoundingClientRect();
+        card.style.setProperty("--mx", (e.clientX - r.left) + "px");
+        card.style.setProperty("--my", (e.clientY - r.top) + "px");
+      });
+
+      var sMeta = STATUS_META[item.status] || STATUS_META.live;
+      var cMeta = CAT_META[item.category] || CAT_META.speed;
+
+      var top = document.createElement("div");
+      top.className = "ai-card-top";
+      var pill = document.createElement("span");
+      pill.className = "ai-status-pill " + sMeta.cls;
+      pill.textContent = sMeta.label;
+      var ver = document.createElement("span");
+      ver.className = "ai-version-code";
+      ver.textContent = (item.code || "DIAG") + " · " + (item.version || "v1.0");
+      top.appendChild(pill);
+      top.appendChild(ver);
+
+      var vis = document.createElement("div");
+      vis.className = "ai-card-visual";
+      vis.style.background = item.gradient || cMeta.gradient;
+      var em = document.createElement("span");
+      em.className = "ai-card-emoji";
+      em.textContent = item.emoji || cMeta.emoji;
+      var cl = document.createElement("span");
+      cl.className = "ai-card-cat-label";
+      cl.textContent = cMeta.label;
+      vis.appendChild(em);
+      vis.appendChild(cl);
+
+      var ttl = document.createElement("h3");
+      ttl.className = "ai-card-title";
+      ttl.textContent = item.title;
+
+      var cmdBox = document.createElement("div");
+      cmdBox.className = "rp-cmd-pill";
+      cmdBox.title = "클릭하여 진단 명령어 즉시 복사";
+      cmdBox.textContent = "> " + (item.cmd || "sfc /scannow");
+      cmdBox.addEventListener("click", function (e) {
+        e.stopPropagation();
+        copyText(item.cmd || item.prompt, "💻 명령어 [" + (item.cmd || "") + "] 복사 완료!");
+      });
+
+      var desc = document.createElement("p");
+      desc.className = "ai-card-desc";
+      desc.textContent = item.summary;
+
+      var tags = document.createElement("div");
+      tags.className = "ai-tag-list";
+      (item.tags || []).forEach(function (t) {
+        var sp = document.createElement("span");
+        sp.className = "ai-tag-item";
+        sp.textContent = "#" + t;
+        tags.appendChild(sp);
+      });
+
+      var foot = document.createElement("div");
+      foot.className = "ai-card-foot";
+
+      var isLiked = Boolean(likedMap[item.id]);
+      var likeB = document.createElement("button");
+      likeB.type = "button";
+      likeB.className = "ai-like-btn" + (isLiked ? " liked" : "");
+      likeB.textContent = (isLiked ? "♥ " : "♡ ") + getLikes(item);
+      likeB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (likedMap[item.id]) { delete likedMap[item.id]; showToast("관심 진단법에서 해제했습니다."); }
+        else { likedMap[item.id] = true; showToast("♥ 관심 진단법으로 저장했습니다!"); }
+        saveJson(STORAGE_LIKES, likedMap);
+        renderAll();
+      });
+
+      var acts = document.createElement("div");
+      acts.className = "ai-card-actions";
+      var cpB = document.createElement("button");
+      cpB.type = "button";
+      cpB.className = "ai-action-btn";
+      cpB.textContent = "📋 명령어 복사";
+      cpB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        copyText(item.prompt || item.cmd, "🛠️ [" + item.title + "] 진단 스크립트가 복사되었습니다!");
+      });
+      var dtB = document.createElement("button");
+      dtB.type = "button";
+      dtB.className = "ai-action-btn";
+      dtB.textContent = "상세 열기 →";
+      dtB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        openDiagDetail(item);
+      });
+      acts.appendChild(cpB);
+      acts.appendChild(dtB);
+      foot.appendChild(likeB);
+      foot.appendChild(acts);
+
+      card.appendChild(top);
+      card.appendChild(vis);
+      card.appendChild(ttl);
+      card.appendChild(cmdBox);
+      card.appendChild(desc);
+      card.appendChild(tags);
+      card.appendChild(foot);
+      card.addEventListener("click", function () { openDiagDetail(item); });
+      gridEl.appendChild(card);
+    });
+  }
+
+  if (openAddBtn) {
+    openAddBtn.addEventListener("click", function () {
+      var titleVal = window.prompt("새 PC 진단·최적화 제목을 입력하세요:", "윈도우 11 우클릭 클래식 메뉴 즉시 복원");
+      if (!titleVal || !titleVal.trim()) return;
+      var cmdVal = window.prompt("핵심 실행 명령어 한 줄:", "reg.exe add \"HKCU\\Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\\InprocServer32\" /f /ve") || "sfc /scannow";
+      var summaryVal = window.prompt("진단/해결 설명:", "더보기를 누르지 않아도 바로 전체 우클릭 메뉴가 뜨도록 레지스트리를 최적화합니다.") || "";
+      var newItem = {
+        id: "rp-custom-" + Date.now(),
+        code: "DIAG-" + String(getAll().length + 1).padStart(3, "0"),
+        version: "v1.0",
+        status: "live",
+        category: "speed",
+        cmd: cmdVal.trim(),
+        title: titleVal.trim(),
+        summary: summaryVal.trim() || titleVal.trim(),
+        tags: ["PC진단", "최적화", "BAIOO"],
+        date: new Date().toISOString().slice(0, 10),
+        baseLikes: 1,
+        prompt: "[" + titleVal.trim() + "]\n# 실행 명령어:\n" + cmdVal.trim() + "\n\n# 설명:\n" + (summaryVal.trim() || titleVal.trim())
+      };
+      customDiags.unshift(newItem);
+      saveJson(STORAGE_CUSTOM, customDiags);
+      showToast("🛠️ 새 진단 레시피가 배포되었습니다!");
       renderAll();
     });
   }
