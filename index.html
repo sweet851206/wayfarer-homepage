@@ -132,8 +132,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 24px;
+    gap: 16px;
     height: 68px;
+  }
+
+  header .container.nav {
+    width: min(1280px, calc(100% - 32px));
   }
 
   .logo {
@@ -156,7 +160,7 @@
   .nav-links {
     display: flex;
     align-items: center;
-    gap: 26px;
+    gap: 18px;
     list-style: none;
   }
 
@@ -166,6 +170,7 @@
     font-size: .94rem;
     color: #111;
     padding: 8px 2px;
+    white-space: nowrap;
     transition: color .2s ease;
   }
 
