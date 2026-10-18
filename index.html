@@ -2106,6 +2106,40 @@
     font-size: .78rem;
     font-weight: 800;
   }
+
+  /* ── BAIOO About & Vision Hub (#about 전용 스타일) ── */
+  #about {
+    --ai-cyan: #0284C7;
+    --ai-indigo: #14B8A6;
+    --ai-emerald: #6366F1;
+    --ai-glow: rgba(14, 165, 233, .15);
+  }
+  [data-theme="dark"] #about {
+    --ai-cyan: #38BDF8;
+    --ai-glow: rgba(56, 189, 248, .20);
+    background:
+      radial-gradient(45% 35% at 85% 15%, rgba(56,189,248,.18), transparent 70%),
+      radial-gradient(50% 40% at 10% 30%, rgba(45,212,191,.15), transparent 70%),
+      var(--bg);
+  }
+  [data-theme="dark"] .tag.about {
+    color: #7DD3FC;
+    background: rgba(56,189,248,.16);
+  }
+  .ab-highlight-pill {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    background: rgba(14, 165, 233, .12);
+    color: var(--ai-cyan);
+    font-size: .8rem;
+    font-weight: 800;
+  }
 </style>
 </head>
 <body>
@@ -2581,29 +2615,69 @@
     <a href="#home" class="back-btn">← 홈으로</a>
 
     <div class="sec-head">
-      <span class="tag about">ABOUT</span>
-      <h2>소개</h2>
+      <span class="tag about">ABOUT BAIOO</span>
+      <h2>About BAIOO &amp; Vision</h2>
+      <p class="ai-lead-sub">AI 세상을 바꾸는 찬란한 열쇠 — Brilliant AI, Infinite Possibilities</p>
     </div>
 
-    <div class="post-grid">
-      <div class="post">
-        <div class="icon-large">🗝️</div>
-        <h3>AI 세상을 바꾸는 찬란한 열쇠</h3>
-        <p>작은 시작이 큰 변화를 연다. 기록하고, 고치고, 쉬어가는 공간 — Wayfarer를 그대로 이어가는 곳입니다.</p>
+    <div class="ai-hero-banner">
+      <div class="ai-banner-left">
+        <span class="ai-banner-badge">🗝️ BAIOO MANIFESTO &amp; ECOSYSTEM</span>
+        <h3>작은 시작이 큰 변화를 연다, 아이디어를 세상에 배포하는 공간</h3>
+        <p>BAIOO(바이오)는 AI 워크플로우, 브랜딩 스튜디오, 여행 큐레이션, PC 자가진단, 스마트 펫케어까지 실전에서 검증된 아이디어를 누구나 복제·활용할 수 있도록 배포하는 크리에이티브 플랫폼입니다.</p>
+        <div class="ai-banner-actions">
+          <a href="#ai" class="ai-btn-primary">🚀 AI 허브 바로가기</a>
+          <a href="#branding" class="ai-btn-ghost">✨ 브랜딩 스튜디오</a>
+          <a href="#contact" class="ai-btn-ghost">💬 문의·제휴 안내</a>
+        </div>
       </div>
-
-      <div class="post">
-        <div class="icon-large">🧭</div>
-        <h3>세 개의 공간</h3>
-        <p>여행 기록(TRAVEL), 컴퓨터 수리·상담(REPAIR), 반려�토끼 토토의 일상(BUNNY). 글 등록은 각 섹션에서 직접 합니다.</p>
-      </div>
-
-      <div class="post">
-        <div class="icon-large">🐰</div>
-        <h3>운영 원칙</h3>
-        <p>PHP·Python 없이 정적 파일로 동작합니다. 외부 라이브러리 없음, 다크모드·모바일 지원, reduced-motion 준수.</p>
+      <div class="ai-stats-grid">
+        <div class="ai-stat-box">
+          <span class="ai-stat-num" id="abStatTotal">6</span>
+          <span class="ai-stat-label">핵심 아키텍처·원칙</span>
+        </div>
+        <div class="ai-stat-box">
+          <span class="ai-stat-num">5대</span>
+          <span class="ai-stat-label">전문 배포 허브</span>
+        </div>
+        <div class="ai-stat-box">
+          <span class="ai-stat-num" id="abStatLikes">0</span>
+          <span class="ai-stat-label">누적 응원·공감</span>
+        </div>
       </div>
     </div>
+
+    <div class="ai-toolbar">
+      <div class="ai-toolbar-top">
+        <div class="ai-search-wrap">
+          <span class="ai-search-icon" aria-hidden="true">🔍</span>
+          <input type="search" id="abSearchInput" class="ai-search-input" placeholder="BAIOO 뜻, 비전, 5대 섹션, 기술 스택, 운영 원칙 검색..." aria-label="BAIOO 소개 검색">
+        </div>
+        <div class="ai-select-group">
+          <select id="abSortSelect" class="ai-select" aria-label="정렬 기준">
+            <option value="newest">기본 순서</option>
+            <option value="popular">인기·공감순</option>
+            <option value="title">이름순 (가나다)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="ai-cat-bar" id="abCategoryBar" role="tablist" aria-label="소개 카테고리 필터">
+        <button type="button" class="ai-cat-btn active" data-cat="all">전체 보기</button>
+        <button type="button" class="ai-cat-btn" data-cat="vision">🗝️ 비전·브랜드 철학</button>
+        <button type="button" class="ai-cat-btn" data-cat="space">🧭 5대 허브 가이드</button>
+        <button type="button" class="ai-cat-btn" data-cat="tech">⚡ 기술 아키텍처</button>
+        <button type="button" class="ai-cat-btn" data-cat="history">📜 탄생 히스토리</button>
+        <button type="button" class="ai-cat-btn" data-cat="rule">🤝 운영·보안 원칙</button>
+      </div>
+    </div>
+
+    <div class="ai-status-bar">
+      <div class="ai-active-chips" id="abActiveChips"></div>
+      <div class="ai-result-count" id="abResultCount">총 6개의 BAIOO 스토리</div>
+    </div>
+
+    <div class="ai-idea-grid" id="abIdeaGrid"></div>
   </div>
 </section>
 
@@ -2622,7 +2696,7 @@
       <div class="post">
         <div class="icon-large">📋</div>
         <h3>수집하는 정보</h3>
-        <p>Wayfarer는 회원가입 없이 볼 수 있어 직접 개인정보를 받지 않습니다. 글 등록 시 입력한 제목·내용·사진은 사이트 표시용으로만 저장됩니다.</p>
+        <p>BAIOO는 회원가입 없이 볼 수 있어 직접 개인정보를 받지 않습니다. 글 등록 시 입력한 제목·내용·사진은 사이트 표시용으로만 저장됩니다.</p>
       </div>
 
       <div class="post">
@@ -2661,7 +2735,7 @@
       <div class="post">
         <div class="icon-large">🧭</div>
         <h3>운영자</h3>
-        <p>Wayfarer 운영자가 직접 답합니다. 여행·수리·토토 이야기도 환영합니다.</p>
+        <p>BAIOO 운영자가 직접 답합니다. AI·브랜딩·여행·PC진단·토토 이야기도 환영합니다.</p>
       </div>
     </div>
   </div>
@@ -6180,6 +6254,359 @@
   if (sortSelect) sortSelect.addEventListener("change", function () { state.sort = sortSelect.value || "newest"; renderAll(); });
   if (searchInput) searchInput.addEventListener("input", function () { state.query = searchInput.value || ""; renderAll(); });
   if (bookmarkBtn) bookmarkBtn.addEventListener("click", function () { state.bookmarkedOnly = !state.bookmarkedOnly; syncControls(); renderAll(); });
+
+  renderAll();
+})();
+
+/* ===== BAIOO About & Vision Hub (#about 필터·검색·원클릭 이동·복사) ===== */
+(function () {
+  "use strict";
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+
+  var STORAGE_LIKES = "baioo_ab_likes_v1";
+
+  var CAT_META = {
+    vision:  { label: "비전·브랜드 철학", emoji: "🗝️", gradient: "linear-gradient(135deg, #0284C7 0%, #2563EB 100%)" },
+    space:   { label: "5대 허브 가이드",  emoji: "🧭", gradient: "linear-gradient(135deg, #14B8A6 0%, #0EA5E9 100%)" },
+    tech:    { label: "기술 아키텍처",    emoji: "⚡", gradient: "linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)" },
+    history: { label: "탄생 히스토리",    emoji: "📜", gradient: "linear-gradient(135deg, #F43F5E 0%, #EC4899 100%)" },
+    rule:    { label: "운영·보안 원칙",   emoji: "🤝", gradient: "linear-gradient(135deg, #10B981 0%, #059669 100%)" }
+  };
+
+  var SEED_ABOUT = [
+    {
+      id: "ab-seed-1",
+      code: "BAIOO-VISION",
+      version: "CORE",
+      category: "vision",
+      highlight: "🗝️ Brilliant AI, Infinite Possibilities",
+      title: "AI 세상을 바꾸는 찬란한 열쇠, BAIOO",
+      summary: "작은 시작이 큰 변화를 엽니다. 머릿속에만 머물던 아이디어를 실제 작동하는 프롬프트·코드·가이드로 정제해 세상에 배포하는 개인 크리에이티브 플랫폼입니다.",
+      tags: ["BAIOO", "비전선언문", "아이디어배포", "찬란한열쇠"],
+      date: "2026-10-19",
+      baseLikes: 64,
+      jumpHash: "#ai",
+      jumpLabel: "AI 허브 이동 →",
+      prompt: "[BAIOO 브랜드 선언문]\n- 이름: BAIOO (발음: 비에이아이오오 / 약칭: 바이오)\n- 슬로건: Brilliant AI, Infinite Possibilities (찬란한 AI, 무한한 가능성)\n- 핵심 미션: 작은 시작이 큰 변화를 연다 — 개인의 창의적 아이디어를 즉시 복제 가능한 형태로 세상에 배포한다."
+    },
+    {
+      id: "ab-seed-2",
+      code: "BAIOO-HUBS",
+      version: "5-SECTIONS",
+      category: "space",
+      highlight: "🧭 AI · Branding · Travel · Diagnostics · Pets",
+      title: "유기적으로 연결된 5대 전문 아이디어 허브",
+      summary: "① AI 런치패드 ② Branding 스튜디오 ③ Travel 루트 큐레이션 ④ Computer Diagnostics 진단 ⑤ Pets 스마트 케어까지 5개 전문 공간이 하나의 통일된 인터페이스로 동작합니다.",
+      tags: ["5대섹션", "플랫폼구조", "올인원허브", "큐레이션"],
+      date: "2026-10-19",
+      baseLikes: 53,
+      jumpHash: "#branding",
+      jumpLabel: "브랜딩 이동 →",
+      prompt: "[BAIOO 5대 섹션 구성]\n1. AI (#ai): 멀티 에이전트 파이프라인·자동화·프롬프트 레시피 배포\n2. Branding agency (#branding): 네이밍·슬로건·HEX 컬러 스와치 스튜디오\n3. Travel (#travel): 검증된 여행 동선 & AI 맞춤 일정 설계\n4. Computer Diagnostics (#repair): 원클릭 윈도우/하드웨어 진단 명령어\n5. Pets (#bunny): 네덜란드 드워프 토토 일상 & 스마트 펫테크"
+    },
+    {
+      id: "ab-seed-3",
+      code: "BAIOO-ARCH",
+      version: "ZERO-BUILD",
+      category: "tech",
+      highlight: "⚡ Single-HTML · Zero Framework · Cloudflare Edge",
+      title: "외부 프레임워크 0%, 초경량 단일 파일 아키텍처",
+      summary: "무거운 빌드 도구나 외부 JS 라이브러리 없이 순수 HTML·CSS·Vanilla JS 단일 파일로 구현되어 초기 로딩이 빠르고 Cloudflare Pages 글로벌 엣지에 1분 내 배포됩니다.",
+      tags: ["Zero-Build", "Single-HTML", "CloudflarePages", "초고속로딩"],
+      date: "2026-10-18",
+      baseLikes: 49,
+      jumpHash: "#repair",
+      jumpLabel: "진단 허브 이동 →",
+      prompt: "[BAIOO 기술 스택 & 아키텍처]\n- 구조: 단일 index.html 인라인 CSS/JS (외부 의존성 0개)\n- 레이아웃: PC 220px 좌측 고정 사이드바 + 모바일 반응형 드롭다운\n- 상태 저장: 브라우저 localStorage + 네이티브 <dialog> 모달\n- 배포 파이프라인: GitHub main 브랜치 푸시 → Cloudflare Pages 자동 배포"
+    },
+    {
+      id: "ab-seed-4",
+      code: "BAIOO-STORY",
+      version: "HISTORY",
+      category: "history",
+      highlight: "📜 Wayfarer에서 BAIOO로의 리브랜딩 여정",
+      title: "글로벌 리스크 검증을 거쳐 탄생한 BAIOO 스토리",
+      summary: "기존 Wayfarer에서 출발해 AIOO, BRAIOO 등 수십 개의 후보군을 검토하고, 영미권 어감 리스크와 발음 직관성을 철저히 검증해 최종 확정한 브랜드 진화 기록입니다.",
+      tags: ["리브랜딩", "히스토리", "네이밍검증", "브랜드스토리"],
+      date: "2026-10-18",
+      baseLikes: 44,
+      jumpHash: "#branding",
+      jumpLabel: "스토리 상세 →",
+      prompt: "[BAIOO 탄생 타임라인]\n1. 초기 베이스: Wayfarer (여행·수리·일상 기록 웹앱)\n2. 확장 전환: AI 및 브랜딩 아이디어 배포 플랫폼으로 목적 고도화\n3. 네이밍 확정: AIOO(선점) → BRAIOO(영미권 어감 배제) → BAIOO 최종 채택"
+    },
+    {
+      id: "ab-seed-5",
+      code: "BAIOO-A11Y",
+      version: "UX-FIRST",
+      category: "tech",
+      highlight: "☀️/🌙 라이트·다크 듀얼 테마 & 접근성 준수",
+      title: "초보자 친화적 UX & 웹 접근성(Accessibility) 표준",
+      summary: "상단 ☀️/🌙 직관적 테마 전환 버튼, 키보드 포커스 네비게이션, 동작 줄이기(prefers-reduced-motion) 설정까지 모든 방문자를 배려한 설계 표준을 지킵니다.",
+      tags: ["다크모드", "웹접근성", "초보자친화", "반응형디자인"],
+      date: "2026-10-17",
+      baseLikes: 39,
+      jumpHash: "#home",
+      jumpLabel: "대문 보기 →",
+      prompt: "[BAIOO UI/UX 4대 표준]\n1. 라이트(☀️) / 다크(🌙) 모드 1클릭 즉시 전환\n2. 마우스 스포트라이트 호버 & 부드러운 30° 듀얼 웨이브 모션\n3. prefers-reduced-motion 설정 시 불필요한 애니메이션 즉시 비활성화\n4. 원클릭 클립보드 복사 및 토스트 알림 피드백"
+    },
+    {
+      id: "ab-seed-6",
+      code: "BAIOO-POLICY",
+      version: "TRUST",
+      category: "rule",
+      highlight: "🤝 회원가입 없는 클린 열람 & 오픈 소통",
+      title: "투명한 운영 원칙 & GitHub 오픈 피드백 채널",
+      summary: "복잡한 로그인이나 개인정보 요구 없이 모든 아이디어와 프롬프트를 즉시 열람·복사할 수 있으며, GitHub를 통해 언제든 제휴와 피드백을 주고받습니다.",
+      tags: ["운영원칙", "개인정보보호", "오픈소통", "GitHub"],
+      date: "2026-10-16",
+      baseLikes: 41,
+      jumpHash: "#contact",
+      jumpLabel: "연락처 이동 →",
+      prompt: "[BAIOO 운영 및 소통 안내]\n- 개인정보 보호: 별도 회원가입 없이 모든 아이디어 카드 무료 열람·복사 가능\n- 공식 저장소 및 문의: https://github.com/sweet851206\n- 배포 주소: https://personal-portfolio-website-3z2.pages.dev/"
+    }
+  ];
+
+  var state = { category: "all", sort: "newest", query: "" };
+
+  function loadJson(k, fb) { try { var r = localStorage.getItem(k); return r ? JSON.parse(r) : fb; } catch (e) { return fb; } }
+  function saveJson(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+  var likedMap = loadJson(STORAGE_LIKES, {});
+  if (!likedMap || typeof likedMap !== "object") likedMap = {};
+
+  function getLikes(item) { return Number(item.baseLikes || 0) + (likedMap[item.id] ? 1 : 0); }
+
+  var gridEl = $("#abIdeaGrid");
+  var searchInput = $("#abSearchInput");
+  var sortSelect = $("#abSortSelect");
+  var catBar = $("#abCategoryBar");
+  var chipsEl = $("#abActiveChips");
+  var countEl = $("#abResultCount");
+  var statTotalEl = $("#abStatTotal");
+  var statLikesEl = $("#abStatLikes");
+  var toastEl = $("#aiToast");
+
+  function showToast(msg) {
+    if (!toastEl) return;
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    setTimeout(function () { toastEl.classList.remove("show"); }, 2300);
+  }
+
+  function copyText(text, msg) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { showToast(msg); });
+    } else {
+      showToast(msg);
+    }
+  }
+
+  function openAboutDetail(item) {
+    var dlg = $("#aiDetailDialog");
+    if (!dlg) return;
+    var st = $("#aiDetailStatus");
+    if (st) { st.className = "ai-status-pill live"; st.textContent = "🗝️ BAIOO OFFICIAL"; }
+    var cd = $("#aiDetailCode");
+    if (cd) cd.textContent = item.code + " · " + item.version;
+    var dt = $("#aiDetailDate");
+    if (dt) dt.textContent = "🗓 " + item.date;
+    var tt = $("#aiDetailTitle");
+    if (tt) tt.textContent = item.title;
+    var sm = $("#aiDetailSummary");
+    if (sm) sm.textContent = item.summary;
+    var tgWrap = $("#aiDetailTags");
+    if (tgWrap) {
+      tgWrap.textContent = "";
+      (item.tags || []).forEach(function (t) {
+        var s = document.createElement("span");
+        s.className = "ai-tag-item";
+        s.textContent = "#" + t;
+        tgWrap.appendChild(s);
+      });
+    }
+    var pr = $("#aiDetailPrompt");
+    if (pr) pr.textContent = item.prompt || item.summary;
+    var delBtn = $("#aiDeleteCustomBtn");
+    if (delBtn) delBtn.hidden = true;
+    if (!dlg.open) dlg.showModal();
+  }
+
+  function syncControls() {
+    if (searchInput && searchInput.value !== state.query) searchInput.value = state.query;
+    if (sortSelect) sortSelect.value = state.sort;
+    if (catBar) {
+      $$(".ai-cat-btn", catBar).forEach(function (b) {
+        b.classList.toggle("active", b.getAttribute("data-cat") === state.category);
+      });
+    }
+  }
+
+  function renderAll() {
+    if (!gridEl) return;
+    var likeCnt = 0;
+    SEED_ABOUT.forEach(function (x) { likeCnt += getLikes(x); });
+    if (statTotalEl) statTotalEl.textContent = String(SEED_ABOUT.length);
+    if (statLikesEl) statLikesEl.textContent = String(likeCnt);
+
+    if (chipsEl) {
+      chipsEl.textContent = "";
+      if (state.category !== "all") {
+        var b1 = document.createElement("button");
+        b1.type = "button";
+        b1.className = "ai-chip";
+        b1.textContent = "카테고리: " + (CAT_META[state.category] ? CAT_META[state.category].label : state.category) + " ×";
+        b1.addEventListener("click", function () { state.category = "all"; syncControls(); renderAll(); });
+        chipsEl.appendChild(b1);
+      }
+      if (state.query.trim()) {
+        var b2 = document.createElement("button");
+        b2.type = "button";
+        b2.className = "ai-chip";
+        b2.textContent = "검색: \"" + state.query.trim() + "\" ×";
+        b2.addEventListener("click", function () { state.query = ""; syncControls(); renderAll(); });
+        chipsEl.appendChild(b2);
+      }
+    }
+
+    var q = state.query.trim().toLowerCase();
+    var list = SEED_ABOUT.filter(function (item) {
+      if (state.category !== "all" && item.category !== state.category) return false;
+      if (q) {
+        var hay = [item.title, item.summary, item.highlight, (item.tags || []).join(" ")].join(" ").toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+
+    list.sort(function (a, b) {
+      if (state.sort === "popular") return getLikes(b) - getLikes(a);
+      if (state.sort === "title") return String(a.title).localeCompare(String(b.title), "ko");
+      return 0;
+    });
+
+    if (countEl) countEl.textContent = "총 " + list.length + "개의 BAIOO 스토리";
+    gridEl.textContent = "";
+
+    list.forEach(function (item) {
+      var card = document.createElement("article");
+      card.className = "ai-card";
+      card.tabIndex = 0;
+      card.addEventListener("mousemove", function (e) {
+        var r = card.getBoundingClientRect();
+        card.style.setProperty("--mx", (e.clientX - r.left) + "px");
+        card.style.setProperty("--my", (e.clientY - r.top) + "px");
+      });
+
+      var cMeta = CAT_META[item.category] || CAT_META.vision;
+
+      var top = document.createElement("div");
+      top.className = "ai-card-top";
+      var pill = document.createElement("span");
+      pill.className = "ai-status-pill live";
+      pill.textContent = "🗝️ OFFICIAL";
+      var ver = document.createElement("span");
+      ver.className = "ai-version-code";
+      ver.textContent = item.code + " · " + item.version;
+      top.appendChild(pill);
+      top.appendChild(ver);
+
+      var vis = document.createElement("div");
+      vis.className = "ai-card-visual";
+      vis.style.background = cMeta.gradient;
+      var em = document.createElement("span");
+      em.className = "ai-card-emoji";
+      em.textContent = cMeta.emoji;
+      var cl = document.createElement("span");
+      cl.className = "ai-card-cat-label";
+      cl.textContent = cMeta.label;
+      vis.appendChild(em);
+      vis.appendChild(cl);
+
+      var ttl = document.createElement("h3");
+      ttl.className = "ai-card-title";
+      ttl.textContent = item.title;
+
+      var hl = document.createElement("div");
+      hl.className = "ab-highlight-pill";
+      hl.textContent = item.highlight;
+
+      var desc = document.createElement("p");
+      desc.className = "ai-card-desc";
+      desc.textContent = item.summary;
+
+      var tags = document.createElement("div");
+      tags.className = "ai-tag-list";
+      (item.tags || []).forEach(function (t) {
+        var sp = document.createElement("span");
+        sp.className = "ai-tag-item";
+        sp.textContent = "#" + t;
+        tags.appendChild(sp);
+      });
+
+      var foot = document.createElement("div");
+      foot.className = "ai-card-foot";
+
+      var isLiked = Boolean(likedMap[item.id]);
+      var likeB = document.createElement("button");
+      likeB.type = "button";
+      likeB.className = "ai-like-btn" + (isLiked ? " liked" : "");
+      likeB.textContent = (isLiked ? "♥ " : "♡ ") + getLikes(item);
+      likeB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (likedMap[item.id]) { delete likedMap[item.id]; showToast("공감에서 해제했습니다."); }
+        else { likedMap[item.id] = true; showToast("♥ BAIOO 스토리에 공감했습니다!"); }
+        saveJson(STORAGE_LIKES, likedMap);
+        renderAll();
+      });
+
+      var acts = document.createElement("div");
+      acts.className = "ai-card-actions";
+      var cpB = document.createElement("button");
+      cpB.type = "button";
+      cpB.className = "ai-action-btn";
+      cpB.textContent = "📋 요약 복사";
+      cpB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        copyText(item.prompt, "🗝️ [" + item.title + "] 소개 스펙이 복사되었습니다!");
+      });
+      var jpB = document.createElement("button");
+      jpB.type = "button";
+      jpB.className = "ai-action-btn";
+      jpB.textContent = item.jumpLabel || "상세 보기 →";
+      jpB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (item.jumpHash) { location.hash = item.jumpHash; }
+        else { openAboutDetail(item); }
+      });
+      acts.appendChild(cpB);
+      acts.appendChild(jpB);
+      foot.appendChild(likeB);
+      foot.appendChild(acts);
+
+      card.appendChild(top);
+      card.appendChild(vis);
+      card.appendChild(ttl);
+      card.appendChild(hl);
+      card.appendChild(desc);
+      card.appendChild(tags);
+      card.appendChild(foot);
+      card.addEventListener("click", function () { openAboutDetail(item); });
+      gridEl.appendChild(card);
+    });
+  }
+
+  if (catBar) {
+    $$(".ai-cat-btn", catBar).forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        state.category = btn.getAttribute("data-cat") || "all";
+        syncControls(); renderAll();
+      });
+    });
+  }
+  if (sortSelect) sortSelect.addEventListener("change", function () { state.sort = sortSelect.value || "newest"; renderAll(); });
+  if (searchInput) searchInput.addEventListener("input", function () { state.query = searchInput.value || ""; renderAll(); });
 
   renderAll();
 })();
