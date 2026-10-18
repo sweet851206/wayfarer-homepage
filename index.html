@@ -1364,6 +1364,557 @@
   .wave-1 { animation: waveMove 9s linear infinite; }
   .wave-2 { animation: waveMove 14s linear infinite reverse; }
   @keyframes waveMove { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ── BAIOO AI 아이디어 배포 런치패드 (#ai 전용 스타일) ── */
+  #ai {
+    --ai-cyan: #0EA5E9;
+    --ai-indigo: #6366F1;
+    --ai-emerald: #10B981;
+    --ai-amber: #F59E0B;
+    --ai-glow: rgba(14, 165, 233, .14);
+    background:
+      radial-gradient(45% 35% at 85% 12%, rgba(99, 102, 241, .14), transparent 70%),
+      radial-gradient(40% 35% at 12% 28%, rgba(14, 165, 233, .14), transparent 70%),
+      var(--bg);
+  }
+  [data-theme="dark"] #ai {
+    --ai-glow: rgba(56, 189, 248, .20);
+    background:
+      radial-gradient(45% 35% at 85% 12%, rgba(99, 102, 241, .22), transparent 70%),
+      radial-gradient(40% 35% at 12% 28%, rgba(14, 165, 233, .18), transparent 70%),
+      var(--bg);
+  }
+  .tag.ai-tag {
+    background: rgba(14, 165, 233, .14);
+    color: var(--ai-cyan);
+    border-color: rgba(14, 165, 233, .25);
+  }
+  .ai-lead-sub {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 1.02rem;
+    font-weight: 600;
+  }
+
+  /* 상단 대시보드 배너 (Bento Hero Strip) */
+  .ai-hero-banner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.45fr 1fr;
+    gap: 24px;
+    padding: 32px 34px;
+    margin-bottom: 26px;
+    border-radius: 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(16px);
+    overflow: hidden;
+  }
+  .ai-hero-banner::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--ai-cyan), var(--ai-indigo), var(--ai-emerald));
+  }
+  .ai-banner-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(14, 165, 233, .12);
+    color: var(--ai-cyan);
+    font-size: .76rem;
+    font-weight: 900;
+    letter-spacing: .06em;
+    margin-bottom: 12px;
+  }
+  .ai-banner-left h3 {
+    font-size: clamp(1.32rem, 2.4vw, 1.8rem);
+    font-weight: 900;
+    color: var(--text-strong);
+    letter-spacing: -.03em;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  .ai-banner-left p {
+    color: var(--muted);
+    font-size: .95rem;
+    margin-bottom: 20px;
+  }
+  .ai-banner-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .ai-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 14px;
+    border: none;
+    background: linear-gradient(135deg, var(--ai-cyan), var(--ai-indigo));
+    color: #fff;
+    font-weight: 800;
+    font-size: .9rem;
+    cursor: pointer;
+    box-shadow: 0 12px 26px rgba(14, 165, 233, .26);
+    transition: transform .2s ease, filter .2s ease;
+  }
+  .ai-btn-primary:hover { transform: translateY(-2px); filter: brightness(1.06); }
+  .ai-btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--surface-soft);
+    color: var(--text-strong);
+    font-weight: 800;
+    font-size: .9rem;
+    cursor: pointer;
+    transition: border-color .2s ease, transform .2s ease, background .2s ease;
+  }
+  .ai-btn-ghost:hover { border-color: var(--ai-cyan); transform: translateY(-1px); }
+  .ai-btn-ghost.active {
+    border-color: #EC4899;
+    background: rgba(236, 72, 153, .12);
+    color: #EC4899;
+  }
+
+  .ai-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    align-self: center;
+  }
+  .ai-stat-box {
+    padding: 18px 12px;
+    border-radius: 20px;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+  .ai-stat-num {
+    display: block;
+    font-size: 1.7rem;
+    font-weight: 950;
+    background: linear-gradient(135deg, var(--ai-cyan), var(--ai-indigo));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.2;
+  }
+  .ai-stat-label {
+    display: block;
+    font-size: .78rem;
+    font-weight: 800;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* 컨트롤 툴바 (검색 + 카테고리 필터 + 상태/정렬) */
+  .ai-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding: 20px 22px;
+    border-radius: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  .ai-toolbar-top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .ai-search-wrap {
+    position: relative;
+    flex: 1 1 260px;
+  }
+  .ai-search-input {
+    width: 100%;
+    padding: 12px 16px 12px 42px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--surface-soft);
+    color: var(--text-strong);
+    font-size: .92rem;
+    font-weight: 600;
+    outline: none;
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  .ai-search-input:focus {
+    border-color: var(--ai-cyan);
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, .16);
+  }
+  .ai-search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: .95rem;
+  }
+  .ai-select-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .ai-select {
+    padding: 11px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--surface-soft);
+    color: var(--text-strong);
+    font-weight: 700;
+    font-size: .88rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .ai-cat-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .ai-cat-btn {
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface-soft);
+    color: var(--text);
+    font-weight: 800;
+    font-size: .86rem;
+    cursor: pointer;
+    transition: all .2s ease;
+  }
+  .ai-cat-btn:hover {
+    border-color: var(--ai-cyan);
+    transform: translateY(-1px);
+  }
+  .ai-cat-btn.active {
+    background: linear-gradient(135deg, var(--ai-cyan), var(--ai-indigo));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 8px 20px rgba(14, 165, 233, .25);
+  }
+
+  /* 활성 필터 칩 & 결과 카운트 */
+  .ai-status-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 22px;
+    padding: 0 4px;
+  }
+  .ai-active-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .ai-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: rgba(14, 165, 233, .12);
+    color: var(--ai-cyan);
+    font-weight: 800;
+    font-size: .82rem;
+    border: 1px solid rgba(14, 165, 233, .26);
+    cursor: pointer;
+    transition: background .2s ease;
+  }
+  .ai-chip:hover { background: rgba(14, 165, 233, .2); }
+  .ai-result-count {
+    font-size: .88rem;
+    font-weight: 800;
+    color: var(--muted);
+  }
+
+  /* 아이디어 배포 카드 그리드 (3열 Bento 카드) */
+  .ai-idea-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .ai-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 22px;
+    overflow: hidden;
+    transition: transform .28s cubic-bezier(.22,.61,.36,1), border-color .28s ease, box-shadow .28s ease;
+    cursor: pointer;
+  }
+  .ai-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(400px circle at var(--mx, 50%) var(--my, 0%), var(--ai-glow), transparent 60%);
+    opacity: 0;
+    transition: opacity .3s ease;
+    pointer-events: none;
+  }
+  .ai-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(14, 165, 233, .42);
+    box-shadow: 0 24px 54px rgba(15, 23, 42, .14);
+  }
+  .ai-card:hover::before { opacity: 1; }
+  .ai-card:focus-visible {
+    outline: 3px solid rgba(14, 165, 233, .5);
+    outline-offset: 3px;
+  }
+
+  .ai-card-top,
+  .ai-card-visual,
+  .ai-card-title,
+  .ai-card-desc,
+  .ai-tag-list,
+  .ai-card-foot {
+    position: relative;
+    z-index: 1;
+  }
+
+  .ai-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .ai-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: .74rem;
+    font-weight: 900;
+    letter-spacing: .04em;
+  }
+  .ai-status-pill.live { background: rgba(16, 185, 129, .14); color: #10B981; }
+  .ai-status-pill.beta { background: rgba(245, 158, 11, .14); color: #F59E0B; }
+  .ai-status-pill.concept { background: rgba(99, 102, 241, .14); color: #6366F1; }
+
+  .ai-version-code {
+    font-size: .76rem;
+    font-weight: 800;
+    color: var(--muted);
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+
+  .ai-card-visual {
+    height: 124px;
+    border-radius: 18px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    color: #fff;
+    overflow: hidden;
+  }
+  .ai-card-emoji {
+    font-size: 2.75rem;
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,.22));
+  }
+  .ai-card-cat-label {
+    font-size: .75rem;
+    font-weight: 900;
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, .28);
+    backdrop-filter: blur(6px);
+  }
+
+  .ai-card-title {
+    font-size: 1.16rem;
+    font-weight: 900;
+    color: var(--text-strong);
+    letter-spacing: -.03em;
+    margin-bottom: 8px;
+    line-height: 1.35;
+  }
+  .ai-card-desc {
+    color: var(--muted);
+    font-size: .92rem;
+    line-height: 1.65;
+    margin-bottom: 16px;
+    flex-grow: 1;
+  }
+
+  .ai-tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .ai-tag-item {
+    font-size: .75rem;
+    font-weight: 700;
+    padding: 4px 9px;
+    border-radius: 6px;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .ai-card-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .ai-card-actions {
+    display: flex;
+    gap: 6px;
+  }
+  .ai-action-btn {
+    padding: 7px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface-soft);
+    color: var(--text-strong);
+    font-size: .8rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all .2s ease;
+  }
+  .ai-action-btn:hover {
+    border-color: var(--ai-cyan);
+    color: var(--ai-cyan);
+  }
+  .ai-like-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 11px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: .8rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all .2s ease;
+  }
+  .ai-like-btn:hover { border-color: rgba(236, 72, 153, .4); }
+  .ai-like-btn.liked {
+    color: #EC4899;
+    border-color: rgba(236, 72, 153, .38);
+    background: rgba(236, 72, 153, .1);
+  }
+
+  .ai-empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 54px 24px;
+    border-radius: 24px;
+    background: var(--surface);
+    border: 1px dashed var(--border);
+  }
+  .ai-empty-state p {
+    color: var(--muted);
+    font-weight: 800;
+    margin-bottom: 14px;
+  }
+
+  /* 모달 내 프롬프트·스펙 코드 박스 */
+  .ai-detail-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin: 10px 0 16px;
+  }
+  .ai-prompt-label {
+    margin-top: 18px;
+    margin-bottom: 8px;
+    font-size: .86rem;
+    font-weight: 900;
+    color: var(--text-strong);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .ai-prompt-box {
+    padding: 18px;
+    border-radius: 16px;
+    background: #0F172A;
+    color: #E2E8F0;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: .86rem;
+    line-height: 1.68;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    border: 1px solid rgba(255,255,255,.14);
+  }
+  .field select {
+    width: 100%;
+    padding: 13px 15px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    font: inherit;
+    color: var(--text);
+    background: var(--surface-soft);
+  }
+
+  /* 토스트 알림 */
+  .ai-toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 9999;
+    padding: 14px 22px;
+    border-radius: 14px;
+    background: #0F172A;
+    color: #fff;
+    font-weight: 800;
+    font-size: .9rem;
+    box-shadow: 0 18px 40px rgba(0,0,0,.32);
+    border: 1px solid rgba(56, 189, 248, .35);
+    transform: translateY(20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform .25s ease, opacity .25s ease;
+  }
+  .ai-toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  @media (max-width: 1024px) {
+    .ai-hero-banner { grid-template-columns: 1fr; }
+    .ai-idea-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .ai-idea-grid { grid-template-columns: 1fr; }
+    .ai-stats-grid { grid-template-columns: 1fr; }
+    .ai-hero-banner { padding: 24px 20px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ai-card, .ai-btn-primary, .ai-cat-btn { transition: none !important; }
+  }
 </style>
 </head>
 <body>
@@ -1426,51 +1977,74 @@
     <a href="#home" class="back-btn">← 홈으로</a>
 
     <div class="sec-head">
-      <span class="tag travel">AI</span>
-      <h2>AI 써보고 남김</h2>
+      <span class="tag ai-tag">AI LAUNCHPAD</span>
+      <h2>AI 아이디어 배포 허브</h2>
+      <p class="ai-lead-sub">Brilliant AI, Infinite Possibilities — 아이디어를 코드와 프롬프트로 세상에 배포합니다</p>
     </div>
 
-    <div class="shop-filters">
-      <button type="button" class="shop-filter">브랜드 ⌄</button>
-      <button type="button" class="shop-filter">카테고리 ⌄</button>
-      <button type="button" class="shop-filter">사이즈 ⌄</button>
-      <button type="button" class="shop-filter">가격대 ⌄</button>
-      <button type="button" class="shop-filter">색상 ⌄</button>
-      <button type="button" class="shop-filter">시즌 ⌄</button>
-      <button type="button" class="shop-filter">정렬 ⌄</button>
+    <div class="ai-hero-banner">
+      <div class="ai-banner-left">
+        <span class="ai-banner-badge">🚀 BAIOO IDEA DISTRIBUTION</span>
+        <h3>상상을 실행 가능한 프로젝트로, 즉시 배포하고 공유합니다</h3>
+        <p>직접 설계한 AI 에이전트 시스템, 웹 자동화 도구, 실전 프롬프트 레시피를 카테고리별로 탐색하고 원클릭으로 복제해 활용해 보세요.</p>
+        <div class="ai-banner-actions">
+          <button type="button" class="ai-btn-primary" id="aiOpenAddBtn">✨ 새 아이디어 배포하기</button>
+          <button type="button" class="ai-btn-ghost" id="aiFilterBookmarkedBtn">♥ 관심 아이디어 모아보기</button>
+        </div>
+      </div>
+      <div class="ai-stats-grid">
+        <div class="ai-stat-box">
+          <span class="ai-stat-num" id="aiStatTotal">6</span>
+          <span class="ai-stat-label">배포된 아이디어</span>
+        </div>
+        <div class="ai-stat-box">
+          <span class="ai-stat-num" id="aiStatLive">4</span>
+          <span class="ai-stat-label">LIVE 가동중</span>
+        </div>
+        <div class="ai-stat-box">
+          <span class="ai-stat-num" id="aiStatLikes">0</span>
+          <span class="ai-stat-label">누적 응원·북마크</span>
+        </div>
+      </div>
     </div>
-    <div><span class="shop-tag">MEN ×</span></div>
 
-    <div class="shop-grid">
-      <div class="shop-card">
-        <div class="shop-img" style="background:linear-gradient(180deg,#3a3f4a,#20242c)">🧥</div>
-        <p class="shop-brand">제이하스</p>
-        <p class="shop-no">NO.JSD26333.</p>
-        <p class="shop-name"><span class="shop-badge">Slim</span> 차콜 그레이 스트라이프 모혼방 스트레치 더블 수트</p>
-        <p class="shop-price"><s>698,000원</s> <b>349,000원</b></p>
+    <div class="ai-toolbar">
+      <div class="ai-toolbar-top">
+        <div class="ai-search-wrap">
+          <span class="ai-search-icon" aria-hidden="true">🔍</span>
+          <input type="search" id="aiSearchInput" class="ai-search-input" placeholder="아이디어 제목, 설명, 기술 태그(#에이전트, #자동화 등) 검색..." aria-label="아이디어 검색">
+        </div>
+        <div class="ai-select-group">
+          <select id="aiStatusSelect" class="ai-select" aria-label="배포 상태 필터">
+            <option value="all">모든 상태 (All)</option>
+            <option value="live">🚀 LIVE 배포중</option>
+            <option value="beta">🧪 BETA 테스트</option>
+            <option value="concept">📐 CONCEPT 설계</option>
+          </select>
+          <select id="aiSortSelect" class="ai-select" aria-label="정렬 기준">
+            <option value="newest">최신 배포순</option>
+            <option value="popular">인기·응원순</option>
+            <option value="title">이름순 (가나다)</option>
+          </select>
+        </div>
       </div>
-      <div class="shop-card">
-        <div class="shop-img" style="background:linear-gradient(180deg,#4a3f36,#26211c)">🧥</div>
-        <p class="shop-brand">파크랜드</p>
-        <p class="shop-no">NO.PJJ26304</p>
-        <p class="shop-name"><span class="shop-badge">NEW</span> 와인 나일론 혼방 점퍼</p>
-        <p class="shop-price"><s>398,000원</s> <b>199,000원</b></p>
-      </div>
-      <div class="shop-card">
-        <div class="shop-img" style="background:linear-gradient(180deg,#434957,#23262e)">🤵</div>
-        <p class="shop-brand">파크랜드</p>
-        <p class="shop-no">NO.PSS26384.</p>
-        <p class="shop-name"><span class="shop-badge">NEW</span> 그레이 모혼방 투웨이 스트레치 수트</p>
-        <p class="shop-price"><s>598,000원</s> <b>299,000원</b></p>
-      </div>
-      <div class="shop-card">
-        <div class="shop-img" style="background:linear-gradient(180deg,#2e3a55,#1a2130)">👔</div>
-        <p class="shop-brand">카브리니</p>
-        <p class="shop-no">NO.KSS26351.</p>
-        <p class="shop-name"><span class="shop-badge">NEW</span> 네이비 모 스트레치 수트</p>
-        <p class="shop-price"><s>898,000원</s> <b>449,000원</b></p>
+
+      <div class="ai-cat-bar" id="aiCategoryBar" role="tablist" aria-label="아이디어 카테고리 필터">
+        <button type="button" class="ai-cat-btn active" data-cat="all">전체 보기</button>
+        <button type="button" class="ai-cat-btn" data-cat="agent">🤖 AI 에이전트</button>
+        <button type="button" class="ai-cat-btn" data-cat="tool">⚡ 자동화·웹툴</button>
+        <button type="button" class="ai-cat-btn" data-cat="prompt">🧠 프롬프트 레시피</button>
+        <button type="button" class="ai-cat-btn" data-cat="creative">🎨 크리에이티브</button>
+        <button type="button" class="ai-cat-btn" data-cat="lab">💡 실험실 (Lab)</button>
       </div>
     </div>
+
+    <div class="ai-status-bar">
+      <div class="ai-active-chips" id="aiActiveChips"></div>
+      <div class="ai-result-count" id="aiResultCount">총 6개의 아이디어</div>
+    </div>
+
+    <div class="ai-idea-grid" id="aiIdeaGrid"></div>
   </div>
 </section>
 
@@ -1774,6 +2348,90 @@
     </div>
   </div>
 </dialog>
+
+<dialog id="aiDetailDialog" aria-label="AI 아이디어 배포 상세">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="aiDetailDialog" aria-label="닫기">×</button>
+    <div class="ai-detail-meta">
+      <span class="ai-status-pill live" id="aiDetailStatus">🚀 LIVE</span>
+      <span class="ai-version-code" id="aiDetailCode">BAIOO-001 · v2.1</span>
+      <span class="post-date" id="aiDetailDate" style="margin:0"></span>
+    </div>
+    <h3 class="dlg-title" id="aiDetailTitle"></h3>
+    <p id="aiDetailSummary" style="color:var(--text);line-height:1.8;margin-bottom:14px;"></p>
+    <div class="ai-tag-list" id="aiDetailTags"></div>
+
+    <div class="ai-prompt-label">
+      <span>⚡ 배포 프롬프트 / 실행 스펙</span>
+      <button type="button" class="ai-action-btn" id="aiCopyPromptBtn">📋 스펙·프롬프트 복사</button>
+    </div>
+    <pre class="ai-prompt-box" id="aiDetailPrompt"></pre>
+
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-danger" id="aiDeleteCustomBtn" hidden>삭제</button>
+      <button type="button" class="btn btn-ghost" id="aiShareLinkBtn">🔗 공유 링크 복사</button>
+      <button type="button" class="btn btn-ghost" data-close="aiDetailDialog">닫기</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="aiAddDialog" aria-label="새 AI 아이디어 배포하기">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="aiAddDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title">✨ 새 아이디어 배포하기</h3>
+    <form id="aiAddForm" novalidate>
+      <div class="field">
+        <label for="aiInputTitle">아이디어 제목 *</label>
+        <input type="text" id="aiInputTitle" placeholder="예: 원클릭 유튜브 쇼츠 대본 생성 에이전트" required>
+      </div>
+      <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label for="aiInputCategory">카테고리</label>
+          <select id="aiInputCategory">
+            <option value="agent">🤖 AI 에이전트</option>
+            <option value="tool">⚡ 자동화·웹툴</option>
+            <option value="prompt">🧠 프롬프트 레시피</option>
+            <option value="creative">🎨 크리에이티브</option>
+            <option value="lab">💡 실험실 (Lab)</option>
+          </select>
+        </div>
+        <div>
+          <label for="aiInputStatus">배포 상태</label>
+          <select id="aiInputStatus">
+            <option value="live">🚀 LIVE 배포중</option>
+            <option value="beta">🧪 BETA 테스트</option>
+            <option value="concept">📐 CONCEPT 설계</option>
+          </select>
+        </div>
+      </div>
+      <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label for="aiInputVersion">버전</label>
+          <input type="text" id="aiInputVersion" placeholder="예: v1.0" value="v1.0">
+        </div>
+        <div>
+          <label for="aiInputTags">태그 (쉼표로 구분)</label>
+          <input type="text" id="aiInputTags" placeholder="예: 에이전트, 자동화, 프롬프트">
+        </div>
+      </div>
+      <div class="field">
+        <label for="aiInputSummary">핵심 아이디어 요약 *</label>
+        <textarea id="aiInputSummary" style="min-height:86px;" placeholder="이 아이디어가 어떤 문제를 해결하고 어떤 가치를 주는지 적어주세요."></textarea>
+      </div>
+      <div class="field">
+        <label for="aiInputPrompt">배포할 프롬프트 / 실행 가이드 / 코드 스펙</label>
+        <textarea id="aiInputPrompt" style="min-height:120px;" placeholder="방문자가 복사해서 바로 사용할 수 있는 프롬프트나 설계 스펙을 적어주세요."></textarea>
+      </div>
+      <div class="form-error" id="aiAddError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="aiAddDialog">취소</button>
+        <button type="submit" class="btn btn-primary">🚀 즉시 배포</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<div id="aiToast" class="ai-toast" role="status" aria-live="polite"></div>
 
 <script>
 (function () {
@@ -2337,6 +2995,666 @@
   }
 
   loadBunny();
+})();
+
+/* ===== BAIOO AI 아이디어 배포 허브 (필터·검색·정렬·복사·북마크·즉시배포) ===== */
+(function () {
+  "use strict";
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+
+  var STORAGE_CUSTOM = "baioo_ai_custom_ideas_v1";
+  var STORAGE_LIKES = "baioo_ai_likes_v1";
+
+  var CATEGORY_META = {
+    agent:    { label: "AI 에이전트",    emoji: "🤖", gradient: "linear-gradient(135deg, #0EA5E9 0%, #2563EB 100%)" },
+    tool:     { label: "자동화·웹툴",    emoji: "⚡", gradient: "linear-gradient(135deg, #10B981 0%, #059669 100%)" },
+    prompt:   { label: "프롬프트 레시피", emoji: "🧠", gradient: "linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)" },
+    creative: { label: "크리에이티브",    emoji: "🎨", gradient: "linear-gradient(135deg, #EC4899 0%, #F43F5E 100%)" },
+    lab:      { label: "실험실 (Lab)",   emoji: "💡", gradient: "linear-gradient(135deg, #14B8A6 0%, #0EA5E9 100%)" }
+  };
+
+  var STATUS_META = {
+    live:    { label: "🚀 LIVE",    cls: "live" },
+    beta:    { label: "🧪 BETA",    cls: "beta" },
+    concept: { label: "📐 CONCEPT", cls: "concept" }
+  };
+
+  var SEED_IDEAS = [
+    {
+      id: "baioo-seed-1",
+      code: "BAIOO-001",
+      version: "v2.1",
+      status: "live",
+      category: "agent",
+      emoji: "🤖",
+      gradient: "linear-gradient(135deg, #0EA5E9 0%, #2563EB 100%)",
+      title: "바이브 코딩 마스터 파이프라인 (5단계 승인 게이트)",
+      summary: "리서치(research.md) → 상세 설계(plan.md) → 승인 게이트 → 정밀 구현 → 검증 피드백까지 AI가 탈선 없이 완주하는 실전 코딩 규격.",
+      tags: ["Multi-Agent", "VibeCoding", "승인게이트", "아키텍처"],
+      date: "2026-10-19",
+      baseLikes: 42,
+      prompt: "[바이브 코딩 5단계 마스터 규칙]\n1. 리서치: 실제 코드베이스의 데이터 흐름·컨벤션·영향 범위를 분석해 research.md 작성\n2. 계획: 접근 방식, 체크리스트(- [ ]), 실제 변경 코드 스니펫을 포함한 plan.md 작성\n3. 승인 게이트: 사용자의 '코딩 시작' 승인 전까지 프로덕션 코드 수정 절대 금지\n4. 정밀 구현: 단계 완료마다 plan.md에 [x] 표시하며 누락 없이 구현\n5. 피드백: 변경 요약 및 사용자 확인 포인트 최종 보고"
+    },
+    {
+      id: "baioo-seed-2",
+      code: "BAIOO-002",
+      version: "v1.5",
+      status: "live",
+      category: "tool",
+      emoji: "⚡",
+      gradient: "linear-gradient(135deg, #10B981 0%, #059669 100%)",
+      title: "Zero-Build 단일 파일 글로벌 배포 엔진",
+      summary: "무거운 프레임워크나 유료 서버 없이 순수 HTML·CSS·JS 단일 파일과 Git Push만으로 Cloudflare Pages에 1분 내 배포하는 초경량 웹 아키텍처.",
+      tags: ["Cloudflare", "Zero-Build", "Single-HTML", "초고속배포"],
+      date: "2026-10-19",
+      baseLikes: 38,
+      prompt: "# BAIOO 원클릭 글로벌 배포 명령어\ngit add index.html\ngit commit -m \"feat: deploy new AI idea update\"\ngit push origin main\n\n# 1~2분 후 Cloudflare Pages 엣지 서버 반영 완료 (Ctrl+F5 확인)"
+    },
+    {
+      id: "baioo-seed-3",
+      code: "BAIOO-003",
+      version: "v1.8",
+      status: "live",
+      category: "prompt",
+      emoji: "🧠",
+      gradient: "linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)",
+      title: "토큰 85% 절약형 타겟 슬라이스 리딩 프로토콜",
+      summary: "수천 줄짜리 파일 전체를 읽지 않고 grep으로 핵심 라인만 먼저 특정한 뒤 해당 구간만 정밀하게 읽고 수정하는 초고효율 AI 작업 규칙.",
+      tags: ["Token-Saver", "Prompt", "비용최적화", "Grep-Slice"],
+      date: "2026-10-18",
+      baseLikes: 31,
+      prompt: "[토큰 절약 코딩 지시문]\n- 대상 파일: index.html\n- 규칙 1: 통파일 읽기(Full-file read) 절대 금지\n- 규칙 2: grep으로 타겟 섹션/키워드의 줄 번호(Line) 먼저 탐색\n- 규칙 3: read(offset, limit)으로 필요한 줄만 읽고 edit로 정확히 수정"
+    },
+    {
+      id: "baioo-seed-4",
+      code: "BAIOO-004",
+      version: "v1.2",
+      status: "live",
+      category: "creative",
+      emoji: "🎨",
+      gradient: "linear-gradient(135deg, #EC4899 0%, #F43F5E 100%)",
+      title: "글로벌 브랜드 네이밍 & 리스크 검증 프레임워크",
+      summary: "도메인 선점 여부, 글로벌 상표 중복, 영미권 어감·슬랭 리스크까지 다각도로 필터링하여 'BAIOO' 브랜드를 도출한 실전 브랜딩 레시피.",
+      tags: ["Branding", "BAIOO", "네이밍검증", "슬로건"],
+      date: "2026-10-18",
+      baseLikes: 29,
+      prompt: "[글로벌 네이밍 4단계 검증 체크리스트]\n1. 발음 직관성: 한국어·영어 모두 부르기 쉬운가? (BAIOO: 바이오 / 비에이아이오오)\n2. 영미권 어감 체크: 부정적 연상이나 속어 충돌이 없는가?\n3. 슬로건 확장성: Brilliant AI, Infinite Possibilities\n4. 도메인 및 검색 식별성 확인"
+    },
+    {
+      id: "baioo-seed-5",
+      code: "BAIOO-005",
+      version: "v0.9",
+      status: "beta",
+      category: "tool",
+      emoji: "📊",
+      gradient: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)",
+      title: "로컬 LLM 양자화 모델 실전 코딩 벤치마크",
+      summary: "내 PC에서 구동되는 로컬 AI 모델(IQ2_XS, IQ3_S, Qwen3-Coder 30B 등)의 실제 코딩 과제 수행 점수와 응답 속도를 비교 측정하는 벤치마크 스위트.",
+      tags: ["Local-LLM", "Benchmark", "Quantization", "성능비교"],
+      date: "2026-10-17",
+      baseLikes: 24,
+      prompt: "[로컬 코딩 모델 평가 항목]\n- Task 1: 데이터 처리 및 로직 정확도 (JSON 파싱/정렬)\n- Task 2: 반응형 UI/CSS 레이아웃 구현 완성도\n- Task 3: 파일 경로·제약사항 준수율 및 초당 토큰 속도(tok/s)"
+    },
+    {
+      id: "baioo-seed-6",
+      code: "BAIOO-006",
+      version: "v0.5",
+      status: "concept",
+      category: "lab",
+      emoji: "💡",
+      gradient: "linear-gradient(135deg, #14B8A6 0%, #0EA5E9 100%)",
+      title: "원클릭 아이디어 → 인터랙티브 프로토타입 생성기",
+      summary: "머릿속에 떠오른 아이디어를 한 줄로 입력하면 핵심 기능 정의서, UI 카드 구조, 배포 체크리스트를 즉시 생성해 주는 차세대 실험실 프로젝트.",
+      tags: ["Idea-to-MVP", "Prototype", "실험실", "자동설계"],
+      date: "2026-10-16",
+      baseLikes: 27,
+      prompt: "[아이디어 즉시 배포 템플릿]\n1. 핵심 문제(Problem): 누구의 어떤 불편함을 해결하는가?\n2. 해결 방식(Solution): AI/자동화로 어떻게 단순화하는가?\n3. 원클릭 실행물(Deliverable): 방문자가 즉시 복사·실행할 수 있는 프롬프트 또는 웹툴 제공"
+    }
+  ];
+
+  var state = {
+    category: "all",
+    status: "all",
+    sort: "newest",
+    query: "",
+    bookmarkedOnly: false,
+    activeIdeaId: null
+  };
+
+  function loadJson(key, fallback) {
+    try {
+      var raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  function saveJson(key, val) {
+    try {
+      localStorage.setItem(key, JSON.stringify(val));
+    } catch (e) {}
+  }
+
+  var customIdeas = loadJson(STORAGE_CUSTOM, []);
+  if (!Array.isArray(customIdeas)) customIdeas = [];
+  var likedMap = loadJson(STORAGE_LIKES, {});
+  if (!likedMap || typeof likedMap !== "object") likedMap = {};
+
+  function getAllIdeas() {
+    return customIdeas.concat(SEED_IDEAS);
+  }
+
+  function getLikeCount(idea) {
+    var base = Number(idea.baseLikes || 0);
+    return base + (likedMap[idea.id] ? 1 : 0);
+  }
+
+  var gridEl = $("#aiIdeaGrid");
+  var searchInput = $("#aiSearchInput");
+  var statusSelect = $("#aiStatusSelect");
+  var sortSelect = $("#aiSortSelect");
+  var catBar = $("#aiCategoryBar");
+  var chipsEl = $("#aiActiveChips");
+  var countEl = $("#aiResultCount");
+  var statTotalEl = $("#aiStatTotal");
+  var statLiveEl = $("#aiStatLive");
+  var statLikesEl = $("#aiStatLikes");
+  var bookmarkFilterBtn = $("#aiFilterBookmarkedBtn");
+  var openAddBtn = $("#aiOpenAddBtn");
+  var toastEl = $("#aiToast");
+  var toastTimer = null;
+
+  function showToast(msg) {
+    if (!toastEl) return;
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toastEl.classList.remove("show");
+    }, 2400);
+  }
+
+  function copyText(text, successMsg) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        showToast(successMsg || "✨ 클립보드에 복사되었습니다!");
+      }).catch(function () {
+        fallbackCopy(text, successMsg);
+      });
+    } else {
+      fallbackCopy(text, successMsg);
+    }
+  }
+
+  function fallbackCopy(text, successMsg) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.cssText = "position:fixed;left:-9999px;top:0;";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      showToast(successMsg || "✨ 클립보드에 복사되었습니다!");
+    } catch (e) {
+      showToast("복사에 실패했습니다. 직접 선택해 복사해 주세요.");
+    }
+  }
+
+  function updateStats() {
+    var all = getAllIdeas();
+    var liveCount = 0;
+    var totalLikes = 0;
+    all.forEach(function (item) {
+      if (item.status === "live") liveCount += 1;
+      totalLikes += getLikeCount(item);
+    });
+    if (statTotalEl) statTotalEl.textContent = String(all.length);
+    if (statLiveEl) statLiveEl.textContent = String(liveCount);
+    if (statLikesEl) statLikesEl.textContent = String(totalLikes);
+  }
+
+  function renderChips() {
+    if (!chipsEl) return;
+    chipsEl.textContent = "";
+
+    function addChip(label, onRemove) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "ai-chip";
+      btn.textContent = label + " ×";
+      btn.addEventListener("click", onRemove);
+      chipsEl.appendChild(btn);
+    }
+
+    if (state.category !== "all") {
+      var cMeta = CATEGORY_META[state.category];
+      addChip("카테고리: " + (cMeta ? cMeta.label : state.category), function () {
+        state.category = "all";
+        syncControls();
+        renderAll();
+      });
+    }
+    if (state.status !== "all") {
+      var sMeta = STATUS_META[state.status];
+      addChip("상태: " + (sMeta ? sMeta.label : state.status), function () {
+        state.status = "all";
+        syncControls();
+        renderAll();
+      });
+    }
+    if (state.bookmarkedOnly) {
+      addChip("♥ 내 관심 아이디어", function () {
+        state.bookmarkedOnly = false;
+        syncControls();
+        renderAll();
+      });
+    }
+    if (state.query.trim()) {
+      addChip("검색: \"" + state.query.trim() + "\"", function () {
+        state.query = "";
+        syncControls();
+        renderAll();
+      });
+    }
+  }
+
+  function syncControls() {
+    if (searchInput && searchInput.value !== state.query) searchInput.value = state.query;
+    if (statusSelect) statusSelect.value = state.status;
+    if (sortSelect) sortSelect.value = state.sort;
+    if (bookmarkFilterBtn) bookmarkFilterBtn.classList.toggle("active", state.bookmarkedOnly);
+    if (catBar) {
+      $$(".ai-cat-btn", catBar).forEach(function (b) {
+        b.classList.toggle("active", b.getAttribute("data-cat") === state.category);
+      });
+    }
+  }
+
+  function filterAndSortIdeas() {
+    var q = state.query.trim().toLowerCase();
+    var filtered = getAllIdeas().filter(function (item) {
+      if (state.category !== "all" && item.category !== state.category) return false;
+      if (state.status !== "all" && item.status !== state.status) return false;
+      if (state.bookmarkedOnly && !likedMap[item.id]) return false;
+      if (q) {
+        var hay = [
+          item.title,
+          item.summary,
+          item.code,
+          (item.tags || []).join(" ")
+        ].join(" ").toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+
+    filtered.sort(function (a, b) {
+      if (state.sort === "popular") {
+        return getLikeCount(b) - getLikeCount(a);
+      }
+      if (state.sort === "title") {
+        return String(a.title).localeCompare(String(b.title), "ko");
+      }
+      return String(b.date || "").localeCompare(String(a.date || ""));
+    });
+
+    return filtered;
+  }
+
+  function createIdeaCard(item) {
+    var card = document.createElement("article");
+    card.className = "ai-card";
+    card.tabIndex = 0;
+
+    card.addEventListener("mousemove", function (e) {
+      var rect = card.getBoundingClientRect();
+      card.style.setProperty("--mx", (e.clientX - rect.left) + "px");
+      card.style.setProperty("--my", (e.clientY - rect.top) + "px");
+    });
+
+    var sMeta = STATUS_META[item.status] || STATUS_META.live;
+    var cMeta = CATEGORY_META[item.category] || CATEGORY_META.agent;
+
+    var top = document.createElement("div");
+    top.className = "ai-card-top";
+    var pill = document.createElement("span");
+    pill.className = "ai-status-pill " + sMeta.cls;
+    pill.textContent = sMeta.label;
+    var ver = document.createElement("span");
+    ver.className = "ai-version-code";
+    ver.textContent = (item.code || "BAIOO") + " · " + (item.version || "v1.0");
+    top.appendChild(pill);
+    top.appendChild(ver);
+
+    var visual = document.createElement("div");
+    visual.className = "ai-card-visual";
+    visual.style.background = item.gradient || cMeta.gradient;
+    var emoji = document.createElement("span");
+    emoji.className = "ai-card-emoji";
+    emoji.textContent = item.emoji || cMeta.emoji;
+    var catLabel = document.createElement("span");
+    catLabel.className = "ai-card-cat-label";
+    catLabel.textContent = cMeta.label;
+    visual.appendChild(emoji);
+    visual.appendChild(catLabel);
+
+    var title = document.createElement("h3");
+    title.className = "ai-card-title";
+    title.textContent = item.title;
+
+    var desc = document.createElement("p");
+    desc.className = "ai-card-desc";
+    desc.textContent = item.summary;
+
+    var tagList = document.createElement("div");
+    tagList.className = "ai-tag-list";
+    (item.tags || []).forEach(function (t) {
+      var tg = document.createElement("span");
+      tg.className = "ai-tag-item";
+      tg.textContent = "#" + t;
+      tagList.appendChild(tg);
+    });
+
+    var foot = document.createElement("div");
+    foot.className = "ai-card-foot";
+
+    var likeBtn = document.createElement("button");
+    likeBtn.type = "button";
+    var isLiked = Boolean(likedMap[item.id]);
+    likeBtn.className = "ai-like-btn" + (isLiked ? " liked" : "");
+    likeBtn.textContent = (isLiked ? "♥ " : "♡ ") + getLikeCount(item);
+    likeBtn.setAttribute("aria-label", item.title + " 관심 아이디어 표시");
+    likeBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (likedMap[item.id]) {
+        delete likedMap[item.id];
+        showToast("관심 아이디어에서 해제했습니다.");
+      } else {
+        likedMap[item.id] = true;
+        showToast("♥ 관심 아이디어로 저장했습니다!");
+      }
+      saveJson(STORAGE_LIKES, likedMap);
+      renderAll();
+    });
+
+    var actions = document.createElement("div");
+    actions.className = "ai-card-actions";
+
+    var copyBtn = document.createElement("button");
+    copyBtn.type = "button";
+    copyBtn.className = "ai-action-btn";
+    copyBtn.textContent = "📋 프롬프트 복사";
+    copyBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      copyText(item.prompt || item.summary, "✨ [" + item.title + "] 프롬프트가 복사되었습니다!");
+    });
+
+    var detailBtn = document.createElement("button");
+    detailBtn.type = "button";
+    detailBtn.className = "ai-action-btn";
+    detailBtn.textContent = "상세 열기 →";
+    detailBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      openDetailModal(item.id);
+    });
+
+    actions.appendChild(copyBtn);
+    actions.appendChild(detailBtn);
+    foot.appendChild(likeBtn);
+    foot.appendChild(actions);
+
+    card.appendChild(top);
+    card.appendChild(visual);
+    card.appendChild(title);
+    card.appendChild(desc);
+    card.appendChild(tagList);
+    card.appendChild(foot);
+
+    card.addEventListener("click", function () { openDetailModal(item.id); });
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openDetailModal(item.id);
+      }
+    });
+
+    return card;
+  }
+
+  function renderAll() {
+    if (!gridEl) return;
+    updateStats();
+    renderChips();
+
+    var list = filterAndSortIdeas();
+    if (countEl) countEl.textContent = "총 " + list.length + "개의 아이디어 배포중";
+
+    gridEl.textContent = "";
+    if (!list.length) {
+      var empty = document.createElement("div");
+      empty.className = "ai-empty-state";
+      var p = document.createElement("p");
+      p.textContent = "조건에 맞는 AI 아이디어가 없습니다.";
+      var resetBtn = document.createElement("button");
+      resetBtn.type = "button";
+      resetBtn.className = "ai-btn-primary";
+      resetBtn.textContent = "필터 전체 초기화";
+      resetBtn.addEventListener("click", function () {
+        state.category = "all";
+        state.status = "all";
+        state.query = "";
+        state.bookmarkedOnly = false;
+        syncControls();
+        renderAll();
+      });
+      empty.appendChild(p);
+      empty.appendChild(resetBtn);
+      gridEl.appendChild(empty);
+      return;
+    }
+
+    list.forEach(function (item) {
+      gridEl.appendChild(createIdeaCard(item));
+    });
+  }
+
+  /* 상세 모달 제어 */
+  var detailDlg = $("#aiDetailDialog");
+  var detailStatus = $("#aiDetailStatus");
+  var detailCode = $("#aiDetailCode");
+  var detailDate = $("#aiDetailDate");
+  var detailTitle = $("#aiDetailTitle");
+  var detailSummary = $("#aiDetailSummary");
+  var detailTags = $("#aiDetailTags");
+  var detailPrompt = $("#aiDetailPrompt");
+  var copyPromptBtn = $("#aiCopyPromptBtn");
+  var shareLinkBtn = $("#aiShareLinkBtn");
+  var deleteCustomBtn = $("#aiDeleteCustomBtn");
+
+  function openDetailModal(id) {
+    var target = null;
+    getAllIdeas().forEach(function (x) { if (x.id === id) target = x; });
+    if (!target || !detailDlg) return;
+
+    state.activeIdeaId = id;
+    var sMeta = STATUS_META[target.status] || STATUS_META.live;
+    if (detailStatus) {
+      detailStatus.className = "ai-status-pill " + sMeta.cls;
+      detailStatus.textContent = sMeta.label;
+    }
+    if (detailCode) detailCode.textContent = (target.code || "BAIOO") + " · " + (target.version || "v1.0");
+    if (detailDate) detailDate.textContent = "🗓 " + (target.date || "2026-10-19");
+    if (detailTitle) detailTitle.textContent = target.title;
+    if (detailSummary) detailSummary.textContent = target.summary;
+    if (detailTags) {
+      detailTags.textContent = "";
+      (target.tags || []).forEach(function (t) {
+        var tg = document.createElement("span");
+        tg.className = "ai-tag-item";
+        tg.textContent = "#" + t;
+        detailTags.appendChild(tg);
+      });
+    }
+    if (detailPrompt) detailPrompt.textContent = target.prompt || target.summary;
+    if (deleteCustomBtn) {
+      var isCustom = customIdeas.some(function (c) { return c.id === id; });
+      deleteCustomBtn.hidden = !isCustom;
+    }
+    if (!detailDlg.open) detailDlg.showModal();
+  }
+
+  if (copyPromptBtn) {
+    copyPromptBtn.addEventListener("click", function () {
+      var target = null;
+      getAllIdeas().forEach(function (x) { if (x.id === state.activeIdeaId) target = x; });
+      if (!target) return;
+      copyText(target.prompt || target.summary, "✨ 프롬프트·스펙이 클립보드에 복사되었습니다!");
+    });
+  }
+
+  if (shareLinkBtn) {
+    shareLinkBtn.addEventListener("click", function () {
+      var target = null;
+      getAllIdeas().forEach(function (x) { if (x.id === state.activeIdeaId) target = x; });
+      var shareText = target
+        ? "[BAIOO AI 아이디어] " + target.title + " - " + location.origin + location.pathname + "#ai"
+        : location.href;
+      copyText(shareText, "🔗 아이디어 공유 링크가 복사되었습니다!");
+    });
+  }
+
+  if (deleteCustomBtn) {
+    deleteCustomBtn.addEventListener("click", function () {
+      if (!state.activeIdeaId) return;
+      customIdeas = customIdeas.filter(function (c) { return c.id !== state.activeIdeaId; });
+      saveJson(STORAGE_CUSTOM, customIdeas);
+      if (detailDlg && detailDlg.open) detailDlg.close();
+      showToast("아이디어가 삭제되었습니다.");
+      renderAll();
+    });
+  }
+
+  /* 새 아이디어 배포 모달 제어 */
+  var addDlg = $("#aiAddDialog");
+  var addForm = $("#aiAddForm");
+  var inputTitle = $("#aiInputTitle");
+  var inputCategory = $("#aiInputCategory");
+  var inputStatus = $("#aiInputStatus");
+  var inputVersion = $("#aiInputVersion");
+  var inputTags = $("#aiInputTags");
+  var inputSummary = $("#aiInputSummary");
+  var inputPrompt = $("#aiInputPrompt");
+  var addError = $("#aiAddError");
+
+  if (openAddBtn && addDlg) {
+    openAddBtn.addEventListener("click", function () {
+      if (addError) addError.textContent = "";
+      if (!addDlg.open) addDlg.showModal();
+      if (inputTitle) inputTitle.focus();
+    });
+  }
+
+  if (addForm) {
+    addForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var titleVal = (inputTitle && inputTitle.value || "").trim();
+      var summaryVal = (inputSummary && inputSummary.value || "").trim();
+      if (!titleVal) {
+        if (addError) addError.textContent = "아이디어 제목을 입력해 주세요.";
+        if (inputTitle) inputTitle.focus();
+        return;
+      }
+      if (!summaryVal) {
+        if (addError) addError.textContent = "핵심 아이디어 요약을 입력해 주세요.";
+        if (inputSummary) inputSummary.focus();
+        return;
+      }
+
+      var catVal = (inputCategory && inputCategory.value) || "agent";
+      var cMeta = CATEGORY_META[catVal] || CATEGORY_META.agent;
+      var rawTags = (inputTags && inputTags.value || "").split(",");
+      var cleanTags = [];
+      rawTags.forEach(function (t) {
+        var trimmed = t.trim().replace(/^#/, "");
+        if (trimmed) cleanTags.push(trimmed);
+      });
+      if (!cleanTags.length) cleanTags = ["BAIOO", cMeta.label];
+
+      var newIdea = {
+        id: "baioo-custom-" + Date.now(),
+        code: "BAIOO-" + String(getAllIdeas().length + 1).padStart(3, "0"),
+        version: (inputVersion && inputVersion.value.trim()) || "v1.0",
+        status: (inputStatus && inputStatus.value) || "live",
+        category: catVal,
+        emoji: cMeta.emoji,
+        gradient: cMeta.gradient,
+        title: titleVal,
+        summary: summaryVal,
+        tags: cleanTags,
+        date: new Date().toISOString().slice(0, 10),
+        baseLikes: 1,
+        prompt: (inputPrompt && inputPrompt.value.trim()) || summaryVal
+      };
+
+      customIdeas.unshift(newIdea);
+      saveJson(STORAGE_CUSTOM, customIdeas);
+      addForm.reset();
+      if (inputVersion) inputVersion.value = "v1.0";
+      if (addDlg && addDlg.open) addDlg.close();
+      showToast("🚀 새 아이디어가 허브에 배포되었습니다!");
+      renderAll();
+    });
+  }
+
+  /* 이벤트 리스너 바인딩 */
+  if (catBar) {
+    $$(".ai-cat-btn", catBar).forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        state.category = btn.getAttribute("data-cat") || "all";
+        syncControls();
+        renderAll();
+      });
+    });
+  }
+  if (statusSelect) {
+    statusSelect.addEventListener("change", function () {
+      state.status = statusSelect.value || "all";
+      renderAll();
+    });
+  }
+  if (sortSelect) {
+    sortSelect.addEventListener("change", function () {
+      state.sort = sortSelect.value || "newest";
+      renderAll();
+    });
+  }
+  if (searchInput) {
+    searchInput.addEventListener("input", function () {
+      state.query = searchInput.value || "";
+      renderAll();
+    });
+  }
+  if (bookmarkFilterBtn) {
+    bookmarkFilterBtn.addEventListener("click", function () {
+      state.bookmarkedOnly = !state.bookmarkedOnly;
+      syncControls();
+      renderAll();
+    });
+  }
+
+  /* 신규 모달 닫기 버튼 안전 보장 */
+  $$("[data-close='aiDetailDialog'], [data-close='aiAddDialog']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var d = document.getElementById(b.getAttribute("data-close"));
+      if (d && d.open) d.close();
+    });
+  });
+
+  renderAll();
 })();
 </script>
 
