@@ -1,4 +1,4 @@
-import { listPosts, createPost, deletePost, json } from "../../_store.js";
+import { listPosts, createPost, deletePost, json } from "../_store.js";
 
 export async function onRequest(context) {
   const { request, env } = context;
