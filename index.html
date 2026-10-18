@@ -164,7 +164,7 @@
     position: relative;
     font-weight: 900;
     font-size: .94rem;
-    color: var(--muted);
+    color: #111;
     padding: 8px 2px;
     transition: color .2s ease;
   }
@@ -177,14 +177,19 @@
     width: 0;
     height: 2px;
     border-radius: 999px;
-    background: linear-gradient(90deg, var(--travel), var(--repair));
+    background: #111;
     transition: width .25s ease;
   }
 
   .nav-links a:hover,
   .nav-links a.active {
-    color: var(--text-strong);
+    color: #000;
   }
+
+  [data-theme="dark"] .nav-links a { color: #E5E7EB; }
+  [data-theme="dark"] .nav-links a:hover,
+  [data-theme="dark"] .nav-links a.active { color: #fff; }
+  [data-theme="dark"] .nav-links a::after { background: #fff; }
 
   .nav-links a:hover::after,
   .nav-links a.active::after {
@@ -1346,10 +1351,10 @@
     <div class="nav-right">
       <ul class="nav-links" id="navLinks">
         <li><a href="#home" data-nav="home">Main</a></li>
-        <li><a href="#travel" data-nav="travel">🧭 여행</a></li>
-        <li><a href="#repair" data-nav="repair">🖥️ 수리·상담</a></li>
-        <li><a href="#bunny" data-nav="bunny">🐰 토끼 일상</a></li>
-        <li><a href="#about" data-nav="about">소개</a></li>
+        <li><a href="#travel" data-nav="travel">Travel</a></li>
+        <li><a href="#repair" data-nav="repair">Repair</a></li>
+        <li><a href="#bunny" data-nav="bunny">Bunny</a></li>
+        <li><a href="#about" data-nav="about">About</a></li>
       </ul>
 
       <button class="theme-toggle" id="themeToggle" aria-label="다크 모드 전환" title="다크 모드 전환">🌙</button>
