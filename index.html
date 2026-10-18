@@ -1,0 +1,2189 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wayfarer | 시작하라, 그럼 바뀔 것이다</title>
+
+<meta name="description" content="여행 기록, 컴퓨터 수리·상담, 반려토끼 토토의 일상을 담은 Wayfarer 홈페이지입니다.">
+<meta name="theme-color" content="#F6F8FB">
+<meta name="color-scheme" content="light dark">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Wayfarer | 시작하라, 그럼 바뀔 것이다">
+<meta property="og:description" content="여행 기록, 컴퓨터 수리·상담, 반려토끼 토토의 일상을 담은 Wayfarer 홈페이지입니다.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%AD%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+<!-- 10-18 요청: 찬란한 열쇠 폰트 (Google Fonts) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gasoek+One&family=Nanum+Myeongjo:wght@700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F6F8FB;
+    --surface: rgba(255,255,255,.82);
+    --surface-soft: rgba(255,255,255,.62);
+    --surface-glass: rgba(255,255,255,.78);
+    --text: #1F2937;
+    --text-strong: #0F172A;
+    --muted: #64748B;
+
+    --travel: #FF6B35;
+    --travel-soft: rgba(255,107,53,.12);
+    --repair: #10B981;
+    --repair-soft: rgba(16,185,129,.12);
+    --bunny: #EC4899;
+    --bunny-soft: rgba(236,72,153,.12);
+
+    --border: rgba(15,23,42,.08);
+    --shadow: 0 18px 50px rgba(15,23,42,.08);
+    --radius: 24px;
+    --font: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  }
+
+  [data-theme="dark"] {
+    --bg: #070B14;
+    --surface: rgba(255,255,255,.06);
+    --surface-soft: rgba(255,255,255,.09);
+    --surface-glass: rgba(10,15,28,.78);
+    --text: #E2E8F0;
+    --text-strong: #FFFFFF;
+    --muted: #94A3B8;
+
+    --travel-soft: rgba(255,107,53,.14);
+    --repair-soft: rgba(16,185,129,.14);
+    --bunny-soft: rgba(236,72,153,.14);
+
+    --border: rgba(255,255,255,.12);
+    --shadow: 0 22px 60px rgba(0,0,0,.35);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    font-family: var(--font);
+    background:
+      radial-gradient(circle at 12% 8%, rgba(255,107,53,.10), transparent 28%),
+      radial-gradient(circle at 88% 4%, rgba(16,185,129,.10), transparent 26%),
+      radial-gradient(circle at 72% 86%, rgba(236,72,153,.08), transparent 30%),
+      var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  button, input, textarea { font-family: inherit; }
+  a { color: inherit; text-decoration: none; }
+  [hidden] { display: none !important; }
+  section[id] { scroll-margin-top: 88px; }
+
+  .container {
+    width: min(1160px, calc(100% - 40px));
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  .parallax-section {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    padding: 120px 0;
+    overflow: hidden;
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,.66), rgba(246,248,251,.90));
+    z-index: 1;
+  }
+
+  [data-theme="dark"] .overlay {
+    background: linear-gradient(180deg, rgba(7,11,20,.70), rgba(7,11,20,.93));
+  }
+
+  .page-view { min-height: calc(100vh - 64px); }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface-glass);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+    transition: box-shadow .25s ease, background .25s ease;
+  }
+
+  header.scrolled {
+    box-shadow: 0 12px 34px rgba(15,23,42,.08);
+  }
+
+  .nav {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    height: 68px;
+  }
+
+  .logo {
+    font-size: 1.45rem;
+    font-weight: 900;
+    letter-spacing: -.04em;
+    color: var(--text-strong);
+    white-space: nowrap;
+  }
+
+  .logo .logo-w { color: var(--travel); }
+  .logo .logo-dot { color: var(--repair); }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    position: relative;
+    font-weight: 900;
+    font-size: .94rem;
+    color: var(--muted);
+    padding: 8px 2px;
+    transition: color .2s ease;
+  }
+
+  .nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--travel), var(--repair));
+    transition: width .25s ease;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--text-strong);
+  }
+
+  .nav-links a:hover::after,
+  .nav-links a.active::after {
+    width: 100%;
+  }
+
+  .theme-toggle,
+  .menu-btn {
+    display: inline-grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface-soft);
+    color: var(--text);
+    cursor: pointer;
+    transition: transform .2s ease, border-color .2s ease, background .2s ease;
+  }
+
+  .theme-toggle:hover,
+  .menu-btn:hover {
+    transform: translateY(-1px);
+    border-color: rgba(255,107,53,.45);
+  }
+
+  .menu-btn {
+    font-size: 1.25rem;
+    display: none;
+  }
+
+  /* ── HERO (대문: 최신 트렌드 · 깔끔 · 시원한 오션/에어리 스타일) ── */
+  .hero {
+    position: relative;
+    min-height: calc(100vh - 68px);
+    display: flex;
+    align-items: center;
+    padding: 110px 0 96px;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+      radial-gradient(60% 55% at 18% 12%, rgba(14, 165, 233, 0.16), transparent 70%),
+      radial-gradient(55% 50% at 85% 18%, rgba(16, 185, 129, 0.14), transparent 70%),
+      radial-gradient(50% 50% at 50% 90%, rgba(56, 189, 248, 0.12), transparent 70%),
+      linear-gradient(180deg, #F0F7FF 0%, #F8FAFC 55%, #F6F8FB 100%);
+  }
+
+  [data-theme="dark"] .hero {
+    background:
+      radial-gradient(60% 55% at 18% 12%, rgba(14, 165, 233, 0.20), transparent 70%),
+      radial-gradient(55% 50% at 85% 18%, rgba(16, 185, 129, 0.16), transparent 70%),
+      linear-gradient(180deg, #060D1A 0%, #070B14 100%);
+  }
+
+  .hero .overlay {
+    z-index: 0;
+    background-image:
+      linear-gradient(to right, rgba(14, 165, 233, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(14, 165, 233, 0.06) 1px, transparent 1px);
+    background-size: 48px 48px;
+    -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 35%, #000 30%, transparent 100%);
+    mask-image: radial-gradient(ellipse 75% 65% at 50% 35%, #000 30%, transparent 100%);
+  }
+
+  .hero .container { z-index: 2; }
+
+  .orb {
+    position: absolute;
+    border-radius: 999px;
+    filter: blur(85px);
+    opacity: .45;
+    pointer-events: none;
+    z-index: 0;
+    animation: float 16s ease-in-out infinite;
+  }
+
+  .orb-1 {
+    width: 460px;
+    height: 460px;
+    left: -120px;
+    top: -140px;
+    background: rgba(56, 189, 248, 0.35);
+  }
+
+  .orb-2 {
+    width: 400px;
+    height: 400px;
+    right: -100px;
+    bottom: -120px;
+    background: rgba(16, 185, 129, 0.28);
+    animation-delay: -6s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translate3d(0,0,0) scale(1); }
+    50% { transform: translate3d(16px,-18px,0) scale(1.05); }
+  }
+
+  .hero-inner {
+    text-align: center;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(14, 165, 233, 0.22);
+    color: #0369A1;
+    font-weight: 800;
+    font-size: .86rem;
+    letter-spacing: -.01em;
+    box-shadow: 0 8px 24px rgba(14, 165, 233, 0.10);
+    backdrop-filter: blur(12px);
+  }
+
+  [data-theme="dark"] .hero-badge {
+    background: rgba(15, 23, 42, 0.75);
+    border-color: rgba(56, 189, 248, 0.28);
+    color: #38BDF8;
+  }
+
+  .hero-badge span { color: #0284C7; font-weight: 900; }
+  [data-theme="dark"] .hero-badge span { color: #38BDF8; }
+
+  .hero-badge::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #0EA5E9;
+    animation: pulse 2.2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.55); }
+    50%      { box-shadow: 0 0 0 7px rgba(14, 165, 233, 0); }
+  }
+
+  .hero h1 {
+    max-width: 920px;
+    margin: 26px auto 20px;
+    font-size: clamp(2.4rem, 5.4vw, 4.1rem);
+    font-weight: 900;
+    line-height: 1.16;
+    letter-spacing: -.045em;
+    color: var(--text-strong);
+    text-wrap: balance;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(120deg, #0284C7 0%, #0EA5E9 48%, #10B981 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* 10-18: 대문 제목 — 찬란한 열쇠 (Gasoek One, 화려하게) */
+  .hero h1.hero-key {
+    font-family: 'Gasoek One', 'Nanum Myeongjo', var(--font);
+    font-weight: 400;
+    letter-spacing: -.02em;
+    background: linear-gradient(115deg, #0369A1 0%, #0EA5E9 35%, #8B5CF6 65%, #F59E0B 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  [data-theme="dark"] .hero h1.hero-key {
+    background: linear-gradient(115deg, #38BDF8 0%, #2DD4BF 35%, #A78BFA 65%, #FBBF24 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  /* 10-18: 제목 아래 작은 부가 문구 */
+  .hero-sub {
+    max-width: 680px;
+    margin: -8px auto 18px;
+    font-family: 'Nanum Myeongjo', var(--font);
+    font-weight: 700;
+    font-size: 1.02rem;
+    letter-spacing: .06em;
+    color: var(--muted);
+  }
+  .rise-2b { transition-delay: .28s; }
+
+  .hero p.lead {
+    max-width: 680px;
+    margin: 0 auto;
+    color: var(--muted);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    font-weight: 500;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 36px;
+  }
+
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 15px 30px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: .98rem;
+    letter-spacing: -.02em;
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease, background .22s ease;
+  }
+
+  .cta-primary {
+    background: linear-gradient(135deg, #0284C7 0%, #0EA5E9 55%, #14B8A6 100%);
+    color: #fff;
+    box-shadow: 0 14px 32px rgba(14, 165, 233, 0.28);
+  }
+
+  .cta-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 38px rgba(14, 165, 233, 0.36);
+  }
+
+  .cta-ghost {
+    background: rgba(255, 255, 255, 0.85);
+    color: var(--text-strong);
+    border: 1px solid rgba(15, 23, 42, 0.10);
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
+    backdrop-filter: blur(12px);
+  }
+
+  [data-theme="dark"] .cta-ghost {
+    background: rgba(15, 23, 42, 0.72);
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+
+  .cta-ghost:hover {
+    transform: translateY(-2px);
+    border-color: rgba(14, 165, 233, 0.45);
+  }
+
+  .hero-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 56px;
+    text-align: left;
+  }
+
+  .hero-card {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 30px;
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.86);
+    border: 1px solid rgba(14, 165, 233, 0.14);
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.05);
+    backdrop-filter: blur(16px);
+    transition: transform .3s cubic-bezier(.22,.61,.36,1), box-shadow .3s ease, border-color .3s ease;
+    cursor: pointer;
+  }
+
+  [data-theme="dark"] .hero-card {
+    background: rgba(15, 23, 42, 0.68);
+    border-color: rgba(255, 255, 255, 0.10);
+  }
+
+  .hero-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 24px 56px rgba(14, 165, 233, 0.13);
+    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  }
+
+  .hero-card.travel { --accent: #0EA5E9; --accent-soft: rgba(14, 165, 233, 0.12); }
+  .hero-card.repair { --accent: #10B981; --accent-soft: rgba(16, 185, 129, 0.12); }
+  .hero-card.bunny  { --accent: #F43F5E; --accent-soft: rgba(244, 63, 94, 0.11); }
+
+  .hero-card .num {
+    position: absolute;
+    top: 28px;
+    right: 28px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+  }
+
+  .hero-card .icon {
+    width: 60px;
+    height: 60px;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    font-size: 1.85rem;
+    background: var(--accent-soft);
+    margin-bottom: 22px;
+  }
+
+  .hero-card h3 {
+    margin: 0 0 10px;
+    font-size: 1.28rem;
+    font-weight: 800;
+    line-height: 1.35;
+    letter-spacing: -.03em;
+    color: var(--text-strong);
+  }
+
+  .hero-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: .96rem;
+    line-height: 1.7;
+    flex-grow: 1;
+  }
+
+  .hero-card .go {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 24px;
+    font-weight: 800;
+    font-size: .92rem;
+    color: var(--accent);
+    transition: transform .22s ease, gap .22s ease;
+  }
+
+  .hero-card:hover .go {
+    gap: 10px;
+    transform: translateX(3px);
+  }
+
+  .hero-card:focus-visible, .cta:focus-visible {
+    outline: 3px solid rgba(14, 165, 233, 0.5);
+    outline-offset: 3px;
+  }
+
+  .scroll-cue {
+    display: none;
+  }
+
+  .rise { opacity: 0; transform: translateY(20px); animation: rise .75s cubic-bezier(.22,.61,.36,1) forwards; }
+  .rise-1 { animation-delay: .04s; } .rise-2 { animation-delay: .12s; } .rise-3 { animation-delay: .22s; } .rise-4 { animation-delay: .32s; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .orb, .hero-badge::before { animation: none !important; }
+    .wave { animation: none !important; }
+    .rise { opacity: 1; transform: none; animation: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  .sec-head {
+    text-align: center;
+    margin-bottom: 54px;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: .78rem;
+    font-weight: 950;
+    letter-spacing: .08em;
+    border: 1px solid transparent;
+  }
+
+  .tag.travel { background: var(--travel-soft); color: var(--travel); }
+  .tag.repair { background: var(--repair-soft); color: var(--repair); }
+  .tag.bunny  { background: var(--bunny-soft);  color: var(--bunny); }
+
+  .sec-head h2 {
+    margin-top: 16px;
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    line-height: 1.18;
+    letter-spacing: -.05em;
+    color: var(--text-strong);
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 34px;
+    padding: 11px 18px;
+    border-radius: 999px;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    color: var(--text);
+    font-weight: 900;
+    font-size: .88rem;
+    transition: transform .22s ease, border-color .22s ease;
+  }
+
+  .back-btn:hover {
+    transform: translateX(-4px);
+    border-color: rgba(255,107,53,.35);
+  }
+
+  .section-add-btn {
+    margin-top: 24px;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 999px;
+    color: #fff;
+    font-weight: 950;
+    font-size: .98rem;
+    letter-spacing: -.02em;
+    cursor: pointer;
+    transition: transform .22s ease, box-shadow .22s ease, filter .22s ease;
+  }
+
+  .section-add-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+  }
+
+  .section-add-btn.travel-add {
+    background: linear-gradient(135deg, var(--travel), #FF9A76);
+    box-shadow: 0 16px 34px rgba(255,107,53,.28);
+  }
+
+  .section-add-btn.repair-add {
+    background: linear-gradient(135deg, var(--repair), #34D399);
+    box-shadow: 0 16px 34px rgba(16,185,129,.24);
+  }
+
+  .section-add-btn.bunny-add {
+    background: linear-gradient(135deg, var(--bunny), #F472B6);
+    box-shadow: 0 16px 34px rgba(236,72,153,.24);
+  }
+
+  .post-grid,
+  .cat-grid,
+  .bunny-gallery,
+  .user-post-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+
+  .user-post-grid { margin-top: 24px; }
+  .contents { display: contents; }
+
+  .post,
+  .cat,
+  .bunny-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    padding: 32px 26px;
+    box-shadow: var(--shadow);
+    transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  }
+
+  .post:hover,
+  .cat:hover,
+  .bunny-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 58px rgba(15,23,42,.12);
+    border-color: rgba(255,107,53,.22);
+  }
+
+  .icon-large {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    display: inline-block;
+  }
+
+  .post h3,
+  .cat h3,
+  .bunny-card h3 {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    line-height: 1.35;
+    letter-spacing: -.035em;
+    color: var(--text-strong);
+  }
+
+  .post p,
+  .cat p,
+  .bunny-card p {
+    color: var(--muted);
+    font-size: .98rem;
+    line-height: 1.78;
+  }
+
+  .faq {
+    max-width: 820px;
+    margin: 54px auto 0;
+  }
+
+  .faq-item {
+    overflow: hidden;
+    margin-bottom: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+  }
+
+  .faq-item .q {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 24px;
+    border: none;
+    background: transparent;
+    color: var(--text-strong);
+    font-size: 1rem;
+    font-weight: 900;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .faq-item .q::after {
+    content: "+";
+    font-size: 1.45rem;
+    line-height: 1;
+    color: var(--repair);
+    transition: transform .25s ease;
+  }
+
+  .faq-item.open .q::after {
+    transform: rotate(45deg);
+  }
+
+  .faq-item .a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .3s ease;
+    background: var(--surface-soft);
+  }
+
+  .faq-item .a p {
+    padding: 20px 24px;
+    color: var(--muted);
+    font-size: .96rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .contact-notice {
+    margin-top: 56px;
+    padding: 34px;
+    text-align: center;
+    color: var(--repair);
+    font-weight: 950;
+    font-size: 1.05rem;
+    border-radius: 28px;
+    background: var(--repair-soft);
+    border: 1px solid color-mix(in srgb, var(--repair) 18%, var(--border));
+    box-shadow: var(--shadow);
+  }
+
+  .pure-light-section {
+    background: var(--surface-soft);
+    padding: 100px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .bunny-box {
+    margin-bottom: 32px;
+    padding: 34px;
+    border-radius: 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+
+  .bunny-box h3 {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border);
+    font-size: 1.28rem;
+    color: var(--text-strong);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .bunny-box p {
+    color: var(--text);
+    font-size: 1.02rem;
+  }
+
+  .tip-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    list-style: none;
+  }
+
+  .tip-item {
+    padding: 22px;
+    border-radius: 22px;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+  }
+
+  .tip-item strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1.08rem;
+    color: var(--bunny);
+  }
+
+  .tip-item span {
+    color: var(--muted);
+    font-size: .96rem;
+    line-height: 1.75;
+  }
+
+  .bunny-gallery { margin-bottom: 32px; }
+
+  .add-btn {
+    margin-top: 24px;
+    padding: 13px 28px;
+    border: none;
+    border-radius: 999px;
+    background: var(--travel);
+    color: #fff;
+    font-weight: 900;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(255,107,53,.3);
+    transition: transform .2s, box-shadow .2s;
+  }
+
+  .add-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(255,107,53,.38);
+  }
+
+  .user-post {
+    position: relative;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+  }
+
+  .user-post:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 28px 70px rgba(15,23,42,.14);
+    border-color: rgba(255,107,53,.28);
+  }
+
+  .user-post .thumb {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: linear-gradient(135deg, var(--surface-soft), var(--surface));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    overflow: hidden;
+  }
+
+  .user-post .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .user-post .badge {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    padding: 4px 11px;
+    border-radius: 999px;
+    background: rgba(15,23,42,.72);
+    color: #fff;
+    font-size: .78rem;
+    font-weight: 900;
+    backdrop-filter: blur(8px);
+  }
+
+  .user-post .post-body {
+    padding: 22px 24px 28px;
+  }
+
+  .user-post .post-body h3 {
+    margin: 2px 0 8px;
+    font-size: 1.2rem;
+    line-height: 1.35;
+    letter-spacing: -.035em;
+    color: var(--text-strong);
+  }
+
+  .post-date {
+    font-size: .82rem;
+    color: var(--muted);
+    font-weight: 900;
+  }
+
+  .clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    color: var(--muted);
+  }
+
+  .file-list {
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: 18px;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+  }
+
+  .file-list a {
+    display: block;
+    margin-top: 8px;
+    color: var(--travel);
+    font-weight: 900;
+    overflow-wrap: anywhere;
+  }
+
+  .attach-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  #fileCount, #photoCount {
+    font-size: .85rem;
+    color: var(--muted);
+  }
+
+  dialog {
+    margin: auto;
+    border: none;
+    border-radius: 28px;
+    padding: 0;
+    width: min(680px, calc(100% - 32px));
+    max-height: calc(100vh - 48px);
+    background: var(--surface-glass);
+    color: var(--text);
+    box-shadow: 0 30px 80px rgba(0,0,0,.25);
+    backdrop-filter: blur(18px);
+    overflow: hidden;
+  }
+
+  dialog::backdrop {
+    background: rgba(15,23,42,.55);
+    backdrop-filter: blur(6px);
+  }
+
+  body:has(dialog[open]) {
+    overflow: hidden;
+  }
+
+  .dlg-body {
+    padding: 32px;
+    max-height: calc(100vh - 48px);
+    overflow: auto;
+  }
+
+  .dlg-title {
+    padding-right: 44px;
+    margin-bottom: 22px;
+    font-size: 1.55rem;
+    line-height: 1.25;
+    letter-spacing: -.045em;
+    color: var(--text-strong);
+    overflow-wrap: anywhere;
+  }
+
+  .field { margin-bottom: 18px; }
+
+  .field label,
+  .field .lbl {
+    display: block;
+    margin-bottom: 8px;
+    font-size: .92rem;
+    font-weight: 950;
+    color: var(--text-strong);
+  }
+
+  .field input[type="text"],
+  .field input[type="date"],
+  .field textarea {
+    width: 100%;
+    padding: 13px 15px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    font: inherit;
+    color: var(--text);
+    background: var(--surface-soft);
+    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 150px;
+  }
+
+  .field input:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--travel);
+    box-shadow: 0 0 0 4px rgba(255,107,53,.15);
+    background: var(--surface);
+  }
+
+  .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .file-btn {
+    display: inline-block;
+    padding: 11px 18px;
+    border: 1px dashed var(--border);
+    border-radius: 14px;
+    font-weight: 900;
+    font-size: .92rem;
+    cursor: pointer;
+    color: var(--text);
+    transition: border-color .2s ease, color .2s ease, transform .2s ease;
+  }
+
+  .file-btn:hover {
+    border-color: var(--travel);
+    color: var(--travel);
+    transform: translateY(-1px);
+  }
+
+  .preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .thumb-sm {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+  }
+
+  .thumb-sm img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .rm {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 26px;
+    height: 26px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(15,23,42,.75);
+    color: #fff;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .form-error {
+    min-height: 1.4em;
+    color: #E53E3E;
+    font-size: .9rem;
+    font-weight: 900;
+  }
+
+  .dlg-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 18px;
+  }
+
+  .btn {
+    padding: 12px 22px;
+    border-radius: 999px;
+    font-weight: 950;
+    font-size: .95rem;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: transform .2s ease, filter .2s ease, border-color .2s ease;
+  }
+
+  .btn:hover { transform: translateY(-1px); }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--travel), #FF9A76);
+    color: #fff;
+  }
+
+  .btn-primary:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-ghost {
+    background: var(--surface-soft);
+    border-color: var(--border);
+    color: var(--text);
+  }
+
+  .btn-danger {
+    background: rgba(229,62,62,.10);
+    border-color: rgba(229,62,62,.22);
+    color: #E53E3E;
+  }
+
+  .x-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(15,23,42,.08);
+    font-size: 1.35rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--text);
+  }
+
+  #viewContent {
+    white-space: pre-wrap;
+    line-height: 1.85;
+    overflow-wrap: anywhere;
+    color: var(--text);
+  }
+
+  .view-photos {
+    display: grid;
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .view-photos img {
+    width: 100%;
+    border-radius: 20px;
+    display: block;
+    border: 1px solid var(--border);
+  }
+
+  .about-section {
+    background: var(--surface-soft);
+    padding: 100px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .about-section p {
+    max-width: 720px;
+    margin: 24px auto 0;
+    color: var(--muted);
+    font-size: 1.06rem;
+    line-height: 1.85;
+  }
+
+  footer {
+    background: #0F172A;
+    color: #94A3B8;
+    text-align: center;
+    padding: 42px 20px;
+    font-size: .9rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+  }
+
+  footer span {
+    color: var(--bunny);
+    font-weight: 900;
+  }
+
+  @media (max-width: 1024px) {
+    .post-grid,
+    .cat-grid,
+    .bunny-gallery,
+    .user-post-grid,
+    .hero-cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 860px) {
+    .parallax-section { background-attachment: scroll; }
+    .tip-list { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 760px) {
+    .menu-btn { display: inline-grid; }
+
+    .nav-links {
+      display: none;
+      position: absolute;
+      top: 68px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 18px;
+      padding: 24px;
+      background: var(--surface-glass);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .nav-links.open { display: flex; }
+  }
+
+  @media (max-width: 640px) {
+    .post-grid,
+    .cat-grid,
+    .bunny-gallery,
+    .user-post-grid,
+    .hero-cards {
+      grid-template-columns: 1fr;
+    }
+
+    .hero {
+      padding: 120px 0 90px;
+    }
+
+    .parallax-section {
+      padding: 90px 0;
+    }
+
+    .dlg-body {
+      padding: 24px 20px;
+    }
+
+    .hero-card {
+      padding: 28px;
+    }
+  }
+
+  /* ── 좌측 세로 사이드바 (PC 761px 이상만, 모바일은 기존 상단바 유지) ── */
+  @media (min-width: 761px) {
+    header {
+      position: fixed; left: 0; top: 0; bottom: 0;
+      width: 220px; border-bottom: none;
+      border-right: 1px solid var(--border);
+    }
+    header .container.nav {
+      flex-direction: column; align-items: stretch; justify-content: flex-start;
+      height: 100vh; padding: 28px 20px; gap: 28px;
+    }
+    .nav-right { flex-direction: column; align-items: stretch; gap: 14px; }
+    .nav-links { flex-direction: column; align-items: stretch; gap: 6px; }
+    .nav-links a { display: block; padding: 12px 14px; border-radius: 12px; }
+    .nav-links a:hover, .nav-links a.active { background: var(--surface-soft); }
+    .nav-links a::after { display: none; }
+    .theme-toggle { align-self: flex-start; }
+    body { padding-left: 220px; }
+    .hero { min-height: 100vh; }
+  }
+
+  /* ── travel 배경: 도심 황혼 (2.jpg 대체, 외부이미지 없음) ── */
+  #travel {
+    background:
+      radial-gradient(45% 35% at 82% 18%, rgba(255,154,118,.35), transparent 70%),
+      radial-gradient(50% 40% at 12% 25%, rgba(56,189,248,.25), transparent 70%),
+      linear-gradient(180deg, #0B2447 0%, #134E5E 55%, #1B6B6B 100%);
+  }
+  #travel .overlay { background: linear-gradient(180deg, rgba(7,11,20,.15), rgba(7,11,20,.55)); }
+  #travel .sec-head h2 { color: #F1F5F9; }
+  #travel .back-btn { color: #F1F5F9; background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.2); }
+  #travel .tag.travel { background: rgba(255,107,53,.22); color: #FFB59E; }
+  /* ── 비대칭: 짝수 카드 내리기 (PC만) ── */
+  @media (min-width: 1025px) {
+    #travel .post-grid { align-items: start; }
+    #travel .post-grid > .post:nth-child(even) { margin-top: 28px; }
+  }
+
+  /* ── 10-18: repair 배경 — 깨진 3.jpg 제거, travel과 같은 방식의 CSS 그라데이션 ── */
+  #repair {
+    background:
+      radial-gradient(45% 35% at 80% 20%, rgba(16,185,129,.30), transparent 70%),
+      radial-gradient(50% 40% at 15% 30%, rgba(99,102,241,.22), transparent 70%),
+      linear-gradient(180deg, #0F3D33 0%, #14532D 55%, #166534 100%);
+  }
+  #repair .overlay { background: linear-gradient(180deg, rgba(7,11,20,.15), rgba(7,11,20,.55)); }
+  #repair .sec-head h2 { color: #F1F5F9; }
+  #repair .back-btn { color: #F1F5F9; background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.2); }
+
+  /* ── 10-18: about 섹션 (nav '소개' 링크 연결) ── */
+  #about {
+    background:
+      radial-gradient(45% 35% at 85% 15%, rgba(56,189,248,.22), transparent 70%),
+      radial-gradient(50% 40% at 10% 30%, rgba(45,212,191,.18), transparent 70%),
+      linear-gradient(180deg, #EAF6FF 0%, #F1F8F5 60%, #F6F8FB 100%);
+  }
+  .tag.about { background: rgba(56,189,248,.14); color: #0284C7; }
+
+  /* ── 전체: 선택색 + 섹션제목 그라데이션 바 ── */
+  ::selection { background: rgba(14,165,233,.28); }
+  .sec-head h2::after {
+    content: ""; display: block; width: 72px; height: 5px; border-radius: 999px;
+    margin: 18px auto 0;
+    background: linear-gradient(90deg, var(--travel), var(--repair), var(--bunny));
+  }
+
+  /* ── 대문 물결 (확대 + 그라데이션 + 30° 대각선) ── */
+  .wave-wrap { position: absolute; left: -20%; right: -20%; bottom: -70px; height: 260px; z-index: 1; overflow: hidden; pointer-events: none; transform: rotate(30deg); transform-origin: center bottom; }
+  .wave { position: absolute; bottom: 0; width: 200%; height: 100%; }
+  .wave-1 { animation: waveMove 9s linear infinite; }
+  .wave-2 { animation: waveMove 14s linear infinite reverse; }
+  @keyframes waveMove { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <a href="#home" class="logo"><span class="logo-w">W</span>ayfarer<span class="logo-dot">.</span></a>
+
+    <div class="nav-right">
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" data-nav="home">홈</a></li>
+        <li><a href="#travel" data-nav="travel">🧭 여행</a></li>
+        <li><a href="#repair" data-nav="repair">🖥️ 수리·상담</a></li>
+        <li><a href="#bunny" data-nav="bunny">🐰 토끼 일상</a></li>
+        <li><a href="#about" data-nav="about">소개</a></li>
+      </ul>
+
+      <button class="theme-toggle" id="themeToggle" aria-label="다크 모드 전환" title="다크 모드 전환">🌙</button>
+      <button class="menu-btn" id="menuBtn" aria-label="메뉴 열기">☰</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero parallax-section" id="home" data-view="home">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="overlay"></div>
+  <div class="wave-wrap" aria-hidden="true">
+    <svg class="wave wave-1" viewBox="0 0 2880 120" preserveAspectRatio="none">
+      <defs><linearGradient id="waveGrad1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#38BDF8" stop-opacity=".38"/><stop offset=".5" stop-color="#6366F1" stop-opacity=".30"/><stop offset="1" stop-color="#38BDF8" stop-opacity=".38"/></linearGradient></defs>
+      <path d="M0,64 C240,96 480,32 720,56 C960,80 1200,96 1440,64 C1680,96 1920,32 2160,56 C2400,80 2640,96 2880,64 L2880,120 L0,120 Z" fill="url(#waveGrad1)"/>
+    </svg>
+    <svg class="wave wave-2" viewBox="0 0 2880 120" preserveAspectRatio="none">
+      <defs><linearGradient id="waveGrad2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2DD4BF" stop-opacity=".30"/><stop offset=".5" stop-color="#0EA5E9" stop-opacity=".24"/><stop offset="1" stop-color="#2DD4BF" stop-opacity=".30"/></linearGradient></defs>
+      <path d="M0,72 C260,40 520,100 780,72 C1040,44 1240,80 1440,60 C1700,40 1960,100 2220,72 C2480,44 2680,80 2880,60 L2880,120 L0,120 Z" fill="url(#waveGrad2)"/>
+    </svg>
+  </div>
+
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-badge rise rise-1">
+        <span>Wayfarer</span> · 기록하고, 고치고, 쉬어가는 공간
+      </div>
+
+      <h1 class="rise rise-2 hero-key">AI 세상을 바꾸는 찬란한 열쇠</h1>
+
+      <p class="hero-sub rise rise-2b">작은 시작이 큰 변화를 연다</p>
+
+      <p class="lead rise rise-3">
+        탁 트인 풍경을 담는 여행기부터 답답한 컴퓨터 고장을 명쾌하게 해결하는 수리 팁,
+        그리고 반려토끼 토토의 평화로운 일상까지 한곳에 깔끔하게 담았습니다.
+      </p>
+
+      <div class="hero-cta rise rise-4">
+        <a href="#travel" class="cta cta-primary">🧭 여행 기록 둘러보기</a>
+        <a href="#repair" class="cta cta-ghost">🖥️ PC 수리·상담 안내</a>
+        <a href="#bunny" class="cta cta-ghost">🐰 토토의 일상 보기</a>
+      </div>
+
+      <div class="hero-cards rise rise-4">
+        <a href="#travel" class="hero-card travel">
+          <span class="num">01 · TRAVEL</span>
+          <div class="icon">🧭</div>
+          <h3>내 여행 기록</h3>
+          <p>직접 발로 뛰며 다녀온 국내외 여행지와 생생한 현지 이야기들.</p>
+          <span class="go">여행 기록 보기 →</span>
+        </a>
+
+        <a href="#repair" class="hero-card repair">
+          <span class="num">02 · REPAIR</span>
+          <div class="icon">🖥️</div>
+          <h3>컴퓨터 수리·상담</h3>
+          <p>머리 아픈 PC 고장 꿀팁 공유 및 맞춤형 1:1 상담 안내.</p>
+          <span class="go">수리·상담 받기 →</span>
+        </a>
+
+        <a href="#bunny" class="hero-card bunny">
+          <span class="num">03 · BUNNY</span>
+          <div class="icon">🐰</div>
+          <h3>토끼 일상</h3>
+          <p>반려토끼 토토 소개, 갤러리 사진, 유익한 양육 정보 팁 모음.</p>
+          <span class="go">토끼 보러 가기 →</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="travel" class="parallax-section page-view" data-view="travel" hidden>
+  <div class="overlay"></div>
+  <div class="container">
+    <a href="#home" class="back-btn">← 홈으로</a>
+
+    <div class="sec-head">
+      <span class="tag travel">TRAVEL</span>
+      <h2>다녀온 여행 발자국</h2>
+      <button type="button" class="section-add-btn travel-add" data-category="travel">＋ 새 여행 등록</button>
+    </div>
+
+    <div class="post-grid">
+      <div class="contents" id="travelUserPosts"></div>
+
+      <div class="post">
+        <div class="icon-large">🌊</div>
+        <h3>부산 영도 감성 여행</h3>
+        <p>흰여울문화마을 골목길 사이로 바라본 끝없는 수평선과 오션뷰 카페 탐방 기록.</p>
+      </div>
+
+      <div class="post">
+        <div class="icon-large">🏙️</div>
+        <h3>일본 도쿄 시티 라이프</h3>
+        <p>도쿄 타워가 한눈에 보이는 명소부터 나만 알고 싶은 고요한 숨은 골목길 투어.</p>
+      </div>
+
+      <div class="post">
+        <div class="icon-large">🏔️</div>
+        <h3>강원도 평창 숲속 힐링</h3>
+        <p>초록빛 숲 한가운데서 온전한 휴식과 자연 소리를 만끽했던 2박 3일의 주말 휴양.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="repair" class="parallax-section page-view" data-view="repair" hidden>
+  <div class="overlay"></div>
+  <div class="container">
+    <a href="#home" class="back-btn">← 홈으로</a>
+
+    <div class="sec-head">
+      <span class="tag repair">REPAIR</span>
+      <h2>컴퓨터 고장 수리 & 상담</h2>
+      <button type="button" class="section-add-btn repair-add" data-category="repair">＋ 새 글 등록</button>
+    </div>
+
+    <div class="user-post-grid" id="repairUserPosts"></div>
+
+    <div class="cat-grid">
+      <div class="cat">
+        <div class="icon-large">⚙️</div>
+        <h3>느려진 PC 포맷·</h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="bunny" class="parallax-section page-view" data-view="bunny" hidden>
+  <div class="overlay"></div>
+  <div class="container">
+    <a href="#home" class="back-btn">← 홈으로</a>
+
+    <div class="sec-head">
+      <span class="tag bunny">BUNNY</span>
+      <h2>토끼 일상</h2>
+      <button type="button" class="section-add-btn bunny-add" data-category="bunny">＋ 새 일상 등록</button>
+    </div>
+
+    <div class="post-grid">
+      <div class="contents" id="bunnyUserPosts"></div>
+
+      <div class="post">
+        <div class="icon-large">🐰</div>
+        <h3>토토를 소개합니다</h3>
+        <p>네덜란드 드워프 토토. 낮에는 쿨쿨, 저녁에는 방방. 건초 리필은 정시에.</p>
+      </div>
+
+      <div class="post">
+        <div class="icon-large">🥬</div>
+        <h3>토토 밥상 기록</h3>
+        <p>건초·펠릿·채소 급여 기록과 좋아하는 간식 랭킹을 공유합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 10-18: about 섹션 추가 (nav '소개' 링크 연결) ===== -->
+<section id="about" class="parallax-section page-view" data-view="about" hidden>
+  <div class="overlay"></div>
+  <div class="container">
+    <a href="#home" class="back-btn">← 홈으로</a>
+
+    <div class="sec-head">
+      <span class="tag about">ABOUT</span>
+      <h2>소개</h2>
+    </div>
+
+    <div class="post-grid">
+      <div class="post">
+        <div class="icon-large">🗝️</div>
+        <h3>AI 세상을 바꾸는 찬란한 열쇠</h3>
+        <p>작은 시작이 큰 변화를 연다. 기록하고, 고치고, 쉬어가는 공간 — Wayfarer를 그대로 이어가는 곳입니다.</p>
+      </div>
+
+      <div class="post">
+        <div class="icon-large">🧭</div>
+        <h3>세 개의 공간</h3>
+        <p>여행 기록(TRAVEL), 컴퓨터 수리·상담(REPAIR), 반려�토끼 토토의 일상(BUNNY). 글 등록은 각 섹션에서 직접 합니다.</p>
+      </div>
+
+      <div class="post">
+        <div class="icon-large">🐰</div>
+        <h3>운영 원칙</h3>
+        <p>PHP·Python 없이 정적 파일로 동작합니다. 외부 라이브러리 없음, 다크모드·모바일 지원, reduced-motion 준수.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 여행 등록/상세 다이얼로그 (t_bfa1d4af) ===== -->
+<dialog id="travelFormDialog" aria-label="새 여행 글 등록">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="travelFormDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title">새 여행 글</h3>
+    <form id="travelForm" novalidate>
+      <div class="field">
+        <label for="travelTitle">제목 *</label>
+        <input type="text" id="travelTitle" maxlength="120" placeholder="예: 제주 올레길 걷기">
+      </div>
+      <div class="field">
+        <label for="travelDate">날짜</label>
+        <input type="date" id="travelDate">
+      </div>
+      <div class="field">
+        <label for="travelContent">내용</label>
+        <textarea id="travelContent" placeholder="여행 이야기를 적어주세요"></textarea>
+      </div>
+      <div class="field">
+        <label for="travelFiles">사진·파일 (여러 개)</label>
+        <div class="attach-row">
+          <label class="file-btn" for="travelFiles">파일 선택</label>
+          <input type="file" id="travelFiles" class="sr" multiple>
+          <span id="fileCount">선택된 파일 없음</span>
+        </div>
+        <div class="preview-grid" id="travelPreview"></div>
+      </div>
+      <div class="form-error" id="travelFormError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="travelFormDialog">취소</button>
+        <button type="submit" class="btn btn-primary" id="travelSubmit">등록</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog id="travelViewDialog" aria-label="여행 글 상세">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="travelViewDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title" id="viewTitle"></h3>
+    <div class="post-date" id="viewDate"></div>
+    <div class="view-photos" id="viewPhotos"></div>
+    <div id="viewContent"></div>
+    <div class="file-list" id="viewFiles" hidden></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-danger" id="viewDelete">삭제</button>
+      <button type="button" class="btn btn-ghost" data-close="travelViewDialog">닫기</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- ===== 토끼일상 등록/상세 다이얼로그 ===== -->
+<dialog id="bunnyFormDialog" aria-label="새 일상 등록">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="bunnyFormDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title">새 일상 글</h3>
+    <form id="bunnyForm" novalidate>
+      <div class="field">
+        <label for="bunnyTitle">제목 *</label>
+        <input type="text" id="bunnyTitle" maxlength="120" placeholder="예: 토토 낮잠 포착">
+      </div>
+      <div class="field">
+        <label for="bunnyDate">날짜</label>
+        <input type="date" id="bunnyDate">
+      </div>
+      <div class="field">
+        <label for="bunnyContent">내용</label>
+        <textarea id="bunnyContent" placeholder="토토의 하루를 적어주세요"></textarea>
+      </div>
+      <div class="field">
+        <label for="bunnyFiles">사진·파일 (여러 개)</label>
+        <div class="attach-row">
+          <label class="file-btn" for="bunnyFiles">파일 선택</label>
+          <input type="file" id="bunnyFiles" class="sr" multiple>
+          <span id="bunnyFileCount">선택된 파일 없음</span>
+        </div>
+        <div class="preview-grid" id="bunnyPreview"></div>
+      </div>
+      <div class="form-error" id="bunnyFormError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="bunnyFormDialog">취소</button>
+        <button type="submit" class="btn btn-primary" id="bunnySubmit">등록</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog id="bunnyViewDialog" aria-label="일상 글 상세">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="bunnyViewDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title" id="bunnyViewTitle"></h3>
+    <div class="post-date" id="bunnyViewDate"></div>
+    <div class="view-photos" id="bunnyViewPhotos"></div>
+    <div id="bunnyViewContent"></div>
+    <div class="file-list" id="bunnyViewFiles" hidden></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-danger" id="bunnyViewDelete">삭제</button>
+      <button type="button" class="btn btn-ghost" data-close="bunnyViewDialog">닫기</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  "use strict";
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+
+  /* ---------- 뷰 전환: data-view 규칙 (hidden 토글, nav active) ---------- */
+  var views = $$("section[data-view]");
+  function showView(name) {
+    var target = null;
+    views.forEach(function (s) { if (s.dataset.view === name) target = s; });
+    if (!target) return; /* bunny/about 등 미존재 섹션: no-op */
+    views.forEach(function (s) { s.hidden = (s !== target); });
+    $$(".nav-links a").forEach(function (a) { a.classList.toggle("active", a.dataset.nav === name); });
+    $$(".nav-links").forEach(function (n) { n.classList.remove("open"); });
+    window.scrollTo(0, 0);
+    if (name === "home") enterHome(); /* 첫 대문 진입 시 전체 내용 상승 */
+  }
+  function route() { showView((location.hash || "#home").replace("#", "") || "home"); }
+  window.addEventListener("hashchange", route);
+
+  /* ---------- 대문 첫 진입: 전체 내용 아래→위 상승 (JS, 좌측 바 제외) ---------- */
+  var homeEntered = false;
+  function enterHome() {
+    if (homeEntered) return;          /* 첫 진입 1회만 */
+    homeEntered = true;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return; /* 접근성: 애니메이션 끄기 */
+    var c = $("#home .container");    /* header(좌측 바) 제외, 대문 내용 블록만 */
+    if (!c || !c.animate) return;
+    c.animate(
+      [{ transform: "translateY(60px)", opacity: 0 }, { transform: "translateY(0)", opacity: 1 }],
+      { duration: 800, easing: "cubic-bezier(.22,.61,.36,1)" }
+    );
+  }
+
+  var menuBtn = $("#menuBtn");
+  if (menuBtn) {
+    menuBtn.addEventListener("click", function () {
+      var nl = $(".nav-links");
+      if (nl) nl.classList.toggle("open");
+    });
+  }
+
+  /* ---------- API ---------- */
+  function apiList() {
+    return fetch("/api?action=list", { headers: { Accept: "application/json" } })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        var posts = data && data.posts;
+        /* PS5.1 ConvertTo-Json: 1개면 bare object, 그 외 ArrayList 래퍼({value,Count}) — 정규화 */
+        if (posts && !Array.isArray(posts)) posts = Array.isArray(posts.value) ? posts.value : (posts.id ? [posts] : []);
+        return Array.isArray(posts) ? posts : [];
+      });
+  }
+  function isImageFile(f) {
+    var n = String(f.name || f.originalName || "").toLowerCase();
+    return /^image\//.test(f.type || "") || /\.(png|jpe?g|gif|webp|bmp|svg)$/.test(n);
+  }
+  function postDate(p) {
+    if (p.date) return p.date;
+    if (p.createdAt) { try { return new Date(p.createdAt).toISOString().slice(0, 10); } catch (e) {} }
+    return "";
+  }
+
+  /* ---------- 여행 목록 렌더 (#travelUserPosts, .contents=display:contents라 .post-grid에 합류) ---------- */
+  var listEl = $("#travelUserPosts");
+  var travelPosts = [];
+
+  function fileLinks(files, ev) {
+    var fl = document.createElement("div");
+    fl.className = "file-list";
+    fl.style.marginTop = "12px";
+    files.forEach(function (f) {
+      var a = document.createElement("a");
+      a.href = f.url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.textContent = "📎 " + (f.originalName || f.name);
+      if (ev) a.addEventListener("click", function (e) { e.stopPropagation(); });
+      fl.appendChild(a);
+    });
+    return fl;
+  }
+
+  function makeCard(p) {
+    var card = document.createElement("article");
+    card.className = "post";
+    card.tabIndex = 0;
+
+    var imgs = (p.files || []).filter(isImageFile);
+    var photo = document.createElement("div");
+    photo.className = "photo";
+    if (imgs.length) {
+      var im = document.createElement("img");
+      im.src = imgs[0].url;
+      im.alt = p.title || "";
+      im.loading = "lazy";
+      im.style.cssText = "width:100%;height:100%;object-fit:cover;border-radius:20px;display:block;";
+      photo.appendChild(im);
+    } else {
+      photo.style.cssText = "display:grid;place-items:center;font-size:3.2rem;background:linear-gradient(135deg,var(--travel-soft),var(--surface-soft));";
+      photo.textContent = "🧭";
+    }
+    var h = document.createElement("h3");
+    h.textContent = p.title || "(제목 없음)";
+    var c = document.createElement("p");
+    c.className = "clamp";
+    c.textContent = p.content || "";
+    var d = document.createElement("div");
+    d.className = "post-date";
+    d.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    card.appendChild(photo);
+    card.appendChild(h);
+    card.appendChild(c);
+    card.appendChild(d);
+    if ((p.files || []).length) card.appendChild(fileLinks(p.files, true));
+
+    card.addEventListener("click", function () { openView(p.id); });
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openView(p.id); }
+    });
+    return card;
+  }
+
+  function renderTravel() {
+    listEl.textContent = "";
+    if (!travelPosts.length) {
+      var empty = document.createElement("div");
+      empty.style.cssText = "grid-column:1/-1;text-align:center;color:var(--muted);font-weight:800;padding:26px 0;";
+      empty.textContent = "등록된 여행 글이 없습니다. 아래 버튼으로 첫 여행을 등록해 보세요!";
+      listEl.appendChild(empty);
+      return;
+    }
+    travelPosts.forEach(function (p) { listEl.appendChild(makeCard(p)); });
+  }
+
+  function loadTravel() {
+    return apiList().then(function (posts) {
+      travelPosts = posts.filter(function (p) { return p.category === "travel"; });
+      renderTravel();
+    }).catch(function () { travelPosts = []; renderTravel(); });
+  }
+
+  /* ---------- 다이얼로그 공통 ---------- */
+  function openDlg(d) { if (d && !d.open) d.showModal(); }
+  function closeDlg(d) { if (d && d.open) d.close(); }
+  $$("[data-close]").forEach(function (b) {
+    b.addEventListener("click", function () { closeDlg(document.getElementById(b.getAttribute("data-close"))); });
+  });
+
+  /* ---------- 등록 폼 ---------- */
+  var formDlg = $("#travelFormDialog"),
+      form = $("#travelForm"),
+      titleInput = $("#travelTitle"),
+      dateInput = $("#travelDate"),
+      contentInput = $("#travelContent"),
+      fileInput = $("#travelFiles"),
+      previewEl = $("#travelPreview"),
+      fileCountEl = $("#fileCount"),
+      errorEl = $("#travelFormError"),
+      submitBtn = $("#travelSubmit");
+  var picked = [];
+
+  function renderPreview() {
+    $$("img", previewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
+    previewEl.textContent = "";
+    fileCountEl.textContent = picked.length ? picked.length + "개 선택됨" : "선택된 파일 없음";
+    picked.forEach(function (f, i) {
+      var tile = document.createElement("div");
+      tile.className = "thumb-sm";
+      tile.title = f.name;
+      if (isImageFile(f)) {
+        var im = document.createElement("img");
+        im.src = URL.createObjectURL(f);
+        im.alt = f.name;
+        tile.appendChild(im);
+      } else {
+        tile.style.cssText = "display:grid;place-items:center;font-size:1.6rem;";
+        tile.textContent = "📄";
+      }
+      var rm = document.createElement("button");
+      rm.type = "button";
+      rm.className = "rm";
+      rm.textContent = "×";
+      rm.setAttribute("aria-label", f.name + " 제거");
+      rm.addEventListener("click", function () { picked.splice(i, 1); renderPreview(); });
+      tile.appendChild(rm);
+      previewEl.appendChild(tile);
+    });
+  }
+
+  fileInput.addEventListener("change", function () {
+    picked = picked.concat(Array.prototype.slice.call(fileInput.files));
+    fileInput.value = "";
+    renderPreview();
+  });
+
+  $$(".section-add-btn[data-category='travel']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      errorEl.textContent = "";
+      openDlg(formDlg);
+      titleInput.focus();
+    });
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var title = titleInput.value.trim();
+    if (!title) { errorEl.textContent = "제목을 입력하세요."; titleInput.focus(); return; }
+    errorEl.textContent = "";
+    submitBtn.disabled = true;
+    submitBtn.textContent = "등록 중…";
+    var fd = new FormData();
+    fd.append("title", title);
+    fd.append("content", contentInput.value);
+    fd.append("category", "travel");
+    fd.append("date", dateInput.value || "");
+    picked.forEach(function (f) { fd.append("files[]", f); });
+    fetch("/api?action=create", { method: "POST", body: fd })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        form.reset();
+        picked = [];
+        renderPreview();
+        closeDlg(formDlg);
+        return loadTravel();
+      })
+      .catch(function (err) { errorEl.textContent = "등록 실패: " + ((err && err.message) || err); })
+      .then(function () { submitBtn.disabled = false; submitBtn.textContent = "등록"; });
+  });
+
+  /* ---------- 상세 다이얼로그 + 삭제 ---------- */
+  var viewDlg = $("#travelViewDialog"),
+      viewTitle = $("#viewTitle"),
+      viewDate = $("#viewDate"),
+      viewPhotos = $("#viewPhotos"),
+      viewContent = $("#viewContent"),
+      viewFiles = $("#viewFiles"),
+      deleteBtn = $("#viewDelete");
+  var viewingId = null;
+
+  function openView(id) {
+    var p = null;
+    travelPosts.forEach(function (x) { if (x.id === id) p = x; });
+    if (!p) return;
+    viewingId = id;
+    viewTitle.textContent = p.title || "(제목 없음)";
+    viewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    viewPhotos.textContent = "";
+    (p.files || []).filter(isImageFile).forEach(function (f) {
+      var im = document.createElement("img");
+      im.src = f.url;
+      im.alt = f.originalName || f.name;
+      viewPhotos.appendChild(im);
+    });
+    viewContent.textContent = p.content || "(내용 없음)";
+    viewFiles.textContent = "";
+    viewFiles.hidden = !(p.files && p.files.length);
+    if (p.files && p.files.length) viewFiles.appendChild(fileLinks(p.files, false));
+    openDlg(viewDlg);
+  }
+
+  deleteBtn.addEventListener("click", function () {
+    if (!viewingId) return;
+    if (!window.confirm("이 글을 삭제할까요? 첨부 파일도 함께 삭제됩니다.")) return;
+    deleteBtn.disabled = true;
+    fetch("/api/" + encodeURIComponent(viewingId), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: viewingId })
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        closeDlg(viewDlg);
+        viewingId = null;
+        return loadTravel();
+      })
+      .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
+      .then(function () { deleteBtn.disabled = false; });
+  });
+
+  /* ---------- init ---------- */
+  route();
+  loadTravel();
+})();
+
+/* ===== 토끼일상 (save3/api3, travel 패턴 미러) ===== */
+(function () {
+  "use strict";
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+
+  function apiList3() {
+    return fetch("/api3?action=list", { headers: { Accept: "application/json" } })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        var posts = data && data.posts;
+        if (posts && !Array.isArray(posts)) posts = Array.isArray(posts.value) ? posts.value : (posts.id ? [posts] : []);
+        return Array.isArray(posts) ? posts : [];
+      });
+  }
+  function isImageFile(f) {
+    var n = String(f.name || f.originalName || "").toLowerCase();
+    return /^image\//.test(f.type || "") || /\.(png|jpe?g|gif|webp|bmp|svg)$/.test(n);
+  }
+  function postDate(p) {
+    if (p.date) return p.date;
+    if (p.createdAt) { try { return new Date(p.createdAt).toISOString().slice(0, 10); } catch (e) {} }
+    return "";
+  }
+
+  var listEl = $("#bunnyUserPosts");
+  var bunnyPosts = [];
+
+  function fileLinks(files, ev) {
+    var fl = document.createElement("div");
+    fl.className = "file-list";
+    fl.style.marginTop = "12px";
+    files.forEach(function (f) {
+      var a = document.createElement("a");
+      a.href = f.url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.textContent = "📎 " + (f.originalName || f.name);
+      if (ev) a.addEventListener("click", function (e) { e.stopPropagation(); });
+      fl.appendChild(a);
+    });
+    return fl;
+  }
+
+  function makeCard(p) {
+    var card = document.createElement("article");
+    card.className = "post";
+    card.tabIndex = 0;
+
+    var imgs = (p.files || []).filter(isImageFile);
+    var photo = document.createElement("div");
+    photo.className = "photo";
+    if (imgs.length) {
+      var im = document.createElement("img");
+      im.src = imgs[0].url;
+      im.alt = p.title || "";
+      im.loading = "lazy";
+      im.style.cssText = "width:100%;height:100%;object-fit:cover;border-radius:20px;display:block;";
+      photo.appendChild(im);
+    } else {
+      photo.style.cssText = "display:grid;place-items:center;font-size:3.2rem;background:linear-gradient(135deg,var(--bunny-soft),var(--surface-soft));";
+      photo.textContent = "🐰";
+    }
+    var h = document.createElement("h3");
+    h.textContent = p.title || "(제목 없음)";
+    var c = document.createElement("p");
+    c.className = "clamp";
+    c.textContent = p.content || "";
+    var d = document.createElement("div");
+    d.className = "post-date";
+    d.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    card.appendChild(photo);
+    card.appendChild(h);
+    card.appendChild(c);
+    card.appendChild(d);
+    if ((p.files || []).length) card.appendChild(fileLinks(p.files, true));
+
+    card.addEventListener("click", function () { openBunnyView(p.id); });
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openBunnyView(p.id); }
+    });
+    return card;
+  }
+
+  function renderBunny() {
+    if (!listEl) return;
+    listEl.textContent = "";
+    if (!bunnyPosts.length) {
+      var empty = document.createElement("div");
+      empty.style.cssText = "grid-column:1/-1;text-align:center;color:var(--muted);font-weight:800;padding:26px 0;";
+      empty.textContent = "등록된 일상 글이 없습니다. 위 버튼으로 첫 일상을 등록해 보세요!";
+      listEl.appendChild(empty);
+      return;
+    }
+    bunnyPosts.forEach(function (p) { listEl.appendChild(makeCard(p)); });
+  }
+
+  function loadBunny() {
+    return apiList3().then(function (posts) {
+      bunnyPosts = posts;
+      renderBunny();
+    }).catch(function () { bunnyPosts = []; renderBunny(); });
+  }
+
+  var formDlg = $("#bunnyFormDialog"),
+      form = $("#bunnyForm"),
+      titleInput = $("#bunnyTitle"),
+      dateInput = $("#bunnyDate"),
+      contentInput = $("#bunnyContent"),
+      fileInput = $("#bunnyFiles"),
+      previewEl = $("#bunnyPreview"),
+      fileCountEl = $("#bunnyFileCount"),
+      errorEl = $("#bunnyFormError"),
+      submitBtn = $("#bunnySubmit");
+  var picked = [];
+
+  function renderPreview() {
+    if (!previewEl) return;
+    $$("img", previewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
+    previewEl.textContent = "";
+    if (fileCountEl) fileCountEl.textContent = picked.length ? picked.length + "개 선택됨" : "선택된 파일 없음";
+    picked.forEach(function (f, i) {
+      var tile = document.createElement("div");
+      tile.className = "thumb-sm";
+      tile.title = f.name;
+      if (isImageFile(f)) {
+        var im = document.createElement("img");
+        im.src = URL.createObjectURL(f);
+        im.alt = f.name;
+        tile.appendChild(im);
+      } else {
+        tile.style.cssText = "display:grid;place-items:center;font-size:1.6rem;";
+        tile.textContent = "📄";
+      }
+      var rm = document.createElement("button");
+      rm.type = "button";
+      rm.className = "rm";
+      rm.textContent = "×";
+      rm.setAttribute("aria-label", f.name + " 제거");
+      rm.addEventListener("click", function () { picked.splice(i, 1); renderPreview(); });
+      tile.appendChild(rm);
+      previewEl.appendChild(tile);
+    });
+  }
+
+  if (fileInput) {
+    fileInput.addEventListener("change", function () {
+      picked = picked.concat(Array.prototype.slice.call(fileInput.files));
+      fileInput.value = "";
+      renderPreview();
+    });
+  }
+
+  $$(".section-add-btn[data-category='bunny']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      if (errorEl) errorEl.textContent = "";
+      if (formDlg) { if (!formDlg.open) formDlg.showModal(); }
+      if (titleInput) titleInput.focus();
+    });
+  });
+
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var title = titleInput.value.trim();
+      if (!title) { errorEl.textContent = "제목을 입력하세요."; titleInput.focus(); return; }
+      errorEl.textContent = "";
+      submitBtn.disabled = true;
+      submitBtn.textContent = "등록 중…";
+      var fd = new FormData();
+      fd.append("title", title);
+      fd.append("content", contentInput.value);
+      fd.append("category", "bunny");
+      fd.append("date", dateInput.value || "");
+      picked.forEach(function (f) { fd.append("files[]", f); });
+      fetch("/api3?action=create", { method: "POST", body: fd })
+        .then(function (res) {
+          return res.json().catch(function () { return null; }).then(function (data) {
+            if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+            return data;
+          });
+        })
+        .then(function () {
+          form.reset();
+          picked = [];
+          renderPreview();
+          if (formDlg && formDlg.open) formDlg.close();
+          return loadBunny();
+        })
+        .catch(function (err) { errorEl.textContent = "등록 실패: " + ((err && err.message) || err); })
+        .then(function () { submitBtn.disabled = false; submitBtn.textContent = "등록"; });
+    });
+  }
+
+  var viewDlg = $("#bunnyViewDialog"),
+      viewTitle = $("#bunnyViewTitle"),
+      viewDate = $("#bunnyViewDate"),
+      viewPhotos = $("#bunnyViewPhotos"),
+      viewContent = $("#bunnyViewContent"),
+      viewFiles = $("#bunnyViewFiles"),
+      deleteBtn = $("#bunnyViewDelete");
+  var viewingId = null;
+
+  function openBunnyView(id) {
+    var p = null;
+    bunnyPosts.forEach(function (x) { if (x.id === id) p = x; });
+    if (!p) return;
+    viewingId = id;
+    viewTitle.textContent = p.title || "(제목 없음)";
+    viewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    viewPhotos.textContent = "";
+    (p.files || []).filter(isImageFile).forEach(function (f) {
+      var im = document.createElement("img");
+      im.src = f.url;
+      im.alt = f.originalName || f.name;
+      viewPhotos.appendChild(im);
+    });
+    viewContent.textContent = p.content || "(내용 없음)";
+    viewFiles.textContent = "";
+    viewFiles.hidden = !(p.files && p.files.length);
+    if (p.files && p.files.length) viewFiles.appendChild(fileLinks(p.files, false));
+    if (viewDlg && !viewDlg.open) viewDlg.showModal();
+  }
+
+  if (deleteBtn) {
+    deleteBtn.addEventListener("click", function () {
+      if (!viewingId) return;
+      if (!window.confirm("이 글을 삭제할까요? 첨부 파일도 함께 삭제됩니다.")) return;
+      deleteBtn.disabled = true;
+      fetch("/api3/" + encodeURIComponent(viewingId), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: viewingId })
+      })
+        .then(function (res) {
+          return res.json().catch(function () { return null; }).then(function (data) {
+            if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+            return data;
+          });
+        })
+        .then(function () {
+          if (viewDlg && viewDlg.open) viewDlg.close();
+          viewingId = null;
+          return loadBunny();
+        })
+        .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
+        .then(function () { deleteBtn.disabled = false; });
+    });
+  }
+
+  loadBunny();
+})();
+</script>
+</body>
+</html>
