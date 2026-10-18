@@ -1988,6 +1988,57 @@
     transform: translateY(-2px) scale(1.03);
     box-shadow: 0 6px 14px rgba(0,0,0,.18);
   }
+
+  /* ── BAIOO Pets Hub (#bunny 전용 스타일) ── */
+  #bunny {
+    --ai-cyan: #EC4899;
+    --ai-indigo: #F59E0B;
+    --ai-emerald: #10B981;
+    --ai-glow: rgba(236, 72, 153, .14);
+    background:
+      radial-gradient(45% 35% at 85% 12%, rgba(236, 72, 153, .13), transparent 70%),
+      radial-gradient(40% 35% at 12% 28%, rgba(245, 158, 11, .12), transparent 70%),
+      var(--bg);
+  }
+  [data-theme="dark"] #bunny {
+    --ai-glow: rgba(236, 72, 153, .22);
+    background:
+      radial-gradient(45% 35% at 85% 12%, rgba(236, 72, 153, .20), transparent 70%),
+      radial-gradient(40% 35% at 12% 28%, rgba(245, 158, 11, .16), transparent 70%),
+      var(--bg);
+  }
+  #bunny .ai-card:hover {
+    border-color: rgba(236, 72, 153, .42);
+  }
+  .pet-routine-pill {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    background: var(--bunny-soft);
+    color: var(--bunny);
+    font-size: .8rem;
+    font-weight: 800;
+  }
+  .pet-diary-subhead {
+    margin: 48px 0 18px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+  .pet-diary-subhead h3 {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: var(--text-strong);
+  }
 </style>
 </head>
 <body>
@@ -2263,25 +2314,82 @@
     <a href="#home" class="back-btn">← 홈으로</a>
 
     <div class="sec-head">
-      <span class="tag bunny">BUNNY</span>
-      <h2>토끼 일상</h2>
-      <button type="button" class="section-add-btn bunny-add" data-category="bunny">＋ 새 일상 등록</button>
+      <span class="tag bunny">PETS &amp; SMART CARE</span>
+      <h2>Pets Care &amp; Idea Hub</h2>
+      <p class="ai-lead-sub">반려동물 맞춤 영양·건강 루틴부터 스마트 펫테크 아이디어, 토토의 일상을 배포하고 기록합니다</p>
     </div>
 
+    <div class="ai-hero-banner">
+      <div class="ai-banner-left">
+        <span class="ai-banner-badge">🐾 BAIOO PET CARE &amp; TECH</span>
+        <h3>작은 생명과 더 오래, 더 행복하게 공존하는 케어 레시피</h3>
+        <p>네덜란드 드워프 토토의 실전 급여·건강 데이터부터 AI 기반 펫 케어 체크리스트, 환경 자동화 아이디어를 한곳에서 탐색하고 복제해 보세요.</p>
+        <div class="ai-banner-actions">
+          <button type="button" class="ai-btn-primary" id="petOpenAddBtn">✨ 새 펫 케어·아이디어 배포</button>
+          <button type="button" class="ai-btn-ghost" id="petFilterBookmarkedBtn">♥ 관심 케어팁 모아보기</button>
+          <button type="button" class="ai-btn-ghost section-add-btn" data-category="bunny" style="margin:0;color:var(--text-strong);">📸 사진·일상 글 등록</button>
+        </div>
+      </div>
+      <div class="ai-stats-grid">
+        <div class="ai-stat-box">
+          <span class="ai-stat-num" id="petStatTotal">6</span>
+          <span class="ai-stat-label">배포된 펫 가이드</span>
+        </div>
+        <div class="ai-stat-box">
+          <span class="ai-stat-num" id="petStatLive">5</span>
+          <span class="ai-stat-label">실전 검증 완료</span>
+        </div>
+        <div class="ai-stat-box">
+          <span class="ai-stat-num" id="petStatLikes">0</span>
+          <span class="ai-stat-label">누적 하트·북마크</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-toolbar">
+      <div class="ai-toolbar-top">
+        <div class="ai-search-wrap">
+          <span class="ai-search-icon" aria-hidden="true">🔍</span>
+          <input type="search" id="petSearchInput" class="ai-search-input" placeholder="토토, 건초, 건강체크, 온도자동화, 펫테크 키워드 검색..." aria-label="펫 케어 아이디어 검색">
+        </div>
+        <div class="ai-select-group">
+          <select id="petStatusSelect" class="ai-select" aria-label="상태 필터">
+            <option value="all">모든 상태 (All)</option>
+            <option value="live">🐾 LIVE 실전루틴</option>
+            <option value="beta">🧪 BETA 실험중</option>
+            <option value="concept">💡 IDEA 아이디어</option>
+          </select>
+          <select id="petSortSelect" class="ai-select" aria-label="정렬 기준">
+            <option value="newest">최신 등록순</option>
+            <option value="popular">인기·하트순</option>
+            <option value="title">이름순 (가나다)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="ai-cat-bar" id="petCategoryBar" role="tablist" aria-label="펫 카테고리 필터">
+        <button type="button" class="ai-cat-btn active" data-cat="all">전체 보기</button>
+        <button type="button" class="ai-cat-btn" data-cat="diet">🥬 영양·밥상 루틴</button>
+        <button type="button" class="ai-cat-btn" data-cat="health">🩺 건강·응급 체크</button>
+        <button type="button" class="ai-cat-btn" data-cat="pettech">🤖 스마트 펫테크</button>
+        <button type="button" class="ai-cat-btn" data-cat="living">🏡 공간·행동풍부화</button>
+        <button type="button" class="ai-cat-btn" data-cat="diary">🐰 토토 프로필·일지</button>
+      </div>
+    </div>
+
+    <div class="ai-status-bar">
+      <div class="ai-active-chips" id="petActiveChips"></div>
+      <div class="ai-result-count" id="petResultCount">총 6개의 펫 케어 아이디어</div>
+    </div>
+
+    <div class="ai-idea-grid" id="petIdeaGrid"></div>
+
+    <div class="pet-diary-subhead">
+      <h3>📸 토토의 사진·일상 앨범</h3>
+      <button type="button" class="section-add-btn bunny-add" data-category="bunny" style="margin:0;">＋ 새 일상 등록</button>
+    </div>
     <div class="post-grid">
       <div class="contents" id="bunnyUserPosts"></div>
-
-      <div class="post">
-        <div class="icon-large">🐰</div>
-        <h3>토토를 소개합니다</h3>
-        <p>네덜란드 드워프 토토. 낮에는 쿨쿨, 저녁에는 방방. 건초 리필은 정시에.</p>
-      </div>
-
-      <div class="post">
-        <div class="icon-large">🥬</div>
-        <h3>토토 밥상 기록</h3>
-        <p>건초·펠릿·채소 급여 기록과 좋아하는 간식 랭킹을 공유합니다.</p>
-      </div>
     </div>
   </div>
 </section>
@@ -4590,6 +4698,445 @@
       if (d && d.open) d.close();
     });
   });
+
+  renderAll();
+})();
+
+/* ===== BAIOO Pets Care & Idea Hub (#bunny 필터·검색·복사·등록) ===== */
+(function () {
+  "use strict";
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+
+  var STORAGE_CUSTOM = "baioo_pet_custom_v1";
+  var STORAGE_LIKES = "baioo_pet_likes_v1";
+
+  var CAT_META = {
+    diet:    { label: "영양·밥상 루틴",   emoji: "🥬", gradient: "linear-gradient(135deg, #10B981 0%, #059669 100%)" },
+    health:  { label: "건강·응급 체크",   emoji: "🩺", gradient: "linear-gradient(135deg, #F43F5E 0%, #E11D48 100%)" },
+    pettech: { label: "스마트 펫테크",    emoji: "🤖", gradient: "linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)" },
+    living:  { label: "공간·행동풍부화",  emoji: "🏡", gradient: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)" },
+    diary:   { label: "토토 프로필·일지", emoji: "🐰", gradient: "linear-gradient(135deg, #EC4899 0%, #F472B6 100%)" }
+  };
+
+  var STATUS_META = {
+    live:    { label: "🐾 LIVE 루틴",  cls: "live" },
+    beta:    { label: "🧪 BETA 실험",  cls: "beta" },
+    concept: { label: "💡 IDEA 기획",  cls: "concept" }
+  };
+
+  var SEED_PETS = [
+    {
+      id: "pet-seed-1",
+      code: "PETS-001",
+      version: "v2.0",
+      status: "live",
+      category: "diary",
+      routine: "⏰ 낮에는 쿨쿨 · 저녁엔 우다다 방방",
+      title: "네덜란드 드워프 '토토' 마스터 프로필",
+      summary: "작고 소중한 네덜란드 드워프 토토의 성격, 선호하는 건초 취향, 가장 좋아하는 쓰다듬기 포인트를 정리한 집사 인계 가이드.",
+      tags: ["네덜란드드워프", "토토", "성격가이드", "집사수칙"],
+      date: "2026-10-19",
+      baseLikes: 54,
+      prompt: "[토토 맞춤형 돌봄 마스터 수칙]\n1. 품종: 네덜란드 드워프 (Netherland Dwarf)\n2. 활동 패턴: 낮 시간에는 조용한 휴식, 저녁~밤 시간대 우다다(Binky) 타임\n3. 핵심 원칙: 건초 리필은 정시에 끊기지 않게, 낯선 소음 주의, 이마·볼 주변 부드럽게 쓰다듬기"
+    },
+    {
+      id: "pet-seed-2",
+      code: "PETS-002",
+      version: "v1.6",
+      status: "live",
+      category: "diet",
+      routine: "🌾 티모시 80% + 신선 채소 10% + 펠릿 5%",
+      title: "토토의 황금 비율 밥상 & 간식 티어표",
+      summary: "치아 마모와 장운동(GI Stasis 예방)을 위한 1번가 티모시 무한 급여 원칙과 로메인·청경채·허브류 기호도 랭킹 데이터.",
+      tags: ["티모시건초", "급여표", "간식랭킹", "장건강"],
+      date: "2026-10-19",
+      baseLikes: 46,
+      prompt: "[반려토끼 일일 황금 급여 레시피]\n- 주식(80~85%): 신선한 티모시 건초 24시간 무한 리필 + 깨끗한 급수\n- 부식(10%): 물기 털어낸 잎채소(로메인, 청경채, 치커리 등)\n- 펠릿(5%): 체중 비례 정량 급여 (아침/저녁 분할)\n- 주의: 당분 높은 과일·씨앗류 제한"
+    },
+    {
+      id: "pet-seed-3",
+      code: "PETS-003",
+      version: "v1.4",
+      status: "live",
+      category: "health",
+      routine: "🩺 매일 아침·저녁 배변 크기·개수 체크",
+      title: "소동물 위장관 정체(식체) 3분 조기 감지표",
+      summary: "아픈 티를 잘 내지 않는 초식 반려동물의 식욕 저하, 배변 크기 변화, 웅크림 자세를 초기 단계에서 즉시 판별하는 체크리스트.",
+      tags: ["건강체크", "식체예방", "배변모니터링", "응급매뉴얼"],
+      date: "2026-10-18",
+      baseLikes: 41,
+      prompt: "[매일 2회 필수 건강 체크리스트]\n1. 배변 상태: 동글동글하고 일정한 크기인가? (작아지거나 줄어들면 수분·건초 보충)\n2. 식욕 반응: 좋아하는 간식/펠릿 소리에 즉시 반응하는가?\n3. 자세 & 체온: 귀 온도가 너무 차갑거나 배를 바닥에 누르고 웅크리지 않는가?\n※ 6~8시간 이상 금식/무배변 시 즉시 특수동물병원 내원"
+    },
+    {
+      id: "pet-seed-4",
+      code: "PETS-004",
+      version: "v1.1",
+      status: "live",
+      category: "living",
+      routine: "🌡️ 적정 온도 18~24°C · 습도 40~60%",
+      title: "사계절 온습도 & 안전 놀이터 설계 가이드",
+      summary: "더위에 약한 토끼를 위한 여름철 쿨링 대리석·에어컨 루틴과 전선 보호관(케이블 정리), 미끄럼 방지 매트 시공 노하우.",
+      tags: ["온습도관리", "전선보호", "미끄럼방지", "비절창예방"],
+      date: "2026-10-18",
+      baseLikes: 35,
+      prompt: "[안전한 방목 환경(Bunny-Proofing) 체크리스트]\n1. 전선 보호: 모든 바닥 전선은 하드 커버 또는 높이 올리기\n2. 바닥 매트: 발바닥 비절창 및 슬개골 보호용 논슬립 매트 필수\n3. 온습도: 25°C 이상 시 즉시 쿨링 가동 (열사병 예방 최우선)\n4. 은신처: 언제든 숨어서 쉴 수 있는 2출구 우드 하우스 배치"
+    },
+    {
+      id: "pet-seed-5",
+      code: "PETS-005",
+      version: "v0.9",
+      status: "beta",
+      category: "pettech",
+      routine: "🤖 AI 비전 & 스마트 플러그 연동",
+      title: "AI 반려동물 급수·식사량 자동 기록 아이디어",
+      summary: "홈캠 영상에서 건초통과 급수기 방문 횟수를 카운트해 평소보다 활동량이 떨어지면 스마트폰으로 즉시 알림을 보내는 펫테크 시안.",
+      tags: ["스마트펫테크", "AI홈캠", "자동알림", "IoT케어"],
+      date: "2026-10-17",
+      baseLikes: 38,
+      prompt: "[스마트 펫케어 모니터링 설계 스펙]\n- 감지 구역(ROI): 건초 급여기 / 급수기 / 화장실 3구역 지정\n- 이상 징후 알림 조건: 최근 4시간 내 화장실 또는 건초 구역 체류 시간 0초일 때 집사에게 푸시 알림 발송"
+    },
+    {
+      id: "pet-seed-6",
+      code: "PETS-006",
+      version: "v0.7",
+      status: "concept",
+      category: "pettech",
+      routine: "💡 증상·식단 입력 → 맞춤 케어 리포트",
+      title: "AI 초식동물 건초·채소 궁합 판독 프롬프트",
+      summary: "새로 급여하려는 채소나 허브 이름을 입력하면 칼슘·수산염 함량과 권장 급여 주기, 주의사항을 즉시 알려주는 AI 수의 영양 프롬프트.",
+      tags: ["AI영양사", "채소궁합", "칼슘관리", "프롬프트"],
+      date: "2026-10-16",
+      baseLikes: 32,
+      prompt: "[반려토끼 채소·간식 안전성 판독 프롬프트]\n입력 식재료: [채소/허브/과일 이름]\n분석 출력:\n1. 급여 가능 여부 (안전 / 소량 급여 / 급여 금지)\n2. 칼슘 및 당분 함량 수준 (요로결석·비만 위험도)\n3. 체중 1~1.5kg 드워프 기준 1회 적정 급여량과 주당 권장 횟수"
+    }
+  ];
+
+  var state = {
+    category: "all",
+    status: "all",
+    sort: "newest",
+    query: "",
+    bookmarkedOnly: false
+  };
+
+  function loadJson(k, fb) {
+    try { var r = localStorage.getItem(k); return r ? JSON.parse(r) : fb; } catch (e) { return fb; }
+  }
+  function saveJson(k, v) {
+    try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {}
+  }
+
+  var customPets = loadJson(STORAGE_CUSTOM, []);
+  if (!Array.isArray(customPets)) customPets = [];
+  var likedMap = loadJson(STORAGE_LIKES, {});
+  if (!likedMap || typeof likedMap !== "object") likedMap = {};
+
+  function getAll() { return customPets.concat(SEED_PETS); }
+  function getLikes(item) { return Number(item.baseLikes || 0) + (likedMap[item.id] ? 1 : 0); }
+
+  var gridEl = $("#petIdeaGrid");
+  var searchInput = $("#petSearchInput");
+  var statusSelect = $("#petStatusSelect");
+  var sortSelect = $("#petSortSelect");
+  var catBar = $("#petCategoryBar");
+  var chipsEl = $("#petActiveChips");
+  var countEl = $("#petResultCount");
+  var statTotalEl = $("#petStatTotal");
+  var statLiveEl = $("#petStatLive");
+  var statLikesEl = $("#petStatLikes");
+  var bookmarkBtn = $("#petFilterBookmarkedBtn");
+  var openAddBtn = $("#petOpenAddBtn");
+  var toastEl = $("#aiToast");
+
+  function showToast(msg) {
+    if (!toastEl) return;
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    setTimeout(function () { toastEl.classList.remove("show"); }, 2300);
+  }
+
+  function copyText(text, msg) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { showToast(msg); });
+    } else {
+      showToast(msg);
+    }
+  }
+
+  function openPetDetail(item) {
+    var dlg = $("#aiDetailDialog");
+    if (!dlg) return;
+    var sMeta = STATUS_META[item.status] || STATUS_META.live;
+    var st = $("#aiDetailStatus");
+    if (st) { st.className = "ai-status-pill " + sMeta.cls; st.textContent = sMeta.label; }
+    var cd = $("#aiDetailCode");
+    if (cd) cd.textContent = (item.code || "PETS") + " · " + (item.version || "v1.0");
+    var dt = $("#aiDetailDate");
+    if (dt) dt.textContent = "🗓 " + (item.date || "2026-10-19");
+    var tt = $("#aiDetailTitle");
+    if (tt) tt.textContent = item.title;
+    var sm = $("#aiDetailSummary");
+    if (sm) sm.textContent = (item.routine ? "[" + item.routine + "] " : "") + item.summary;
+    var tgWrap = $("#aiDetailTags");
+    if (tgWrap) {
+      tgWrap.textContent = "";
+      (item.tags || []).forEach(function (t) {
+        var s = document.createElement("span");
+        s.className = "ai-tag-item";
+        s.textContent = "#" + t;
+        tgWrap.appendChild(s);
+      });
+    }
+    var pr = $("#aiDetailPrompt");
+    if (pr) pr.textContent = item.prompt || item.summary;
+    var delBtn = $("#aiDeleteCustomBtn");
+    if (delBtn) delBtn.hidden = true;
+    if (!dlg.open) dlg.showModal();
+  }
+
+  function syncControls() {
+    if (searchInput && searchInput.value !== state.query) searchInput.value = state.query;
+    if (statusSelect) statusSelect.value = state.status;
+    if (sortSelect) sortSelect.value = state.sort;
+    if (bookmarkBtn) bookmarkBtn.classList.toggle("active", state.bookmarkedOnly);
+    if (catBar) {
+      $$(".ai-cat-btn", catBar).forEach(function (b) {
+        b.classList.toggle("active", b.getAttribute("data-cat") === state.category);
+      });
+    }
+  }
+
+  function renderAll() {
+    if (!gridEl) return;
+    var all = getAll();
+    var liveCnt = 0, likeCnt = 0;
+    all.forEach(function (x) {
+      if (x.status === "live") liveCnt++;
+      likeCnt += getLikes(x);
+    });
+    if (statTotalEl) statTotalEl.textContent = String(all.length);
+    if (statLiveEl) statLiveEl.textContent = String(liveCnt);
+    if (statLikesEl) statLikesEl.textContent = String(likeCnt);
+
+    if (chipsEl) {
+      chipsEl.textContent = "";
+      function addChip(txt, fn) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "ai-chip";
+        b.textContent = txt + " ×";
+        b.addEventListener("click", fn);
+        chipsEl.appendChild(b);
+      }
+      if (state.category !== "all") {
+        addChip("카테고리: " + (CAT_META[state.category] ? CAT_META[state.category].label : state.category), function () {
+          state.category = "all"; syncControls(); renderAll();
+        });
+      }
+      if (state.status !== "all") {
+        addChip("상태: " + (STATUS_META[state.status] ? STATUS_META[state.status].label : state.status), function () {
+          state.status = "all"; syncControls(); renderAll();
+        });
+      }
+      if (state.bookmarkedOnly) {
+        addChip("♥ 관심 케어팁", function () {
+          state.bookmarkedOnly = false; syncControls(); renderAll();
+        });
+      }
+      if (state.query.trim()) {
+        addChip("검색: \"" + state.query.trim() + "\"", function () {
+          state.query = ""; syncControls(); renderAll();
+        });
+      }
+    }
+
+    var q = state.query.trim().toLowerCase();
+    var list = all.filter(function (item) {
+      if (state.category !== "all" && item.category !== state.category) return false;
+      if (state.status !== "all" && item.status !== state.status) return false;
+      if (state.bookmarkedOnly && !likedMap[item.id]) return false;
+      if (q) {
+        var hay = [item.title, item.summary, item.routine, (item.tags || []).join(" ")].join(" ").toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+
+    list.sort(function (a, b) {
+      if (state.sort === "popular") return getLikes(b) - getLikes(a);
+      if (state.sort === "title") return String(a.title).localeCompare(String(b.title), "ko");
+      return String(b.date || "").localeCompare(String(a.date || ""));
+    });
+
+    if (countEl) countEl.textContent = "총 " + list.length + "개의 펫 케어 아이디어";
+    gridEl.textContent = "";
+
+    if (!list.length) {
+      var emp = document.createElement("div");
+      emp.className = "ai-empty-state";
+      emp.innerHTML = "<p>조건에 맞는 펫 케어 카드가 없습니다.</p>";
+      var rb = document.createElement("button");
+      rb.type = "button";
+      rb.className = "ai-btn-primary";
+      rb.textContent = "필터 전체 초기화";
+      rb.addEventListener("click", function () {
+        state.category = "all"; state.status = "all"; state.query = ""; state.bookmarkedOnly = false;
+        syncControls(); renderAll();
+      });
+      emp.appendChild(rb);
+      gridEl.appendChild(emp);
+      return;
+    }
+
+    list.forEach(function (item) {
+      var card = document.createElement("article");
+      card.className = "ai-card";
+      card.tabIndex = 0;
+      card.addEventListener("mousemove", function (e) {
+        var r = card.getBoundingClientRect();
+        card.style.setProperty("--mx", (e.clientX - r.left) + "px");
+        card.style.setProperty("--my", (e.clientY - r.top) + "px");
+      });
+
+      var sMeta = STATUS_META[item.status] || STATUS_META.live;
+      var cMeta = CAT_META[item.category] || CAT_META.diary;
+
+      var top = document.createElement("div");
+      top.className = "ai-card-top";
+      var pill = document.createElement("span");
+      pill.className = "ai-status-pill " + sMeta.cls;
+      pill.textContent = sMeta.label;
+      var ver = document.createElement("span");
+      ver.className = "ai-version-code";
+      ver.textContent = (item.code || "PETS") + " · " + (item.version || "v1.0");
+      top.appendChild(pill);
+      top.appendChild(ver);
+
+      var vis = document.createElement("div");
+      vis.className = "ai-card-visual";
+      vis.style.background = item.gradient || cMeta.gradient;
+      var em = document.createElement("span");
+      em.className = "ai-card-emoji";
+      em.textContent = item.emoji || cMeta.emoji;
+      var cl = document.createElement("span");
+      cl.className = "ai-card-cat-label";
+      cl.textContent = cMeta.label;
+      vis.appendChild(em);
+      vis.appendChild(cl);
+
+      var ttl = document.createElement("h3");
+      ttl.className = "ai-card-title";
+      ttl.textContent = item.title;
+
+      var rt = document.createElement("div");
+      rt.className = "pet-routine-pill";
+      rt.textContent = item.routine || "🐾 데일리 케어 루틴";
+
+      var desc = document.createElement("p");
+      desc.className = "ai-card-desc";
+      desc.textContent = item.summary;
+
+      var tags = document.createElement("div");
+      tags.className = "ai-tag-list";
+      (item.tags || []).forEach(function (t) {
+        var sp = document.createElement("span");
+        sp.className = "ai-tag-item";
+        sp.textContent = "#" + t;
+        tags.appendChild(sp);
+      });
+
+      var foot = document.createElement("div");
+      foot.className = "ai-card-foot";
+
+      var isLiked = Boolean(likedMap[item.id]);
+      var likeB = document.createElement("button");
+      likeB.type = "button";
+      likeB.className = "ai-like-btn" + (isLiked ? " liked" : "");
+      likeB.textContent = (isLiked ? "♥ " : "♡ ") + getLikes(item);
+      likeB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (likedMap[item.id]) { delete likedMap[item.id]; showToast("관심 케어팁에서 해제했습니다."); }
+        else { likedMap[item.id] = true; showToast("♥ 관심 케어팁으로 저장했습니다!"); }
+        saveJson(STORAGE_LIKES, likedMap);
+        renderAll();
+      });
+
+      var acts = document.createElement("div");
+      acts.className = "ai-card-actions";
+      var cpB = document.createElement("button");
+      cpB.type = "button";
+      cpB.className = "ai-action-btn";
+      cpB.textContent = "📋 가이드 복사";
+      cpB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        copyText(item.prompt || item.summary, "🐾 [" + item.title + "] 케어 가이드가 복사되었습니다!");
+      });
+      var dtB = document.createElement("button");
+      dtB.type = "button";
+      dtB.className = "ai-action-btn";
+      dtB.textContent = "상세 열기 →";
+      dtB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        openPetDetail(item);
+      });
+      acts.appendChild(cpB);
+      acts.appendChild(dtB);
+      foot.appendChild(likeB);
+      foot.appendChild(acts);
+
+      card.appendChild(top);
+      card.appendChild(vis);
+      card.appendChild(ttl);
+      card.appendChild(rt);
+      card.appendChild(desc);
+      card.appendChild(tags);
+      card.appendChild(foot);
+      card.addEventListener("click", function () { openPetDetail(item); });
+      gridEl.appendChild(card);
+    });
+  }
+
+  if (openAddBtn) {
+    openAddBtn.addEventListener("click", function () {
+      var titleVal = window.prompt("새 펫 케어·아이디어 제목을 입력하세요:", "토토 계절별 털갈이 브러싱 루틴");
+      if (!titleVal || !titleVal.trim()) return;
+      var routineVal = window.prompt("핵심 루틴 한 줄 요약:", "🪮 환절기 주 3회 코밍 + 헤어볼 예방 건초 강화") || "🐾 맞춤 케어 루틴";
+      var summaryVal = window.prompt("상세 설명 또는 케어 팁:", "털갈이 시기에 삼키는 털을 줄이기 위한 브러싱 및 수분 보충 가이드입니다.") || "";
+      var newItem = {
+        id: "pet-custom-" + Date.now(),
+        code: "PETS-" + String(getAll().length + 1).padStart(3, "0"),
+        version: "v1.0",
+        status: "live",
+        category: "diary",
+        routine: routineVal.trim(),
+        title: titleVal.trim(),
+        summary: summaryVal.trim() || titleVal.trim(),
+        tags: ["토토", "케어루틴", "BAIOO"],
+        date: new Date().toISOString().slice(0, 10),
+        baseLikes: 1,
+        prompt: "[" + titleVal.trim() + "]\n- 루틴: " + routineVal.trim() + "\n- 가이드: " + (summaryVal.trim() || titleVal.trim())
+      };
+      customPets.unshift(newItem);
+      saveJson(STORAGE_CUSTOM, customPets);
+      showToast("🐾 새 펫 케어 아이디어가 배포되었습니다!");
+      renderAll();
+    });
+  }
+
+  if (catBar) {
+    $$(".ai-cat-btn", catBar).forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        state.category = btn.getAttribute("data-cat") || "all";
+        syncControls(); renderAll();
+      });
+    });
+  }
+  if (statusSelect) statusSelect.addEventListener("change", function () { state.status = statusSelect.value || "all"; renderAll(); });
+  if (sortSelect) sortSelect.addEventListener("change", function () { state.sort = sortSelect.value || "newest"; renderAll(); });
+  if (searchInput) searchInput.addEventListener("input", function () { state.query = searchInput.value || ""; renderAll(); });
+  if (bookmarkBtn) bookmarkBtn.addEventListener("click", function () { state.bookmarkedOnly = !state.bookmarkedOnly; syncControls(); renderAll(); });
 
   renderAll();
 })();
