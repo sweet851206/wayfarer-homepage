@@ -1335,6 +1335,21 @@
   }
   .tag.about { background: rgba(56,189,248,.14); color: #0284C7; }
 
+  /* ── 쇼핑몰식 상품목록 (AI 섹션) ── */
+  .shop-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+  .shop-filter { padding: 10px 18px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--text); font-weight: 700; font-size: .9rem; cursor: pointer; }
+  .shop-tag { display: inline-block; padding: 8px 14px; border-radius: 8px; background: rgba(15,23,42,.08); font-weight: 800; font-size: .85rem; margin-bottom: 28px; }
+  .shop-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; text-align: center; }
+  .shop-img { aspect-ratio: 3/4; border-radius: 6px; display: grid; place-items: center; font-size: 3.5rem; margin-bottom: 18px; }
+  .shop-brand { font-size: 1.02rem; color: var(--text-strong); margin-bottom: 4px; }
+  .shop-no { font-size: .9rem; color: var(--muted); margin-bottom: 8px; }
+  .shop-name { font-size: .95rem; color: var(--text); line-height: 1.7; margin-bottom: 10px; }
+  .shop-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; background: #1e40af; color: #fff; font-size: .72rem; font-weight: 900; margin-right: 6px; }
+  .shop-price s { color: var(--muted); font-weight: 400; margin-right: 10px; }
+  .shop-price b { color: #1e40af; font-size: 1.05rem; }
+  [data-theme="dark"] .shop-price b { color: #7dd3fc; }
+  @media (max-width: 1024px) { .shop-grid { grid-template-columns: repeat(2, 1fr); } }
+
   /* ── 전체: 선택색 + 섹션제목 그라데이션 바 ── */
   ::selection { background: rgba(14,165,233,.28); }
   .sec-head h2::after {
@@ -1415,11 +1430,45 @@
       <h2>AI 써보고 남김</h2>
     </div>
 
-    <div class="post-grid">
-      <div class="post">
-        <div class="icon-large">🤖</div>
-        <h3>막올리는 AI 참고 노트</h3>
-        <p>써보고 좋았던 프롬프트·실패담을 자유롭게 쌓는 곳입니다.</p>
+    <div class="shop-filters">
+      <button type="button" class="shop-filter">브랜드 ⌄</button>
+      <button type="button" class="shop-filter">카테고리 ⌄</button>
+      <button type="button" class="shop-filter">사이즈 ⌄</button>
+      <button type="button" class="shop-filter">가격대 ⌄</button>
+      <button type="button" class="shop-filter">색상 ⌄</button>
+      <button type="button" class="shop-filter">시즌 ⌄</button>
+      <button type="button" class="shop-filter">정렬 ⌄</button>
+    </div>
+    <div><span class="shop-tag">MEN ×</span></div>
+
+    <div class="shop-grid">
+      <div class="shop-card">
+        <div class="shop-img" style="background:linear-gradient(180deg,#3a3f4a,#20242c)">🧥</div>
+        <p class="shop-brand">제이하스</p>
+        <p class="shop-no">NO.JSD26333.</p>
+        <p class="shop-name"><span class="shop-badge">Slim</span> 차콜 그레이 스트라이프 모혼방 스트레치 더블 수트</p>
+        <p class="shop-price"><s>698,000원</s> <b>349,000원</b></p>
+      </div>
+      <div class="shop-card">
+        <div class="shop-img" style="background:linear-gradient(180deg,#4a3f36,#26211c)">🧥</div>
+        <p class="shop-brand">파크랜드</p>
+        <p class="shop-no">NO.PJJ26304</p>
+        <p class="shop-name"><span class="shop-badge">NEW</span> 와인 나일론 혼방 점퍼</p>
+        <p class="shop-price"><s>398,000원</s> <b>199,000원</b></p>
+      </div>
+      <div class="shop-card">
+        <div class="shop-img" style="background:linear-gradient(180deg,#434957,#23262e)">🤵</div>
+        <p class="shop-brand">파크랜드</p>
+        <p class="shop-no">NO.PSS26384.</p>
+        <p class="shop-name"><span class="shop-badge">NEW</span> 그레이 모혼방 투웨이 스트레치 수트</p>
+        <p class="shop-price"><s>598,000원</s> <b>299,000원</b></p>
+      </div>
+      <div class="shop-card">
+        <div class="shop-img" style="background:linear-gradient(180deg,#2e3a55,#1a2130)">👔</div>
+        <p class="shop-brand">카브리니</p>
+        <p class="shop-no">NO.KSS26351.</p>
+        <p class="shop-name"><span class="shop-badge">NEW</span> 네이비 모 스트레치 수트</p>
+        <p class="shop-price"><s>898,000원</s> <b>449,000원</b></p>
       </div>
     </div>
   </div>
