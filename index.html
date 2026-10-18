@@ -1358,7 +1358,8 @@
         <li><a href="#about" data-nav="about">About</a></li>
       </ul>
 
-      <button class="theme-toggle" id="themeToggle" aria-label="다크 모드 전환" title="다크 모드 전환">🌙</button>
+      <button class="theme-toggle" id="themeLight" aria-label="라이트 모드" title="라이트 모드">☀️</button>
+      <button class="theme-toggle" id="themeDark" aria-label="다크 모드 전환" title="다크 모드 전환">🌙</button>
       <button class="menu-btn" id="menuBtn" aria-label="메뉴 열기">☰</button>
     </div>
   </div>
@@ -1739,6 +1740,19 @@
     menuBtn.addEventListener("click", function () {
       var nl = $(".nav-links");
       if (nl) nl.classList.toggle("open");
+    });
+  }
+
+  var themeLight = $("#themeLight");
+  if (themeLight) {
+    themeLight.addEventListener("click", function () {
+      document.documentElement.setAttribute("data-theme", "light");
+    });
+  }
+  var themeDark = $("#themeDark");
+  if (themeDark) {
+    themeDark.addEventListener("click", function () {
+      document.documentElement.setAttribute("data-theme", "dark");
     });
   }
 
