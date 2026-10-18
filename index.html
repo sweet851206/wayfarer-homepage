@@ -223,7 +223,8 @@
     transform: translateY(-1px);
     border-color: rgba(255,107,53,.45);
   }
-  #themeDark { margin-left: 8px; }
+  #themeDark { margin-left: 0; }
+  .theme-row { display: flex; align-items: center; gap: 10px; }
 
   .menu-btn {
     font-size: 1.25rem;
@@ -1293,8 +1294,8 @@
     .nav-links a { display: block; padding: 12px 14px; border-radius: 12px; }
     .nav-links a:hover, .nav-links a.active { background: var(--surface-soft); }
     .nav-links a::after { display: none; }
-    .theme-toggle { align-self: flex-start; }
-    #themeDark { margin-left: 0; margin-top: 8px; }
+    .theme-row { align-self: flex-start; }
+    #themeDark { margin-left: 0; margin-top: 0; }
     body { padding-left: 220px; }
     footer { margin-left: -220px; position: relative; z-index: 200; }
     .hero { min-height: 100vh; }
@@ -1937,8 +1938,10 @@
         <li><a href="#about" data-nav="about">About</a></li>
       </ul>
 
+      <div class="theme-row">
       <button class="theme-toggle" id="themeLight" aria-label="라이트 모드" title="라이트 모드">☀️</button>
       <button class="theme-toggle" id="themeDark" aria-label="다크 모드 전환" title="다크 모드 전환">🌙</button>
+      </div>
       <button class="menu-btn" id="menuBtn" aria-label="메뉴 열기">☰</button>
     </div>
   </div>
