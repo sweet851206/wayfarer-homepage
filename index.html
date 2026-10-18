@@ -2039,6 +2039,36 @@
     font-weight: 900;
     color: var(--text-strong);
   }
+
+  /* ── BAIOO Travel Hub (#travel 전용 스타일) ── */
+  #travel {
+    --ai-cyan: #FF6B35;
+    --ai-indigo: #F59E0B;
+    --ai-emerald: #38BDF8;
+    --ai-glow: rgba(255, 107, 53, .16);
+  }
+  #travel .ai-lead-sub,
+  #travel .pet-diary-subhead h3,
+  #travel .ai-result-count {
+    color: #E2E8F0;
+  }
+  #travel .ai-card:hover {
+    border-color: rgba(255, 107, 53, .48);
+  }
+  .tr-route-pill {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    background: var(--travel-soft);
+    color: var(--travel);
+    font-size: .8rem;
+    font-weight: 800;
+  }
 </style>
 </head>
 <body>
@@ -2257,31 +2287,82 @@
     <a href="#home" class="back-btn">← 홈으로</a>
 
     <div class="sec-head">
-      <span class="tag travel">TRAVEL</span>
-      <h2>다녀온 여행 발자국</h2>
-      <button type="button" class="section-add-btn travel-add" data-category="travel">＋ 새 여행 등록</button>
+      <span class="tag travel">TRAVEL &amp; ROUTE HUB</span>
+      <h2>Travel Route &amp; Smart Trip</h2>
+      <p class="ai-lead-sub">직접 다녀온 검증된 여행 동선부터 AI 맞춤 일정 설계 프롬프트, 패킹 노하우를 배포합니다</p>
     </div>
 
+    <div class="ai-hero-banner">
+      <div class="ai-banner-left">
+        <span class="ai-banner-badge">🧭 BAIOO TRAVEL CURATION</span>
+        <h3>실패 없는 동선과 스마트한 여행 레시피를 공유합니다</h3>
+        <p>부산 영도 오션뷰 코스, 도쿄 골목 투어, 평창 숲속 힐링 루트부터 AI 1분 일정 생성 프롬프트까지 클릭 한 번으로 복사해 떠나보세요.</p>
+        <div class="ai-banner-actions">
+          <button type="button" class="ai-btn-primary" id="trOpenAddBtn">✨ 새 여행 코스·팁 배포</button>
+          <button type="button" class="ai-btn-ghost" id="trFilterBookmarkedBtn">♥ 관심 여행코스 모아보기</button>
+          <button type="button" class="ai-btn-ghost section-add-btn" data-category="travel" style="margin:0;color:var(--text-strong);">📸 사진·여행기 등록</button>
+        </div>
+      </div>
+      <div class="ai-stats-grid">
+        <div class="ai-stat-box">
+          <span class="ai-stat-num" id="trStatTotal">6</span>
+          <span class="ai-stat-label">배포된 여행 코스</span>
+        </div>
+        <div class="ai-stat-box">
+          <span class="ai-stat-num" id="trStatLive">5</span>
+          <span class="ai-stat-label">실제 답사 완료</span>
+        </div>
+        <div class="ai-stat-box">
+          <span class="ai-stat-num" id="trStatLikes">0</span>
+          <span class="ai-stat-label">누적 저장·공감</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-toolbar">
+      <div class="ai-toolbar-top">
+        <div class="ai-search-wrap">
+          <span class="ai-search-icon" aria-hidden="true">🔍</span>
+          <input type="search" id="trSearchInput" class="ai-search-input" placeholder="부산, 도쿄, 평창, 일정 프롬프트, 패킹 리스트 검색..." aria-label="여행 코스 검색">
+        </div>
+        <div class="ai-select-group">
+          <select id="trStatusSelect" class="ai-select" aria-label="상태 필터">
+            <option value="all">모든 상태 (All)</option>
+            <option value="live">🧭 LIVE 답사완료</option>
+            <option value="beta">🧪 BETA 추천루트</option>
+            <option value="concept">💡 IDEA 스마트팁</option>
+          </select>
+          <select id="trSortSelect" class="ai-select" aria-label="정렬 기준">
+            <option value="newest">최신 등록순</option>
+            <option value="popular">인기·공감순</option>
+            <option value="title">이름순 (가나다)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="ai-cat-bar" id="trCategoryBar" role="tablist" aria-label="여행 카테고리 필터">
+        <button type="button" class="ai-cat-btn active" data-cat="all">전체 보기</button>
+        <button type="button" class="ai-cat-btn" data-cat="ocean">🌊 오션·해안 코스</button>
+        <button type="button" class="ai-cat-btn" data-cat="city">🏙️ 시티·골목 투어</button>
+        <button type="button" class="ai-cat-btn" data-cat="nature">🏔️ 숲·자연 힐링</button>
+        <button type="button" class="ai-cat-btn" data-cat="smart">🤖 AI 스마트 여행툴</button>
+        <button type="button" class="ai-cat-btn" data-cat="pack">🎒 패킹·체크리스트</button>
+      </div>
+    </div>
+
+    <div class="ai-status-bar">
+      <div class="ai-active-chips" id="trActiveChips"></div>
+      <div class="ai-result-count" id="trResultCount">총 6개의 여행 코스·아이디어</div>
+    </div>
+
+    <div class="ai-idea-grid" id="trIdeaGrid"></div>
+
+    <div class="pet-diary-subhead">
+      <h3>📸 나의 여행 발자국 앨범</h3>
+      <button type="button" class="section-add-btn travel-add" data-category="travel" style="margin:0;">＋ 새 여행 등록</button>
+    </div>
     <div class="post-grid">
       <div class="contents" id="travelUserPosts"></div>
-
-      <div class="post">
-        <div class="icon-large">🌊</div>
-        <h3>부산 영도 감성 여행</h3>
-        <p>흰여울문화마을 골목길 사이로 바라본 끝없는 수평선과 오션뷰 카페 탐방 기록.</p>
-      </div>
-
-      <div class="post">
-        <div class="icon-large">🏙️</div>
-        <h3>일본 도쿄 시티 라이프</h3>
-        <p>도쿄 타워가 한눈에 보이는 명소부터 나만 알고 싶은 고요한 숨은 골목길 투어.</p>
-      </div>
-
-      <div class="post">
-        <div class="icon-large">🏔️</div>
-        <h3>강원도 평창 숲속 힐링</h3>
-        <p>초록빛 숲 한가운데서 온전한 휴식과 자연 소리를 만끽했던 2박 3일의 주말 휴양.</p>
-      </div>
     </div>
   </div>
 </section>
@@ -5121,6 +5202,435 @@
       customPets.unshift(newItem);
       saveJson(STORAGE_CUSTOM, customPets);
       showToast("🐾 새 펫 케어 아이디어가 배포되었습니다!");
+      renderAll();
+    });
+  }
+
+  if (catBar) {
+    $$(".ai-cat-btn", catBar).forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        state.category = btn.getAttribute("data-cat") || "all";
+        syncControls(); renderAll();
+      });
+    });
+  }
+  if (statusSelect) statusSelect.addEventListener("change", function () { state.status = statusSelect.value || "all"; renderAll(); });
+  if (sortSelect) sortSelect.addEventListener("change", function () { state.sort = sortSelect.value || "newest"; renderAll(); });
+  if (searchInput) searchInput.addEventListener("input", function () { state.query = searchInput.value || ""; renderAll(); });
+  if (bookmarkBtn) bookmarkBtn.addEventListener("click", function () { state.bookmarkedOnly = !state.bookmarkedOnly; syncControls(); renderAll(); });
+
+  renderAll();
+})();
+
+/* ===== BAIOO Travel Route & Smart Trip Hub (#travel 필터·검색·복사·등록) ===== */
+(function () {
+  "use strict";
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+
+  var STORAGE_CUSTOM = "baioo_tr_custom_v1";
+  var STORAGE_LIKES = "baioo_tr_likes_v1";
+
+  var CAT_META = {
+    ocean:  { label: "오션·해안 코스",   emoji: "🌊", gradient: "linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%)" },
+    city:   { label: "시티·골목 투어",   emoji: "🏙️", gradient: "linear-gradient(135deg, #FF6B35 0%, #E11D48 100%)" },
+    nature: { label: "숲·자연 힐링",     emoji: "🏔️", gradient: "linear-gradient(135deg, #10B981 0%, #059669 100%)" },
+    smart:  { label: "AI 스마트 여행툴", emoji: "🤖", gradient: "linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)" },
+    pack:   { label: "패킹·체크리스트",  emoji: "🎒", gradient: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)" }
+  };
+
+  var STATUS_META = {
+    live:    { label: "🧭 LIVE 답사완료", cls: "live" },
+    beta:    { label: "🧪 BETA 추천루트", cls: "beta" },
+    concept: { label: "💡 IDEA 스마트팁", cls: "concept" }
+  };
+
+  var SEED_TRIPS = [
+    {
+      id: "tr-seed-1",
+      code: "TRIP-001",
+      version: "v2.0",
+      status: "live",
+      category: "ocean",
+      route: "📍 흰여울문화마을 → 절영해안산책로 → 태종대 오션뷰",
+      title: "부산 영도 감성 해안 산책 & 오션뷰 카페 루트",
+      summary: "흰여울문화마을 골목길 사이로 펼쳐지는 끝없는 수평선과 노을 시간대에 맞춰 걷는 영도 해안 핵심 반나절 동선.",
+      tags: ["부산영도", "흰여울문화마을", "오션뷰카페", "해안산책"],
+      date: "2026-10-19",
+      baseLikes: 52,
+      prompt: "[부산 영도 오션뷰 반나절 황금 동선]\n14:00 흰여울문화마을 상단 골목 산책 시작\n15:30 바다 정면 통창 로스터리 카페 휴식\n17:00 절영해안산책로 해안 터널 일몰 감상\n18:30 영도 포차거리 또는 해산물 로컬 저녁"
+    },
+    {
+      id: "tr-seed-2",
+      code: "TRIP-002",
+      version: "v1.7",
+      status: "live",
+      category: "city",
+      route: "📍 시바공원(도쿄타워) → 다이칸야마 → 나카메구로 골목",
+      title: "일본 도쿄 시티 라이프 & 히든 골목 투어",
+      summary: "도쿄 타워가 한눈에 들어오는 포토 스팟부터 관광객 북적임 없이 여유롭게 걷는 도쿄 로컬 편집숍·로스터리 골목 코스.",
+      tags: ["도쿄여행", "도쿄타워", "골목투어", "시티라이프"],
+      date: "2026-10-18",
+      baseLikes: 47,
+      prompt: "[도쿄 로컬 감성 원데이 루트]\n10:30 다이칸야마 츠타야 티사이트 모닝 커피\n13:00 나카메구로 강변 로컬 산책 & 런치\n16:30 시바공원 & 아카바네바시역 도쿄타워 뷰포인트\n19:00 롯폰기/아자부주반 야경 디너"
+    },
+    {
+      id: "tr-seed-3",
+      code: "TRIP-003",
+      version: "v1.5",
+      status: "live",
+      category: "nature",
+      route: "📍 오대산 전나무숲길 → 대관령 목장 → 숲속 프라이빗 스테이",
+      title: "강원도 평창 숲속 2박 3일 완벽 디톡스 코스",
+      summary: "초록빛 피톤치드 숲 한가운데서 디지털 알림을 끄고 바람과 계곡 소리만 만끽했던 주말 무소음 힐링 휴양 코스의 정석.",
+      tags: ["강원도평창", "숲속힐링", "전나무숲", "주말휴양"],
+      date: "2026-10-18",
+      baseLikes: 41,
+      prompt: "[평창 2박 3일 디지털 디톡스 루트]\nDay 1: 오대산 월정사 전나무숲길 맨발/트레킹 산책 → 숙소 체크인\nDay 2: 대관령 고원 바람길 산책 → 로컬 메밀·황태 맛집 → 별빛 불멍\nDay 3: 숲속 모닝 티타임 후 여유로운 귀경"
+    },
+    {
+      id: "tr-seed-4",
+      code: "TRIP-004",
+      version: "v1.3",
+      status: "live",
+      category: "smart",
+      route: "🤖 동선 역행 0% · 구글맵 좌표 연동 프롬프트",
+      title: "AI 3분 맞춤 여행 동선 최적화 프롬프트",
+      summary: "가고 싶은 장소 목록만 던져주면 이동 시간을 최소화해 오전·오후·야경 시간대별로 자동 배치해 주는 실전 여행 설계 프롬프트.",
+      tags: ["AI여행설계", "동선최적화", "구글맵", "프롬프트"],
+      date: "2026-10-17",
+      baseLikes: 44,
+      prompt: "[AI 여행 동선 최적화 마스터 프롬프트]\n여행지: [도시명] / 기간: [N박 M일]\n희망 방문지: [장소 1, 장소 2, ...]\n요청사항:\n1. 지리적으로 인접한 구역끼리 묶어 동선 낭비(왔다갔다) 0%로 배치\n2. 각 스팟의 골든타임(오전 한적한 시간 / 일몰 / 야경) 반영\n3. 우천 시 대체 가능한 실내 코스 1곳씩 함께 제시"
+    },
+    {
+      id: "tr-seed-5",
+      code: "TRIP-005",
+      version: "v1.1",
+      status: "live",
+      category: "pack",
+      route: "🎒 기내용 7kg 컷 · 출발 10분 전 최종 점검표",
+      title: "미니멀리스트 2박 3일 초경량 패킹 체크리스트",
+      summary: "짐 무게는 절반으로 줄이고 현지에서의 이동 기동성은 2배로 높이는 멀티 어댑터·압축 파우치·비상 상비약 필수 구성표.",
+      tags: ["패킹리스트", "기내수하물", "미니멀여행", "체크리스트"],
+      date: "2026-10-16",
+      baseLikes: 36,
+      prompt: "[출발 직전 1분 패킹 체크리스트]\n1. 필수 서류/결제: 신분증·여권, 트래블월렛/카드 2장, 소액 현금\n2. 전자기기: PD 멀티 충전기 1개, 보조배터리(기내 반입), eSIM QR\n3. 의류/세면: 압축 파우치, 레이어드 바람막이, 개인 상비약(소화제·진통제)"
+    },
+    {
+      id: "tr-seed-6",
+      code: "TRIP-006",
+      version: "v0.9",
+      status: "concept",
+      category: "smart",
+      route: "💡 광고성 블로그 차단 · 현지인 재방문 맛집 추출",
+      title: "관광객 맛집 거르고 진짜 로컬 노포 찾는 검색 공식",
+      summary: "협찬 리뷰 대신 현지 언어로 된 최근 3개월 내 평점과 재방문 키워드만 교차 검증해 실패 없는 식당을 골라내는 검색 레시피.",
+      tags: ["로컬맛집", "노포탐방", "검색노하우", "실패없는식당"],
+      date: "2026-10-15",
+      baseLikes: 33,
+      prompt: "[현지 찐맛집 필터링 3단계 공식]\n1. 구글맵/현지 지도에서 평점 4.1~4.5 구간 + 리뷰 150~800개 매장 타겟\n2. 리뷰 최신순 정렬 후 현지어 리뷰 비중이 70% 이상인지 확인\n3. 메뉴판 사진에서 단일 대표 메뉴 전문점인지 체크"
+    }
+  ];
+
+  var state = { category: "all", status: "all", sort: "newest", query: "", bookmarkedOnly: false };
+
+  function loadJson(k, fb) { try { var r = localStorage.getItem(k); return r ? JSON.parse(r) : fb; } catch (e) { return fb; } }
+  function saveJson(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+  var customTrips = loadJson(STORAGE_CUSTOM, []);
+  if (!Array.isArray(customTrips)) customTrips = [];
+  var likedMap = loadJson(STORAGE_LIKES, {});
+  if (!likedMap || typeof likedMap !== "object") likedMap = {};
+
+  function getAll() { return customTrips.concat(SEED_TRIPS); }
+  function getLikes(item) { return Number(item.baseLikes || 0) + (likedMap[item.id] ? 1 : 0); }
+
+  var gridEl = $("#trIdeaGrid");
+  var searchInput = $("#trSearchInput");
+  var statusSelect = $("#trStatusSelect");
+  var sortSelect = $("#trSortSelect");
+  var catBar = $("#trCategoryBar");
+  var chipsEl = $("#trActiveChips");
+  var countEl = $("#trResultCount");
+  var statTotalEl = $("#trStatTotal");
+  var statLiveEl = $("#trStatLive");
+  var statLikesEl = $("#trStatLikes");
+  var bookmarkBtn = $("#trFilterBookmarkedBtn");
+  var openAddBtn = $("#trOpenAddBtn");
+  var toastEl = $("#aiToast");
+
+  function showToast(msg) {
+    if (!toastEl) return;
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    setTimeout(function () { toastEl.classList.remove("show"); }, 2300);
+  }
+
+  function copyText(text, msg) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { showToast(msg); });
+    } else {
+      showToast(msg);
+    }
+  }
+
+  function openTripDetail(item) {
+    var dlg = $("#aiDetailDialog");
+    if (!dlg) return;
+    var sMeta = STATUS_META[item.status] || STATUS_META.live;
+    var st = $("#aiDetailStatus");
+    if (st) { st.className = "ai-status-pill " + sMeta.cls; st.textContent = sMeta.label; }
+    var cd = $("#aiDetailCode");
+    if (cd) cd.textContent = (item.code || "TRIP") + " · " + (item.version || "v1.0");
+    var dt = $("#aiDetailDate");
+    if (dt) dt.textContent = "🗓 " + (item.date || "2026-10-19");
+    var tt = $("#aiDetailTitle");
+    if (tt) tt.textContent = item.title;
+    var sm = $("#aiDetailSummary");
+    if (sm) sm.textContent = (item.route ? "[" + item.route + "] " : "") + item.summary;
+    var tgWrap = $("#aiDetailTags");
+    if (tgWrap) {
+      tgWrap.textContent = "";
+      (item.tags || []).forEach(function (t) {
+        var s = document.createElement("span");
+        s.className = "ai-tag-item";
+        s.textContent = "#" + t;
+        tgWrap.appendChild(s);
+      });
+    }
+    var pr = $("#aiDetailPrompt");
+    if (pr) pr.textContent = item.prompt || item.summary;
+    var delBtn = $("#aiDeleteCustomBtn");
+    if (delBtn) delBtn.hidden = true;
+    if (!dlg.open) dlg.showModal();
+  }
+
+  function syncControls() {
+    if (searchInput && searchInput.value !== state.query) searchInput.value = state.query;
+    if (statusSelect) statusSelect.value = state.status;
+    if (sortSelect) sortSelect.value = state.sort;
+    if (bookmarkBtn) bookmarkBtn.classList.toggle("active", state.bookmarkedOnly);
+    if (catBar) {
+      $$(".ai-cat-btn", catBar).forEach(function (b) {
+        b.classList.toggle("active", b.getAttribute("data-cat") === state.category);
+      });
+    }
+  }
+
+  function renderAll() {
+    if (!gridEl) return;
+    var all = getAll();
+    var liveCnt = 0, likeCnt = 0;
+    all.forEach(function (x) {
+      if (x.status === "live") liveCnt++;
+      likeCnt += getLikes(x);
+    });
+    if (statTotalEl) statTotalEl.textContent = String(all.length);
+    if (statLiveEl) statLiveEl.textContent = String(liveCnt);
+    if (statLikesEl) statLikesEl.textContent = String(likeCnt);
+
+    if (chipsEl) {
+      chipsEl.textContent = "";
+      function addChip(txt, fn) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "ai-chip";
+        b.textContent = txt + " ×";
+        b.addEventListener("click", fn);
+        chipsEl.appendChild(b);
+      }
+      if (state.category !== "all") {
+        addChip("카테고리: " + (CAT_META[state.category] ? CAT_META[state.category].label : state.category), function () {
+          state.category = "all"; syncControls(); renderAll();
+        });
+      }
+      if (state.status !== "all") {
+        addChip("상태: " + (STATUS_META[state.status] ? STATUS_META[state.status].label : state.status), function () {
+          state.status = "all"; syncControls(); renderAll();
+        });
+      }
+      if (state.bookmarkedOnly) {
+        addChip("♥ 관심 여행코스", function () {
+          state.bookmarkedOnly = false; syncControls(); renderAll();
+        });
+      }
+      if (state.query.trim()) {
+        addChip("검색: \"" + state.query.trim() + "\"", function () {
+          state.query = ""; syncControls(); renderAll();
+        });
+      }
+    }
+
+    var q = state.query.trim().toLowerCase();
+    var list = all.filter(function (item) {
+      if (state.category !== "all" && item.category !== state.category) return false;
+      if (state.status !== "all" && item.status !== state.status) return false;
+      if (state.bookmarkedOnly && !likedMap[item.id]) return false;
+      if (q) {
+        var hay = [item.title, item.summary, item.route, (item.tags || []).join(" ")].join(" ").toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+
+    list.sort(function (a, b) {
+      if (state.sort === "popular") return getLikes(b) - getLikes(a);
+      if (state.sort === "title") return String(a.title).localeCompare(String(b.title), "ko");
+      return String(b.date || "").localeCompare(String(a.date || ""));
+    });
+
+    if (countEl) countEl.textContent = "총 " + list.length + "개의 여행 코스·아이디어";
+    gridEl.textContent = "";
+
+    if (!list.length) {
+      var emp = document.createElement("div");
+      emp.className = "ai-empty-state";
+      emp.innerHTML = "<p>조건에 맞는 여행 코스가 없습니다.</p>";
+      var rb = document.createElement("button");
+      rb.type = "button";
+      rb.className = "ai-btn-primary";
+      rb.textContent = "필터 전체 초기화";
+      rb.addEventListener("click", function () {
+        state.category = "all"; state.status = "all"; state.query = ""; state.bookmarkedOnly = false;
+        syncControls(); renderAll();
+      });
+      emp.appendChild(rb);
+      gridEl.appendChild(emp);
+      return;
+    }
+
+    list.forEach(function (item) {
+      var card = document.createElement("article");
+      card.className = "ai-card";
+      card.tabIndex = 0;
+      card.addEventListener("mousemove", function (e) {
+        var r = card.getBoundingClientRect();
+        card.style.setProperty("--mx", (e.clientX - r.left) + "px");
+        card.style.setProperty("--my", (e.clientY - r.top) + "px");
+      });
+
+      var sMeta = STATUS_META[item.status] || STATUS_META.live;
+      var cMeta = CAT_META[item.category] || CAT_META.ocean;
+
+      var top = document.createElement("div");
+      top.className = "ai-card-top";
+      var pill = document.createElement("span");
+      pill.className = "ai-status-pill " + sMeta.cls;
+      pill.textContent = sMeta.label;
+      var ver = document.createElement("span");
+      ver.className = "ai-version-code";
+      ver.textContent = (item.code || "TRIP") + " · " + (item.version || "v1.0");
+      top.appendChild(pill);
+      top.appendChild(ver);
+
+      var vis = document.createElement("div");
+      vis.className = "ai-card-visual";
+      vis.style.background = item.gradient || cMeta.gradient;
+      var em = document.createElement("span");
+      em.className = "ai-card-emoji";
+      em.textContent = item.emoji || cMeta.emoji;
+      var cl = document.createElement("span");
+      cl.className = "ai-card-cat-label";
+      cl.textContent = cMeta.label;
+      vis.appendChild(em);
+      vis.appendChild(cl);
+
+      var ttl = document.createElement("h3");
+      ttl.className = "ai-card-title";
+      ttl.textContent = item.title;
+
+      var rt = document.createElement("div");
+      rt.className = "tr-route-pill";
+      rt.textContent = item.route || "📍 추천 여행 코스";
+
+      var desc = document.createElement("p");
+      desc.className = "ai-card-desc";
+      desc.textContent = item.summary;
+
+      var tags = document.createElement("div");
+      tags.className = "ai-tag-list";
+      (item.tags || []).forEach(function (t) {
+        var sp = document.createElement("span");
+        sp.className = "ai-tag-item";
+        sp.textContent = "#" + t;
+        tags.appendChild(sp);
+      });
+
+      var foot = document.createElement("div");
+      foot.className = "ai-card-foot";
+
+      var isLiked = Boolean(likedMap[item.id]);
+      var likeB = document.createElement("button");
+      likeB.type = "button";
+      likeB.className = "ai-like-btn" + (isLiked ? " liked" : "");
+      likeB.textContent = (isLiked ? "♥ " : "♡ ") + getLikes(item);
+      likeB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (likedMap[item.id]) { delete likedMap[item.id]; showToast("관심 여행코스에서 해제했습니다."); }
+        else { likedMap[item.id] = true; showToast("♥ 관심 여행코스로 저장했습니다!"); }
+        saveJson(STORAGE_LIKES, likedMap);
+        renderAll();
+      });
+
+      var acts = document.createElement("div");
+      acts.className = "ai-card-actions";
+      var cpB = document.createElement("button");
+      cpB.type = "button";
+      cpB.className = "ai-action-btn";
+      cpB.textContent = "📋 코스 복사";
+      cpB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        copyText(item.prompt || item.summary, "🧭 [" + item.title + "] 동선이 복사되었습니다!");
+      });
+      var dtB = document.createElement("button");
+      dtB.type = "button";
+      dtB.className = "ai-action-btn";
+      dtB.textContent = "상세 열기 →";
+      dtB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        openTripDetail(item);
+      });
+      acts.appendChild(cpB);
+      acts.appendChild(dtB);
+      foot.appendChild(likeB);
+      foot.appendChild(acts);
+
+      card.appendChild(top);
+      card.appendChild(vis);
+      card.appendChild(ttl);
+      card.appendChild(rt);
+      card.appendChild(desc);
+      card.appendChild(tags);
+      card.appendChild(foot);
+      card.addEventListener("click", function () { openTripDetail(item); });
+      gridEl.appendChild(card);
+    });
+  }
+
+  if (openAddBtn) {
+    openAddBtn.addEventListener("click", function () {
+      var titleVal = window.prompt("새 여행 코스·팁 제목을 입력하세요:", "제주 서쪽 해안도로 노을 드라이브 코스");
+      if (!titleVal || !titleVal.trim()) return;
+      var routeVal = window.prompt("핵심 동선 한 줄 요약:", "📍 애월 한담해변 → 신창풍차해안도로 → 수월봉 일몰") || "📍 추천 여행 루트";
+      var summaryVal = window.prompt("상세 설명 또는 여행 팁:", "오후 4시에 출발해 제주 서쪽 바다 노을을 가장 아름답게 만나는 드라이브 동선입니다.") || "";
+      var newItem = {
+        id: "tr-custom-" + Date.now(),
+        code: "TRIP-" + String(getAll().length + 1).padStart(3, "0"),
+        version: "v1.0",
+        status: "live",
+        category: "ocean",
+        route: routeVal.trim(),
+        title: titleVal.trim(),
+        summary: summaryVal.trim() || titleVal.trim(),
+        tags: ["여행코스", "추천동선", "BAIOO"],
+        date: new Date().toISOString().slice(0, 10),
+        baseLikes: 1,
+        prompt: "[" + titleVal.trim() + "]\n- 동선: " + routeVal.trim() + "\n- 가이드: " + (summaryVal.trim() || titleVal.trim())
+      };
+      customTrips.unshift(newItem);
+      saveJson(STORAGE_CUSTOM, customTrips);
+      showToast("🧭 새 여행 코스가 배포되었습니다!");
       renderAll();
     });
   }
