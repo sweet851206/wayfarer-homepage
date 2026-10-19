@@ -2173,6 +2173,8 @@
     font-size: .8rem;
     font-weight: 800;
   }
+  .visit-counter { text-align: right; font-size: .78rem; color: var(--muted); margin: 6px 0 0; }
+  .visit-counter b { font-variant-numeric: tabular-nums; letter-spacing: .06em; }
 </style>
 </head>
 <body>
@@ -2646,6 +2648,7 @@
   <div class="overlay"></div>
   <div class="container">
     <a href="#home" class="back-btn">← 홈으로</a>
+    <p class="visit-counter">방문자: <b id="visitCount">000000</b></p>
 
     <div class="sec-head">
       <span class="tag about">ABOUT BAIOO</span>
@@ -6747,6 +6750,29 @@
   }
 
   renderAll();
+})();
+
+/* ===== 방문자 카운터 (D1 visits, 브라우저당 1회만 +1) ===== */
+(function () {
+  var el = document.getElementById("visitCount");
+  if (!el) return;
+  function show(n) {
+    el.textContent = String(n || 0).padStart(6, "0");
+  }
+  try {
+    var counted = null;
+    try { counted = localStorage.getItem("baioo_visit_counted"); } catch (e) {}
+    var action = counted ? "get" : "hit";
+    fetch("/visits?action=" + action, { method: counted ? "GET" : "POST" })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (j && j.ok) {
+          show(j.count);
+          try { if (!counted) localStorage.setItem("baioo_visit_counted", "1"); } catch (e) {}
+        }
+      })
+      .catch(function () {});
+  } catch (e) {}
 })();
 </script>
 

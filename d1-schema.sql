@@ -8,3 +8,4 @@ CREATE TABLE IF NOT EXISTS posts (
   files TEXT DEFAULT '[]'
 );
 CREATE INDEX IF NOT EXISTS idx_posts_board ON posts(board, created_at DESC);
+CREATE TABLE IF NOT EXISTS visits (id TEXT PRIMARY KEY, count INTEGER NOT NULL);
