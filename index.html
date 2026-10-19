@@ -230,6 +230,11 @@
     content: ""; position: absolute; left: 9px; right: 9px; top: 50%;
     height: 2px; background: #EF4444; transform: rotate(-45deg); border-radius: 2px;
   }
+  #bgmSelect {
+    height: 42px; border: 1px solid var(--border); border-radius: 14px;
+    background: var(--surface-soft); color: var(--text);
+    font-size: .85rem; padding: 0 8px; cursor: pointer; max-width: 110px;
+  }
 
   .menu-btn {
     font-size: 1.25rem;
@@ -2207,6 +2212,13 @@
       <button class="theme-toggle" id="themeLight" aria-label="라이트 모드" title="라이트 모드">☀️</button>
       <button class="theme-toggle" id="themeDark" aria-label="다크 모드 전환" title="다크 모드 전환">🌙</button>
       <button class="theme-toggle muted" id="soundToggle" aria-label="배경음 켜기/끄기" title="배경음 켜기/끄기">🔊</button>
+      <select id="bgmSelect" aria-label="배경음 선택" title="배경음 선택">
+        <option value="bgm1.mp3">1 Satie</option>
+        <option value="bgm2.mp3">2 Bach</option>
+        <option value="bgm3.mp3">3 Chopin</option>
+        <option value="bgm4.mp3">4 Debussy</option>
+      </select>
+      <audio id="bgm" loop preload="none"></audio>
       </div>
       <button class="menu-btn" id="menuBtn" aria-label="메뉴 열기">☰</button>
     </div>
@@ -3243,8 +3255,22 @@
     });
   }
 
-  /* 배경음 켜기/끄기 (노래 파일 없음, 버튼만. 나중에 <audio id="bgm"> 넣으면 자동 연결) */
+  /* 배경음 4곡 선택 (Pixabay에서 다운받아 bgm1~4.mp3로 같은 폴더에 넣기) */
   var soundToggle = $("#soundToggle");
+  var bgmSelect = $("#bgmSelect");
+  var bgm = document.getElementById("bgm");
+  if (bgm) { bgm.volume = 0.25; }
+  function currentTrack() {
+    var v = "bgm1.mp3";
+    try { v = localStorage.getItem("baioo-track") || "bgm1.mp3"; } catch (e) {}
+    return v;
+  }
+  function setTrack(v, autoplay) {
+    try { localStorage.setItem("baioo-track", v); } catch (e) {}
+    if (bgmSelect && bgmSelect.value !== v) bgmSelect.value = v;
+    if (bgm && bgm.getAttribute("src") !== v) bgm.setAttribute("src", v);
+    if (bgm && autoplay && window.__baiooSound === "on") { try { var p = bgm.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {} }
+  }
   function applySound(mode) {
     if (!soundToggle) return;
     var isOn = (mode === "on");
@@ -3255,15 +3281,24 @@
     soundToggle.setAttribute("title", isOn ? "배경음 끄기" : "배경음 켜기");
     window.__baiooSound = mode;
     try { localStorage.setItem("baioo-sound", mode); } catch (e) {}
-    var bgm = document.getElementById("bgm");
-    if (bgm) { bgm.muted = !isOn; if (isOn && bgm.paused) { try { bgm.play(); } catch (e) {} } else if (!isOn && !bgm.paused) { bgm.pause(); } }
+    if (!bgm) return;
+    if (isOn) { try { var p = bgm.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {} }
+    else { bgm.pause(); }
   }
   if (soundToggle) {
     var savedSound = "off";
     try { savedSound = localStorage.getItem("baioo-sound") || "off"; } catch (e) {}
+    setTrack(currentTrack(), false);
     applySound(savedSound);
     soundToggle.addEventListener("click", function () {
+      setTrack(currentTrack(), false);
       applySound(window.__baiooSound === "on" ? "off" : "on");
+    });
+  }
+  if (bgmSelect) {
+    bgmSelect.value = currentTrack();
+    bgmSelect.addEventListener("change", function () {
+      setTrack(bgmSelect.value, true);
     });
   }
 
