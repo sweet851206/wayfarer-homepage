@@ -3302,10 +3302,8 @@
   }
   /* Main 누르면 배경음 켜기 (사용자 클릭이라 브라우저 허용) */
   function mainStartsSound() {
-    if (window.__baiooSound !== "on") {
-      setTrack(currentTrack(), false);
-      applySound("on");
-    }
+    setTrack(currentTrack(), false);
+    applySound("on");
   }
   var mainNav = document.querySelector('a[data-nav="home"]');
   if (mainNav) { mainNav.addEventListener("click", mainStartsSound); }
