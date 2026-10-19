@@ -106,7 +106,7 @@ function Mime($ext) {
       ".json"{"application/json; charset=utf-8";break}
       ".jpg"{"image/jpeg";break}; ".jpeg"{"image/jpeg";break}; ".png"{"image/png";break}; ".gif"{"image/gif";break}; ".webp"{"image/webp";break}; ".svg"{"image/svg+xml";break}
       ".pdf"{"application/pdf";break}; ".zip"{"application/zip";break}
-      ".txt"{"text/plain; charset=utf-8";break}
+      ".txt"{"text/plain; charset=utf-8";break}; ".mp3"{"audio/mpeg";break}
       default{"application/octet-stream"}
     }
 }
