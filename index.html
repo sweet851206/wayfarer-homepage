@@ -225,6 +225,11 @@
   }
   #themeDark { margin-left: 0; }
   .theme-row { display: flex; align-items: center; gap: 10px; }
+  #soundToggle { color: #EAB308; font-size: 1.25rem; position: relative; }
+  #soundToggle.muted::after {
+    content: ""; position: absolute; left: 9px; right: 9px; top: 50%;
+    height: 2px; background: #EF4444; transform: rotate(-45deg); border-radius: 2px;
+  }
 
   .menu-btn {
     font-size: 1.25rem;
@@ -2201,7 +2206,7 @@
       <div class="theme-row">
       <button class="theme-toggle" id="themeLight" aria-label="라이트 모드" title="라이트 모드">☀️</button>
       <button class="theme-toggle" id="themeDark" aria-label="다크 모드 전환" title="다크 모드 전환">🌙</button>
-      <button class="theme-toggle" id="soundToggle" aria-label="배경음 켜기/끄기" title="배경음 켜기/끄기">🔇</button>
+      <button class="theme-toggle muted" id="soundToggle" aria-label="배경음 켜기/끄기" title="배경음 켜기/끄기">🔊</button>
       </div>
       <button class="menu-btn" id="menuBtn" aria-label="메뉴 열기">☰</button>
     </div>
@@ -3243,7 +3248,9 @@
   function applySound(mode) {
     if (!soundToggle) return;
     var isOn = (mode === "on");
-    soundToggle.textContent = isOn ? "🔊" : "🔇";
+    soundToggle.textContent = "🔊";
+    if (isOn) { soundToggle.classList.remove("muted"); }
+    else { soundToggle.classList.add("muted"); }
     soundToggle.setAttribute("aria-label", isOn ? "배경음 끄기" : "배경음 켜기");
     soundToggle.setAttribute("title", isOn ? "배경음 끄기" : "배경음 켜기");
     window.__baiooSound = mode;
