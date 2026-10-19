@@ -1301,33 +1301,52 @@
     .hero { min-height: 100vh; }
   }
 
-  /* ── travel 배경: 도심 황혼 (2.jpg 대체, 외부이미지 없음) ── */
+  /* ── travel 배경: 낮=흰색, 밤=도심 황혼 ── */
   #travel {
+    background:
+      radial-gradient(45% 35% at 82% 18%, rgba(255,154,118,.14), transparent 70%),
+      radial-gradient(50% 40% at 12% 25%, rgba(56,189,248,.12), transparent 70%),
+      linear-gradient(180deg, #FFF7F0 0%, #F6F8FB 100%);
+  }
+  [data-theme="dark"] #travel {
     background:
       radial-gradient(45% 35% at 82% 18%, rgba(255,154,118,.35), transparent 70%),
       radial-gradient(50% 40% at 12% 25%, rgba(56,189,248,.25), transparent 70%),
       linear-gradient(180deg, #0B2447 0%, #134E5E 55%, #1B6B6B 100%);
   }
-  #travel .overlay { background: linear-gradient(180deg, rgba(7,11,20,.15), rgba(7,11,20,.55)); }
-  #travel .sec-head h2 { color: #F1F5F9; }
-  #travel .back-btn { color: #F1F5F9; background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.2); }
-  #travel .tag.travel { background: rgba(255,107,53,.22); color: #FFB59E; }
+  #travel .overlay { background: transparent; }
+  [data-theme="dark"] #travel .overlay { background: linear-gradient(180deg, rgba(7,11,20,.15), rgba(7,11,20,.55)); }
+  #travel .sec-head h2 { color: var(--text-strong); }
+  [data-theme="dark"] #travel .sec-head h2 { color: #F1F5F9; }
+  #travel .back-btn { color: var(--text); background: var(--surface); border-color: var(--border); }
+  [data-theme="dark"] #travel .back-btn { color: #F1F5F9; background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.2); }
+  #travel .tag.travel { background: var(--travel-soft); color: var(--travel); }
+  [data-theme="dark"] #travel .tag.travel { background: rgba(255,107,53,.22); color: #FFB59E; }
   /* ── 비대칭: 짝수 카드 내리기 (PC만) ── */
   @media (min-width: 1025px) {
     #travel .post-grid { align-items: start; }
     #travel .post-grid > .post:nth-child(even) { margin-top: 28px; }
   }
 
-  /* ── 10-18: repair 배경 — 깨진 3.jpg 제거, travel과 같은 방식의 CSS 그라데이션 ── */
+  /* ── 10-18: repair 배경 — 낮=흰색, 밤=초록 그라데이션 ── */
   #repair {
+    background:
+      radial-gradient(45% 35% at 80% 20%, rgba(16,185,129,.12), transparent 70%),
+      radial-gradient(50% 40% at 15% 30%, rgba(99,102,241,.10), transparent 70%),
+      linear-gradient(180deg, #EFFDF5 0%, #F6F8FB 100%);
+  }
+  [data-theme="dark"] #repair {
     background:
       radial-gradient(45% 35% at 80% 20%, rgba(16,185,129,.30), transparent 70%),
       radial-gradient(50% 40% at 15% 30%, rgba(99,102,241,.22), transparent 70%),
       linear-gradient(180deg, #0F3D33 0%, #14532D 55%, #166534 100%);
   }
-  #repair .overlay { background: linear-gradient(180deg, rgba(7,11,20,.15), rgba(7,11,20,.55)); }
-  #repair .sec-head h2 { color: #F1F5F9; }
-  #repair .back-btn { color: #F1F5F9; background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.2); }
+  #repair .overlay { background: transparent; }
+  [data-theme="dark"] #repair .overlay { background: linear-gradient(180deg, rgba(7,11,20,.15), rgba(7,11,20,.55)); }
+  #repair .sec-head h2 { color: var(--text-strong); }
+  [data-theme="dark"] #repair .sec-head h2 { color: #F1F5F9; }
+  #repair .back-btn { color: var(--text); background: var(--surface); border-color: var(--border); }
+  [data-theme="dark"] #repair .back-btn { color: #F1F5F9; background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.2); }
 
   /* ── 10-18: about 섹션 (nav '소개' 링크 연결) ── */
   #about {
@@ -2050,6 +2069,11 @@
   #travel .ai-lead-sub,
   #travel .pet-diary-subhead h3,
   #travel .ai-result-count {
+    color: var(--muted);
+  }
+  [data-theme="dark"] #travel .ai-lead-sub,
+  [data-theme="dark"] #travel .pet-diary-subhead h3,
+  [data-theme="dark"] #travel .ai-result-count {
     color: #E2E8F0;
   }
   #travel .ai-card:hover {
@@ -2080,9 +2104,18 @@
   #repair .ai-lead-sub,
   #repair .pet-diary-subhead h3,
   #repair .ai-result-count {
+    color: var(--muted);
+  }
+  [data-theme="dark"] #repair .ai-lead-sub,
+  [data-theme="dark"] #repair .pet-diary-subhead h3,
+  [data-theme="dark"] #repair .ai-result-count {
     color: #E2E8F0;
   }
   #repair .tag.repair {
+    background: var(--repair-soft);
+    color: #059669;
+  }
+  [data-theme="dark"] #repair .tag.repair {
     background: rgba(16, 185, 129, .24);
     color: #6EE7B7;
   }
