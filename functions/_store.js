@@ -30,7 +30,7 @@ export async function createPost(req, db, bucket, board) {
   }
   const created = new Date().toISOString();
   await db.prepare(
-    "INSERT INTO posts(id,board,title,content,date,created_at,files) VALUES(?,?,?,?,?,?,)"
+    "INSERT INTO posts(id,board,title,content,date,created_at,files) VALUES(?,?,?,?,?,?,?)"
   ).bind(
     id, board,
     String(fd.get("title") || ""), String(fd.get("content") || ""),
