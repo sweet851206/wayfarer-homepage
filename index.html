@@ -3281,7 +3281,9 @@
     if (!travelPosts.length) {
       var empty = document.createElement("div");
       empty.style.cssText = "grid-column:1/-1;text-align:center;color:var(--muted);font-weight:800;padding:26px 0;";
-      empty.textContent = "등록된 여행 글이 없습니다. 아래 버튼으로 첫 여행을 등록해 보세요!";
+      empty.textContent = document.body.classList.contains("is-admin")
+        ? "등록된 여행 글이 없습니다. 아래 버튼으로 첫 여행을 등록해 보세요!"
+        : "등록된 여행 글이 없습니다.";
       listEl.appendChild(empty);
       return;
     }
@@ -3539,7 +3541,9 @@
     if (!bunnyPosts.length) {
       var empty = document.createElement("div");
       empty.style.cssText = "grid-column:1/-1;text-align:center;color:var(--muted);font-weight:800;padding:26px 0;";
-      empty.textContent = "등록된 일상 글이 없습니다. 위 버튼으로 첫 일상을 등록해 보세요!";
+      empty.textContent = document.body.classList.contains("is-admin")
+        ? "등록된 일상 글이 없습니다. 위 버튼으로 첫 일상을 등록해 보세요!"
+        : "등록된 일상 글이 없습니다.";
       listEl.appendChild(empty);
       return;
     }
@@ -6941,6 +6945,7 @@
       if (isAdmin()) {
         try { localStorage.removeItem("baioo_admin"); } catch (err) {}
         sync();
+        location.reload();
       } else {
         var id = window.prompt("관리자 ID:", "");
         if (id === null) return;
@@ -6949,6 +6954,7 @@
           try { localStorage.setItem("baioo_admin", "1"); } catch (err) {}
           sync();
           alert("관리자 모드 ON");
+          location.reload();
         } else {
           alert("ID/PW가 틀렸습니다.");
         }
