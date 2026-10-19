@@ -3300,6 +3300,17 @@
       setTrack(bgmSelect.value, true);
     });
   }
+  /* Main 누르면 배경음 켜기 (사용자 클릭이라 브라우저 허용) */
+  function mainStartsSound() {
+    if (window.__baiooSound !== "on") {
+      setTrack(currentTrack(), false);
+      applySound("on");
+    }
+  }
+  var mainNav = document.querySelector('a[data-nav="home"]');
+  if (mainNav) { mainNav.addEventListener("click", mainStartsSound); }
+  var logoHome = document.querySelector('.logo[href="#home"]');
+  if (logoHome) { logoHome.addEventListener("click", mainStartsSound); }
 
   /* ---------- API ---------- */
   function apiList() {
