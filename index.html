@@ -4109,6 +4109,38 @@
 
     actions.appendChild(copyBtn);
     actions.appendChild(detailBtn);
+    if (String(item.id || "").indexOf("baioo-custom-") === 0) {
+      var aiEdB = document.createElement("button");
+      aiEdB.type = "button";
+      aiEdB.className = "ai-action-btn admin-only";
+      aiEdB.textContent = "✏️ 수정";
+      aiEdB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var t = window.prompt("제목 수정:", item.title);
+        if (t === null) return;
+        var s = window.prompt("설명 수정:", item.summary || "");
+        if (s === null) return;
+        item.title = (t.trim() || item.title);
+        item.summary = (s.trim() || item.summary);
+        saveJson(STORAGE_CUSTOM, customIdeas);
+        showToast("✨ 수정되었습니다!");
+        renderAll();
+      });
+      var aiDelB = document.createElement("button");
+      aiDelB.type = "button";
+      aiDelB.className = "ai-action-btn admin-only";
+      aiDelB.textContent = "🗑️ 삭제";
+      aiDelB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (!window.confirm("이 아이디어를 삭제할까요?")) return;
+        customIdeas = customIdeas.filter(function (c) { return c.id !== item.id; });
+        saveJson(STORAGE_CUSTOM, customIdeas);
+        showToast("삭제되었습니다!");
+        renderAll();
+      });
+      actions.appendChild(aiEdB);
+      actions.appendChild(aiDelB);
+    }
     foot.appendChild(likeBtn);
     foot.appendChild(actions);
 
@@ -4802,6 +4834,38 @@
 
     actions.appendChild(copyBtn);
     actions.appendChild(detailBtn);
+    if (String(item.id || "").indexOf("baioo-br-") === 0) {
+      var brEdB = document.createElement("button");
+      brEdB.type = "button";
+      brEdB.className = "ai-action-btn admin-only";
+      brEdB.textContent = "✏️ 수정";
+      brEdB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var t = window.prompt("제목 수정:", item.title);
+        if (t === null) return;
+        var s = window.prompt("설명 수정:", item.summary || "");
+        if (s === null) return;
+        item.title = (t.trim() || item.title);
+        item.summary = (s.trim() || item.summary);
+        saveJson(STORAGE_CUSTOM, customBrands);
+        showToast("✨ 수정되었습니다!");
+        renderAll();
+      });
+      var brDelB = document.createElement("button");
+      brDelB.type = "button";
+      brDelB.className = "ai-action-btn admin-only";
+      brDelB.textContent = "🗑️ 삭제";
+      brDelB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (!window.confirm("이 아이디어를 삭제할까요?")) return;
+        customBrands = customBrands.filter(function (c) { return c.id !== item.id; });
+        saveJson(STORAGE_CUSTOM, customBrands);
+        showToast("삭제되었습니다!");
+        renderAll();
+      });
+      actions.appendChild(brEdB);
+      actions.appendChild(brDelB);
+    }
     foot.appendChild(likeBtn);
     foot.appendChild(actions);
 
@@ -5924,6 +5988,41 @@
       });
       acts.appendChild(cpB);
       acts.appendChild(dtB);
+      if (String(item.id || "").indexOf("tr-custom-") === 0) {
+        var trEdB = document.createElement("button");
+        trEdB.type = "button";
+        trEdB.className = "ai-action-btn admin-only";
+        trEdB.textContent = "✏️ 수정";
+        trEdB.addEventListener("click", function (e) {
+          e.stopPropagation();
+          var t = window.prompt("제목 수정:", item.title);
+          if (t === null) return;
+          var r = window.prompt("동선 수정:", item.route || "");
+          if (r === null) return;
+          var s = window.prompt("설명 수정:", item.summary || "");
+          if (s === null) return;
+          item.title = (t.trim() || item.title);
+          item.route = (r.trim() || item.route);
+          item.summary = (s.trim() || item.summary);
+          saveJson(STORAGE_CUSTOM, customTrips);
+          showToast("🧭 수정되었습니다!");
+          renderAll();
+        });
+        var trDelB = document.createElement("button");
+        trDelB.type = "button";
+        trDelB.className = "ai-action-btn admin-only";
+        trDelB.textContent = "🗑️ 삭제";
+        trDelB.addEventListener("click", function (e) {
+          e.stopPropagation();
+          if (!window.confirm("이 코스를 삭제할까요?")) return;
+          customTrips = customTrips.filter(function (x) { return x.id !== item.id; });
+          saveJson(STORAGE_CUSTOM, customTrips);
+          showToast("삭제되었습니다!");
+          renderAll();
+        });
+        acts.appendChild(trEdB);
+        acts.appendChild(trDelB);
+      }
       foot.appendChild(likeB);
       foot.appendChild(acts);
 
@@ -6358,6 +6457,41 @@
       });
       acts.appendChild(cpB);
       acts.appendChild(dtB);
+      if (String(item.id || "").indexOf("rp-custom-") === 0) {
+        var rpEdB = document.createElement("button");
+        rpEdB.type = "button";
+        rpEdB.className = "ai-action-btn admin-only";
+        rpEdB.textContent = "✏️ 수정";
+        rpEdB.addEventListener("click", function (e) {
+          e.stopPropagation();
+          var t = window.prompt("제목 수정:", item.title);
+          if (t === null) return;
+          var c = window.prompt("명령어 수정:", item.cmd || "");
+          if (c === null) return;
+          var s = window.prompt("설명 수정:", item.summary || "");
+          if (s === null) return;
+          item.title = (t.trim() || item.title);
+          item.cmd = (c.trim() || item.cmd);
+          item.summary = (s.trim() || item.summary);
+          saveJson(STORAGE_CUSTOM, customDiags);
+          showToast("🛠️ 수정되었습니다!");
+          renderAll();
+        });
+        var rpDelB = document.createElement("button");
+        rpDelB.type = "button";
+        rpDelB.className = "ai-action-btn admin-only";
+        rpDelB.textContent = "🗑️ 삭제";
+        rpDelB.addEventListener("click", function (e) {
+          e.stopPropagation();
+          if (!window.confirm("이 진단법을 삭제할까요?")) return;
+          customDiags = customDiags.filter(function (x) { return x.id !== item.id; });
+          saveJson(STORAGE_CUSTOM, customDiags);
+          showToast("삭제되었습니다!");
+          renderAll();
+        });
+        acts.appendChild(rpEdB);
+        acts.appendChild(rpDelB);
+      }
       foot.appendChild(likeB);
       foot.appendChild(acts);
 
