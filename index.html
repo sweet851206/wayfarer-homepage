@@ -4199,6 +4199,7 @@
         item.title = (t.trim() || item.title);
         item.summary = (s.trim() || item.summary);
         saveJson(STORAGE_CUSTOM, customIdeas);
+        ideaServerUpsert("ai", item);
         showToast("✨ 수정되었습니다!");
         renderAll();
       });
@@ -4211,6 +4212,7 @@
         if (!window.confirm("이 아이디어를 삭제할까요?")) return;
         customIdeas = customIdeas.filter(function (c) { return c.id !== item.id; });
         saveJson(STORAGE_CUSTOM, customIdeas);
+        ideaServerDelete("ai", item.id);
         showToast("삭제되었습니다!");
         renderAll();
       });
@@ -4345,6 +4347,7 @@
       if (!state.activeIdeaId) return;
       customIdeas = customIdeas.filter(function (c) { return c.id !== state.activeIdeaId; });
       saveJson(STORAGE_CUSTOM, customIdeas);
+      ideaServerDelete("ai", state.activeIdeaId);
       if (detailDlg && detailDlg.open) detailDlg.close();
       showToast("아이디어가 삭제되었습니다.");
       renderAll();
@@ -4415,6 +4418,7 @@
 
       customIdeas.unshift(newIdea);
       saveJson(STORAGE_CUSTOM, customIdeas);
+      ideaServerUpsert("ai", newIdea);
       addForm.reset();
       if (inputVersion) inputVersion.value = "v1.0";
       if (addDlg && addDlg.open) addDlg.close();
@@ -4468,6 +4472,11 @@
   });
 
   renderAll();
+  ideaServerSync("ai", function () { return customIdeas; }, function (items) {
+    customIdeas = items;
+    saveJson(STORAGE_CUSTOM, customIdeas);
+    renderAll();
+  });
 })();
 
 /* ===== BAIOO Branding Agency 스튜디오 (네이밍·컬러 스와치 복사·필터·등록) ===== */
@@ -4924,6 +4933,7 @@
         item.title = (t.trim() || item.title);
         item.summary = (s.trim() || item.summary);
         saveJson(STORAGE_CUSTOM, customBrands);
+        ideaServerUpsert("br", item);
         showToast("✨ 수정되었습니다!");
         renderAll();
       });
@@ -4936,6 +4946,7 @@
         if (!window.confirm("이 아이디어를 삭제할까요?")) return;
         customBrands = customBrands.filter(function (c) { return c.id !== item.id; });
         saveJson(STORAGE_CUSTOM, customBrands);
+        ideaServerDelete("br", item.id);
         showToast("삭제되었습니다!");
         renderAll();
       });
@@ -5079,6 +5090,7 @@
       if (!state.activeBrandId) return;
       customBrands = customBrands.filter(function (c) { return c.id !== state.activeBrandId; });
       saveJson(STORAGE_CUSTOM, customBrands);
+      ideaServerDelete("br", state.activeBrandId);
       if (detailDlg && detailDlg.open) detailDlg.close();
       showToast("브랜딩 아이디어가 삭제되었습니다.");
       renderAll();
@@ -5166,6 +5178,7 @@
 
       customBrands.unshift(newBrand);
       saveJson(STORAGE_CUSTOM, customBrands);
+      ideaServerUpsert("br", newBrand);
       addForm.reset();
       if (inputColors) inputColors.value = "#F43F5E, #8B5CF6, #0F172A";
       if (addDlg && addDlg.open) addDlg.close();
@@ -5217,6 +5230,11 @@
   });
 
   renderAll();
+  ideaServerSync("br", function () { return customBrands; }, function (items) {
+    customBrands = items;
+    saveJson(STORAGE_CUSTOM, customBrands);
+    renderAll();
+  });
 })();
 
 /* ===== BAIOO Pets Care & Idea Hub (#bunny 필터·검색·복사·등록) ===== */
@@ -5617,6 +5635,7 @@
           item.routine = (r.trim() || item.routine);
           item.summary = (s.trim() || item.summary);
           saveJson(STORAGE_CUSTOM, customPets);
+          ideaServerUpsert("pet", item);
           showToast("🐾 수정되었습니다!");
           renderAll();
         });
@@ -5629,6 +5648,7 @@
           if (!window.confirm("이 아이디어를 삭제할까요?")) return;
           customPets = customPets.filter(function (x) { return x.id !== item.id; });
           saveJson(STORAGE_CUSTOM, customPets);
+          ideaServerDelete("pet", item.id);
           showToast("🐾 삭제되었습니다!");
           renderAll();
         });
@@ -5672,6 +5692,7 @@
       };
       customPets.unshift(newItem);
       saveJson(STORAGE_CUSTOM, customPets);
+      ideaServerUpsert("pet", newItem);
       showToast("🐾 새 펫 케어 아이디어가 배포되었습니다!");
       renderAll();
     });
@@ -5691,6 +5712,11 @@
   if (bookmarkBtn) bookmarkBtn.addEventListener("click", function () { state.bookmarkedOnly = !state.bookmarkedOnly; syncControls(); renderAll(); });
 
   renderAll();
+  ideaServerSync("pet", function () { return customPets; }, function (items) {
+    customPets = items;
+    saveJson(STORAGE_CUSTOM, customPets);
+    renderAll();
+  });
 })();
 
 /* ===== BAIOO Travel Route & Smart Trip Hub (#travel 필터·검색·복사·등록) ===== */
@@ -6081,6 +6107,7 @@
           item.route = (r.trim() || item.route);
           item.summary = (s.trim() || item.summary);
           saveJson(STORAGE_CUSTOM, customTrips);
+          ideaServerUpsert("tr", item);
           showToast("🧭 수정되었습니다!");
           renderAll();
         });
@@ -6093,6 +6120,7 @@
           if (!window.confirm("이 코스를 삭제할까요?")) return;
           customTrips = customTrips.filter(function (x) { return x.id !== item.id; });
           saveJson(STORAGE_CUSTOM, customTrips);
+          ideaServerDelete("tr", item.id);
           showToast("삭제되었습니다!");
           renderAll();
         });
@@ -6136,6 +6164,7 @@
       };
       customTrips.unshift(newItem);
       saveJson(STORAGE_CUSTOM, customTrips);
+      ideaServerUpsert("tr", newItem);
       showToast("🧭 새 여행 코스가 배포되었습니다!");
       renderAll();
     });
@@ -6155,6 +6184,11 @@
   if (bookmarkBtn) bookmarkBtn.addEventListener("click", function () { state.bookmarkedOnly = !state.bookmarkedOnly; syncControls(); renderAll(); });
 
   renderAll();
+  ideaServerSync("tr", function () { return customTrips; }, function (items) {
+    customTrips = items;
+    saveJson(STORAGE_CUSTOM, customTrips);
+    renderAll();
+  });
 })();
 
 /* ===== BAIOO Computer Diagnostics & Tuning Hub (#repair 필터·검색·명령어복사·등록) ===== */
@@ -6550,6 +6584,7 @@
           item.cmd = (c.trim() || item.cmd);
           item.summary = (s.trim() || item.summary);
           saveJson(STORAGE_CUSTOM, customDiags);
+          ideaServerUpsert("rp", item);
           showToast("🛠️ 수정되었습니다!");
           renderAll();
         });
@@ -6562,6 +6597,7 @@
           if (!window.confirm("이 진단법을 삭제할까요?")) return;
           customDiags = customDiags.filter(function (x) { return x.id !== item.id; });
           saveJson(STORAGE_CUSTOM, customDiags);
+          ideaServerDelete("rp", item.id);
           showToast("삭제되었습니다!");
           renderAll();
         });
@@ -6605,6 +6641,7 @@
       };
       customDiags.unshift(newItem);
       saveJson(STORAGE_CUSTOM, customDiags);
+      ideaServerUpsert("rp", newItem);
       showToast("🛠️ 새 진단 레시피가 배포되었습니다!");
       renderAll();
     });
@@ -6624,6 +6661,11 @@
   if (bookmarkBtn) bookmarkBtn.addEventListener("click", function () { state.bookmarkedOnly = !state.bookmarkedOnly; syncControls(); renderAll(); });
 
   renderAll();
+  ideaServerSync("rp", function () { return customDiags; }, function (items) {
+    customDiags = items;
+    saveJson(STORAGE_CUSTOM, customDiags);
+    renderAll();
+  });
 })();
 
 /* ===== BAIOO About & Vision Hub (#about 필터·검색·원클릭 이동·복사) ===== */
@@ -7035,6 +7077,41 @@
   });
   sync();
 })();
+
+/* ===== 아이디어 공유 동기화 (D1 ideas, 5개 허브 공용) ===== */
+function ideaServerUpsert(board, item) {
+  try {
+    fetch("/ideas?action=upsert&board=" + encodeURIComponent(board), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ board: board, item: item })
+    }).catch(function () {});
+  } catch (e) {}
+}
+function ideaServerDelete(board, id) {
+  try {
+    fetch("/ideas?action=delete&board=" + encodeURIComponent(board), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ board: board, id: id })
+    }).catch(function () {});
+  } catch (e) {}
+}
+function ideaServerSync(board, getLocal, apply) {
+  fetch("/ideas?action=list&board=" + encodeURIComponent(board), { headers: { Accept: "application/json" } })
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok || !Array.isArray(j.items)) return;
+      var serverItems = j.items;
+      var serverIds = {};
+      serverItems.forEach(function (it) { if (it && it.id) serverIds[it.id] = true; });
+      var localItems = getLocal() || [];
+      var missing = localItems.filter(function (it) { return it && it.id && !serverIds[it.id]; });
+      missing.forEach(function (it) { ideaServerUpsert(board, it); });
+      apply(serverItems.concat(missing));
+    })
+    .catch(function () {});
+}
 
 /* ===== 방문자 카운터 (D1 visits, 브라우저당 1회만 +1) ===== */(function () {
   var el = document.getElementById("visitCount");
