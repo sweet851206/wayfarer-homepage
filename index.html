@@ -2909,6 +2909,7 @@
     <div id="viewContent"></div>
     <div class="file-list" id="viewFiles" hidden></div>
     <div class="dlg-actions">
+      <button type="button" class="btn btn-primary admin-only" id="viewEdit">수정</button>
       <button type="button" class="btn btn-danger admin-only" id="viewDelete">삭제</button>
       <button type="button" class="btn btn-ghost" data-close="travelViewDialog">닫기</button>
     </div>
@@ -2960,6 +2961,7 @@
     <div id="bunnyViewContent"></div>
     <div class="file-list" id="bunnyViewFiles" hidden></div>
     <div class="dlg-actions">
+      <button type="button" class="btn btn-primary admin-only" id="bunnyViewEdit">수정</button>
       <button type="button" class="btn btn-danger admin-only" id="bunnyViewDelete">삭제</button>
       <button type="button" class="btn btn-ghost" data-close="bunnyViewDialog">닫기</button>
     </div>
@@ -3445,6 +3447,43 @@
       .then(function () { deleteBtn.disabled = false; });
   });
 
+  var editBtn = $("#viewEdit");
+  if (editBtn) {
+    editBtn.addEventListener("click", function () {
+      if (!viewingId) return;
+      var p = null;
+      travelPosts.forEach(function (x) { if (x.id === viewingId) p = x; });
+      if (!p) return;
+      var t = window.prompt("제목 수정:", p.title || "");
+      if (t === null) return;
+      var c = window.prompt("내용 수정:", p.content || "");
+      if (c === null) return;
+      var d = window.prompt("날짜 수정(YYYY-MM-DD):", p.date || "");
+      if (d === null) return;
+      var fd = new FormData();
+      fd.append("id", viewingId);
+      fd.append("title", t.trim());
+      fd.append("content", c);
+      fd.append("date", (d || "").trim());
+      editBtn.disabled = true;
+      fetch("/api?action=update", { method: "POST", body: fd })
+        .then(function (res) {
+          return res.json().catch(function () { return null; }).then(function (data) {
+            if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+            return data;
+          });
+        })
+        .then(function () { return loadTravel(); })
+        .then(function () {
+          var np = null;
+          travelPosts.forEach(function (x) { if (x.id === viewingId) np = x; });
+          if (np) openView(viewingId);
+        })
+        .catch(function (err) { window.alert("수정 실패: " + ((err && err.message) || err)); })
+        .then(function () { editBtn.disabled = false; });
+    });
+  }
+
   /* ---------- init ---------- */
   route();
   loadTravel();
@@ -3700,6 +3739,39 @@
         })
         .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
         .then(function () { deleteBtn.disabled = false; });
+    });
+  }
+
+  var editBtn3 = $("#bunnyViewEdit");
+  if (editBtn3) {
+    editBtn3.addEventListener("click", function () {
+      if (!viewingId) return;
+      var p = null;
+      bunnyPosts.forEach(function (x) { if (x.id === viewingId) p = x; });
+      if (!p) return;
+      var t = window.prompt("제목 수정:", p.title || "");
+      if (t === null) return;
+      var c = window.prompt("내용 수정:", p.content || "");
+      if (c === null) return;
+      var d = window.prompt("날짜 수정(YYYY-MM-DD):", p.date || "");
+      if (d === null) return;
+      var fd = new FormData();
+      fd.append("id", viewingId);
+      fd.append("title", t.trim());
+      fd.append("content", c);
+      fd.append("date", (d || "").trim());
+      editBtn3.disabled = true;
+      fetch("/api3?action=update", { method: "POST", body: fd })
+        .then(function (res) {
+          return res.json().catch(function () { return null; }).then(function (data) {
+            if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+            return data;
+          });
+        })
+        .then(function () { return loadBunny(); })
+        .then(function () { openBunnyView(viewingId); })
+        .catch(function (err) { window.alert("수정 실패: " + ((err && err.message) || err)); })
+        .then(function () { editBtn3.disabled = false; });
     });
   }
 

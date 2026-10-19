@@ -1,4 +1,4 @@
-import { listPosts, createPost, deletePost, json } from "../_store.js";
+import { listPosts, createPost, updatePost, deletePost, json } from "../_store.js";
 
 export async function onRequest(context) {
   const { request, env } = context;
@@ -10,6 +10,9 @@ export async function onRequest(context) {
     }
     if (request.method === "POST" && action === "create") {
       return json(await createPost(request, env.BLOG_DB, env.BLOG_FILES, "travel"));
+    }
+    if (request.method === "POST" && action === "update") {
+      return json(await updatePost(request, env.BLOG_DB, "travel"));
     }
     if (request.method === "POST") {
       return json(await deletePost(request, env.BLOG_DB, env.BLOG_FILES, "travel"));

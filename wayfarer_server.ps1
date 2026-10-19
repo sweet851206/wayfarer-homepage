@@ -202,6 +202,34 @@ while($listener.IsListening){
       }
     }
 
+    if($path -eq "/api" -and $method -eq "POST"){
+      $action=$ctx.Request.QueryString["action"]
+      if($action -eq "update"){
+        $parts=Parse-Multipart $ctx
+        $decU = { param($x) if($null -eq $x){""}else{[Text.Encoding]::UTF8.GetString($x)} }
+        $getF = { param($n) $pp=$parts|Where Name -eq $n|Select -First 1; if($pp){&$decU $pp.Data}else{""} }
+        $uid=&$getF "id"
+        $posts=Load-Posts
+        $posts=@($posts|ForEach-Object { if($_.id -eq $uid){ $_.title=&$getF "title"; $_.content=&$getF "content"; $_.date=&$getF "date" }; $_ })
+        Save-Posts $posts
+        Send-Json $ctx @{ok=$true;id=$uid}; continue
+      }
+    }
+
+    if($path -eq "/api3" -and $method -eq "POST"){
+      $action=$ctx.Request.QueryString["action"]
+      if($action -eq "update"){
+        $parts=Parse-Multipart $ctx
+        $decU3 = { param($x) if($null -eq $x){""}else{[Text.Encoding]::UTF8.GetString($x)} }
+        $getF3 = { param($n) $pp=$parts|Where Name -eq $n|Select -First 1; if($pp){&$decU3 $pp.Data}else{""} }
+        $uid=&$getF3 "id"
+        $posts=Load-Posts3
+        $posts=@($posts|ForEach-Object { if($_.id -eq $uid){ $_.title=&$getF3 "title"; $_.content=&$getF3 "content"; $_.date=&$getF3 "date" }; $_ })
+        Save-Posts3 $posts
+        Send-Json $ctx @{ok=$true;id=$uid}; continue
+      }
+    }
+
     if($path -eq "/api" -and $method -eq "POST" -and $ctx.Request.ContentType -like "application/json*"){
       # reserved
     }

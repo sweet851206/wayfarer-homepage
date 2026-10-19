@@ -39,6 +39,19 @@ export async function createPost(req, db, bucket, board) {
   return { ok: true, id: id };
 }
 
+export async function updatePost(req, db, board) {
+  const fd = await req.formData();
+  const id = String(fd.get("id") || "");
+  if (!id) return { ok: false, message: "no id" };
+  await db.prepare(
+    "UPDATE posts SET title=?, content=?, date=? WHERE id=? AND board=?"
+  ).bind(
+    String(fd.get("title") || ""), String(fd.get("content") || ""),
+    String(fd.get("date") || ""), id, board
+  ).run();
+  return { ok: true, id: id };
+}
+
 export async function deletePost(req, db, bucket, board) {
   var id = "";
   try {
