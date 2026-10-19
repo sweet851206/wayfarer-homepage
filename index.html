@@ -5459,6 +5459,41 @@
       });
       acts.appendChild(cpB);
       acts.appendChild(dtB);
+      if (String(item.id || "").indexOf("pet-custom-") === 0) {
+        var edB = document.createElement("button");
+        edB.type = "button";
+        edB.className = "ai-action-btn admin-only";
+        edB.textContent = "✏️ 수정";
+        edB.addEventListener("click", function (e) {
+          e.stopPropagation();
+          var t = window.prompt("제목 수정:", item.title);
+          if (t === null) return;
+          var r = window.prompt("루틴 수정:", item.routine || "");
+          if (r === null) return;
+          var s = window.prompt("설명 수정:", item.summary || "");
+          if (s === null) return;
+          item.title = (t.trim() || item.title);
+          item.routine = (r.trim() || item.routine);
+          item.summary = (s.trim() || item.summary);
+          saveJson(STORAGE_CUSTOM, customPets);
+          showToast("🐾 수정되었습니다!");
+          renderAll();
+        });
+        var delB = document.createElement("button");
+        delB.type = "button";
+        delB.className = "ai-action-btn admin-only";
+        delB.textContent = "🗑️ 삭제";
+        delB.addEventListener("click", function (e) {
+          e.stopPropagation();
+          if (!window.confirm("이 아이디어를 삭제할까요?")) return;
+          customPets = customPets.filter(function (x) { return x.id !== item.id; });
+          saveJson(STORAGE_CUSTOM, customPets);
+          showToast("🐾 삭제되었습니다!");
+          renderAll();
+        });
+        acts.appendChild(edB);
+        acts.appendChild(delB);
+      }
       foot.appendChild(likeB);
       foot.appendChild(acts);
 
@@ -6754,21 +6789,40 @@
   renderAll();
 })();
 
-/* ===== 관리자 모드 (#admin 1회 → 버튼 표시) ===== */
+/* ===== 관리자 모드 (ID/PW 임시 1234/1234) ===== */
 (function () {
+  function isAdmin() {
+    try { return localStorage.getItem("baioo_admin") === "1"; } catch (e) { return false; }
+  }
   function sync() {
-    var admin = false;
+    var admin = isAdmin();
     try {
-      if (location.hash === "#admin") {
-        try { localStorage.setItem("baioo_admin", "1"); } catch (e) {}
-        admin = true;
-      } else {
-        try { admin = localStorage.getItem("baioo_admin") === "1"; } catch (e) {}
-      }
+      if (location.hash === "#admin") admin = true;
     } catch (e) {}
     document.body.classList.toggle("is-admin", !!admin);
+    var b = document.getElementById("adminBtn");
+    if (b) b.textContent = admin ? "로그아웃" : "관리자";
   }
   window.addEventListener("hashchange", sync);
+  document.addEventListener("click", function (e) {
+    if (e.target && e.target.id === "adminBtn") {
+      if (isAdmin()) {
+        try { localStorage.removeItem("baioo_admin"); } catch (err) {}
+        sync();
+      } else {
+        var id = window.prompt("관리자 ID:", "");
+        if (id === null) return;
+        var pw = window.prompt("비밀번호:", "");
+        if (id === "1234" && pw === "1234") {
+          try { localStorage.setItem("baioo_admin", "1"); } catch (err) {}
+          sync();
+          alert("관리자 모드 ON");
+        } else {
+          alert("ID/PW가 틀렸습니다.");
+        }
+      }
+    }
+  });
   sync();
 })();
 
@@ -6796,7 +6850,7 @@
 </script>
 
 <footer>
-  <a href="#privacy">개인정보처리방침</a> · <a href="#contact">연락처</a><br>
+  <a href="#privacy">개인정보처리방침</a> · <a href="#contact">연락처</a> · <button type="button" id="adminBtn" style="background:none;border:none;color:#000;font-size:.9rem;font-weight:600;cursor:pointer;text-decoration:underline;">관리자</button><br>
   © 2026 <span>BAIOO</span>. AI 세상을 바꾸는 찬란한 열쇠.
 </footer>
 
