@@ -2968,6 +2968,46 @@
   </div>
 </dialog>
 
+<dialog id="ideaFormDialog" aria-label="아이디어 등록·수정">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="ideaFormDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title" id="ideaFormDlgTitle">새 아이디어 등록</h3>
+    <form id="ideaForm" novalidate>
+      <div class="field">
+        <label for="ideaFormTitle">제목 *</label>
+        <input type="text" id="ideaFormTitle" maxlength="120">
+      </div>
+      <div class="field">
+        <label for="ideaFormExtra" id="ideaFormExtraLabel">핵심 한 줄</label>
+        <input type="text" id="ideaFormExtra" maxlength="200">
+      </div>
+      <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label for="ideaFormCat">카테고리</label>
+          <select id="ideaFormCat"></select>
+        </div>
+        <div>
+          <label for="ideaFormStatus">상태</label>
+          <select id="ideaFormStatus"></select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="ideaFormTags">태그 (쉼표로 구분)</label>
+        <input type="text" id="ideaFormTags">
+      </div>
+      <div class="field">
+        <label for="ideaFormSummary">상세 설명</label>
+        <textarea id="ideaFormSummary" style="min-height:110px;"></textarea>
+      </div>
+      <div class="form-error" id="ideaFormError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="ideaFormDialog">취소</button>
+        <button type="submit" class="btn btn-primary" id="ideaFormSubmit">등록</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
 <dialog id="aiDetailDialog" aria-label="AI 아이디어 배포 상세">
   <div class="dlg-body">
     <button type="button" class="x-close" data-close="aiDetailDialog" aria-label="닫기">×</button>
@@ -3920,6 +3960,7 @@
   }
 
   var customIdeas = loadJson(STORAGE_CUSTOM, []);
+  var editingIdeaId = null;
   if (!Array.isArray(customIdeas)) customIdeas = [];
   var likedMap = loadJson(STORAGE_LIKES, {});
   if (!likedMap || typeof likedMap !== "object") likedMap = {};
@@ -4192,16 +4233,17 @@
       aiEdB.textContent = "✏️ 수정";
       aiEdB.addEventListener("click", function (e) {
         e.stopPropagation();
-        var t = window.prompt("제목 수정:", item.title);
-        if (t === null) return;
-        var s = window.prompt("설명 수정:", item.summary || "");
-        if (s === null) return;
-        item.title = (t.trim() || item.title);
-        item.summary = (s.trim() || item.summary);
-        saveJson(STORAGE_CUSTOM, customIdeas);
-        ideaServerUpsert("ai", item);
-        showToast("✨ 수정되었습니다!");
-        renderAll();
+        editingIdeaId = item.id;
+        if (inputTitle) inputTitle.value = item.title || "";
+        if (inputCategory) inputCategory.value = item.category || "agent";
+        if (inputStatus) inputStatus.value = item.status || "live";
+        if (inputVersion) inputVersion.value = item.version || "v1.0";
+        if (inputTags) inputTags.value = (item.tags || []).join(", ");
+        if (inputSummary) inputSummary.value = item.summary || "";
+        if (inputPrompt) inputPrompt.value = item.prompt || "";
+        if (addError) addError.textContent = "";
+        if (addDlg && !addDlg.open) addDlg.showModal();
+        if (inputTitle) inputTitle.focus();
       });
       var aiDelB = document.createElement("button");
       aiDelB.type = "button";
@@ -4368,6 +4410,9 @@
 
   if (openAddBtn && addDlg) {
     openAddBtn.addEventListener("click", function () {
+      editingIdeaId = null;
+      if (addForm) addForm.reset();
+      if (inputVersion) inputVersion.value = "v1.0";
       if (addError) addError.textContent = "";
       if (!addDlg.open) addDlg.showModal();
       if (inputTitle) inputTitle.focus();
@@ -4400,29 +4445,49 @@
       });
       if (!cleanTags.length) cleanTags = ["BAIOO", cMeta.label];
 
-      var newIdea = {
-        id: "baioo-custom-" + Date.now(),
-        code: "BAIOO-" + String(getAllIdeas().length + 1).padStart(3, "0"),
-        version: (inputVersion && inputVersion.value.trim()) || "v1.0",
-        status: (inputStatus && inputStatus.value) || "live",
-        category: catVal,
-        emoji: cMeta.emoji,
-        gradient: cMeta.gradient,
-        title: titleVal,
-        summary: summaryVal,
-        tags: cleanTags,
-        date: new Date().toISOString().slice(0, 10),
-        baseLikes: 1,
-        prompt: (inputPrompt && inputPrompt.value.trim()) || summaryVal
-      };
+      if (editingIdeaId) {
+        var target = null;
+        customIdeas.forEach(function (x) { if (x.id === editingIdeaId) target = x; });
+        if (target) {
+          target.title = titleVal;
+          target.summary = summaryVal;
+          target.category = catVal;
+          target.status = (inputStatus && inputStatus.value) || target.status;
+          target.version = (inputVersion && inputVersion.value.trim()) || target.version;
+          target.tags = cleanTags;
+          target.prompt = (inputPrompt && inputPrompt.value.trim()) || summaryVal;
+          target.emoji = cMeta.emoji;
+          target.gradient = cMeta.gradient;
+          saveJson(STORAGE_CUSTOM, customIdeas);
+          ideaServerUpsert("ai", target);
+          showToast("✨ 수정되었습니다!");
+        }
+        editingIdeaId = null;
+      } else {
+        var newIdea = {
+          id: "baioo-custom-" + Date.now(),
+          code: "BAIOO-" + String(getAllIdeas().length + 1).padStart(3, "0"),
+          version: (inputVersion && inputVersion.value.trim()) || "v1.0",
+          status: (inputStatus && inputStatus.value) || "live",
+          category: catVal,
+          emoji: cMeta.emoji,
+          gradient: cMeta.gradient,
+          title: titleVal,
+          summary: summaryVal,
+          tags: cleanTags,
+          date: new Date().toISOString().slice(0, 10),
+          baseLikes: 1,
+          prompt: (inputPrompt && inputPrompt.value.trim()) || summaryVal
+        };
 
-      customIdeas.unshift(newIdea);
-      saveJson(STORAGE_CUSTOM, customIdeas);
-      ideaServerUpsert("ai", newIdea);
+        customIdeas.unshift(newIdea);
+        saveJson(STORAGE_CUSTOM, customIdeas);
+        ideaServerUpsert("ai", newIdea);
+        showToast("🚀 새 아이디어가 허브에 배포되었습니다!");
+      }
       addForm.reset();
       if (inputVersion) inputVersion.value = "v1.0";
       if (addDlg && addDlg.open) addDlg.close();
-      showToast("🚀 새 아이디어가 허브에 배포되었습니다!");
       renderAll();
     });
   }
@@ -4633,6 +4698,7 @@
   }
 
   var customBrands = loadJson(STORAGE_CUSTOM, []);
+  var editingBrandId = null;
   if (!Array.isArray(customBrands)) customBrands = [];
   var likedMap = loadJson(STORAGE_LIKES, {});
   if (!likedMap || typeof likedMap !== "object") likedMap = {};
@@ -4926,16 +4992,18 @@
       brEdB.textContent = "✏️ 수정";
       brEdB.addEventListener("click", function (e) {
         e.stopPropagation();
-        var t = window.prompt("제목 수정:", item.title);
-        if (t === null) return;
-        var s = window.prompt("설명 수정:", item.summary || "");
-        if (s === null) return;
-        item.title = (t.trim() || item.title);
-        item.summary = (s.trim() || item.summary);
-        saveJson(STORAGE_CUSTOM, customBrands);
-        ideaServerUpsert("br", item);
-        showToast("✨ 수정되었습니다!");
-        renderAll();
+        editingBrandId = item.id;
+        if (inputTitle) inputTitle.value = item.title || "";
+        if (inputSlogan) inputSlogan.value = item.slogan || "";
+        if (inputCategory) inputCategory.value = item.category || "naming";
+        if (inputStatus) inputStatus.value = item.status || "live";
+        if (inputColors) inputColors.value = (item.colors || []).join(", ");
+        if (inputTags) inputTags.value = (item.tags || []).join(", ");
+        if (inputSummary) inputSummary.value = item.summary || "";
+        if (inputPrompt) inputPrompt.value = item.prompt || "";
+        if (addError) addError.textContent = "";
+        if (addDlg && !addDlg.open) addDlg.showModal();
+        if (inputTitle) inputTitle.focus();
       });
       var brDelB = document.createElement("button");
       brDelB.type = "button";
@@ -5111,6 +5179,9 @@
 
   if (openAddBtn && addDlg) {
     openAddBtn.addEventListener("click", function () {
+      editingBrandId = null;
+      if (addForm) addForm.reset();
+      if (inputColors) inputColors.value = "#F43F5E, #8B5CF6, #0F172A";
       if (addError) addError.textContent = "";
       if (!addDlg.open) addDlg.showModal();
       if (inputTitle) inputTitle.focus();
@@ -5158,31 +5229,52 @@
       });
       if (!cleanTags.length) cleanTags = ["BAIOO", cMeta.label];
 
-      var newBrand = {
-        id: "baioo-br-" + Date.now(),
-        code: "BRAND-" + String(getAllBrands().length + 1).padStart(3, "0"),
-        version: "v1.0",
-        status: (inputStatus && inputStatus.value) || "live",
-        category: catVal,
-        emoji: cMeta.emoji,
-        gradient: cMeta.gradient,
-        title: titleVal,
-        slogan: sloganVal,
-        colors: cleanColors,
-        summary: summaryVal,
-        tags: cleanTags,
-        date: new Date().toISOString().slice(0, 10),
-        baseLikes: 1,
-        prompt: (inputPrompt && inputPrompt.value.trim()) || ("[" + titleVal + "]\n- 슬로건: " + sloganVal + "\n- 컬러: " + cleanColors.join(", ") + "\n- 설명: " + summaryVal)
-      };
+      if (editingBrandId) {
+        var bTarget = null;
+        customBrands.forEach(function (x) { if (x.id === editingBrandId) bTarget = x; });
+        if (bTarget) {
+          bTarget.title = titleVal;
+          bTarget.slogan = sloganVal;
+          bTarget.category = catVal;
+          bTarget.status = (inputStatus && inputStatus.value) || bTarget.status;
+          bTarget.colors = cleanColors;
+          bTarget.tags = cleanTags;
+          bTarget.summary = summaryVal;
+          bTarget.prompt = (inputPrompt && inputPrompt.value.trim()) || ("[" + titleVal + "]\n- 슬로건: " + sloganVal + "\n- 컬러: " + cleanColors.join(", ") + "\n- 설명: " + summaryVal);
+          bTarget.emoji = cMeta.emoji;
+          bTarget.gradient = cMeta.gradient;
+          saveJson(STORAGE_CUSTOM, customBrands);
+          ideaServerUpsert("br", bTarget);
+          showToast("✨ 수정되었습니다!");
+        }
+        editingBrandId = null;
+      } else {
+        var newBrand = {
+          id: "baioo-br-" + Date.now(),
+          code: "BRAND-" + String(getAllBrands().length + 1).padStart(3, "0"),
+          version: "v1.0",
+          status: (inputStatus && inputStatus.value) || "live",
+          category: catVal,
+          emoji: cMeta.emoji,
+          gradient: cMeta.gradient,
+          title: titleVal,
+          slogan: sloganVal,
+          colors: cleanColors,
+          summary: summaryVal,
+          tags: cleanTags,
+          date: new Date().toISOString().slice(0, 10),
+          baseLikes: 1,
+          prompt: (inputPrompt && inputPrompt.value.trim()) || ("[" + titleVal + "]\n- 슬로건: " + sloganVal + "\n- 컬러: " + cleanColors.join(", ") + "\n- 설명: " + summaryVal)
+        };
 
-      customBrands.unshift(newBrand);
-      saveJson(STORAGE_CUSTOM, customBrands);
-      ideaServerUpsert("br", newBrand);
+        customBrands.unshift(newBrand);
+        saveJson(STORAGE_CUSTOM, customBrands);
+        ideaServerUpsert("br", newBrand);
+        showToast("✨ 새 브랜드 아이디어가 스튜디오에 배포되었습니다!");
+      }
       addForm.reset();
       if (inputColors) inputColors.value = "#F43F5E, #8B5CF6, #0F172A";
       if (addDlg && addDlg.open) addDlg.close();
-      showToast("✨ 새 브랜드 아이디어가 스튜디오에 배포되었습니다!");
       renderAll();
     });
   }
@@ -5625,19 +5717,26 @@
         edB.textContent = "✏️ 수정";
         edB.addEventListener("click", function (e) {
           e.stopPropagation();
-          var t = window.prompt("제목 수정:", item.title);
-          if (t === null) return;
-          var r = window.prompt("루틴 수정:", item.routine || "");
-          if (r === null) return;
-          var s = window.prompt("설명 수정:", item.summary || "");
-          if (s === null) return;
-          item.title = (t.trim() || item.title);
-          item.routine = (r.trim() || item.routine);
-          item.summary = (s.trim() || item.summary);
-          saveJson(STORAGE_CUSTOM, customPets);
-          ideaServerUpsert("pet", item);
-          showToast("🐾 수정되었습니다!");
-          renderAll();
+          openIdeaForm({
+            dlgTitle: "펫 케어·아이디어 수정",
+            extraLabel: "핵심 루틴 한 줄",
+            categories: Object.keys(CAT_META).map(function (k) { return [k, CAT_META[k].emoji + " " + CAT_META[k].label]; }),
+            statuses: Object.keys(STATUS_META).map(function (k) { return [k, STATUS_META[k].label]; }),
+            submitLabel: "🐾 수정하기",
+            initial: { title: item.title, extra: item.routine, category: item.category, status: item.status, tags: item.tags, summary: item.summary },
+            onSubmit: function (d) {
+              item.title = d.title;
+              item.routine = d.extra || item.routine;
+              item.category = d.category || item.category;
+              item.status = d.status || item.status;
+              item.tags = d.tags.length ? d.tags : item.tags;
+              item.summary = d.summary || item.summary;
+              saveJson(STORAGE_CUSTOM, customPets);
+              ideaServerUpsert("pet", item);
+              showToast("🐾 수정되었습니다!");
+              renderAll();
+            }
+          });
         });
         var delB = document.createElement("button");
         delB.type = "button";
@@ -5672,29 +5771,40 @@
 
   if (openAddBtn) {
     openAddBtn.addEventListener("click", function () {
-      var titleVal = window.prompt("새 펫 케어·아이디어 제목을 입력하세요:", "토토 계절별 털갈이 브러싱 루틴");
-      if (!titleVal || !titleVal.trim()) return;
-      var routineVal = window.prompt("핵심 루틴 한 줄 요약:", "🪮 환절기 주 3회 코밍 + 헤어볼 예방 건초 강화") || "🐾 맞춤 케어 루틴";
-      var summaryVal = window.prompt("상세 설명 또는 케어 팁:", "털갈이 시기에 삼키는 털을 줄이기 위한 브러싱 및 수분 보충 가이드입니다.") || "";
-      var newItem = {
-        id: "pet-custom-" + Date.now(),
-        code: "PETS-" + String(getAll().length + 1).padStart(3, "0"),
-        version: "v1.0",
-        status: "live",
-        category: "diary",
-        routine: routineVal.trim(),
-        title: titleVal.trim(),
-        summary: summaryVal.trim() || titleVal.trim(),
-        tags: ["토토", "케어루틴", "BAIOO"],
-        date: new Date().toISOString().slice(0, 10),
-        baseLikes: 1,
-        prompt: "[" + titleVal.trim() + "]\n- 루틴: " + routineVal.trim() + "\n- 가이드: " + (summaryVal.trim() || titleVal.trim())
-      };
-      customPets.unshift(newItem);
-      saveJson(STORAGE_CUSTOM, customPets);
-      ideaServerUpsert("pet", newItem);
-      showToast("🐾 새 펫 케어 아이디어가 배포되었습니다!");
-      renderAll();
+      openIdeaForm({
+        dlgTitle: "새 펫 케어·아이디어 등록",
+        titlePh: "예: 토토 계절별 털갈이 브러싱 루틴",
+        extraLabel: "핵심 루틴 한 줄",
+        extraPh: "🪮 환절기 주 3회 코밍 + 헤어볼 예방 건초 강화",
+        categories: Object.keys(CAT_META).map(function (k) { return [k, CAT_META[k].emoji + " " + CAT_META[k].label]; }),
+        statuses: Object.keys(STATUS_META).map(function (k) { return [k, STATUS_META[k].label]; }),
+        tagsPh: "예: 토토, 케어루틴",
+        summaryPh: "털갈이 시기에 삼키는 털을 줄이기 위한 브러싱 및 수분 보충 가이드입니다.",
+        submitLabel: "🐾 배포하기",
+        initial: null,
+        onSubmit: function (d) {
+          var cMeta = CAT_META[d.category] || CAT_META.diary;
+          var newItem = {
+            id: "pet-custom-" + Date.now(),
+            code: "PETS-" + String(getAll().length + 1).padStart(3, "0"),
+            version: "v1.0",
+            status: d.status || "live",
+            category: d.category || "diary",
+            routine: d.extra || "🐾 맞춤 케어 루틴",
+            title: d.title,
+            summary: d.summary || d.title,
+            tags: d.tags.length ? d.tags : ["토토", "케어루틴", "BAIOO"],
+            date: new Date().toISOString().slice(0, 10),
+            baseLikes: 1,
+            prompt: "[" + d.title + "]\n- 루틴: " + (d.extra || "🐾 맞춤 케어 루틴") + "\n- 가이드: " + (d.summary || d.title)
+          };
+          customPets.unshift(newItem);
+          saveJson(STORAGE_CUSTOM, customPets);
+          ideaServerUpsert("pet", newItem);
+          showToast("🐾 새 펫 케어 아이디어가 배포되었습니다!");
+          renderAll();
+        }
+      });
     });
   }
 
@@ -6097,19 +6207,26 @@
         trEdB.textContent = "✏️ 수정";
         trEdB.addEventListener("click", function (e) {
           e.stopPropagation();
-          var t = window.prompt("제목 수정:", item.title);
-          if (t === null) return;
-          var r = window.prompt("동선 수정:", item.route || "");
-          if (r === null) return;
-          var s = window.prompt("설명 수정:", item.summary || "");
-          if (s === null) return;
-          item.title = (t.trim() || item.title);
-          item.route = (r.trim() || item.route);
-          item.summary = (s.trim() || item.summary);
-          saveJson(STORAGE_CUSTOM, customTrips);
-          ideaServerUpsert("tr", item);
-          showToast("🧭 수정되었습니다!");
-          renderAll();
+          openIdeaForm({
+            dlgTitle: "여행 코스·팁 수정",
+            extraLabel: "핵심 동선 한 줄",
+            categories: Object.keys(CAT_META).map(function (k) { return [k, CAT_META[k].emoji + " " + CAT_META[k].label]; }),
+            statuses: Object.keys(STATUS_META).map(function (k) { return [k, STATUS_META[k].label]; }),
+            submitLabel: "🧭 수정하기",
+            initial: { title: item.title, extra: item.route, category: item.category, status: item.status, tags: item.tags, summary: item.summary },
+            onSubmit: function (d) {
+              item.title = d.title;
+              item.route = d.extra || item.route;
+              item.category = d.category || item.category;
+              item.status = d.status || item.status;
+              item.tags = d.tags.length ? d.tags : item.tags;
+              item.summary = d.summary || item.summary;
+              saveJson(STORAGE_CUSTOM, customTrips);
+              ideaServerUpsert("tr", item);
+              showToast("🧭 수정되었습니다!");
+              renderAll();
+            }
+          });
         });
         var trDelB = document.createElement("button");
         trDelB.type = "button";
@@ -6144,29 +6261,40 @@
 
   if (openAddBtn) {
     openAddBtn.addEventListener("click", function () {
-      var titleVal = window.prompt("새 여행 코스·팁 제목을 입력하세요:", "제주 서쪽 해안도로 노을 드라이브 코스");
-      if (!titleVal || !titleVal.trim()) return;
-      var routeVal = window.prompt("핵심 동선 한 줄 요약:", "📍 애월 한담해변 → 신창풍차해안도로 → 수월봉 일몰") || "📍 추천 여행 루트";
-      var summaryVal = window.prompt("상세 설명 또는 여행 팁:", "오후 4시에 출발해 제주 서쪽 바다 노을을 가장 아름답게 만나는 드라이브 동선입니다.") || "";
-      var newItem = {
-        id: "tr-custom-" + Date.now(),
-        code: "TRIP-" + String(getAll().length + 1).padStart(3, "0"),
-        version: "v1.0",
-        status: "live",
-        category: "ocean",
-        route: routeVal.trim(),
-        title: titleVal.trim(),
-        summary: summaryVal.trim() || titleVal.trim(),
-        tags: ["여행코스", "추천동선", "BAIOO"],
-        date: new Date().toISOString().slice(0, 10),
-        baseLikes: 1,
-        prompt: "[" + titleVal.trim() + "]\n- 동선: " + routeVal.trim() + "\n- 가이드: " + (summaryVal.trim() || titleVal.trim())
-      };
-      customTrips.unshift(newItem);
-      saveJson(STORAGE_CUSTOM, customTrips);
-      ideaServerUpsert("tr", newItem);
-      showToast("🧭 새 여행 코스가 배포되었습니다!");
-      renderAll();
+      openIdeaForm({
+        dlgTitle: "새 여행 코스·팁 등록",
+        titlePh: "예: 제주 서쪽 해안도로 노을 드라이브 코스",
+        extraLabel: "핵심 동선 한 줄",
+        extraPh: "📍 애월 한담해변 → 신창풍차해안도로 → 수월봉 일몰",
+        categories: Object.keys(CAT_META).map(function (k) { return [k, CAT_META[k].emoji + " " + CAT_META[k].label]; }),
+        statuses: Object.keys(STATUS_META).map(function (k) { return [k, STATUS_META[k].label]; }),
+        tagsPh: "예: 여행코스, 추천동선",
+        summaryPh: "오후 4시에 출발해 제주 서쪽 바다 노을을 가장 아름답게 만나는 드라이브 동선입니다.",
+        submitLabel: "🧭 배포하기",
+        initial: null,
+        onSubmit: function (d) {
+          var cMeta = CAT_META[d.category] || CAT_META.ocean;
+          var newItem = {
+            id: "tr-custom-" + Date.now(),
+            code: "TRIP-" + String(getAll().length + 1).padStart(3, "0"),
+            version: "v1.0",
+            status: d.status || "live",
+            category: d.category || "ocean",
+            route: d.extra || "📍 추천 여행 루트",
+            title: d.title,
+            summary: d.summary || d.title,
+            tags: d.tags.length ? d.tags : ["여행코스", "추천동선", "BAIOO"],
+            date: new Date().toISOString().slice(0, 10),
+            baseLikes: 1,
+            prompt: "[" + d.title + "]\n- 동선: " + (d.extra || "📍 추천 여행 루트") + "\n- 가이드: " + (d.summary || d.title)
+          };
+          customTrips.unshift(newItem);
+          saveJson(STORAGE_CUSTOM, customTrips);
+          ideaServerUpsert("tr", newItem);
+          showToast("🧭 새 여행 코스가 배포되었습니다!");
+          renderAll();
+        }
+      });
     });
   }
 
@@ -6574,19 +6702,26 @@
         rpEdB.textContent = "✏️ 수정";
         rpEdB.addEventListener("click", function (e) {
           e.stopPropagation();
-          var t = window.prompt("제목 수정:", item.title);
-          if (t === null) return;
-          var c = window.prompt("명령어 수정:", item.cmd || "");
-          if (c === null) return;
-          var s = window.prompt("설명 수정:", item.summary || "");
-          if (s === null) return;
-          item.title = (t.trim() || item.title);
-          item.cmd = (c.trim() || item.cmd);
-          item.summary = (s.trim() || item.summary);
-          saveJson(STORAGE_CUSTOM, customDiags);
-          ideaServerUpsert("rp", item);
-          showToast("🛠️ 수정되었습니다!");
-          renderAll();
+          openIdeaForm({
+            dlgTitle: "PC 진단·최적화 수정",
+            extraLabel: "핵심 실행 명령어 한 줄",
+            categories: Object.keys(CAT_META).map(function (k) { return [k, CAT_META[k].emoji + " " + CAT_META[k].label]; }),
+            statuses: Object.keys(STATUS_META).map(function (k) { return [k, STATUS_META[k].label]; }),
+            submitLabel: "🛠️ 수정하기",
+            initial: { title: item.title, extra: item.cmd, category: item.category, status: item.status, tags: item.tags, summary: item.summary },
+            onSubmit: function (d) {
+              item.title = d.title;
+              item.cmd = d.extra || item.cmd;
+              item.category = d.category || item.category;
+              item.status = d.status || item.status;
+              item.tags = d.tags.length ? d.tags : item.tags;
+              item.summary = d.summary || item.summary;
+              saveJson(STORAGE_CUSTOM, customDiags);
+              ideaServerUpsert("rp", item);
+              showToast("🛠️ 수정되었습니다!");
+              renderAll();
+            }
+          });
         });
         var rpDelB = document.createElement("button");
         rpDelB.type = "button";
@@ -6621,29 +6756,40 @@
 
   if (openAddBtn) {
     openAddBtn.addEventListener("click", function () {
-      var titleVal = window.prompt("새 PC 진단·최적화 제목을 입력하세요:", "윈도우 11 우클릭 클래식 메뉴 즉시 복원");
-      if (!titleVal || !titleVal.trim()) return;
-      var cmdVal = window.prompt("핵심 실행 명령어 한 줄:", "reg.exe add \"HKCU\\Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\\InprocServer32\" /f /ve") || "sfc /scannow";
-      var summaryVal = window.prompt("진단/해결 설명:", "더보기를 누르지 않아도 바로 전체 우클릭 메뉴가 뜨도록 레지스트리를 최적화합니다.") || "";
-      var newItem = {
-        id: "rp-custom-" + Date.now(),
-        code: "DIAG-" + String(getAll().length + 1).padStart(3, "0"),
-        version: "v1.0",
-        status: "live",
-        category: "speed",
-        cmd: cmdVal.trim(),
-        title: titleVal.trim(),
-        summary: summaryVal.trim() || titleVal.trim(),
-        tags: ["PC진단", "최적화", "BAIOO"],
-        date: new Date().toISOString().slice(0, 10),
-        baseLikes: 1,
-        prompt: "[" + titleVal.trim() + "]\n# 실행 명령어:\n" + cmdVal.trim() + "\n\n# 설명:\n" + (summaryVal.trim() || titleVal.trim())
-      };
-      customDiags.unshift(newItem);
-      saveJson(STORAGE_CUSTOM, customDiags);
-      ideaServerUpsert("rp", newItem);
-      showToast("🛠️ 새 진단 레시피가 배포되었습니다!");
-      renderAll();
+      openIdeaForm({
+        dlgTitle: "새 PC 진단·최적화 등록",
+        titlePh: "예: 윈도우 11 우클릭 클래식 메뉴 즉시 복원",
+        extraLabel: "핵심 실행 명령어 한 줄",
+        extraPh: "sfc /scannow",
+        categories: Object.keys(CAT_META).map(function (k) { return [k, CAT_META[k].emoji + " " + CAT_META[k].label]; }),
+        statuses: Object.keys(STATUS_META).map(function (k) { return [k, STATUS_META[k].label]; }),
+        tagsPh: "예: PC진단, 최적화",
+        summaryPh: "더보기를 누르지 않아도 바로 전체 우클릭 메뉴가 뜨도록 레지스트리를 최적화합니다.",
+        submitLabel: "🛠️ 배포하기",
+        initial: null,
+        onSubmit: function (d) {
+          var cMeta = CAT_META[d.category] || CAT_META.speed;
+          var newItem = {
+            id: "rp-custom-" + Date.now(),
+            code: "DIAG-" + String(getAll().length + 1).padStart(3, "0"),
+            version: "v1.0",
+            status: d.status || "live",
+            category: d.category || "speed",
+            cmd: d.extra || "sfc /scannow",
+            title: d.title,
+            summary: d.summary || d.title,
+            tags: d.tags.length ? d.tags : ["PC진단", "최적화", "BAIOO"],
+            date: new Date().toISOString().slice(0, 10),
+            baseLikes: 1,
+            prompt: "[" + d.title + "]\n# 실행 명령어:\n" + (d.extra || "sfc /scannow") + "\n\n# 설명:\n" + (d.summary || d.title)
+          };
+          customDiags.unshift(newItem);
+          saveJson(STORAGE_CUSTOM, customDiags);
+          ideaServerUpsert("rp", newItem);
+          showToast("🛠️ 새 진단 레시피가 배포되었습니다!");
+          renderAll();
+        }
+      });
     });
   }
 
@@ -7112,6 +7258,86 @@ function ideaServerSync(board, getLocal, apply) {
     })
     .catch(function () {});
 }
+
+var ideaFormCtx = null;
+function openIdeaForm(ctx) {
+  ideaFormCtx = ctx;
+  var t = document.getElementById("ideaFormDlgTitle");
+  if (t) t.textContent = ctx.dlgTitle || "새 아이디어 등록";
+  var exL = document.getElementById("ideaFormExtraLabel");
+  if (exL) exL.textContent = ctx.extraLabel || "핵심 한 줄";
+  var titleEl = document.getElementById("ideaFormTitle");
+  var extraEl = document.getElementById("ideaFormExtra");
+  var catEl = document.getElementById("ideaFormCat");
+  var stEl = document.getElementById("ideaFormStatus");
+  var tagsEl = document.getElementById("ideaFormTags");
+  var sumEl = document.getElementById("ideaFormSummary");
+  var errEl = document.getElementById("ideaFormError");
+  var subEl = document.getElementById("ideaFormSubmit");
+  var it = ctx.initial || {};
+  if (titleEl) { titleEl.value = it.title || ""; titleEl.placeholder = ctx.titlePh || ""; }
+  if (extraEl) { extraEl.value = it.extra || ""; extraEl.placeholder = ctx.extraPh || ""; }
+  if (catEl) {
+    catEl.textContent = "";
+    (ctx.categories || []).forEach(function (o) {
+      var op = document.createElement("option");
+      op.value = o[0]; op.textContent = o[1];
+      catEl.appendChild(op);
+    });
+    catEl.value = it.category || (((ctx.categories || [])[0] || [])[0]) || "";
+  }
+  if (stEl) {
+    stEl.textContent = "";
+    (ctx.statuses || []).forEach(function (o) {
+      var op = document.createElement("option");
+      op.value = o[0]; op.textContent = o[1];
+      stEl.appendChild(op);
+    });
+    stEl.value = it.status || (((ctx.statuses || [])[0] || [])[0]) || "";
+  }
+  if (tagsEl) { tagsEl.value = (it.tags || []).join(", "); tagsEl.placeholder = ctx.tagsPh || ""; }
+  if (sumEl) { sumEl.value = it.summary || ""; sumEl.placeholder = ctx.summaryPh || ""; }
+  if (errEl) errEl.textContent = "";
+  if (subEl) subEl.textContent = ctx.submitLabel || "등록";
+  var dlg = document.getElementById("ideaFormDialog");
+  if (dlg && !dlg.open) dlg.showModal();
+  if (titleEl) titleEl.focus();
+}
+(function () {
+  var form = document.getElementById("ideaForm");
+  if (!form) return;
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!ideaFormCtx) return;
+    function val(id) { var el = document.getElementById(id); return el ? el.value : ""; }
+    var title = String(val("ideaFormTitle") || "").trim();
+    var errEl = document.getElementById("ideaFormError");
+    if (!title) {
+      if (errEl) errEl.textContent = "제목을 입력하세요.";
+      var te = document.getElementById("ideaFormTitle");
+      if (te) te.focus();
+      return;
+    }
+    var tags = [];
+    String(val("ideaFormTags") || "").split(",").forEach(function (x) {
+      var s = x.trim().replace(/^#/, "");
+      if (s) tags.push(s);
+    });
+    var d = {
+      title: title,
+      extra: String(val("ideaFormExtra") || "").trim(),
+      category: val("ideaFormCat"),
+      status: val("ideaFormStatus"),
+      tags: tags,
+      summary: String(val("ideaFormSummary") || "").trim()
+    };
+    var cb = ideaFormCtx.onSubmit;
+    ideaFormCtx = null;
+    var dlg = document.getElementById("ideaFormDialog");
+    if (dlg && dlg.open) dlg.close();
+    if (cb) cb(d);
+  });
+})();
 
 /* ===== 방문자 카운터 (D1 visits, 브라우저당 1회만 +1) ===== */(function () {
   var el = document.getElementById("visitCount");
