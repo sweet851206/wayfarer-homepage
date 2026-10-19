@@ -2175,6 +2175,8 @@
   }
   .visit-counter { text-align: right; font-size: .78rem; color: var(--muted); margin: 6px 0 0; }
   .visit-counter b { font-variant-numeric: tabular-nums; letter-spacing: .06em; }
+  .admin-only { display: none !important; }
+  body.is-admin .admin-only { display: inline-flex !important; }
 </style>
 </head>
 <body>
@@ -2574,9 +2576,9 @@
         <h3>작은 생명과 더 오래, 더 행복하게 공존하는 케어 레시피</h3>
         <p>네덜란드 드워프 토토의 실전 급여·건강 데이터부터 AI 기반 펫 케어 체크리스트, 환경 자동화 아이디어를 한곳에서 탐색하고 복제해 보세요.</p>
         <div class="ai-banner-actions">
-          <button type="button" class="ai-btn-primary" id="petOpenAddBtn">✨ 새 펫 케어·아이디어 배포</button>
+          <button type="button" class="ai-btn-primary admin-only" id="petOpenAddBtn">✨ 새 펫 케어·아이디어 배포</button>
           <button type="button" class="ai-btn-ghost" id="petFilterBookmarkedBtn">♥ 관심 케어팁 모아보기</button>
-          <button type="button" class="ai-btn-ghost section-add-btn" data-category="bunny" style="margin:0;color:var(--text-strong);">📸 사진·일상 글 등록</button>
+          <button type="button" class="ai-btn-ghost section-add-btn admin-only" data-category="bunny" style="margin:0;color:var(--text-strong);">📸 사진·일상 글 등록</button>
         </div>
       </div>
       <div class="ai-stats-grid">
@@ -2635,7 +2637,7 @@
 
     <div class="pet-diary-subhead">
       <h3>📸 토토의 사진·일상 앨범</h3>
-      <button type="button" class="section-add-btn bunny-add" data-category="bunny" style="margin:0;">＋ 새 일상 등록</button>
+      <button type="button" class="section-add-btn bunny-add admin-only" data-category="bunny" style="margin:0;">＋ 새 일상 등록</button>
     </div>
     <div class="post-grid">
       <div class="contents" id="bunnyUserPosts"></div>
@@ -2957,7 +2959,7 @@
     <div id="bunnyViewContent"></div>
     <div class="file-list" id="bunnyViewFiles" hidden></div>
     <div class="dlg-actions">
-      <button type="button" class="btn btn-danger" id="bunnyViewDelete">삭제</button>
+      <button type="button" class="btn btn-danger admin-only" id="bunnyViewDelete">삭제</button>
       <button type="button" class="btn btn-ghost" data-close="bunnyViewDialog">닫기</button>
     </div>
   </div>
@@ -6752,8 +6754,25 @@
   renderAll();
 })();
 
-/* ===== 방문자 카운터 (D1 visits, 브라우저당 1회만 +1) ===== */
+/* ===== 관리자 모드 (#admin 1회 → 버튼 표시) ===== */
 (function () {
+  function sync() {
+    var admin = false;
+    try {
+      if (location.hash === "#admin") {
+        try { localStorage.setItem("baioo_admin", "1"); } catch (e) {}
+        admin = true;
+      } else {
+        try { admin = localStorage.getItem("baioo_admin") === "1"; } catch (e) {}
+      }
+    } catch (e) {}
+    document.body.classList.toggle("is-admin", !!admin);
+  }
+  window.addEventListener("hashchange", sync);
+  sync();
+})();
+
+/* ===== 방문자 카운터 (D1 visits, 브라우저당 1회만 +1) ===== */(function () {
   var el = document.getElementById("visitCount");
   if (!el) return;
   function show(n) {
