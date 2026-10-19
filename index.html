@@ -6932,13 +6932,17 @@
   function sync() {
     var admin = isAdmin();
     try {
-      if (location.hash === "#admin") admin = true;
+      if (location.hash === "#admin") {
+        admin = true;
+        try { localStorage.setItem("baioo_admin", "1"); } catch (err2) {}
+      }
     } catch (e) {}
     document.body.classList.toggle("is-admin", !!admin);
     var b = document.getElementById("adminBtn");
     if (b) b.textContent = admin ? "로그아웃" : "관리자";
   }
   window.addEventListener("hashchange", sync);
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", sync);
   document.addEventListener("click", function (e) {
     if (e.target && e.target.id === "adminBtn") {
       if (isAdmin()) {
