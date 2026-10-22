@@ -664,6 +664,8 @@
   .board-table tbody tr { cursor: pointer; }
   .board-table tbody tr:hover { background: var(--surface-soft); }
   .board-table .board-title { font-weight: 600; }
+  .board-view-panel { position: relative; margin-top: 14px; padding: 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-soft); }
+  .board-view-panel .x-close { position: absolute; top: 8px; right: 10px; }
   .board-table th:last-child, .board-table td:last-child { white-space: nowrap; }
   body:not(.is-admin) .board-table .board-empty { cursor: default; }
   .ai-page-bar { display: flex; gap: 8px; justify-content: center; margin: 18px 0 4px; flex-wrap: wrap; }
@@ -2329,6 +2331,18 @@
         <tbody id="aiBoardBody"></tbody>
       </table>
       <div class="ai-page-bar" id="aiPageBar"></div>
+    </div>
+    <div class="board-view-panel" id="aiViewPanel" hidden>
+      <button type="button" class="x-close" id="aiViewClose" aria-label="닫기">×</button>
+      <h3 class="dlg-title" id="aiInlineTitle"></h3>
+      <div class="post-date" id="aiInlineDate"></div>
+      <div class="view-photos" id="aiInlinePhotos"></div>
+      <div id="aiInlineContent"></div>
+      <div class="file-list" id="aiInlineFiles" hidden></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-primary admin-only" id="aiInlineEdit">수정</button>
+        <button type="button" class="btn btn-danger admin-only" id="aiInlineDelete">삭제</button>
+      </div>
     </div>
 
     <div class="ai-toolbar">
@@ -4184,20 +4198,31 @@
     aiPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     aiViewingId = p.id;
+    var panel = $("#aiViewPanel");
+    var t = $("#aiInlineTitle"), d = $("#aiInlineDate"), ph = $("#aiInlinePhotos"), c = $("#aiInlineContent"), fl = $("#aiInlineFiles");
+    if (t) t.textContent = p.title || "(제목 없음)";
+    if (d) d.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    if (ph) {
+      ph.textContent = "";
+      (p.files || []).filter(isImageFile).forEach(function (f) {
+        var im = document.createElement("img");
+        im.src = f.url;
+        im.alt = f.originalName || f.name;
+        ph.appendChild(im);
+      });
+    }
+    if (c) c.textContent = p.content || "(내용 없음)";
+    if (fl) {
+      fl.textContent = "";
+      fl.hidden = !(p.files && p.files.length);
+      if (p.files && p.files.length) fl.appendChild(fileLinks(p.files, false));
+    }
+    if (panel) {
+      panel.hidden = false;
+      if (panel.scrollIntoView) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
     aiViewTitle.textContent = p.title || "(제목 없음)";
     aiViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
-    aiViewPhotos.textContent = "";
-    (p.files || []).filter(isImageFile).forEach(function (f) {
-      var im = document.createElement("img");
-      im.src = f.url;
-      im.alt = f.originalName || f.name;
-      aiViewPhotos.appendChild(im);
-    });
-    aiViewContent.textContent = p.content || "(내용 없음)";
-    aiViewFiles.textContent = "";
-    aiViewFiles.hidden = !(p.files && p.files.length);
-    if (p.files && p.files.length) aiViewFiles.appendChild(fileLinks(p.files, false));
-    openDlg(aiViewDlg);
   }
 
   aiBoardBody.addEventListener("click", function (e) {
@@ -4205,6 +4230,13 @@
     if (!tr) return;
     openAiView(tr.getAttribute("data-id"));
   });
+
+  var aiViewClose = $("#aiViewClose");
+  if (aiViewClose) aiViewClose.addEventListener("click", function () { var panel = $("#aiViewPanel"); if (panel) panel.hidden = true; });
+  var aiInlineDelete = $("#aiInlineDelete");
+  if (aiInlineDelete) aiInlineDelete.addEventListener("click", function () { aiDeleteBtn.click(); });
+  var aiInlineEdit = $("#aiInlineEdit");
+  if (aiInlineEdit) aiInlineEdit.addEventListener("click", function () { aiEditBtn.click(); });
 
   aiDeleteBtn.addEventListener("click", function () {
     if (!aiViewingId) return;
@@ -4224,6 +4256,8 @@
       .then(function () {
         closeDlg(aiViewDlg);
         aiViewingId = null;
+        var panel = $("#aiViewPanel");
+        if (panel) panel.hidden = true;
         return loadAi();
       })
       .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
