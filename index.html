@@ -664,7 +664,7 @@
   .board-table tbody tr { cursor: pointer; }
   .board-table tbody tr:hover { background: var(--surface-soft); }
   .board-table .board-title { font-weight: 600; }
-  .board-view-panel { position: relative; margin-top: 14px; padding: 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-soft); }
+  .board-view-panel { position: relative; margin-top: 14px; margin-bottom: 22px; padding: 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-soft); }
   .board-view-panel .x-close { position: absolute; top: 8px; right: 10px; }
   .board-table th:last-child, .board-table td:last-child { white-space: nowrap; }
   body:not(.is-admin) .board-table .board-empty { cursor: default; }
@@ -2434,6 +2434,18 @@
       </table>
       <div class="ai-page-bar" id="brPageBar"></div>
     </div>
+    <div class="board-view-panel" id="brViewPanel" hidden>
+      <button type="button" class="x-close" id="brViewClose" aria-label="닫기">×</button>
+      <h3 class="dlg-title" id="brInlineTitle"></h3>
+      <div class="post-date" id="brInlineDate"></div>
+      <div class="view-photos" id="brInlinePhotos"></div>
+      <div id="brInlineContent"></div>
+      <div class="file-list" id="brInlineFiles" hidden></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-primary admin-only" id="brInlineEdit">수정</button>
+        <button type="button" class="btn btn-danger admin-only" id="brInlineDelete">삭제</button>
+      </div>
+    </div>
 
     <div class="ai-toolbar">
       <div class="ai-toolbar-top">
@@ -2523,6 +2535,18 @@
         <tbody id="trBoardBody"></tbody>
       </table>
       <div class="ai-page-bar" id="trPageBar"></div>
+    </div>
+    <div class="board-view-panel" id="trViewPanel" hidden>
+      <button type="button" class="x-close" id="trViewClose" aria-label="닫기">×</button>
+      <h3 class="dlg-title" id="trInlineTitle"></h3>
+      <div class="post-date" id="trInlineDate"></div>
+      <div class="view-photos" id="trInlinePhotos"></div>
+      <div id="trInlineContent"></div>
+      <div class="file-list" id="trInlineFiles" hidden></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-primary admin-only" id="trInlineEdit">수정</button>
+        <button type="button" class="btn btn-danger admin-only" id="trInlineDelete">삭제</button>
+      </div>
     </div>
 
     <div class="ai-toolbar">
@@ -2622,6 +2646,18 @@
       </table>
       <div class="ai-page-bar" id="rpPageBar"></div>
     </div>
+    <div class="board-view-panel" id="rpViewPanel" hidden>
+      <button type="button" class="x-close" id="rpViewClose" aria-label="닫기">×</button>
+      <h3 class="dlg-title" id="rpInlineTitle"></h3>
+      <div class="post-date" id="rpInlineDate"></div>
+      <div class="view-photos" id="rpInlinePhotos"></div>
+      <div id="rpInlineContent"></div>
+      <div class="file-list" id="rpInlineFiles" hidden></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-primary admin-only" id="rpInlineEdit">수정</button>
+        <button type="button" class="btn btn-danger admin-only" id="rpInlineDelete">삭제</button>
+      </div>
+    </div>
 
     <div class="ai-toolbar">
       <div class="ai-toolbar-top">
@@ -2717,6 +2753,18 @@
         <tbody id="petBoardBody"></tbody>
       </table>
       <div class="ai-page-bar" id="petPageBar"></div>
+    </div>
+    <div class="board-view-panel" id="petViewPanel" hidden>
+      <button type="button" class="x-close" id="petViewClose" aria-label="닫기">×</button>
+      <h3 class="dlg-title" id="petInlineTitle"></h3>
+      <div class="post-date" id="petInlineDate"></div>
+      <div class="view-photos" id="petInlinePhotos"></div>
+      <div id="petInlineContent"></div>
+      <div class="file-list" id="petInlineFiles" hidden></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-primary admin-only" id="petInlineEdit">수정</button>
+        <button type="button" class="btn btn-danger admin-only" id="petInlineDelete">삭제</button>
+      </div>
     </div>
 
     <div class="ai-toolbar">
@@ -4522,20 +4570,31 @@
     brPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     brViewingId = p.id;
+    var panel = $("#brViewPanel");
+    var t = $("#brInlineTitle"), d = $("#brInlineDate"), ph = $("#brInlinePhotos"), c = $("#brInlineContent"), fl = $("#brInlineFiles");
+    if (t) t.textContent = p.title || "(제목 없음)";
+    if (d) d.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    if (ph) {
+      ph.textContent = "";
+      (p.files || []).filter(isImageFile).forEach(function (f) {
+        var im = document.createElement("img");
+        im.src = f.url;
+        im.alt = f.originalName || f.name;
+        ph.appendChild(im);
+      });
+    }
+    if (c) c.textContent = p.content || "(내용 없음)";
+    if (fl) {
+      fl.textContent = "";
+      fl.hidden = !(p.files && p.files.length);
+      if (p.files && p.files.length) fl.appendChild(fileLinks(p.files, false));
+    }
+    if (panel) {
+      panel.hidden = false;
+      if (panel.scrollIntoView) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
     brViewTitle.textContent = p.title || "(제목 없음)";
     brViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
-    brViewPhotos.textContent = "";
-    (p.files || []).filter(isImageFile).forEach(function (f) {
-      var im = document.createElement("img");
-      im.src = f.url;
-      im.alt = f.originalName || f.name;
-      brViewPhotos.appendChild(im);
-    });
-    brViewContent.textContent = p.content || "(내용 없음)";
-    brViewFiles.textContent = "";
-    brViewFiles.hidden = !(p.files && p.files.length);
-    if (p.files && p.files.length) brViewFiles.appendChild(fileLinks(p.files, false));
-    openDlg(brViewDlg);
   }
 
   brBoardBody.addEventListener("click", function (e) {
@@ -4543,6 +4602,13 @@
     if (!tr) return;
     openBrView(tr.getAttribute("data-id"));
   });
+
+  var brViewClose = $("#brViewClose");
+  if (brViewClose) brViewClose.addEventListener("click", function () { var panel = $("#brViewPanel"); if (panel) panel.hidden = true; });
+  var brInlineDelete = $("#brInlineDelete");
+  if (brInlineDelete) brInlineDelete.addEventListener("click", function () { brDeleteBtn.click(); });
+  var brInlineEdit = $("#brInlineEdit");
+  if (brInlineEdit) brInlineEdit.addEventListener("click", function () { var b = $("#brViewEdit"); if (b) b.click(); });
 
   brDeleteBtn.addEventListener("click", function () {
     if (!brViewingId) return;
@@ -4562,6 +4628,8 @@
       .then(function () {
         closeDlg(brViewDlg);
         brViewingId = null;
+        var panel = $("#brViewPanel");
+        if (panel) panel.hidden = true;
         return loadBr();
       })
       .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
@@ -4783,20 +4851,31 @@
     trPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     trViewingId = p.id;
+    var panel = $("#trViewPanel");
+    var t = $("#trInlineTitle"), d = $("#trInlineDate"), ph = $("#trInlinePhotos"), c = $("#trInlineContent"), fl = $("#trInlineFiles");
+    if (t) t.textContent = p.title || "(제목 없음)";
+    if (d) d.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    if (ph) {
+      ph.textContent = "";
+      (p.files || []).filter(isImageFile).forEach(function (f) {
+        var im = document.createElement("img");
+        im.src = f.url;
+        im.alt = f.originalName || f.name;
+        ph.appendChild(im);
+      });
+    }
+    if (c) c.textContent = p.content || "(내용 없음)";
+    if (fl) {
+      fl.textContent = "";
+      fl.hidden = !(p.files && p.files.length);
+      if (p.files && p.files.length) fl.appendChild(fileLinks(p.files, false));
+    }
+    if (panel) {
+      panel.hidden = false;
+      if (panel.scrollIntoView) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
     trViewTitle.textContent = p.title || "(제목 없음)";
     trViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
-    trViewPhotos.textContent = "";
-    (p.files || []).filter(isImageFile).forEach(function (f) {
-      var im = document.createElement("img");
-      im.src = f.url;
-      im.alt = f.originalName || f.name;
-      trViewPhotos.appendChild(im);
-    });
-    trViewContent.textContent = p.content || "(내용 없음)";
-    trViewFiles.textContent = "";
-    trViewFiles.hidden = !(p.files && p.files.length);
-    if (p.files && p.files.length) trViewFiles.appendChild(fileLinks(p.files, false));
-    openDlg(trViewDlg);
   }
 
   trBoardBody.addEventListener("click", function (e) {
@@ -4804,6 +4883,13 @@
     if (!tr) return;
     openTrView(tr.getAttribute("data-id"));
   });
+
+  var trViewClose = $("#trViewClose");
+  if (trViewClose) trViewClose.addEventListener("click", function () { var panel = $("#trViewPanel"); if (panel) panel.hidden = true; });
+  var trInlineDelete = $("#trInlineDelete");
+  if (trInlineDelete) trInlineDelete.addEventListener("click", function () { trDeleteBtn.click(); });
+  var trInlineEdit = $("#trInlineEdit");
+  if (trInlineEdit) trInlineEdit.addEventListener("click", function () { var b = $("#trViewEdit"); if (b) b.click(); });
 
   trDeleteBtn.addEventListener("click", function () {
     if (!trViewingId) return;
@@ -4823,6 +4909,8 @@
       .then(function () {
         closeDlg(trViewDlg);
         trViewingId = null;
+        var panel = $("#trViewPanel");
+        if (panel) panel.hidden = true;
         return loadTr();
       })
       .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
@@ -5044,20 +5132,31 @@
     rpPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     rpViewingId = p.id;
+    var panel = $("#rpViewPanel");
+    var t = $("#rpInlineTitle"), d = $("#rpInlineDate"), ph = $("#rpInlinePhotos"), c = $("#rpInlineContent"), fl = $("#rpInlineFiles");
+    if (t) t.textContent = p.title || "(제목 없음)";
+    if (d) d.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    if (ph) {
+      ph.textContent = "";
+      (p.files || []).filter(isImageFile).forEach(function (f) {
+        var im = document.createElement("img");
+        im.src = f.url;
+        im.alt = f.originalName || f.name;
+        ph.appendChild(im);
+      });
+    }
+    if (c) c.textContent = p.content || "(내용 없음)";
+    if (fl) {
+      fl.textContent = "";
+      fl.hidden = !(p.files && p.files.length);
+      if (p.files && p.files.length) fl.appendChild(fileLinks(p.files, false));
+    }
+    if (panel) {
+      panel.hidden = false;
+      if (panel.scrollIntoView) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
     rpViewTitle.textContent = p.title || "(제목 없음)";
     rpViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
-    rpViewPhotos.textContent = "";
-    (p.files || []).filter(isImageFile).forEach(function (f) {
-      var im = document.createElement("img");
-      im.src = f.url;
-      im.alt = f.originalName || f.name;
-      rpViewPhotos.appendChild(im);
-    });
-    rpViewContent.textContent = p.content || "(내용 없음)";
-    rpViewFiles.textContent = "";
-    rpViewFiles.hidden = !(p.files && p.files.length);
-    if (p.files && p.files.length) rpViewFiles.appendChild(fileLinks(p.files, false));
-    openDlg(rpViewDlg);
   }
 
   rpBoardBody.addEventListener("click", function (e) {
@@ -5065,6 +5164,13 @@
     if (!tr) return;
     openRpView(tr.getAttribute("data-id"));
   });
+
+  var rpViewClose = $("#rpViewClose");
+  if (rpViewClose) rpViewClose.addEventListener("click", function () { var panel = $("#rpViewPanel"); if (panel) panel.hidden = true; });
+  var rpInlineDelete = $("#rpInlineDelete");
+  if (rpInlineDelete) rpInlineDelete.addEventListener("click", function () { rpDeleteBtn.click(); });
+  var rpInlineEdit = $("#rpInlineEdit");
+  if (rpInlineEdit) rpInlineEdit.addEventListener("click", function () { var b = $("#rpViewEdit"); if (b) b.click(); });
 
   rpDeleteBtn.addEventListener("click", function () {
     if (!rpViewingId) return;
@@ -5084,6 +5190,8 @@
       .then(function () {
         closeDlg(rpViewDlg);
         rpViewingId = null;
+        var panel = $("#rpViewPanel");
+        if (panel) panel.hidden = true;
         return loadRp();
       })
       .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
@@ -5305,20 +5413,31 @@
     petPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     petViewingId = p.id;
+    var panel = $("#petViewPanel");
+    var t = $("#petInlineTitle"), d = $("#petInlineDate"), ph = $("#petInlinePhotos"), c = $("#petInlineContent"), fl = $("#petInlineFiles");
+    if (t) t.textContent = p.title || "(제목 없음)";
+    if (d) d.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    if (ph) {
+      ph.textContent = "";
+      (p.files || []).filter(isImageFile).forEach(function (f) {
+        var im = document.createElement("img");
+        im.src = f.url;
+        im.alt = f.originalName || f.name;
+        ph.appendChild(im);
+      });
+    }
+    if (c) c.textContent = p.content || "(내용 없음)";
+    if (fl) {
+      fl.textContent = "";
+      fl.hidden = !(p.files && p.files.length);
+      if (p.files && p.files.length) fl.appendChild(fileLinks(p.files, false));
+    }
+    if (panel) {
+      panel.hidden = false;
+      if (panel.scrollIntoView) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
     petViewTitle.textContent = p.title || "(제목 없음)";
     petViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
-    petViewPhotos.textContent = "";
-    (p.files || []).filter(isImageFile).forEach(function (f) {
-      var im = document.createElement("img");
-      im.src = f.url;
-      im.alt = f.originalName || f.name;
-      petViewPhotos.appendChild(im);
-    });
-    petViewContent.textContent = p.content || "(내용 없음)";
-    petViewFiles.textContent = "";
-    petViewFiles.hidden = !(p.files && p.files.length);
-    if (p.files && p.files.length) petViewFiles.appendChild(fileLinks(p.files, false));
-    openDlg(petViewDlg);
   }
 
   petBoardBody.addEventListener("click", function (e) {
@@ -5326,6 +5445,13 @@
     if (!tr) return;
     openPetView(tr.getAttribute("data-id"));
   });
+
+  var petViewClose = $("#petViewClose");
+  if (petViewClose) petViewClose.addEventListener("click", function () { var panel = $("#petViewPanel"); if (panel) panel.hidden = true; });
+  var petInlineDelete = $("#petInlineDelete");
+  if (petInlineDelete) petInlineDelete.addEventListener("click", function () { petDeleteBtn.click(); });
+  var petInlineEdit = $("#petInlineEdit");
+  if (petInlineEdit) petInlineEdit.addEventListener("click", function () { var b = $("#petViewEdit"); if (b) b.click(); });
 
   petDeleteBtn.addEventListener("click", function () {
     if (!petViewingId) return;
@@ -5345,6 +5471,8 @@
       .then(function () {
         closeDlg(petViewDlg);
         petViewingId = null;
+        var panel = $("#petViewPanel");
+        if (panel) panel.hidden = true;
         return loadPet();
       })
       .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
