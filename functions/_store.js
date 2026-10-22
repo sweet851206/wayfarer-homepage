@@ -102,6 +102,46 @@ export async function votePost(req, db) {
   return { ok: true, id: id, likes: (row && row.likes) || 0, dislikes: (row && row.dislikes) || 0 };
 }
 
+export async function ensureCommentsTable(db) {
+  try {
+    await db.prepare("CREATE TABLE IF NOT EXISTS comments (id TEXT PRIMARY KEY, post_id TEXT NOT NULL, author TEXT DEFAULT '', content TEXT DEFAULT '', created_at TEXT NOT NULL)").run();
+    await db.prepare("CREATE INDEX IF NOT EXISTS idx_comments_post ON comments(post_id, created_at)").run();
+  } catch (e) {}
+}
+
+export async function listComments(db, postId) {
+  await ensureCommentsTable(db);
+  const r = await db.prepare("SELECT id,post_id,author,content,created_at FROM comments WHERE post_id=? ORDER BY created_at ASC LIMIT 100").bind(String(postId || "")).all();
+  return (r.results || []).map(function (row) {
+    return { id: row.id, postId: row.post_id, author: row.author, content: row.content, createdAt: row.created_at };
+  });
+}
+
+export async function createComment(req, db) {
+  await ensureCommentsTable(db);
+  var body = {};
+  try { body = await req.json(); } catch (e) { body = {}; }
+  var postId = String((body && body.postId) || "");
+  var author = String((body && body.author) || "").slice(0, 30);
+  var content = String((body && body.content) || "").slice(0, 500);
+  if (!postId || !content) return { ok: false, message: "bad comment" };
+  if (!author) author = "익명";
+  var id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  var created = new Date().toISOString();
+  await db.prepare("INSERT INTO comments(id,post_id,author,content,created_at) VALUES(?,?,?,?,?)").bind(id, postId, author, content, created).run();
+  return { ok: true, id: id };
+}
+
+export async function deleteComment(req, db) {
+  await ensureCommentsTable(db);
+  var body = {};
+  try { body = await req.json(); } catch (e) { body = {}; }
+  var id = String((body && body.id) || "");
+  if (!id) return { ok: false, message: "no id" };
+  await db.prepare("DELETE FROM comments WHERE id=?").bind(id).run();
+  return { ok: true };
+}
+
 export function json(data, status) {
   return new Response(JSON.stringify(data), {
     status: status || 200,

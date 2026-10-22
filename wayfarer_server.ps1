@@ -4,10 +4,12 @@ $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $Save = Join-Path $Root "save"
 $PostsFile = Join-Path $Save "posts.json"
+$CommentsFile = Join-Path $Save "comments.json"
 $Save3 = Join-Path $Root "save3"
 $PostsFile3 = Join-Path $Save3 "posts3.json"
 New-Item -ItemType Directory -Force -Path $Save | Out-Null
 if (-not (Test-Path $PostsFile)) { Set-Content -Path $PostsFile -Value "[]" -Encoding UTF8 }
+if (-not (Test-Path $CommentsFile)) { Set-Content -Path $CommentsFile -Value "[]" -Encoding UTF8 }
 New-Item -ItemType Directory -Force -Path $Save3 | Out-Null
 if (-not (Test-Path $PostsFile3)) { Set-Content -Path $PostsFile3 -Value "[]" -Encoding UTF8 }
 
@@ -88,6 +90,12 @@ function SafeName($name) {
 }
 function Load-Posts {
     try { return @(Get-Content $PostsFile -Raw -Encoding UTF8 | ConvertFrom-Json) } catch { return @() }
+}
+function Load-Comments {
+    try { return @(Get-Content $CommentsFile -Raw -Encoding UTF8 | ConvertFrom-Json | Where-Object { $_ }) } catch { return @() }
+}
+function Save-Comments($comments) {
+    ConvertTo-Json -InputObject @($comments) -Depth 20 | Set-Content $CommentsFile -Encoding UTF8
 }
 function Save-Posts($posts) {
     ConvertTo-Json -InputObject @($posts) -Depth 20 | Set-Content $PostsFile -Encoding UTF8
@@ -259,6 +267,37 @@ while($listener.IsListening){
         $posts=@($posts|ForEach-Object { if($_.id -eq $vid){ if($kind -eq "like"){ $_.likes=([int]$_.likes)+1 } elseif($kind -eq "dislike"){ $_.dislikes=([int]$_.dislikes)+1 }; $likes=[int]$_.likes; $dislikes=[int]$_.dislikes }; $_ })
         Save-Posts3 $posts
         Send-Json $ctx @{ok=$true;id=$vid;likes=$likes;dislikes=$dislikes}; continue
+      }
+    }
+
+    if($path -eq "/api" -and $method -eq "GET"){
+      $action=$ctx.Request.QueryString["action"]
+      if($action -eq "comments"){
+        $pid=$ctx.Request.QueryString["postId"]
+        $all=Load-Comments
+        $list=@($all|Where {$_.postId -eq $pid}|Sort-Object createdAt)
+        Send-Json $ctx @{ok=$true;comments=$list}; continue
+      }
+    }
+
+    if($path -eq "/api" -and $method -eq "POST"){
+      $action=$ctx.Request.QueryString["action"]
+      if($action -eq "comment"){
+        $body=Read-BodyBytes $ctx.Request.InputStream $ctx.Request.ContentLength64
+        try { $obj=[Text.Encoding]::UTF8.GetString($body)|ConvertFrom-Json } catch { $obj=$null }
+        $author=if($obj.author){$obj.author.ToString().Substring(0,[Math]::Min(30,$obj.author.ToString().Length))}else{"익명"}
+        $content=$obj.content.ToString()
+        if($content.Length -gt 500){$content=$content.Substring(0,500)}
+        $c=[pscustomobject]@{id=[guid]::NewGuid().ToString("N");postId=$obj.postId.ToString();author=$author;content=$content;createdAt=[DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()}
+        $all=Load-Comments; $all=@($c)+@($all); Save-Comments $all
+        Send-Json $ctx @{ok=$true;id=$c.id}; continue
+      }
+      if($action -eq "comment_delete"){
+        $body=Read-BodyBytes $ctx.Request.InputStream $ctx.Request.ContentLength64
+        try { $obj=[Text.Encoding]::UTF8.GetString($body)|ConvertFrom-Json } catch { $obj=$null }
+        $cid=$obj.id.ToString()
+        $all=Load-Comments; $all=@($all|Where {$_.id -ne $cid}); Save-Comments $all
+        Send-Json $ctx @{ok=$true}; continue
       }
     }
 

@@ -670,6 +670,14 @@
   .vote-btn { border: 1px solid var(--border); background: #fff; border-radius: 999px; padding: 8px 14px; cursor: pointer; font-weight: 700; color: #e11d48; }
   .vote-btn:disabled { opacity: .5; cursor: default; }
   .vote-red { color: #e11d48; font-weight: 700; white-space: nowrap; font-size: .8em; margin-right: 2px; }
+  .cmt-wrap { margin-top: 14px; border-top: 1px dashed var(--border); padding-top: 12px; }
+  .cmt-list { display: flex; flex-direction: column; gap: 8px; margin: 8px 0; }
+  .cmt-item { font-size: .9rem; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+  .cmt-item b { color: var(--text-strong); }
+  .cmt-item .cmt-del { float: right; border: none; background: none; cursor: pointer; color: var(--muted); }
+  .cmt-form { display: flex; gap: 6px; margin-top: 8px; }
+  .cmt-form input { flex: 1; min-width: 0; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+  .cmt-toggle { border: none; background: none; cursor: pointer; color: var(--muted); font-size: .85rem; }
   .board-table th:last-child, .board-table td:last-child { white-space: nowrap; }
   body:not(.is-admin) .board-table .board-empty { cursor: default; }
   .ai-page-bar { display: flex; gap: 8px; justify-content: center; margin: 18px 0 4px; flex-wrap: wrap; }
@@ -2349,6 +2357,16 @@
         <button type="button" class="vote-btn" id="aiInlineLike">❤ 추천 <span id="aiLikeCount">0</span></button>
         <button type="button" class="vote-btn" id="aiInlineDislike">💔 비추천 <span id="aiDislikeCount">0</span></button>
       </div>
+      <div class="cmt-wrap">
+        <b>💬 댓글 <span id="aiCmtCount">0</span></b>
+        <div class="cmt-list" id="aiCmtList"></div>
+        <button type="button" class="cmt-toggle" id="aiCmtToggle" hidden>더 보기</button>
+        <div class="cmt-form">
+          <input type="text" id="aiCmtAuthor" maxlength="30" placeholder="이름 (익명 가능)">
+          <input type="text" id="aiCmtInput" maxlength="500" placeholder="댓글을 입력하세요">
+          <button type="button" class="vote-btn" id="aiCmtSend">등록</button>
+        </div>
+      </div>
       <div class="dlg-actions">
         <button type="button" class="btn btn-primary admin-only" id="aiInlineEdit">수정</button>
         <button type="button" class="btn btn-danger admin-only" id="aiInlineDelete">삭제</button>
@@ -2456,6 +2474,16 @@
         <button type="button" class="vote-btn" id="brInlineLike">❤ 추천 <span id="brLikeCount">0</span></button>
         <button type="button" class="vote-btn" id="brInlineDislike">💔 비추천 <span id="brDislikeCount">0</span></button>
       </div>
+      <div class="cmt-wrap">
+        <b>💬 댓글 <span id="brCmtCount">0</span></b>
+        <div class="cmt-list" id="brCmtList"></div>
+        <button type="button" class="cmt-toggle" id="brCmtToggle" hidden>더 보기</button>
+        <div class="cmt-form">
+          <input type="text" id="brCmtAuthor" maxlength="30" placeholder="이름 (익명 가능)">
+          <input type="text" id="brCmtInput" maxlength="500" placeholder="댓글을 입력하세요">
+          <button type="button" class="vote-btn" id="brCmtSend">등록</button>
+        </div>
+      </div>
       <div class="dlg-actions">
         <button type="button" class="btn btn-primary admin-only" id="brInlineEdit">수정</button>
         <button type="button" class="btn btn-danger admin-only" id="brInlineDelete">삭제</button>
@@ -2562,6 +2590,16 @@
       <div class="vote-row">
         <button type="button" class="vote-btn" id="trInlineLike">❤ 추천 <span id="trLikeCount">0</span></button>
         <button type="button" class="vote-btn" id="trInlineDislike">💔 비추천 <span id="trDislikeCount">0</span></button>
+      </div>
+      <div class="cmt-wrap">
+        <b>💬 댓글 <span id="trCmtCount">0</span></b>
+        <div class="cmt-list" id="trCmtList"></div>
+        <button type="button" class="cmt-toggle" id="trCmtToggle" hidden>더 보기</button>
+        <div class="cmt-form">
+          <input type="text" id="trCmtAuthor" maxlength="30" placeholder="이름 (익명 가능)">
+          <input type="text" id="trCmtInput" maxlength="500" placeholder="댓글을 입력하세요">
+          <button type="button" class="vote-btn" id="trCmtSend">등록</button>
+        </div>
       </div>
       <div class="dlg-actions">
         <button type="button" class="btn btn-primary admin-only" id="trInlineEdit">수정</button>
@@ -2678,6 +2716,16 @@
         <button type="button" class="vote-btn" id="rpInlineLike">❤ 추천 <span id="rpLikeCount">0</span></button>
         <button type="button" class="vote-btn" id="rpInlineDislike">💔 비추천 <span id="rpDislikeCount">0</span></button>
       </div>
+      <div class="cmt-wrap">
+        <b>💬 댓글 <span id="rpCmtCount">0</span></b>
+        <div class="cmt-list" id="rpCmtList"></div>
+        <button type="button" class="cmt-toggle" id="rpCmtToggle" hidden>더 보기</button>
+        <div class="cmt-form">
+          <input type="text" id="rpCmtAuthor" maxlength="30" placeholder="이름 (익명 가능)">
+          <input type="text" id="rpCmtInput" maxlength="500" placeholder="댓글을 입력하세요">
+          <button type="button" class="vote-btn" id="rpCmtSend">등록</button>
+        </div>
+      </div>
       <div class="dlg-actions">
         <button type="button" class="btn btn-primary admin-only" id="rpInlineEdit">수정</button>
         <button type="button" class="btn btn-danger admin-only" id="rpInlineDelete">삭제</button>
@@ -2790,6 +2838,16 @@
       <div class="vote-row">
         <button type="button" class="vote-btn" id="petInlineLike">❤ 추천 <span id="petLikeCount">0</span></button>
         <button type="button" class="vote-btn" id="petInlineDislike">💔 비추천 <span id="petDislikeCount">0</span></button>
+      </div>
+      <div class="cmt-wrap">
+        <b>💬 댓글 <span id="petCmtCount">0</span></b>
+        <div class="cmt-list" id="petCmtList"></div>
+        <button type="button" class="cmt-toggle" id="petCmtToggle" hidden>더 보기</button>
+        <div class="cmt-form">
+          <input type="text" id="petCmtAuthor" maxlength="30" placeholder="이름 (익명 가능)">
+          <input type="text" id="petCmtInput" maxlength="500" placeholder="댓글을 입력하세요">
+          <button type="button" class="vote-btn" id="petCmtSend">등록</button>
+        </div>
       </div>
       <div class="dlg-actions">
         <button type="button" class="btn btn-primary admin-only" id="petInlineEdit">수정</button>
@@ -3821,6 +3879,22 @@
         .catch(function (err) { window.alert("투표 실패: " + ((err && err.message) || err)); });
     }
   };
+  window.BaiooCmt = window.BaiooCmt || {
+    list: function (postId) {
+      return fetch("/api?action=comments&postId=" + encodeURIComponent(postId), { headers: { Accept: "application/json" } })
+        .then(function (res) { return res.json(); })
+        .then(function (j) { return (j && j.comments) || []; });
+    },
+    create: function (postId, author, content) {
+      return fetch("/api?action=comment", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ postId: postId, author: author, content: content }) })
+        .then(function (res) { return res.json(); });
+    },
+    remove: function (id) {
+      return fetch("/api?action=comment_delete", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: id }) })
+        .then(function (res) { return res.json(); });
+    },
+    esc: function (s) { return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  };
   function apiList() {
     return fetch("/api?action=list", { headers: { Accept: "application/json" } })
       .then(function (res) { return res.json(); })
@@ -4326,6 +4400,7 @@
     }
     aiViewTitle.textContent = p.title || "(제목 없음)";
     aiViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    loadAiCmt();
   }
 
   aiBoardBody.addEventListener("click", function (e) {
@@ -4360,6 +4435,55 @@
       aiPosts.forEach(function (x) { if (String(x.id) === String(aiViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
       renderAi();
     });
+  });
+
+  var aiCmtList = $("#aiCmtList"), aiCmtCount = $("#aiCmtCount"), aiCmtToggle = $("#aiCmtToggle"),
+      aiCmtAuthor = $("#aiCmtAuthor"), aiCmtInput = $("#aiCmtInput"), aiCmtSend = $("#aiCmtSend");
+  var aiCmtAll = [], aiCmtOpen = false;
+  function renderAiCmt() {
+    if (!aiCmtList) return;
+    aiCmtList.textContent = "";
+    var show = aiCmtOpen ? aiCmtAll : aiCmtAll.slice(0, 10);
+    show.forEach(function (cm) {
+      var d = document.createElement("div");
+      d.className = "cmt-item";
+      var isAdmin = document.body.classList.contains("is-admin");
+      d.innerHTML = "<b>" + window.BaiooCmt.esc(cm.author) + "</b> " + window.BaiooCmt.esc(cm.content) + (isAdmin ? ' <button type="button" class="cmt-del" data-cid="' + cm.id + '">삭제</button>' : "");
+      aiCmtList.appendChild(d);
+    });
+    if (aiCmtCount) aiCmtCount.textContent = aiCmtAll.length;
+    if (aiCmtToggle) {
+      aiCmtToggle.hidden = aiCmtAll.length <= 10;
+      aiCmtToggle.textContent = aiCmtOpen ? "접기" : ("더 보기 (" + aiCmtAll.length + ")");
+    }
+  }
+  function loadAiCmt() {
+    if (!aiViewingId) return;
+    window.BaiooCmt.list(aiViewingId).then(function (rows) {
+      aiCmtAll = rows || [];
+      aiCmtOpen = false;
+      renderAiCmt();
+    }).catch(function () { aiCmtAll = []; renderAiCmt(); });
+  }
+  if (aiCmtToggle) aiCmtToggle.addEventListener("click", function () { aiCmtOpen = !aiCmtOpen; renderAiCmt(); });
+  if (aiCmtSend) aiCmtSend.addEventListener("click", function () {
+    if (!aiViewingId) return;
+    var a = (aiCmtAuthor && aiCmtAuthor.value.trim()) || "익명";
+    var c = (aiCmtInput && aiCmtInput.value.trim()) || "";
+    if (!c) { window.alert("댓글을 입력하세요."); return; }
+    aiCmtSend.disabled = true;
+    window.BaiooCmt.create(aiViewingId, a, c).then(function (j) {
+      if (!j || !j.ok) throw new Error((j && j.message) || "fail");
+      if (aiCmtInput) aiCmtInput.value = "";
+      loadAiCmt();
+    }).catch(function (err) { window.alert("댓글 실패: " + ((err && err.message) || err)); })
+    .then(function () { aiCmtSend.disabled = false; });
+  });
+  if (aiCmtList) aiCmtList.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cid]");
+    if (!b) return;
+    if (!window.confirm("댓글을 삭제할까요?")) return;
+    window.BaiooCmt.remove(b.getAttribute("data-cid")).then(function () { loadAiCmt(); });
   });
 
   aiDeleteBtn.addEventListener("click", function () {
@@ -4680,6 +4804,7 @@
     }
     brViewTitle.textContent = p.title || "(제목 없음)";
     brViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    loadBrCmt();
   }
 
   brBoardBody.addEventListener("click", function (e) {
@@ -4714,6 +4839,48 @@
       brPosts.forEach(function (x) { if (String(x.id) === String(brViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
       renderBr();
     });
+  });
+
+  var brCmtList = $("#brCmtList"), brCmtCount = $("#brCmtCount"), brCmtToggle = $("#brCmtToggle"),
+      brCmtAuthor = $("#brCmtAuthor"), brCmtInput = $("#brCmtInput"), brCmtSend = $("#brCmtSend");
+  var brCmtAll = [], brCmtOpen = false;
+  function renderBrCmt() {
+    if (!brCmtList) return;
+    brCmtList.textContent = "";
+    var show = brCmtOpen ? brCmtAll : brCmtAll.slice(0, 10);
+    show.forEach(function (cm) {
+      var d = document.createElement("div");
+      d.className = "cmt-item";
+      var isAdmin = document.body.classList.contains("is-admin");
+      d.innerHTML = "<b>" + window.BaiooCmt.esc(cm.author) + "</b> " + window.BaiooCmt.esc(cm.content) + (isAdmin ? ' <button type="button" class="cmt-del" data-cid="' + cm.id + '">삭제</button>' : "");
+      brCmtList.appendChild(d);
+    });
+    if (brCmtCount) brCmtCount.textContent = brCmtAll.length;
+    if (brCmtToggle) { brCmtToggle.hidden = brCmtAll.length <= 10; brCmtToggle.textContent = brCmtOpen ? "접기" : ("더 보기 (" + brCmtAll.length + ")"); }
+  }
+  function loadBrCmt() {
+    if (!brViewingId) return;
+    window.BaiooCmt.list(brViewingId).then(function (rows) { brCmtAll = rows || []; brCmtOpen = false; renderBrCmt(); }).catch(function () { brCmtAll = []; renderBrCmt(); });
+  }
+  if (brCmtToggle) brCmtToggle.addEventListener("click", function () { brCmtOpen = !brCmtOpen; renderBrCmt(); });
+  if (brCmtSend) brCmtSend.addEventListener("click", function () {
+    if (!brViewingId) return;
+    var a = (brCmtAuthor && brCmtAuthor.value.trim()) || "익명";
+    var c = (brCmtInput && brCmtInput.value.trim()) || "";
+    if (!c) { window.alert("댓글을 입력하세요."); return; }
+    brCmtSend.disabled = true;
+    window.BaiooCmt.create(brViewingId, a, c).then(function (j) {
+      if (!j || !j.ok) throw new Error((j && j.message) || "fail");
+      if (brCmtInput) brCmtInput.value = "";
+      loadBrCmt();
+    }).catch(function (err) { window.alert("댓글 실패: " + ((err && err.message) || err)); })
+    .then(function () { brCmtSend.disabled = false; });
+  });
+  if (brCmtList) brCmtList.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cid]");
+    if (!b) return;
+    if (!window.confirm("댓글을 삭제할까요?")) return;
+    window.BaiooCmt.remove(b.getAttribute("data-cid")).then(function () { loadBrCmt(); });
   });
 
   brDeleteBtn.addEventListener("click", function () {
@@ -4991,6 +5158,7 @@
     }
     trViewTitle.textContent = p.title || "(제목 없음)";
     trViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    loadTrCmt();
   }
 
   trBoardBody.addEventListener("click", function (e) {
@@ -5025,6 +5193,48 @@
       trPosts.forEach(function (x) { if (String(x.id) === String(trViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
       renderTr();
     });
+  });
+
+  var trCmtList = $("#trCmtList"), trCmtCount = $("#trCmtCount"), trCmtToggle = $("#trCmtToggle"),
+      trCmtAuthor = $("#trCmtAuthor"), trCmtInput = $("#trCmtInput"), trCmtSend = $("#trCmtSend");
+  var trCmtAll = [], trCmtOpen = false;
+  function renderTrCmt() {
+    if (!trCmtList) return;
+    trCmtList.textContent = "";
+    var show = trCmtOpen ? trCmtAll : trCmtAll.slice(0, 10);
+    show.forEach(function (cm) {
+      var d = document.createElement("div");
+      d.className = "cmt-item";
+      var isAdmin = document.body.classList.contains("is-admin");
+      d.innerHTML = "<b>" + window.BaiooCmt.esc(cm.author) + "</b> " + window.BaiooCmt.esc(cm.content) + (isAdmin ? ' <button type="button" class="cmt-del" data-cid="' + cm.id + '">삭제</button>' : "");
+      trCmtList.appendChild(d);
+    });
+    if (trCmtCount) trCmtCount.textContent = trCmtAll.length;
+    if (trCmtToggle) { trCmtToggle.hidden = trCmtAll.length <= 10; trCmtToggle.textContent = trCmtOpen ? "접기" : ("더 보기 (" + trCmtAll.length + ")"); }
+  }
+  function loadTrCmt() {
+    if (!trViewingId) return;
+    window.BaiooCmt.list(trViewingId).then(function (rows) { trCmtAll = rows || []; trCmtOpen = false; renderTrCmt(); }).catch(function () { trCmtAll = []; renderTrCmt(); });
+  }
+  if (trCmtToggle) trCmtToggle.addEventListener("click", function () { trCmtOpen = !trCmtOpen; renderTrCmt(); });
+  if (trCmtSend) trCmtSend.addEventListener("click", function () {
+    if (!trViewingId) return;
+    var a = (trCmtAuthor && trCmtAuthor.value.trim()) || "익명";
+    var c = (trCmtInput && trCmtInput.value.trim()) || "";
+    if (!c) { window.alert("댓글을 입력하세요."); return; }
+    trCmtSend.disabled = true;
+    window.BaiooCmt.create(trViewingId, a, c).then(function (j) {
+      if (!j || !j.ok) throw new Error((j && j.message) || "fail");
+      if (trCmtInput) trCmtInput.value = "";
+      loadTrCmt();
+    }).catch(function (err) { window.alert("댓글 실패: " + ((err && err.message) || err)); })
+    .then(function () { trCmtSend.disabled = false; });
+  });
+  if (trCmtList) trCmtList.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cid]");
+    if (!b) return;
+    if (!window.confirm("댓글을 삭제할까요?")) return;
+    window.BaiooCmt.remove(b.getAttribute("data-cid")).then(function () { loadTrCmt(); });
   });
 
   trDeleteBtn.addEventListener("click", function () {
@@ -5302,6 +5512,7 @@
     }
     rpViewTitle.textContent = p.title || "(제목 없음)";
     rpViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    loadRpCmt();
   }
 
   rpBoardBody.addEventListener("click", function (e) {
@@ -5336,6 +5547,48 @@
       rpPosts.forEach(function (x) { if (String(x.id) === String(rpViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
       renderRp();
     });
+  });
+
+  var rpCmtList = $("#rpCmtList"), rpCmtCount = $("#rpCmtCount"), rpCmtToggle = $("#rpCmtToggle"),
+      rpCmtAuthor = $("#rpCmtAuthor"), rpCmtInput = $("#rpCmtInput"), rpCmtSend = $("#rpCmtSend");
+  var rpCmtAll = [], rpCmtOpen = false;
+  function renderRpCmt() {
+    if (!rpCmtList) return;
+    rpCmtList.textContent = "";
+    var show = rpCmtOpen ? rpCmtAll : rpCmtAll.slice(0, 10);
+    show.forEach(function (cm) {
+      var d = document.createElement("div");
+      d.className = "cmt-item";
+      var isAdmin = document.body.classList.contains("is-admin");
+      d.innerHTML = "<b>" + window.BaiooCmt.esc(cm.author) + "</b> " + window.BaiooCmt.esc(cm.content) + (isAdmin ? ' <button type="button" class="cmt-del" data-cid="' + cm.id + '">삭제</button>' : "");
+      rpCmtList.appendChild(d);
+    });
+    if (rpCmtCount) rpCmtCount.textContent = rpCmtAll.length;
+    if (rpCmtToggle) { rpCmtToggle.hidden = rpCmtAll.length <= 10; rpCmtToggle.textContent = rpCmtOpen ? "접기" : ("더 보기 (" + rpCmtAll.length + ")"); }
+  }
+  function loadRpCmt() {
+    if (!rpViewingId) return;
+    window.BaiooCmt.list(rpViewingId).then(function (rows) { rpCmtAll = rows || []; rpCmtOpen = false; renderRpCmt(); }).catch(function () { rpCmtAll = []; renderRpCmt(); });
+  }
+  if (rpCmtToggle) rpCmtToggle.addEventListener("click", function () { rpCmtOpen = !rpCmtOpen; renderRpCmt(); });
+  if (rpCmtSend) rpCmtSend.addEventListener("click", function () {
+    if (!rpViewingId) return;
+    var a = (rpCmtAuthor && rpCmtAuthor.value.trim()) || "익명";
+    var c = (rpCmtInput && rpCmtInput.value.trim()) || "";
+    if (!c) { window.alert("댓글을 입력하세요."); return; }
+    rpCmtSend.disabled = true;
+    window.BaiooCmt.create(rpViewingId, a, c).then(function (j) {
+      if (!j || !j.ok) throw new Error((j && j.message) || "fail");
+      if (rpCmtInput) rpCmtInput.value = "";
+      loadRpCmt();
+    }).catch(function (err) { window.alert("댓글 실패: " + ((err && err.message) || err)); })
+    .then(function () { rpCmtSend.disabled = false; });
+  });
+  if (rpCmtList) rpCmtList.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cid]");
+    if (!b) return;
+    if (!window.confirm("댓글을 삭제할까요?")) return;
+    window.BaiooCmt.remove(b.getAttribute("data-cid")).then(function () { loadRpCmt(); });
   });
 
   rpDeleteBtn.addEventListener("click", function () {
@@ -5613,6 +5866,7 @@
     }
     petViewTitle.textContent = p.title || "(제목 없음)";
     petViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    loadPetCmt();
   }
 
   petBoardBody.addEventListener("click", function (e) {
@@ -5647,6 +5901,48 @@
       petPosts.forEach(function (x) { if (String(x.id) === String(petViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
       renderPet();
     });
+  });
+
+  var petCmtList = $("#petCmtList"), petCmtCount = $("#petCmtCount"), petCmtToggle = $("#petCmtToggle"),
+      petCmtAuthor = $("#petCmtAuthor"), petCmtInput = $("#petCmtInput"), petCmtSend = $("#petCmtSend");
+  var petCmtAll = [], petCmtOpen = false;
+  function renderPetCmt() {
+    if (!petCmtList) return;
+    petCmtList.textContent = "";
+    var show = petCmtOpen ? petCmtAll : petCmtAll.slice(0, 10);
+    show.forEach(function (cm) {
+      var d = document.createElement("div");
+      d.className = "cmt-item";
+      var isAdmin = document.body.classList.contains("is-admin");
+      d.innerHTML = "<b>" + window.BaiooCmt.esc(cm.author) + "</b> " + window.BaiooCmt.esc(cm.content) + (isAdmin ? ' <button type="button" class="cmt-del" data-cid="' + cm.id + '">삭제</button>' : "");
+      petCmtList.appendChild(d);
+    });
+    if (petCmtCount) petCmtCount.textContent = petCmtAll.length;
+    if (petCmtToggle) { petCmtToggle.hidden = petCmtAll.length <= 10; petCmtToggle.textContent = petCmtOpen ? "접기" : ("더 보기 (" + petCmtAll.length + ")"); }
+  }
+  function loadPetCmt() {
+    if (!petViewingId) return;
+    window.BaiooCmt.list(petViewingId).then(function (rows) { petCmtAll = rows || []; petCmtOpen = false; renderPetCmt(); }).catch(function () { petCmtAll = []; renderPetCmt(); });
+  }
+  if (petCmtToggle) petCmtToggle.addEventListener("click", function () { petCmtOpen = !petCmtOpen; renderPetCmt(); });
+  if (petCmtSend) petCmtSend.addEventListener("click", function () {
+    if (!petViewingId) return;
+    var a = (petCmtAuthor && petCmtAuthor.value.trim()) || "익명";
+    var c = (petCmtInput && petCmtInput.value.trim()) || "";
+    if (!c) { window.alert("댓글을 입력하세요."); return; }
+    petCmtSend.disabled = true;
+    window.BaiooCmt.create(petViewingId, a, c).then(function (j) {
+      if (!j || !j.ok) throw new Error((j && j.message) || "fail");
+      if (petCmtInput) petCmtInput.value = "";
+      loadPetCmt();
+    }).catch(function (err) { window.alert("댓글 실패: " + ((err && err.message) || err)); })
+    .then(function () { petCmtSend.disabled = false; });
+  });
+  if (petCmtList) petCmtList.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cid]");
+    if (!b) return;
+    if (!window.confirm("댓글을 삭제할까요?")) return;
+    window.BaiooCmt.remove(b.getAttribute("data-cid")).then(function () { loadPetCmt(); });
   });
 
   petDeleteBtn.addEventListener("click", function () {
