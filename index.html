@@ -2207,6 +2207,10 @@
   .admin-only { display: none !important; }
   body.is-admin .admin-only { display: inline-flex !important; }
   body.board-open-ai #aiBoardAddBtn { display: inline-flex !important; }
+  body.board-open-br #brBoardAddBtn { display: inline-flex !important; }
+  body.board-open-tr #trBoardAddBtn { display: inline-flex !important; }
+  body.board-open-rp #rpBoardAddBtn { display: inline-flex !important; }
+  body.board-open-pet #petBoardAddBtn { display: inline-flex !important; }
   body:not(.is-admin) #aiDeleteCustomBtn, body:not(.is-admin) #brDeleteCustomBtn { display: none !important; }
 </style>
 </head>
@@ -2401,7 +2405,7 @@
 
     <div class="pet-diary-subhead">
       <h3>📝 자유게시판</h3>
-      <button type="button" class="section-add-btn branding-add admin-only" data-category="branding" style="margin:0;">＋ 새 글 등록</button>
+      <button type="button" class="section-add-btn branding-add admin-only" id="brBoardAddBtn" data-category="branding" style="margin:0;">＋ 새 글 등록</button>
     </div>
     <div class="board-table-wrap">
       <table class="board-table">
@@ -2490,7 +2494,7 @@
 
     <div class="pet-diary-subhead">
       <h3>📝 자유게시판</h3>
-      <button type="button" class="section-add-btn travel-add admin-only" data-category="travel-board" style="margin:0;">＋ 새 글 등록</button>
+      <button type="button" class="section-add-btn travel-add admin-only" id="trBoardAddBtn" data-category="travel-board" style="margin:0;">＋ 새 글 등록</button>
     </div>
     <div class="board-table-wrap">
       <table class="board-table">
@@ -2587,7 +2591,7 @@
 
     <div class="pet-diary-subhead">
       <h3>📝 자유게시판</h3>
-      <button type="button" class="section-add-btn repair-add admin-only" data-category="repair-board" style="margin:0;">＋ 새 글 등록</button>
+      <button type="button" class="section-add-btn repair-add admin-only" id="rpBoardAddBtn" data-category="repair-board" style="margin:0;">＋ 새 글 등록</button>
     </div>
     <div class="board-table-wrap">
       <table class="board-table">
@@ -2682,7 +2686,7 @@
 
     <div class="pet-diary-subhead">
       <h3>📝 자유게시판</h3>
-      <button type="button" class="section-add-btn bunny-add admin-only" data-category="bunny-board" style="margin:0;">＋ 새 글 등록</button>
+      <button type="button" class="section-add-btn bunny-add admin-only" id="petBoardAddBtn" data-category="bunny-board" style="margin:0;">＋ 새 글 등록</button>
     </div>
     <div class="board-table-wrap">
       <table class="board-table">
@@ -2980,6 +2984,30 @@
         <h3>자유게시판 공개 설정 (AI)</h3>
         <p class="ai-lead-sub" id="boardOpenStatus">현재: 관리자만 등록 가능</p>
         <button type="button" class="btn btn-primary" id="boardOpenToggle">모두에게 등록 공개</button>
+      </div>
+      <div class="post">
+        <div class="icon-large">📝</div>
+        <h3>자유게시판 공개 설정 (Branding)</h3>
+        <p class="ai-lead-sub" id="boardOpenStatusBr">현재: 관리자만 등록 가능</p>
+        <button type="button" class="btn btn-primary" id="boardOpenToggleBr">모두에게 등록 공개</button>
+      </div>
+      <div class="post">
+        <div class="icon-large">📝</div>
+        <h3>자유게시판 공개 설정 (Travel)</h3>
+        <p class="ai-lead-sub" id="boardOpenStatusTr">현재: 관리자만 등록 가능</p>
+        <button type="button" class="btn btn-primary" id="boardOpenToggleTr">모두에게 등록 공개</button>
+      </div>
+      <div class="post">
+        <div class="icon-large">📝</div>
+        <h3>자유게시판 공개 설정 (Repair)</h3>
+        <p class="ai-lead-sub" id="boardOpenStatusRp">현재: 관리자만 등록 가능</p>
+        <button type="button" class="btn btn-primary" id="boardOpenToggleRp">모두에게 등록 공개</button>
+      </div>
+      <div class="post">
+        <div class="icon-large">📝</div>
+        <h3>자유게시판 공개 설정 (Pets)</h3>
+        <p class="ai-lead-sub" id="boardOpenStatusPet">현재: 관리자만 등록 가능</p>
+        <button type="button" class="btn btn-primary" id="boardOpenTogglePet">모두에게 등록 공개</button>
       </div>
     </div>
   </div>
@@ -8822,6 +8850,10 @@
   }
   function getCred() { try { var id = localStorage.getItem("baioo_admin_id") || "1234"; var pw = localStorage.getItem("baioo_admin_pw") || "1234"; return {id:id, pw:pw}; } catch(e){ return {id:"1234", pw:"1234"}; } }
   function getBoardOpen() { try { return localStorage.getItem("baioo_board_open_ai") === "1"; } catch (e) { return false; } }
+  function getBoardOpenBr() { try { return localStorage.getItem("baioo_board_open_br") === "1"; } catch (e) { return false; } }
+  function getBoardOpenTr() { try { return localStorage.getItem("baioo_board_open_tr") === "1"; } catch (e) { return false; } }
+  function getBoardOpenRp() { try { return localStorage.getItem("baioo_board_open_rp") === "1"; } catch (e) { return false; } }
+  function getBoardOpenPet() { try { return localStorage.getItem("baioo_board_open_pet") === "1"; } catch (e) { return false; } }
   function sync() {
     var admin = isAdmin();
     document.body.classList.toggle("is-admin", !!admin);
@@ -8833,6 +8865,30 @@
     if (st) st.textContent = open ? "현재: 모두 등록 가능" : "현재: 관리자만 등록 가능";
     var tg = document.getElementById("boardOpenToggle");
     if (tg) tg.textContent = open ? "공개 해제 (관리자만)" : "모두에게 등록 공개";
+    var openBr = getBoardOpenBr();
+    document.body.classList.toggle("board-open-br", !!openBr);
+    var stBr = document.getElementById("boardOpenStatusBr");
+    if (stBr) stBr.textContent = openBr ? "현재: 모두 등록 가능" : "현재: 관리자만 등록 가능";
+    var tgBr = document.getElementById("boardOpenToggleBr");
+    if (tgBr) tgBr.textContent = openBr ? "공개 해제 (관리자만)" : "모두에게 등록 공개";
+    var openTr = getBoardOpenTr();
+    document.body.classList.toggle("board-open-tr", !!openTr);
+    var stTr = document.getElementById("boardOpenStatusTr");
+    if (stTr) stTr.textContent = openTr ? "현재: 모두 등록 가능" : "현재: 관리자만 등록 가능";
+    var tgTr = document.getElementById("boardOpenToggleTr");
+    if (tgTr) tgTr.textContent = openTr ? "공개 해제 (관리자만)" : "모두에게 등록 공개";
+    var openRp = getBoardOpenRp();
+    document.body.classList.toggle("board-open-rp", !!openRp);
+    var stRp = document.getElementById("boardOpenStatusRp");
+    if (stRp) stRp.textContent = openRp ? "현재: 모두 등록 가능" : "현재: 관리자만 등록 가능";
+    var tgRp = document.getElementById("boardOpenToggleRp");
+    if (tgRp) tgRp.textContent = openRp ? "공개 해제 (관리자만)" : "모두에게 등록 공개";
+    var openPet = getBoardOpenPet();
+    document.body.classList.toggle("board-open-pet", !!openPet);
+    var stPet = document.getElementById("boardOpenStatusPet");
+    if (stPet) stPet.textContent = openPet ? "현재: 모두 등록 가능" : "현재: 관리자만 등록 가능";
+    var tgPet = document.getElementById("boardOpenTogglePet");
+    if (tgPet) tgPet.textContent = openPet ? "공개 해제 (관리자만)" : "모두에게 등록 공개";
     if ((location.hash || "") === "#admin" && !admin) { location.hash = "#home"; }
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", sync);
@@ -8884,6 +8940,26 @@
     if (e.target && e.target.id === "boardOpenToggle") {
       if (!isAdmin()) { alert("관리자 로그인 후 사용하세요."); return; }
       try { localStorage.setItem("baioo_board_open_ai", getBoardOpen() ? "0" : "1"); } catch (err) {}
+      sync();
+    }
+    if (e.target && e.target.id === "boardOpenToggleBr") {
+      if (!isAdmin()) { alert("관리자 로그인 후 사용하세요."); return; }
+      try { localStorage.setItem("baioo_board_open_br", getBoardOpenBr() ? "0" : "1"); } catch (err) {}
+      sync();
+    }
+    if (e.target && e.target.id === "boardOpenToggleTr") {
+      if (!isAdmin()) { alert("관리자 로그인 후 사용하세요."); return; }
+      try { localStorage.setItem("baioo_board_open_tr", getBoardOpenTr() ? "0" : "1"); } catch (err) {}
+      sync();
+    }
+    if (e.target && e.target.id === "boardOpenToggleRp") {
+      if (!isAdmin()) { alert("관리자 로그인 후 사용하세요."); return; }
+      try { localStorage.setItem("baioo_board_open_rp", getBoardOpenRp() ? "0" : "1"); } catch (err) {}
+      sync();
+    }
+    if (e.target && e.target.id === "boardOpenTogglePet") {
+      if (!isAdmin()) { alert("관리자 로그인 후 사용하세요."); return; }
+      try { localStorage.setItem("baioo_board_open_pet", getBoardOpenPet() ? "0" : "1"); } catch (err) {}
       sync();
     }
   });
