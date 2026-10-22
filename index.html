@@ -2275,6 +2275,7 @@
   </div>
 
   <div class="container">
+    <p class="visit-counter">홈페이지 방문자(Web visitor): <b data-visit-count>000000</b></p>
     <div class="hero-inner">
       <div class="hero-badge rise rise-1">
         <span>BAIOO</span>
@@ -2291,6 +2292,7 @@
 <section id="ai" class="parallax-section page-view" data-view="ai" hidden>
   <div class="overlay"></div>
   <div class="container">
+    <p class="visit-counter">홈페이지 방문자(Web visitor): <b data-visit-count>000000</b></p>
     <a href="#home" class="back-btn">← 홈으로</a>
 
     <div class="sec-head">
@@ -2397,6 +2399,7 @@
 <section id="branding" class="parallax-section page-view" data-view="branding" hidden>
   <div class="overlay"></div>
   <div class="container">
+    <p class="visit-counter">홈페이지 방문자(Web visitor): <b data-visit-count>000000</b></p>
     <a href="#home" class="back-btn">← 홈으로</a>
 
     <div class="sec-head">
@@ -2502,6 +2505,7 @@
 <section id="travel" class="parallax-section page-view" data-view="travel" hidden>
   <div class="overlay"></div>
   <div class="container">
+    <p class="visit-counter">홈페이지 방문자(Web visitor): <b data-visit-count>000000</b></p>
     <a href="#home" class="back-btn">← 홈으로</a>
 
     <div class="sec-head">
@@ -2616,6 +2620,7 @@
 <section id="repair" class="parallax-section page-view" data-view="repair" hidden>
   <div class="overlay"></div>
   <div class="container">
+    <p class="visit-counter">홈페이지 방문자(Web visitor): <b data-visit-count>000000</b></p>
     <a href="#home" class="back-btn">← 홈으로</a>
 
     <div class="sec-head">
@@ -2728,6 +2733,7 @@
 <section id="bunny" class="parallax-section page-view" data-view="bunny" hidden>
   <div class="overlay"></div>
   <div class="container">
+    <p class="visit-counter">홈페이지 방문자(Web visitor): <b data-visit-count>000000</b></p>
     <a href="#home" class="back-btn">← 홈으로</a>
 
     <div class="sec-head">
@@ -2843,8 +2849,8 @@
 <section id="about" class="parallax-section page-view" data-view="about" hidden>
   <div class="overlay"></div>
   <div class="container">
+    <p class="visit-counter">홈페이지 방문자(Web visitor): <b id="visitCount" data-visit-count>000000</b></p>
     <a href="#home" class="back-btn">← 홈으로</a>
-    <p class="visit-counter">홈페이지 방문자(Web visitor): <b id="visitCount">000000</b></p>
 
     <div class="sec-head">
       <span class="tag about">ABOUT BAIOO</span>
@@ -9605,9 +9611,11 @@ function openIdeaForm(ctx) {
 
 /* ===== 방문자 카운터 (D1 visits, 브라우저당 1회만 +1) ===== */(function () {
   var el = document.getElementById("visitCount");
-  if (!el) return;
   function show(n) {
-    el.textContent = String(n || 0).padStart(6, "0");
+    var t = String(n || 0).padStart(6, "0");
+    if (el) el.textContent = t;
+    var all = document.querySelectorAll("[data-visit-count]");
+    for (var i = 0; i < all.length; i++) all[i].textContent = t;
   }
   try {
     var counted = null;
