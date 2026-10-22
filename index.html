@@ -645,6 +645,11 @@
     box-shadow: 0 16px 34px rgba(255,107,53,.28);
   }
 
+  .section-add-btn.branding-add {
+    background: linear-gradient(135deg, #F43E5E, #8B5CF6);
+    box-shadow: 0 16px 34px rgba(244,63,94,.24);
+  }
+
   .section-add-btn.ai-add {
     background: linear-gradient(135deg, #0EA5E9, #6366F1);
     box-shadow: 0 16px 34px rgba(14,165,233,.28);
@@ -2393,6 +2398,17 @@
       </div>
     </div>
 
+    <div class="pet-diary-subhead">
+      <h3>📝 자유게시판</h3>
+      <button type="button" class="section-add-btn branding-add admin-only" data-category="branding" style="margin:0;">＋ 새 글 등록</button>
+    </div>
+    <div class="board-table-wrap">
+      <table class="board-table">
+        <thead><tr><th style="width:64px">No</th><th>제목</th><th style="width:110px">등록일</th></tr></thead>
+        <tbody id="brBoardBody"></tbody>
+      </table>
+    </div>
+
     <div class="ai-toolbar">
       <div class="ai-toolbar-top">
         <div class="ai-search-wrap">
@@ -3029,6 +3045,58 @@
       <button type="button" class="btn btn-primary admin-only" id="aiViewEdit">수정</button>
       <button type="button" class="btn btn-danger admin-only" id="aiViewDelete">삭제</button>
       <button type="button" class="btn btn-ghost" data-close="aiViewDialog">닫기</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- ===== Branding 자유게시판 등록/상세 다이얼로그 ===== -->
+<dialog id="brFormDialog" aria-label="새 Branding 글 등록">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="brFormDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title">새 Branding 글</h3>
+    <form id="brForm" novalidate>
+      <div class="field">
+        <label for="brTitle">제목 *</label>
+        <input type="text" id="brTitle" maxlength="120" placeholder="예: 오늘의 브랜딩 기록">
+      </div>
+      <div class="field">
+        <label for="brDate">날짜</label>
+        <input type="date" id="brDate">
+      </div>
+      <div class="field">
+        <label for="brContent">내용</label>
+        <textarea id="brContent" placeholder="브랜딩 이야기를 적어주세요"></textarea>
+      </div>
+      <div class="field">
+        <label for="brFiles">사진·파일 (여러 개)</label>
+        <div class="attach-row">
+          <label class="file-btn" for="brFiles">파일 선택</label>
+          <input type="file" id="brFiles" class="sr" multiple>
+          <span id="brFileCount">선택된 파일 없음</span>
+        </div>
+        <div class="preview-grid" id="brPreview"></div>
+      </div>
+      <div class="form-error" id="brFormError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="brFormDialog">취소</button>
+        <button type="submit" class="btn btn-primary" id="brSubmit">등록</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog id="brViewDialog" aria-label="Branding 글 상세">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="brViewDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title" id="brViewTitle"></h3>
+    <div class="post-date" id="brViewDate"></div>
+    <div class="view-photos" id="brViewPhotos"></div>
+    <div id="brViewContent"></div>
+    <div class="file-list" id="brViewFiles" hidden></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-primary admin-only" id="brViewEdit">수정</button>
+      <button type="button" class="btn btn-danger admin-only" id="brViewDelete">삭제</button>
+      <button type="button" class="btn btn-ghost" data-close="brViewDialog">닫기</button>
     </div>
   </div>
 </dialog>
@@ -3929,6 +3997,278 @@
   }
 
   loadAi();
+})();
+
+/* ===== Branding 자유게시판 (AI 패턴 미러) ===== */
+(function () {
+  "use strict";
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+
+  function apiList() {
+    return fetch("/api?action=list", { headers: { Accept: "application/json" } })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        var posts = data && data.posts;
+        if (posts && !Array.isArray(posts)) posts = Array.isArray(posts.value) ? posts.value : (posts.id ? [posts] : []);
+        return Array.isArray(posts) ? posts : [];
+      });
+  }
+  function isImageFile(f) {
+    var n = String(f.name || f.originalName || "").toLowerCase();
+    return /^image\//.test(f.type || "") || /\.(png|jpe?g|gif|webp|bmp|svg)$/.test(n);
+  }
+  function postDate(p) {
+    if (p.date) return p.date;
+    if (p.createdAt) { try { return new Date(p.createdAt).toISOString().slice(0, 10); } catch (e) {} }
+    return "";
+  }
+  function fileLinks(files, ev) {
+    var fl = document.createElement("div");
+    fl.className = "file-list";
+    fl.style.marginTop = "12px";
+    files.forEach(function (f) {
+      var a = document.createElement("a");
+      a.href = f.url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.textContent = "📎 " + (f.originalName || f.name);
+      if (ev) a.addEventListener("click", function (e) { e.stopPropagation(); });
+      fl.appendChild(a);
+    });
+    return fl;
+  }
+  function openDlg(d) { if (d && !d.open) d.showModal(); }
+  function closeDlg(d) { if (d && d.open) d.close(); }
+
+  var brBoardBody = $("#brBoardBody");
+  var brPosts = [];
+
+  function makeBrRow(p, i) {
+    var tr = document.createElement("tr");
+    tr.setAttribute("data-id", p.id);
+    var no = document.createElement("td");
+    no.textContent = String(p.id).slice(-4) || String(i + 1);
+    var ti = document.createElement("td");
+    ti.className = "board-title";
+    ti.textContent = p.title || "(제목 없음)";
+    var dt = document.createElement("td");
+    dt.textContent = postDate(p) || "—";
+    tr.appendChild(no);
+    tr.appendChild(ti);
+    tr.appendChild(dt);
+    return tr;
+  }
+
+  function renderBr() {
+    brBoardBody.textContent = "";
+    if (!brPosts.length) {
+      var tr = document.createElement("tr");
+      var td = document.createElement("td");
+      td.colSpan = 3;
+      td.className = "board-empty";
+      td.style.cssText = "text-align:center;color:var(--muted)";
+      td.textContent = "등록된 글이 없습니다.";
+      tr.appendChild(td);
+      brBoardBody.appendChild(tr);
+      return;
+    }
+    brPosts.forEach(function (p, i) { brBoardBody.appendChild(makeBrRow(p, i)); });
+  }
+
+  function loadBr() {
+    return apiList().then(function (posts) {
+      brPosts = posts.filter(function (p) { return p.category === "branding"; });
+      renderBr();
+    }).catch(function () { brPosts = []; renderBr(); });
+  }
+
+  /* ---------- Branding 등록 폼 ---------- */
+  var brFormDlg = $("#brFormDialog"),
+      brForm = $("#brForm"),
+      brTitleInput = $("#brTitle"),
+      brDateInput = $("#brDate"),
+      brContentInput = $("#brContent"),
+      brFileInput = $("#brFiles"),
+      brPreviewEl = $("#brPreview"),
+      brFileCountEl = $("#brFileCount"),
+      brErrorEl = $("#brFormError"),
+      brSubmitBtn = $("#brSubmit");
+  var brPicked = [];
+
+  function renderBrPreview() {
+    $$("img", brPreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
+    brPreviewEl.textContent = "";
+    brFileCountEl.textContent = brPicked.length ? brPicked.length + "개 선택됨" : "선택된 파일 없음";
+    brPicked.forEach(function (f, i) {
+      var tile = document.createElement("div");
+      tile.className = "thumb-sm";
+      tile.title = f.name;
+      if (isImageFile(f)) {
+        var im = document.createElement("img");
+        im.src = URL.createObjectURL(f);
+        im.alt = f.name;
+        tile.appendChild(im);
+      } else {
+        tile.style.cssText = "display:grid;place-items:center;font-size:1.6rem;";
+        tile.textContent = "📄";
+      }
+      var rm = document.createElement("button");
+      rm.type = "button";
+      rm.className = "rm";
+      rm.textContent = "×";
+      rm.setAttribute("aria-label", f.name + " 제거");
+      rm.addEventListener("click", function () { brPicked.splice(i, 1); renderBrPreview(); });
+      tile.appendChild(rm);
+      brPreviewEl.appendChild(tile);
+    });
+  }
+
+  brFileInput.addEventListener("change", function () {
+    brPicked = brPicked.concat(Array.prototype.slice.call(brFileInput.files));
+    brFileInput.value = "";
+    renderBrPreview();
+  });
+
+  $$(".section-add-btn[data-category='branding']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      brErrorEl.textContent = "";
+      openDlg(brFormDlg);
+      brTitleInput.focus();
+    });
+  });
+
+  brForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var title = brTitleInput.value.trim();
+    if (!title) { brErrorEl.textContent = "제목을 입력하세요."; brTitleInput.focus(); return; }
+    brErrorEl.textContent = "";
+    brSubmitBtn.disabled = true;
+    brSubmitBtn.textContent = "등록 중…";
+    var fd = new FormData();
+    fd.append("title", title);
+    fd.append("content", brContentInput.value);
+    fd.append("category", "branding");
+    fd.append("date", brDateInput.value || "");
+    brPicked.forEach(function (f) { fd.append("files[]", f); });
+    fetch("/api?action=create", { method: "POST", body: fd })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        brForm.reset();
+        brPicked = [];
+        renderBrPreview();
+        closeDlg(brFormDlg);
+        return loadBr();
+      })
+      .catch(function (err) { brErrorEl.textContent = "등록 실패: " + ((err && err.message) || err); })
+      .then(function () { brSubmitBtn.disabled = false; brSubmitBtn.textContent = "등록"; });
+  });
+
+  /* ---------- Branding 상세 다이얼로그 + 삭제 ---------- */
+  var brViewDlg = $("#brViewDialog"),
+      brViewTitle = $("#brViewTitle"),
+      brViewDate = $("#brViewDate"),
+      brViewPhotos = $("#brViewPhotos"),
+      brViewContent = $("#brViewContent"),
+      brViewFiles = $("#brViewFiles"),
+      brDeleteBtn = $("#brViewDelete");
+  var brViewingId = null;
+
+  function openBrView(id) {
+    var p = null;
+    brPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
+    if (!p) return;
+    brViewingId = p.id;
+    brViewTitle.textContent = p.title || "(제목 없음)";
+    brViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    brViewPhotos.textContent = "";
+    (p.files || []).filter(isImageFile).forEach(function (f) {
+      var im = document.createElement("img");
+      im.src = f.url;
+      im.alt = f.originalName || f.name;
+      brViewPhotos.appendChild(im);
+    });
+    brViewContent.textContent = p.content || "(내용 없음)";
+    brViewFiles.textContent = "";
+    brViewFiles.hidden = !(p.files && p.files.length);
+    if (p.files && p.files.length) brViewFiles.appendChild(fileLinks(p.files, false));
+    openDlg(brViewDlg);
+  }
+
+  brBoardBody.addEventListener("click", function (e) {
+    var tr = e.target.closest("tr[data-id]");
+    if (!tr) return;
+    openBrView(tr.getAttribute("data-id"));
+  });
+
+  brDeleteBtn.addEventListener("click", function () {
+    if (!brViewingId) return;
+    if (!window.confirm("이 글을 삭제할까요? 첨부 파일도 함께 삭제됩니다.")) return;
+    brDeleteBtn.disabled = true;
+    fetch("/api/" + encodeURIComponent(brViewingId), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: brViewingId })
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        closeDlg(brViewDlg);
+        brViewingId = null;
+        return loadBr();
+      })
+      .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
+      .then(function () { brDeleteBtn.disabled = false; });
+  });
+
+  var brEditBtn = $("#brViewEdit");
+  if (brEditBtn) {
+    brEditBtn.addEventListener("click", function () {
+      if (!brViewingId) return;
+      var p = null;
+      brPosts.forEach(function (x) { if (x.id === brViewingId) p = x; });
+      if (!p) return;
+      var t = window.prompt("제목 수정:", p.title || "");
+      if (t === null) return;
+      var c = window.prompt("내용 수정:", p.content || "");
+      if (c === null) return;
+      var d = window.prompt("날짜 수정(YYYY-MM-DD):", p.date || "");
+      if (d === null) return;
+      var fd = new FormData();
+      fd.append("id", brViewingId);
+      fd.append("title", t.trim());
+      fd.append("content", c);
+      fd.append("date", (d || "").trim());
+      brEditBtn.disabled = true;
+      fetch("/api?action=update", { method: "POST", body: fd })
+        .then(function (res) {
+          return res.json().catch(function () { return null; }).then(function (data) {
+            if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+            return data;
+          });
+        })
+        .then(function () { return loadBr(); })
+        .then(function () {
+          var np = null;
+          brPosts.forEach(function (x) { if (x.id === brViewingId) np = x; });
+          if (np) openBrView(brViewingId);
+        })
+        .catch(function (err) { window.alert("수정 실패: " + ((err && err.message) || err)); })
+        .then(function () { brEditBtn.disabled = false; });
+    });
+  }
+
+  loadBr();
 })();
 
 /* ===== 토끼일상 (save3/api3, travel 패턴 미러) ===== */
