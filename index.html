@@ -656,12 +656,15 @@
   }
 
   .board-table-wrap { overflow-x: auto; margin-top: 18px; }
-  .board-table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+  .board-table { width: 100%; border-collapse: collapse; font-size: .95rem; table-layout: fixed; }
   .board-table th, .board-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); text-align: left; }
+  .board-table th:first-child, .board-table td:first-child { width: 64px; }
+  .board-table th:last-child, .board-table td:last-child { width: 110px; white-space: nowrap; }
   .board-table thead th { font-weight: 800; color: var(--text-strong); background: var(--surface-soft); }
   .board-table tbody tr { cursor: pointer; }
   .board-table tbody tr:hover { background: var(--surface-soft); }
   .board-table .board-title { font-weight: 600; }
+  .board-table th:last-child, .board-table td:last-child { white-space: nowrap; }
   body:not(.is-admin) .board-table .board-empty { cursor: default; }
   .ai-page-bar { display: flex; gap: 8px; justify-content: center; margin: 18px 0 4px; flex-wrap: wrap; }
   .ai-page-bar .ai-cat-btn:disabled { opacity: .45; cursor: default; transform: none; }
@@ -2415,6 +2418,7 @@
         <thead><tr><th style="width:64px">No</th><th>제목</th><th style="width:110px">등록일</th></tr></thead>
         <tbody id="brBoardBody"></tbody>
       </table>
+      <div class="ai-page-bar" id="brPageBar"></div>
     </div>
 
     <div class="ai-toolbar">
@@ -2504,6 +2508,7 @@
         <thead><tr><th style="width:64px">No</th><th>제목</th><th style="width:110px">등록일</th></tr></thead>
         <tbody id="trBoardBody"></tbody>
       </table>
+      <div class="ai-page-bar" id="trPageBar"></div>
     </div>
 
     <div class="ai-toolbar">
@@ -2601,6 +2606,7 @@
         <thead><tr><th style="width:64px">No</th><th>제목</th><th style="width:110px">등록일</th></tr></thead>
         <tbody id="rpBoardBody"></tbody>
       </table>
+      <div class="ai-page-bar" id="rpPageBar"></div>
     </div>
 
     <div class="ai-toolbar">
@@ -2696,6 +2702,7 @@
         <thead><tr><th style="width:64px">No</th><th>제목</th><th style="width:110px">등록일</th></tr></thead>
         <tbody id="petBoardBody"></tbody>
       </table>
+      <div class="ai-page-bar" id="petPageBar"></div>
     </div>
 
     <div class="ai-toolbar">
@@ -4308,6 +4315,32 @@
 
   var brBoardBody = $("#brBoardBody");
   var brPosts = [];
+  var brPageBar = $("#brPageBar");
+  var brPage = 1;
+  var BR_PAGE_SIZE = 10;
+
+  function renderBrPages(total) {
+    if (!brPageBar) return;
+    brPageBar.textContent = "";
+    var maxPage = Math.max(1, Math.ceil(total / BR_PAGE_SIZE));
+    if (brPage > maxPage) brPage = maxPage;
+    if (brPage < 1) brPage = 1;
+    function mk(label, page, active, disabled) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "ai-cat-btn" + (active ? " active" : "");
+      b.textContent = label;
+      if (disabled) b.disabled = true;
+      else b.addEventListener("click", function () { brPage = page; renderBr(); });
+      brPageBar.appendChild(b);
+    }
+    mk("‹ 이전", brPage - 1, false, brPage === 1);
+    var start = Math.max(1, brPage - 2);
+    var end = Math.min(maxPage, start + 4);
+    start = Math.max(1, end - 4);
+    for (var p = start; p <= end; p++) mk(String(p), p, p === brPage, false);
+    mk("› 다음", brPage + 1, false, brPage === maxPage);
+  }
 
   function makeBrRow(p, i) {
     var tr = document.createElement("tr");
@@ -4326,6 +4359,9 @@
   }
 
   function renderBr() {
+    var maxPage = Math.max(1, Math.ceil(brPosts.length / BR_PAGE_SIZE));
+    if (brPage > maxPage) brPage = maxPage;
+    if (brPage < 1) brPage = 1;
     brBoardBody.textContent = "";
     if (!brPosts.length) {
       var tr = document.createElement("tr");
@@ -4336,9 +4372,12 @@
       td.textContent = "등록된 글이 없습니다.";
       tr.appendChild(td);
       brBoardBody.appendChild(tr);
+      renderBrPages(0);
       return;
     }
-    brPosts.forEach(function (p, i) { brBoardBody.appendChild(makeBrRow(p, i)); });
+    var startIdx = (brPage - 1) * BR_PAGE_SIZE;
+    brPosts.slice(startIdx, startIdx + BR_PAGE_SIZE).forEach(function (p, i) { brBoardBody.appendChild(makeBrRow(p, startIdx + i)); });
+    renderBrPages(brPosts.length);
   }
 
   function loadBr() {
@@ -4537,6 +4576,32 @@
   /* ---------- Travel 자유게시판 (Branding 패턴 미러) ---------- */
   var trBoardBody = $("#trBoardBody");
   var trPosts = [];
+  var trPageBar = $("#trPageBar");
+  var trPage = 1;
+  var TR_PAGE_SIZE = 10;
+
+  function renderTrPages(total) {
+    if (!trPageBar) return;
+    trPageBar.textContent = "";
+    var maxPage = Math.max(1, Math.ceil(total / TR_PAGE_SIZE));
+    if (trPage > maxPage) trPage = maxPage;
+    if (trPage < 1) trPage = 1;
+    function mk(label, page, active, disabled) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "ai-cat-btn" + (active ? " active" : "");
+      b.textContent = label;
+      if (disabled) b.disabled = true;
+      else b.addEventListener("click", function () { trPage = page; renderTr(); });
+      trPageBar.appendChild(b);
+    }
+    mk("‹ 이전", trPage - 1, false, trPage === 1);
+    var start = Math.max(1, trPage - 2);
+    var end = Math.min(maxPage, start + 4);
+    start = Math.max(1, end - 4);
+    for (var p = start; p <= end; p++) mk(String(p), p, p === trPage, false);
+    mk("› 다음", trPage + 1, false, trPage === maxPage);
+  }
 
   function makeTrRow(p, i) {
     var tr = document.createElement("tr");
@@ -4555,6 +4620,9 @@
   }
 
   function renderTr() {
+    var maxPage = Math.max(1, Math.ceil(trPosts.length / TR_PAGE_SIZE));
+    if (trPage > maxPage) trPage = maxPage;
+    if (trPage < 1) trPage = 1;
     trBoardBody.textContent = "";
     if (!trPosts.length) {
       var tr = document.createElement("tr");
@@ -4565,9 +4633,12 @@
       td.textContent = "등록된 글이 없습니다.";
       tr.appendChild(td);
       trBoardBody.appendChild(tr);
+      renderTrPages(0);
       return;
     }
-    trPosts.forEach(function (p, i) { trBoardBody.appendChild(makeTrRow(p, i)); });
+    var startIdx = (trPage - 1) * TR_PAGE_SIZE;
+    trPosts.slice(startIdx, startIdx + TR_PAGE_SIZE).forEach(function (p, i) { trBoardBody.appendChild(makeTrRow(p, startIdx + i)); });
+    renderTrPages(trPosts.length);
   }
 
   function loadTr() {
@@ -4766,6 +4837,32 @@
   /* ---------- Repair 자유게시판 (Travel 패턴 미러) ---------- */
   var rpBoardBody = $("#rpBoardBody");
   var rpPosts = [];
+  var rpPageBar = $("#rpPageBar");
+  var rpPage = 1;
+  var RP_PAGE_SIZE = 10;
+
+  function renderRpPages(total) {
+    if (!rpPageBar) return;
+    rpPageBar.textContent = "";
+    var maxPage = Math.max(1, Math.ceil(total / RP_PAGE_SIZE));
+    if (rpPage > maxPage) rpPage = maxPage;
+    if (rpPage < 1) rpPage = 1;
+    function mk(label, page, active, disabled) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "ai-cat-btn" + (active ? " active" : "");
+      b.textContent = label;
+      if (disabled) b.disabled = true;
+      else b.addEventListener("click", function () { rpPage = page; renderRp(); });
+      rpPageBar.appendChild(b);
+    }
+    mk("‹ 이전", rpPage - 1, false, rpPage === 1);
+    var start = Math.max(1, rpPage - 2);
+    var end = Math.min(maxPage, start + 4);
+    start = Math.max(1, end - 4);
+    for (var p = start; p <= end; p++) mk(String(p), p, p === rpPage, false);
+    mk("› 다음", rpPage + 1, false, rpPage === maxPage);
+  }
 
   function makeRpRow(p, i) {
     var tr = document.createElement("tr");
@@ -4784,6 +4881,9 @@
   }
 
   function renderRp() {
+    var maxPage = Math.max(1, Math.ceil(rpPosts.length / RP_PAGE_SIZE));
+    if (rpPage > maxPage) rpPage = maxPage;
+    if (rpPage < 1) rpPage = 1;
     rpBoardBody.textContent = "";
     if (!rpPosts.length) {
       var tr = document.createElement("tr");
@@ -4794,9 +4894,12 @@
       td.textContent = "등록된 글이 없습니다.";
       tr.appendChild(td);
       rpBoardBody.appendChild(tr);
+      renderRpPages(0);
       return;
     }
-    rpPosts.forEach(function (p, i) { rpBoardBody.appendChild(makeRpRow(p, i)); });
+    var startIdx = (rpPage - 1) * RP_PAGE_SIZE;
+    rpPosts.slice(startIdx, startIdx + RP_PAGE_SIZE).forEach(function (p, i) { rpBoardBody.appendChild(makeRpRow(p, startIdx + i)); });
+    renderRpPages(rpPosts.length);
   }
 
   function loadRp() {
@@ -4995,6 +5098,32 @@
   /* ---------- Pets 자유게시판 (Repair 패턴 미러) ---------- */
   var petBoardBody = $("#petBoardBody");
   var petPosts = [];
+  var petPageBar = $("#petPageBar");
+  var petPage = 1;
+  var PET_PAGE_SIZE = 10;
+
+  function renderPetPages(total) {
+    if (!petPageBar) return;
+    petPageBar.textContent = "";
+    var maxPage = Math.max(1, Math.ceil(total / PET_PAGE_SIZE));
+    if (petPage > maxPage) petPage = maxPage;
+    if (petPage < 1) petPage = 1;
+    function mk(label, page, active, disabled) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "ai-cat-btn" + (active ? " active" : "");
+      b.textContent = label;
+      if (disabled) b.disabled = true;
+      else b.addEventListener("click", function () { petPage = page; renderPet(); });
+      petPageBar.appendChild(b);
+    }
+    mk("‹ 이전", petPage - 1, false, petPage === 1);
+    var start = Math.max(1, petPage - 2);
+    var end = Math.min(maxPage, start + 4);
+    start = Math.max(1, end - 4);
+    for (var p = start; p <= end; p++) mk(String(p), p, p === petPage, false);
+    mk("› 다음", petPage + 1, false, petPage === maxPage);
+  }
 
   function makePetRow(p, i) {
     var tr = document.createElement("tr");
@@ -5013,6 +5142,9 @@
   }
 
   function renderPet() {
+    var maxPage = Math.max(1, Math.ceil(petPosts.length / PET_PAGE_SIZE));
+    if (petPage > maxPage) petPage = maxPage;
+    if (petPage < 1) petPage = 1;
     petBoardBody.textContent = "";
     if (!petPosts.length) {
       var tr = document.createElement("tr");
@@ -5023,9 +5155,12 @@
       td.textContent = "등록된 글이 없습니다.";
       tr.appendChild(td);
       petBoardBody.appendChild(tr);
+      renderPetPages(0);
       return;
     }
-    petPosts.forEach(function (p, i) { petBoardBody.appendChild(makePetRow(p, i)); });
+    var startIdx = (petPage - 1) * PET_PAGE_SIZE;
+    petPosts.slice(startIdx, startIdx + PET_PAGE_SIZE).forEach(function (p, i) { petBoardBody.appendChild(makePetRow(p, startIdx + i)); });
+    renderPetPages(petPosts.length);
   }
 
   function loadPet() {
