@@ -658,8 +658,8 @@
   .board-table-wrap { overflow-x: auto; margin-top: 18px; }
   .board-table { width: 100%; border-collapse: collapse; font-size: .95rem; table-layout: fixed; }
   .board-table th, .board-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); text-align: left; }
-  .board-table th:first-child, .board-table td:first-child { width: 64px; }
-  .board-table th:last-child, .board-table td:last-child { width: 150px; white-space: nowrap; }
+  .board-table th:first-child, .board-table td:first-child { width: 50px; }
+  .board-table th:last-child, .board-table td:last-child { width: 138px; }
   .board-table thead th { font-weight: 800; color: var(--text-strong); background: var(--surface-soft); }
   .board-table tbody tr { cursor: pointer; }
   .board-table tbody tr:hover { background: var(--surface-soft); }
@@ -669,8 +669,8 @@
   .vote-row { display: flex; gap: 10px; margin: 12px 0; }
   .vote-btn { border: 1px solid var(--border); background: #fff; border-radius: 999px; padding: 8px 14px; cursor: pointer; font-weight: 700; color: #e11d48; }
   .vote-btn:disabled { opacity: .5; cursor: default; }
-  .vote-red { color: #e11d48; font-weight: 700; white-space: nowrap; }
-  .board-table th:last-child, .board-table td:last-child { white-space: nowrap; }
+  .vote-red { color: #e11d48; font-weight: 700; white-space: nowrap; font-size: .85em; margin-right: 6px; }
+  .board-table th:last-child, .board-table td:last-child { white-space: nowrap; overflow: hidden; }
   body:not(.is-admin) .board-table .board-empty { cursor: default; }
   .ai-page-bar { display: flex; gap: 8px; justify-content: center; margin: 18px 0 4px; flex-wrap: wrap; }
   .ai-page-bar .ai-cat-btn:disabled { opacity: .45; cursor: default; transform: none; }
@@ -4147,11 +4147,11 @@
     ti.textContent = p.title || "(제목 없음)";
     var dt = document.createElement("td");
     dt.textContent = "";
-    dt.appendChild(document.createTextNode((postDate(p) || "—") + " "));
     var vs = document.createElement("span");
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
+    dt.appendChild(document.createTextNode("  " + (postDate(p) || "—")));
     tr.appendChild(no);
     tr.appendChild(ti);
     tr.appendChild(dt);
@@ -4294,7 +4294,7 @@
     var panel = $("#aiViewPanel");
     var t = $("#aiInlineTitle"), d = $("#aiInlineDate"), ph = $("#aiInlinePhotos"), c = $("#aiInlineContent"), fl = $("#aiInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
-    if (d) { d.textContent = ""; d.appendChild(document.createTextNode("🗓 " + (postDate(p) || "날짜 미정") + "  ")); var dv = document.createElement("span"); dv.className = "vote-red"; dv.textContent = window.BaiooVote.label(p); d.appendChild(dv); }
+    if (d) { var dv = document.createElement("span"); dv.className = "vote-red"; dv.textContent = window.BaiooVote.label(p); d.textContent = ""; d.appendChild(document.createTextNode("🗓 ")); d.appendChild(dv); d.appendChild(document.createTextNode("  " + (postDate(p) || "날짜 미정"))); }
     if (ph) {
       ph.textContent = "";
       (p.files || []).filter(isImageFile).forEach(function (f) {
@@ -4503,11 +4503,11 @@
     ti.textContent = p.title || "(제목 없음)";
     var dt = document.createElement("td");
     dt.textContent = "";
-    dt.appendChild(document.createTextNode((postDate(p) || "—") + " "));
     var vs = document.createElement("span");
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
+    dt.appendChild(document.createTextNode("  " + (postDate(p) || "—")));
     tr.appendChild(no);
     tr.appendChild(ti);
     tr.appendChild(dt);
@@ -4647,7 +4647,7 @@
     var panel = $("#brViewPanel");
     var t = $("#brInlineTitle"), d = $("#brInlineDate"), ph = $("#brInlinePhotos"), c = $("#brInlineContent"), fl = $("#brInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
-    if (d) { d.textContent = ""; d.appendChild(document.createTextNode("🗓 " + (postDate(p) || "날짜 미정") + "  ")); var dv = document.createElement("span"); dv.className = "vote-red"; dv.textContent = window.BaiooVote.label(p); d.appendChild(dv); }
+    if (d) { var dv = document.createElement("span"); dv.className = "vote-red"; dv.textContent = window.BaiooVote.label(p); d.textContent = ""; d.appendChild(document.createTextNode("🗓 ")); d.appendChild(dv); d.appendChild(document.createTextNode("  " + (postDate(p) || "날짜 미정"))); }
     if (ph) {
       ph.textContent = "";
       (p.files || []).filter(isImageFile).forEach(function (f) {
@@ -4813,11 +4813,11 @@
     ti.textContent = p.title || "(제목 없음)";
     var dt = document.createElement("td");
     dt.textContent = "";
-    dt.appendChild(document.createTextNode((postDate(p) || "—") + " "));
     var vs = document.createElement("span");
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
+    dt.appendChild(document.createTextNode("  " + (postDate(p) || "—")));
     tr.appendChild(no);
     tr.appendChild(ti);
     tr.appendChild(dt);
@@ -4957,7 +4957,7 @@
     var panel = $("#trViewPanel");
     var t = $("#trInlineTitle"), d = $("#trInlineDate"), ph = $("#trInlinePhotos"), c = $("#trInlineContent"), fl = $("#trInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
-    if (d) { d.textContent = ""; d.appendChild(document.createTextNode("🗓 " + (postDate(p) || "날짜 미정") + "  ")); var dv = document.createElement("span"); dv.className = "vote-red"; dv.textContent = window.BaiooVote.label(p); d.appendChild(dv); }
+    if (d) { var dv = document.createElement("span"); dv.className = "vote-red"; dv.textContent = window.BaiooVote.label(p); d.textContent = ""; d.appendChild(document.createTextNode("🗓 ")); d.appendChild(dv); d.appendChild(document.createTextNode("  " + (postDate(p) || "날짜 미정"))); }
     if (ph) {
       ph.textContent = "";
       (p.files || []).filter(isImageFile).forEach(function (f) {
@@ -5123,11 +5123,11 @@
     ti.textContent = p.title || "(제목 없음)";
     var dt = document.createElement("td");
     dt.textContent = "";
-    dt.appendChild(document.createTextNode((postDate(p) || "—") + " "));
     var vs = document.createElement("span");
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
+    dt.appendChild(document.createTextNode("  " + (postDate(p) || "—")));
     tr.appendChild(no);
     tr.appendChild(ti);
     tr.appendChild(dt);
@@ -5267,7 +5267,7 @@
     var panel = $("#rpViewPanel");
     var t = $("#rpInlineTitle"), d = $("#rpInlineDate"), ph = $("#rpInlinePhotos"), c = $("#rpInlineContent"), fl = $("#rpInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
-    if (d) { d.textContent = ""; d.appendChild(document.createTextNode("🗓 " + (postDate(p) || "날짜 미정") + "  ")); var dv = document.createElement("span"); dv.className = "vote-red"; dv.textContent = window.BaiooVote.label(p); d.appendChild(dv); }
+    if (d) { var dv = document.createElement("span"); dv.className = "vote-red"; dv.textContent = window.BaiooVote.label(p); d.textContent = ""; d.appendChild(document.createTextNode("🗓 ")); d.appendChild(dv); d.appendChild(document.createTextNode("  " + (postDate(p) || "날짜 미정"))); }
     if (ph) {
       ph.textContent = "";
       (p.files || []).filter(isImageFile).forEach(function (f) {
@@ -5433,11 +5433,11 @@
     ti.textContent = p.title || "(제목 없음)";
     var dt = document.createElement("td");
     dt.textContent = "";
-    dt.appendChild(document.createTextNode((postDate(p) || "—") + " "));
     var vs = document.createElement("span");
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
+    dt.appendChild(document.createTextNode("  " + (postDate(p) || "—")));
     tr.appendChild(no);
     tr.appendChild(ti);
     tr.appendChild(dt);
@@ -5577,7 +5577,7 @@
     var panel = $("#petViewPanel");
     var t = $("#petInlineTitle"), d = $("#petInlineDate"), ph = $("#petInlinePhotos"), c = $("#petInlineContent"), fl = $("#petInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
-    if (d) { d.textContent = ""; d.appendChild(document.createTextNode("🗓 " + (postDate(p) || "날짜 미정") + "  ")); var dv = document.createElement("span"); dv.className = "vote-red"; dv.textContent = window.BaiooVote.label(p); d.appendChild(dv); }
+    if (d) { var dv = document.createElement("span"); dv.className = "vote-red"; dv.textContent = window.BaiooVote.label(p); d.textContent = ""; d.appendChild(document.createTextNode("🗓 ")); d.appendChild(dv); d.appendChild(document.createTextNode("  " + (postDate(p) || "날짜 미정"))); }
     if (ph) {
       ph.textContent = "";
       (p.files || []).filter(isImageFile).forEach(function (f) {
