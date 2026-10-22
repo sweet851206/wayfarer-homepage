@@ -645,6 +645,20 @@
     box-shadow: 0 16px 34px rgba(255,107,53,.28);
   }
 
+  .section-add-btn.ai-add {
+    background: linear-gradient(135deg, #0EA5E9, #6366F1);
+    box-shadow: 0 16px 34px rgba(14,165,233,.28);
+  }
+
+  .board-table-wrap { overflow-x: auto; margin-top: 18px; }
+  .board-table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+  .board-table th, .board-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); text-align: left; }
+  .board-table thead th { font-weight: 800; color: var(--text-strong); background: var(--surface-soft); }
+  .board-table tbody tr { cursor: pointer; }
+  .board-table tbody tr:hover { background: var(--surface-soft); }
+  .board-table .board-title { font-weight: 600; }
+  body:not(.is-admin) .board-table .board-empty { cursor: default; }
+
   .section-add-btn.repair-add {
     background: linear-gradient(135deg, var(--repair), #34D399);
     box-shadow: 0 16px 34px rgba(16,185,129,.24);
@@ -2327,6 +2341,17 @@
     </div>
 
     <div class="ai-idea-grid" id="aiIdeaGrid"></div>
+
+    <div class="pet-diary-subhead">
+      <h3>📝 AI 자유게시판</h3>
+      <button type="button" class="section-add-btn ai-add admin-only" data-category="ai" style="margin:0;">＋ 새 글 등록</button>
+    </div>
+    <div class="board-table-wrap">
+      <table class="board-table">
+        <thead><tr><th style="width:64px">No</th><th>제목</th><th style="width:110px">등록일</th></tr></thead>
+        <tbody id="aiBoardBody"></tbody>
+      </table>
+    </div>
   </div>
 </section>
 
@@ -2951,6 +2976,58 @@
       <button type="button" class="btn btn-primary admin-only" id="viewEdit">수정</button>
       <button type="button" class="btn btn-danger admin-only" id="viewDelete">삭제</button>
       <button type="button" class="btn btn-ghost" data-close="travelViewDialog">닫기</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- ===== AI 등록/상세 다이얼로그 ===== -->
+<dialog id="aiFormDialog" aria-label="새 AI 글 등록">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="aiFormDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title">새 AI 글</h3>
+    <form id="aiForm" novalidate>
+      <div class="field">
+        <label for="aiTitle">제목 *</label>
+        <input type="text" id="aiTitle" maxlength="120" placeholder="예: 오늘의 AI 실험 기록">
+      </div>
+      <div class="field">
+        <label for="aiDate">날짜</label>
+        <input type="date" id="aiDate">
+      </div>
+      <div class="field">
+        <label for="aiContent">내용</label>
+        <textarea id="aiContent" placeholder="AI 이야기를 적어주세요"></textarea>
+      </div>
+      <div class="field">
+        <label for="aiFiles">사진·파일 (여러 개)</label>
+        <div class="attach-row">
+          <label class="file-btn" for="aiFiles">파일 선택</label>
+          <input type="file" id="aiFiles" class="sr" multiple>
+          <span id="aiFileCount">선택된 파일 없음</span>
+        </div>
+        <div class="preview-grid" id="aiPreview"></div>
+      </div>
+      <div class="form-error" id="aiFormError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="aiFormDialog">취소</button>
+        <button type="submit" class="btn btn-primary" id="aiSubmit">등록</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog id="aiViewDialog" aria-label="AI 글 상세">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="aiViewDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title" id="aiViewTitle"></h3>
+    <div class="post-date" id="aiViewDate"></div>
+    <div class="view-photos" id="aiViewPhotos"></div>
+    <div id="aiViewContent"></div>
+    <div class="file-list" id="aiViewFiles" hidden></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-primary admin-only" id="aiViewEdit">수정</button>
+      <button type="button" class="btn btn-danger admin-only" id="aiViewDelete">삭제</button>
+      <button type="button" class="btn btn-ghost" data-close="aiViewDialog">닫기</button>
     </div>
   </div>
 </dialog>
@@ -3622,6 +3699,235 @@
   /* ---------- init ---------- */
   route();
   loadTravel();
+
+  /* ---------- AI 자유게시판 (travel 패턴 미러) ---------- */
+  var aiBoardBody = $("#aiBoardBody");
+  var aiPosts = [];
+
+  function makeAiRow(p, i) {
+    var tr = document.createElement("tr");
+    tr.setAttribute("data-id", p.id);
+    var no = document.createElement("td");
+    no.textContent = String(p.id).slice(-4) || String(i + 1);
+    var ti = document.createElement("td");
+    ti.className = "board-title";
+    ti.textContent = p.title || "(제목 없음)";
+    var dt = document.createElement("td");
+    dt.textContent = postDate(p) || "—";
+    tr.appendChild(no);
+    tr.appendChild(ti);
+    tr.appendChild(dt);
+    return tr;
+  }
+
+  function renderAi() {
+    aiBoardBody.textContent = "";
+    if (!aiPosts.length) {
+      var tr = document.createElement("tr");
+      var td = document.createElement("td");
+      td.colSpan = 3;
+      td.className = "board-empty";
+      td.style.cssText = "text-align:center;color:var(--muted)";
+      td.textContent = "등록된 글이 없습니다.";
+      tr.appendChild(td);
+      aiBoardBody.appendChild(tr);
+      return;
+    }
+    aiPosts.forEach(function (p, i) { aiBoardBody.appendChild(makeAiRow(p, i)); });
+  }
+
+  function loadAi() {
+    return apiList().then(function (posts) {
+      aiPosts = posts.filter(function (p) { return p.category === "ai"; });
+      renderAi();
+    }).catch(function () { aiPosts = []; renderAi(); });
+  }
+
+  /* ---------- AI 등록 폼 ---------- */
+  var aiFormDlg = $("#aiFormDialog"),
+      aiForm = $("#aiForm"),
+      aiTitleInput = $("#aiTitle"),
+      aiDateInput = $("#aiDate"),
+      aiContentInput = $("#aiContent"),
+      aiFileInput = $("#aiFiles"),
+      aiPreviewEl = $("#aiPreview"),
+      aiFileCountEl = $("#aiFileCount"),
+      aiErrorEl = $("#aiFormError"),
+      aiSubmitBtn = $("#aiSubmit");
+  var aiPicked = [];
+
+  function renderAiPreview() {
+    $$("img", aiPreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
+    aiPreviewEl.textContent = "";
+    aiFileCountEl.textContent = aiPicked.length ? aiPicked.length + "개 선택됨" : "선택된 파일 없음";
+    aiPicked.forEach(function (f, i) {
+      var tile = document.createElement("div");
+      tile.className = "thumb-sm";
+      tile.title = f.name;
+      if (isImageFile(f)) {
+        var im = document.createElement("img");
+        im.src = URL.createObjectURL(f);
+        im.alt = f.name;
+        tile.appendChild(im);
+      } else {
+        tile.style.cssText = "display:grid;place-items:center;font-size:1.6rem;";
+        tile.textContent = "📄";
+      }
+      var rm = document.createElement("button");
+      rm.type = "button";
+      rm.className = "rm";
+      rm.textContent = "×";
+      rm.setAttribute("aria-label", f.name + " 제거");
+      rm.addEventListener("click", function () { aiPicked.splice(i, 1); renderAiPreview(); });
+      tile.appendChild(rm);
+      aiPreviewEl.appendChild(tile);
+    });
+  }
+
+  aiFileInput.addEventListener("change", function () {
+    aiPicked = aiPicked.concat(Array.prototype.slice.call(aiFileInput.files));
+    aiFileInput.value = "";
+    renderAiPreview();
+  });
+
+  $$(".section-add-btn[data-category='ai']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      aiErrorEl.textContent = "";
+      openDlg(aiFormDlg);
+      aiTitleInput.focus();
+    });
+  });
+
+  aiForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var title = aiTitleInput.value.trim();
+    if (!title) { aiErrorEl.textContent = "제목을 입력하세요."; aiTitleInput.focus(); return; }
+    aiErrorEl.textContent = "";
+    aiSubmitBtn.disabled = true;
+    aiSubmitBtn.textContent = "등록 중…";
+    var fd = new FormData();
+    fd.append("title", title);
+    fd.append("content", aiContentInput.value);
+    fd.append("category", "ai");
+    fd.append("date", aiDateInput.value || "");
+    aiPicked.forEach(function (f) { fd.append("files[]", f); });
+    fetch("/api?action=create", { method: "POST", body: fd })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        aiForm.reset();
+        aiPicked = [];
+        renderAiPreview();
+        closeDlg(aiFormDlg);
+        return loadAi();
+      })
+      .catch(function (err) { aiErrorEl.textContent = "등록 실패: " + ((err && err.message) || err); })
+      .then(function () { aiSubmitBtn.disabled = false; aiSubmitBtn.textContent = "등록"; });
+  });
+
+  /* ---------- AI 상세 다이얼로그 + 삭제 ---------- */
+  var aiViewDlg = $("#aiViewDialog"),
+      aiViewTitle = $("#aiViewTitle"),
+      aiViewDate = $("#aiViewDate"),
+      aiViewPhotos = $("#aiViewPhotos"),
+      aiViewContent = $("#aiViewContent"),
+      aiViewFiles = $("#aiViewFiles"),
+      aiDeleteBtn = $("#aiViewDelete");
+  var aiViewingId = null;
+
+  function openAiView(id) {
+    var p = null;
+    aiPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
+    if (!p) return;
+    aiViewingId = p.id;
+    aiViewTitle.textContent = p.title || "(제목 없음)";
+    aiViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    aiViewPhotos.textContent = "";
+    (p.files || []).filter(isImageFile).forEach(function (f) {
+      var im = document.createElement("img");
+      im.src = f.url;
+      im.alt = f.originalName || f.name;
+      aiViewPhotos.appendChild(im);
+    });
+    aiViewContent.textContent = p.content || "(내용 없음)";
+    aiViewFiles.textContent = "";
+    aiViewFiles.hidden = !(p.files && p.files.length);
+    if (p.files && p.files.length) aiViewFiles.appendChild(fileLinks(p.files, false));
+    openDlg(aiViewDlg);
+  }
+
+  aiBoardBody.addEventListener("click", function (e) {
+    var tr = e.target.closest("tr[data-id]");
+    if (!tr) return;
+    openAiView(tr.getAttribute("data-id"));
+  });
+
+  aiDeleteBtn.addEventListener("click", function () {
+    if (!aiViewingId) return;
+    if (!window.confirm("이 글을 삭제할까요? 첨부 파일도 함께 삭제됩니다.")) return;
+    aiDeleteBtn.disabled = true;
+    fetch("/api/" + encodeURIComponent(aiViewingId), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: aiViewingId })
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        closeDlg(aiViewDlg);
+        aiViewingId = null;
+        return loadAi();
+      })
+      .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
+      .then(function () { aiDeleteBtn.disabled = false; });
+  });
+
+  var aiEditBtn = $("#aiViewEdit");
+  if (aiEditBtn) {
+    aiEditBtn.addEventListener("click", function () {
+      if (!aiViewingId) return;
+      var p = null;
+      aiPosts.forEach(function (x) { if (x.id === aiViewingId) p = x; });
+      if (!p) return;
+      var t = window.prompt("제목 수정:", p.title || "");
+      if (t === null) return;
+      var c = window.prompt("내용 수정:", p.content || "");
+      if (c === null) return;
+      var d = window.prompt("날짜 수정(YYYY-MM-DD):", p.date || "");
+      if (d === null) return;
+      var fd = new FormData();
+      fd.append("id", aiViewingId);
+      fd.append("title", t.trim());
+      fd.append("content", c);
+      fd.append("date", (d || "").trim());
+      aiEditBtn.disabled = true;
+      fetch("/api?action=update", { method: "POST", body: fd })
+        .then(function (res) {
+          return res.json().catch(function () { return null; }).then(function (data) {
+            if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+            return data;
+          });
+        })
+        .then(function () { return loadAi(); })
+        .then(function () {
+          var np = null;
+          aiPosts.forEach(function (x) { if (x.id === aiViewingId) np = x; });
+          if (np) openAiView(aiViewingId);
+        })
+        .catch(function (err) { window.alert("수정 실패: " + ((err && err.message) || err)); })
+        .then(function () { aiEditBtn.disabled = false; });
+    });
+  }
+
+  loadAi();
 })();
 
 /* ===== 토끼일상 (save3/api3, travel 패턴 미러) ===== */
