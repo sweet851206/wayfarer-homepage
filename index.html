@@ -2891,6 +2891,15 @@
       <h2>관리자 페이지</h2>
       <p class="ai-lead-sub">준비 중입니다</p>
     </div>
+    <div class="post-grid">
+      <div class="post">
+        <div class="icon-large">🔑</div>
+        <h3>관리자 ID·비밀번호 변경</h3>
+        <div class="field"><label for="adminNewId">새 ID</label><input type="text" id="adminNewId" maxlength="32" placeholder="새 관리자 ID"></div>
+        <div class="field"><label for="adminNewPw">새 비밀번호</label><input type="password" id="adminNewPw" maxlength="64" placeholder="새 비밀번호"></div>
+        <button type="button" class="btn btn-primary" id="adminCredSave">변경 저장</button>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -7279,6 +7288,7 @@
   function isAdmin() {
     try { return localStorage.getItem("baioo_admin") === "1"; } catch (e) { return false; }
   }
+  function getCred() { try { var id = localStorage.getItem("baioo_admin_id") || "1234"; var pw = localStorage.getItem("baioo_admin_pw") || "1234"; return {id:id, pw:pw}; } catch(e){ return {id:"1234", pw:"1234"}; } }
   function sync() {
     var admin = isAdmin();
     document.body.classList.toggle("is-admin", !!admin);
@@ -7298,7 +7308,7 @@
         var id = window.prompt("관리자 ID:", "");
         if (id === null) return;
         var pw = window.prompt("비밀번호:", "");
-        if (id === "1234" && pw === "1234") {
+        var c = getCred(); if (id === c.id && pw === c.pw) {
           try { localStorage.setItem("baioo_admin", "1"); } catch (err) {}
           sync();
           location.hash = "#admin";
@@ -7307,6 +7317,21 @@
           alert("ID/PW가 틀렸습니다.");
         }
       }
+    }
+    if (e.target && e.target.id === "adminCredSave") {
+      if (!isAdmin()) { alert("관리자 로그인 후 사용하세요."); return; }
+      var niEl = document.getElementById("adminNewId");
+      var npEl = document.getElementById("adminNewPw");
+      var ni = niEl ? niEl.value.trim() : "";
+      var np = npEl ? npEl.value.trim() : "";
+      if (!ni || !np) { alert("새 ID와 비밀번호를 입력하세요."); return; }
+      try {
+        localStorage.setItem("baioo_admin_id", ni);
+        localStorage.setItem("baioo_admin_pw", np);
+      } catch (err) {}
+      if (niEl) niEl.value = "";
+      if (npEl) npEl.value = "";
+      alert("관리자 ID·비밀번호가 변경되었습니다.");
     }
   });
   sync();
