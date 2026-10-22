@@ -659,7 +659,7 @@
   .board-table { width: 100%; border-collapse: collapse; font-size: .95rem; table-layout: fixed; }
   .board-table th, .board-table td { padding: 10px 8px; border-bottom: 1px solid var(--border); text-align: left; }
   .board-table th:first-child, .board-table td:first-child { width: 48px; }
-  .board-table th:last-child, .board-table td:last-child { width: 170px; padding-left: 6px; padding-right: 6px; }
+  .board-table th:last-child, .board-table td:last-child { width: 185px; padding-left: 6px; padding-right: 6px; }
   .board-table thead th { font-weight: 800; color: var(--text-strong); background: var(--surface-soft); }
   .board-table tbody tr { cursor: pointer; }
   .board-table tbody tr:hover { background: var(--surface-soft); }
@@ -670,6 +670,7 @@
   .vote-btn { border: 1px solid var(--border); background: #fff; border-radius: 999px; padding: 8px 14px; cursor: pointer; font-weight: 700; color: #e11d48; }
   .vote-btn:disabled { opacity: .5; cursor: default; }
   .vote-red { color: #e11d48; font-weight: 700; white-space: nowrap; font-size: .8em; margin-right: 2px; }
+  .row-del { margin-left: 6px; background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0 2px; }
   .cmt-wrap { margin-top: 14px; border-top: 1px dashed var(--border); padding-top: 12px; }
   .cmt-list { display: flex; flex-direction: column; gap: 8px; margin: 8px 0; }
   .cmt-item { font-size: .9rem; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
@@ -2343,7 +2344,7 @@
     </div>
     <div class="board-table-wrap">
       <table class="board-table">
-        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:170px">등록일</th></tr></thead>
+        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:185px">등록일</th></tr></thead>
         <tbody id="aiBoardBody"></tbody>
       </table>
       <div class="ai-page-bar" id="aiPageBar"></div>
@@ -2460,7 +2461,7 @@
     </div>
     <div class="board-table-wrap">
       <table class="board-table">
-        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:170px">등록일</th></tr></thead>
+        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:185px">등록일</th></tr></thead>
         <tbody id="brBoardBody"></tbody>
       </table>
       <div class="ai-page-bar" id="brPageBar"></div>
@@ -2577,7 +2578,7 @@
     </div>
     <div class="board-table-wrap">
       <table class="board-table">
-        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:170px">등록일</th></tr></thead>
+        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:185px">등록일</th></tr></thead>
         <tbody id="trBoardBody"></tbody>
       </table>
       <div class="ai-page-bar" id="trPageBar"></div>
@@ -2702,7 +2703,7 @@
     </div>
     <div class="board-table-wrap">
       <table class="board-table">
-        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:170px">등록일</th></tr></thead>
+        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:185px">등록일</th></tr></thead>
         <tbody id="rpBoardBody"></tbody>
       </table>
       <div class="ai-page-bar" id="rpPageBar"></div>
@@ -2825,7 +2826,7 @@
     </div>
     <div class="board-table-wrap">
       <table class="board-table">
-        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:170px">등록일</th></tr></thead>
+        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:185px">등록일</th></tr></thead>
         <tbody id="petBoardBody"></tbody>
       </table>
       <div class="ai-page-bar" id="petPageBar"></div>
@@ -4234,6 +4235,13 @@
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
     dt.appendChild(document.createTextNode("  " + (postDate(p) || "—")));
+    var del = document.createElement("button");
+    del.type = "button";
+    del.className = "row-del admin-only";
+    del.textContent = "🗑️";
+    del.setAttribute("data-del", p.id);
+    del.setAttribute("aria-label", "삭제");
+    dt.appendChild(del);
     tr.appendChild(no);
     tr.appendChild(ti);
     tr.appendChild(dt);
@@ -4406,6 +4414,17 @@
   }
 
   aiBoardBody.addEventListener("click", function (e) {
+    var delBtn = e.target.closest("[data-del]");
+    if (delBtn) {
+      e.stopPropagation();
+      var did = delBtn.getAttribute("data-del");
+      if (!window.confirm("이 글을 삭제할까요?")) return;
+      fetch("/api/" + encodeURIComponent(did), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: did }) })
+        .then(function (res) { return res.json(); })
+        .then(function () { return loadAi(); })
+        .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); });
+      return;
+    }
     var tr = e.target.closest("tr[data-id]");
     if (!tr) return;
     openAiView(tr.getAttribute("data-id"));
@@ -4641,6 +4660,13 @@
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
     dt.appendChild(document.createTextNode("  " + (postDate(p) || "—")));
+    var del = document.createElement("button");
+    del.type = "button";
+    del.className = "row-del admin-only";
+    del.textContent = "🗑️";
+    del.setAttribute("data-del", p.id);
+    del.setAttribute("aria-label", "삭제");
+    dt.appendChild(del);
     tr.appendChild(no);
     tr.appendChild(ti);
     tr.appendChild(dt);
@@ -4810,6 +4836,17 @@
   }
 
   brBoardBody.addEventListener("click", function (e) {
+    var delBtn = e.target.closest("[data-del]");
+    if (delBtn) {
+      e.stopPropagation();
+      var did = delBtn.getAttribute("data-del");
+      if (!window.confirm("이 글을 삭제할까요?")) return;
+      fetch("/api/" + encodeURIComponent(did), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: did }) })
+        .then(function (res) { return res.json(); })
+        .then(function () { return loadBr(); })
+        .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); });
+      return;
+    }
     var tr = e.target.closest("tr[data-id]");
     if (!tr) return;
     openBrView(tr.getAttribute("data-id"));
@@ -4995,6 +5032,13 @@
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
     dt.appendChild(document.createTextNode("  " + (postDate(p) || "—")));
+    var del = document.createElement("button");
+    del.type = "button";
+    del.className = "row-del admin-only";
+    del.textContent = "🗑️";
+    del.setAttribute("data-del", p.id);
+    del.setAttribute("aria-label", "삭제");
+    dt.appendChild(del);
     tr.appendChild(no);
     tr.appendChild(ti);
     tr.appendChild(dt);
@@ -5164,6 +5208,17 @@
   }
 
   trBoardBody.addEventListener("click", function (e) {
+    var delBtn = e.target.closest("[data-del]");
+    if (delBtn) {
+      e.stopPropagation();
+      var did = delBtn.getAttribute("data-del");
+      if (!window.confirm("이 글을 삭제할까요?")) return;
+      fetch("/api/" + encodeURIComponent(did), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: did }) })
+        .then(function (res) { return res.json(); })
+        .then(function () { return loadTr(); })
+        .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); });
+      return;
+    }
     var tr = e.target.closest("tr[data-id]");
     if (!tr) return;
     openTrView(tr.getAttribute("data-id"));
@@ -5349,6 +5404,13 @@
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
     dt.appendChild(document.createTextNode("  " + (postDate(p) || "—")));
+    var del = document.createElement("button");
+    del.type = "button";
+    del.className = "row-del admin-only";
+    del.textContent = "🗑️";
+    del.setAttribute("data-del", p.id);
+    del.setAttribute("aria-label", "삭제");
+    dt.appendChild(del);
     tr.appendChild(no);
     tr.appendChild(ti);
     tr.appendChild(dt);
@@ -5518,6 +5580,17 @@
   }
 
   rpBoardBody.addEventListener("click", function (e) {
+    var delBtn = e.target.closest("[data-del]");
+    if (delBtn) {
+      e.stopPropagation();
+      var did = delBtn.getAttribute("data-del");
+      if (!window.confirm("이 글을 삭제할까요?")) return;
+      fetch("/api/" + encodeURIComponent(did), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: did }) })
+        .then(function (res) { return res.json(); })
+        .then(function () { return loadRp(); })
+        .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); });
+      return;
+    }
     var tr = e.target.closest("tr[data-id]");
     if (!tr) return;
     openRpView(tr.getAttribute("data-id"));
@@ -5703,6 +5776,13 @@
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
     dt.appendChild(document.createTextNode("  " + (postDate(p) || "—")));
+    var del = document.createElement("button");
+    del.type = "button";
+    del.className = "row-del admin-only";
+    del.textContent = "🗑️";
+    del.setAttribute("data-del", p.id);
+    del.setAttribute("aria-label", "삭제");
+    dt.appendChild(del);
     tr.appendChild(no);
     tr.appendChild(ti);
     tr.appendChild(dt);
@@ -5872,6 +5952,17 @@
   }
 
   petBoardBody.addEventListener("click", function (e) {
+    var delBtn = e.target.closest("[data-del]");
+    if (delBtn) {
+      e.stopPropagation();
+      var did = delBtn.getAttribute("data-del");
+      if (!window.confirm("이 글을 삭제할까요?")) return;
+      fetch("/api/" + encodeURIComponent(did), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: did }) })
+        .then(function (res) { return res.json(); })
+        .then(function () { return loadPet(); })
+        .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); });
+      return;
+    }
     var tr = e.target.closest("tr[data-id]");
     if (!tr) return;
     openPetView(tr.getAttribute("data-id"));
