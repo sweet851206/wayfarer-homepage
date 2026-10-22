@@ -2487,6 +2487,17 @@
       </div>
     </div>
 
+    <div class="pet-diary-subhead">
+      <h3>📝 자유게시판</h3>
+      <button type="button" class="section-add-btn travel-add admin-only" data-category="travel-board" style="margin:0;">＋ 새 글 등록</button>
+    </div>
+    <div class="board-table-wrap">
+      <table class="board-table">
+        <thead><tr><th style="width:64px">No</th><th>제목</th><th style="width:110px">등록일</th></tr></thead>
+        <tbody id="trBoardBody"></tbody>
+      </table>
+    </div>
+
     <div class="ai-toolbar">
       <div class="ai-toolbar-top">
         <div class="ai-search-wrap">
@@ -3097,6 +3108,58 @@
       <button type="button" class="btn btn-primary admin-only" id="brViewEdit">수정</button>
       <button type="button" class="btn btn-danger admin-only" id="brViewDelete">삭제</button>
       <button type="button" class="btn btn-ghost" data-close="brViewDialog">닫기</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- ===== Travel 자유게시판 등록/상세 다이얼로그 ===== -->
+<dialog id="trFormDialog" aria-label="새 Travel 글 등록">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="trFormDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title">새 Travel 글</h3>
+    <form id="trForm" novalidate>
+      <div class="field">
+        <label for="trTitle">제목 *</label>
+        <input type="text" id="trTitle" maxlength="120" placeholder="예: 오늘의 여행 기록">
+      </div>
+      <div class="field">
+        <label for="trDate">날짜</label>
+        <input type="date" id="trDate">
+      </div>
+      <div class="field">
+        <label for="trContent">내용</label>
+        <textarea id="trContent" placeholder="여행 이야기를 적어주세요"></textarea>
+      </div>
+      <div class="field">
+        <label for="trFiles">사진·파일 (여러 개)</label>
+        <div class="attach-row">
+          <label class="file-btn" for="trFiles">파일 선택</label>
+          <input type="file" id="trFiles" class="sr" multiple>
+          <span id="trFileCount">선택된 파일 없음</span>
+        </div>
+        <div class="preview-grid" id="trPreview"></div>
+      </div>
+      <div class="form-error" id="trFormError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="trFormDialog">취소</button>
+        <button type="submit" class="btn btn-primary" id="trSubmit">등록</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog id="trViewDialog" aria-label="Travel 글 상세">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="trViewDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title" id="trViewTitle"></h3>
+    <div class="post-date" id="trViewDate"></div>
+    <div class="view-photos" id="trViewPhotos"></div>
+    <div id="trViewContent"></div>
+    <div class="file-list" id="trViewFiles" hidden></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-primary admin-only" id="trViewEdit">수정</button>
+      <button type="button" class="btn btn-danger admin-only" id="trViewDelete">삭제</button>
+      <button type="button" class="btn btn-ghost" data-close="trViewDialog">닫기</button>
     </div>
   </div>
 </dialog>
@@ -4269,6 +4332,235 @@
   }
 
   loadBr();
+
+  /* ---------- Travel 자유게시판 (Branding 패턴 미러) ---------- */
+  var trBoardBody = $("#trBoardBody");
+  var trPosts = [];
+
+  function makeTrRow(p, i) {
+    var tr = document.createElement("tr");
+    tr.setAttribute("data-id", p.id);
+    var no = document.createElement("td");
+    no.textContent = String(p.id).slice(-4) || String(i + 1);
+    var ti = document.createElement("td");
+    ti.className = "board-title";
+    ti.textContent = p.title || "(제목 없음)";
+    var dt = document.createElement("td");
+    dt.textContent = postDate(p) || "—";
+    tr.appendChild(no);
+    tr.appendChild(ti);
+    tr.appendChild(dt);
+    return tr;
+  }
+
+  function renderTr() {
+    trBoardBody.textContent = "";
+    if (!trPosts.length) {
+      var tr = document.createElement("tr");
+      var td = document.createElement("td");
+      td.colSpan = 3;
+      td.className = "board-empty";
+      td.style.cssText = "text-align:center;color:var(--muted)";
+      td.textContent = "등록된 글이 없습니다.";
+      tr.appendChild(td);
+      trBoardBody.appendChild(tr);
+      return;
+    }
+    trPosts.forEach(function (p, i) { trBoardBody.appendChild(makeTrRow(p, i)); });
+  }
+
+  function loadTr() {
+    return apiList().then(function (posts) {
+      trPosts = posts.filter(function (p) { return p.category === "travel-board"; });
+      renderTr();
+    }).catch(function () { trPosts = []; renderTr(); });
+  }
+
+  /* ---------- Travel 등록 폼 ---------- */
+  var trFormDlg = $("#trFormDialog"),
+      trForm = $("#trForm"),
+      trTitleInput = $("#trTitle"),
+      trDateInput = $("#trDate"),
+      trContentInput = $("#trContent"),
+      trFileInput = $("#trFiles"),
+      trPreviewEl = $("#trPreview"),
+      trFileCountEl = $("#trFileCount"),
+      trErrorEl = $("#trFormError"),
+      trSubmitBtn = $("#trSubmit");
+  var trPicked = [];
+
+  function renderTrPreview() {
+    $$("img", trPreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
+    trPreviewEl.textContent = "";
+    trFileCountEl.textContent = trPicked.length ? trPicked.length + "개 선택됨" : "선택된 파일 없음";
+    trPicked.forEach(function (f, i) {
+      var tile = document.createElement("div");
+      tile.className = "thumb-sm";
+      tile.title = f.name;
+      if (isImageFile(f)) {
+        var im = document.createElement("img");
+        im.src = URL.createObjectURL(f);
+        im.alt = f.name;
+        tile.appendChild(im);
+      } else {
+        tile.style.cssText = "display:grid;place-items:center;font-size:1.6rem;";
+        tile.textContent = "📄";
+      }
+      var rm = document.createElement("button");
+      rm.type = "button";
+      rm.className = "rm";
+      rm.textContent = "×";
+      rm.setAttribute("aria-label", f.name + " 제거");
+      rm.addEventListener("click", function () { trPicked.splice(i, 1); renderTrPreview(); });
+      tile.appendChild(rm);
+      trPreviewEl.appendChild(tile);
+    });
+  }
+
+  trFileInput.addEventListener("change", function () {
+    trPicked = trPicked.concat(Array.prototype.slice.call(trFileInput.files));
+    trFileInput.value = "";
+    renderTrPreview();
+  });
+
+  $$(".section-add-btn[data-category='travel-board']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      trErrorEl.textContent = "";
+      openDlg(trFormDlg);
+      trTitleInput.focus();
+    });
+  });
+
+  trForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var title = trTitleInput.value.trim();
+    if (!title) { trErrorEl.textContent = "제목을 입력하세요."; trTitleInput.focus(); return; }
+    trErrorEl.textContent = "";
+    trSubmitBtn.disabled = true;
+    trSubmitBtn.textContent = "등록 중…";
+    var fd = new FormData();
+    fd.append("title", title);
+    fd.append("content", trContentInput.value);
+    fd.append("category", "travel-board");
+    fd.append("date", trDateInput.value || "");
+    trPicked.forEach(function (f) { fd.append("files[]", f); });
+    fetch("/api?action=create", { method: "POST", body: fd })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        trForm.reset();
+        trPicked = [];
+        renderTrPreview();
+        closeDlg(trFormDlg);
+        return loadTr();
+      })
+      .catch(function (err) { trErrorEl.textContent = "등록 실패: " + ((err && err.message) || err); })
+      .then(function () { trSubmitBtn.disabled = false; trSubmitBtn.textContent = "등록"; });
+  });
+
+  /* ---------- Travel 상세 다이얼로그 + 삭제 ---------- */
+  var trViewDlg = $("#trViewDialog"),
+      trViewTitle = $("#trViewTitle"),
+      trViewDate = $("#trViewDate"),
+      trViewPhotos = $("#trViewPhotos"),
+      trViewContent = $("#trViewContent"),
+      trViewFiles = $("#trViewFiles"),
+      trDeleteBtn = $("#trViewDelete");
+  var trViewingId = null;
+
+  function openTrView(id) {
+    var p = null;
+    trPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
+    if (!p) return;
+    trViewingId = p.id;
+    trViewTitle.textContent = p.title || "(제목 없음)";
+    trViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    trViewPhotos.textContent = "";
+    (p.files || []).filter(isImageFile).forEach(function (f) {
+      var im = document.createElement("img");
+      im.src = f.url;
+      im.alt = f.originalName || f.name;
+      trViewPhotos.appendChild(im);
+    });
+    trViewContent.textContent = p.content || "(내용 없음)";
+    trViewFiles.textContent = "";
+    trViewFiles.hidden = !(p.files && p.files.length);
+    if (p.files && p.files.length) trViewFiles.appendChild(fileLinks(p.files, false));
+    openDlg(trViewDlg);
+  }
+
+  trBoardBody.addEventListener("click", function (e) {
+    var tr = e.target.closest("tr[data-id]");
+    if (!tr) return;
+    openTrView(tr.getAttribute("data-id"));
+  });
+
+  trDeleteBtn.addEventListener("click", function () {
+    if (!trViewingId) return;
+    if (!window.confirm("이 글을 삭제할까요? 첨부 파일도 함께 삭제됩니다.")) return;
+    trDeleteBtn.disabled = true;
+    fetch("/api/" + encodeURIComponent(trViewingId), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: trViewingId })
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        closeDlg(trViewDlg);
+        trViewingId = null;
+        return loadTr();
+      })
+      .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
+      .then(function () { trDeleteBtn.disabled = false; });
+  });
+
+  var trEditBtn = $("#trViewEdit");
+  if (trEditBtn) {
+    trEditBtn.addEventListener("click", function () {
+      if (!trViewingId) return;
+      var p = null;
+      trPosts.forEach(function (x) { if (x.id === trViewingId) p = x; });
+      if (!p) return;
+      var t = window.prompt("제목 수정:", p.title || "");
+      if (t === null) return;
+      var c = window.prompt("내용 수정:", p.content || "");
+      if (c === null) return;
+      var d = window.prompt("날짜 수정(YYYY-MM-DD):", p.date || "");
+      if (d === null) return;
+      var fd = new FormData();
+      fd.append("id", trViewingId);
+      fd.append("title", t.trim());
+      fd.append("content", c);
+      fd.append("date", (d || "").trim());
+      trEditBtn.disabled = true;
+      fetch("/api?action=update", { method: "POST", body: fd })
+        .then(function (res) {
+          return res.json().catch(function () { return null; }).then(function (data) {
+            if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+            return data;
+          });
+        })
+        .then(function () { return loadTr(); })
+        .then(function () {
+          var np = null;
+          trPosts.forEach(function (x) { if (x.id === trViewingId) np = x; });
+          if (np) openTrView(trViewingId);
+        })
+        .catch(function (err) { window.alert("수정 실패: " + ((err && err.message) || err)); })
+        .then(function () { trEditBtn.disabled = false; });
+    });
+  }
+
+  loadTr();
 })();
 
 /* ===== 토끼일상 (save3/api3, travel 패턴 미러) ===== */
