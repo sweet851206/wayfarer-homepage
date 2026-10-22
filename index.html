@@ -4147,7 +4147,7 @@
     var tr = document.createElement("tr");
     tr.setAttribute("data-id", p.id);
     var no = document.createElement("td");
-    no.textContent = String(i + 1);
+    no.textContent = String(i);
     var ti = document.createElement("td");
     ti.className = "board-title";
     ti.textContent = p.title || "(제목 없음)";
@@ -4183,7 +4183,7 @@
     }
     var startIdx = (aiPage - 1) * AI_PAGE_SIZE;
     aiPosts.slice(startIdx, startIdx + AI_PAGE_SIZE).forEach(function (p, i) {
-      aiBoardBody.appendChild(makeAiRow(p, startIdx + i));
+      aiBoardBody.appendChild(makeAiRow(p, aiPosts.length - (startIdx + i)));
     });
     renderAiPages(aiPosts.length);
   }
@@ -4191,6 +4191,7 @@
   function loadAi() {
     return apiList().then(function (posts) {
       aiPosts = posts.filter(function (p) { return p.category === "ai"; });
+      aiPosts.sort(function (a, b) { return ((b.createdAt || 0) > (a.createdAt || 0)) ? 1 : (((b.createdAt || 0) < (a.createdAt || 0)) ? -1 : 0); });
       renderAi();
     }).catch(function () { aiPosts = []; renderAi(); });
   }
@@ -4503,7 +4504,7 @@
     var tr = document.createElement("tr");
     tr.setAttribute("data-id", p.id);
     var no = document.createElement("td");
-    no.textContent = String(i + 1);
+    no.textContent = String(i);
     var ti = document.createElement("td");
     ti.className = "board-title";
     ti.textContent = p.title || "(제목 없음)";
@@ -4538,13 +4539,14 @@
       return;
     }
     var startIdx = (brPage - 1) * BR_PAGE_SIZE;
-    brPosts.slice(startIdx, startIdx + BR_PAGE_SIZE).forEach(function (p, i) { brBoardBody.appendChild(makeBrRow(p, startIdx + i)); });
+    brPosts.slice(startIdx, startIdx + BR_PAGE_SIZE).forEach(function (p, i) { brBoardBody.appendChild(makeBrRow(p, brPosts.length - (startIdx + i))); });
     renderBrPages(brPosts.length);
   }
 
   function loadBr() {
     return apiList().then(function (posts) {
       brPosts = posts.filter(function (p) { return p.category === "branding"; });
+      brPosts.sort(function (a, b) { return ((b.createdAt || 0) > (a.createdAt || 0)) ? 1 : (((b.createdAt || 0) < (a.createdAt || 0)) ? -1 : 0); });
       renderBr();
     }).catch(function () { brPosts = []; renderBr(); });
   }
@@ -4813,7 +4815,7 @@
     var tr = document.createElement("tr");
     tr.setAttribute("data-id", p.id);
     var no = document.createElement("td");
-    no.textContent = String(i + 1);
+    no.textContent = String(i);
     var ti = document.createElement("td");
     ti.className = "board-title";
     ti.textContent = p.title || "(제목 없음)";
@@ -4848,13 +4850,14 @@
       return;
     }
     var startIdx = (trPage - 1) * TR_PAGE_SIZE;
-    trPosts.slice(startIdx, startIdx + TR_PAGE_SIZE).forEach(function (p, i) { trBoardBody.appendChild(makeTrRow(p, startIdx + i)); });
+    trPosts.slice(startIdx, startIdx + TR_PAGE_SIZE).forEach(function (p, i) { trBoardBody.appendChild(makeTrRow(p, trPosts.length - (startIdx + i))); });
     renderTrPages(trPosts.length);
   }
 
   function loadTr() {
     return apiList().then(function (posts) {
       trPosts = posts.filter(function (p) { return p.category === "travel-board"; });
+      trPosts.sort(function (a, b) { return ((b.createdAt || 0) > (a.createdAt || 0)) ? 1 : (((b.createdAt || 0) < (a.createdAt || 0)) ? -1 : 0); });
       renderTr();
     }).catch(function () { trPosts = []; renderTr(); });
   }
@@ -5123,7 +5126,7 @@
     var tr = document.createElement("tr");
     tr.setAttribute("data-id", p.id);
     var no = document.createElement("td");
-    no.textContent = String(i + 1);
+    no.textContent = String(i);
     var ti = document.createElement("td");
     ti.className = "board-title";
     ti.textContent = p.title || "(제목 없음)";
@@ -5158,13 +5161,14 @@
       return;
     }
     var startIdx = (rpPage - 1) * RP_PAGE_SIZE;
-    rpPosts.slice(startIdx, startIdx + RP_PAGE_SIZE).forEach(function (p, i) { rpBoardBody.appendChild(makeRpRow(p, startIdx + i)); });
+    rpPosts.slice(startIdx, startIdx + RP_PAGE_SIZE).forEach(function (p, i) { rpBoardBody.appendChild(makeRpRow(p, rpPosts.length - (startIdx + i))); });
     renderRpPages(rpPosts.length);
   }
 
   function loadRp() {
     return apiList().then(function (posts) {
       rpPosts = posts.filter(function (p) { return p.category === "repair-board"; });
+      rpPosts.sort(function (a, b) { return ((b.createdAt || 0) > (a.createdAt || 0)) ? 1 : (((b.createdAt || 0) < (a.createdAt || 0)) ? -1 : 0); });
       renderRp();
     }).catch(function () { rpPosts = []; renderRp(); });
   }
@@ -5433,7 +5437,7 @@
     var tr = document.createElement("tr");
     tr.setAttribute("data-id", p.id);
     var no = document.createElement("td");
-    no.textContent = String(i + 1);
+    no.textContent = String(i);
     var ti = document.createElement("td");
     ti.className = "board-title";
     ti.textContent = p.title || "(제목 없음)";
@@ -5468,13 +5472,14 @@
       return;
     }
     var startIdx = (petPage - 1) * PET_PAGE_SIZE;
-    petPosts.slice(startIdx, startIdx + PET_PAGE_SIZE).forEach(function (p, i) { petBoardBody.appendChild(makePetRow(p, startIdx + i)); });
+    petPosts.slice(startIdx, startIdx + PET_PAGE_SIZE).forEach(function (p, i) { petBoardBody.appendChild(makePetRow(p, petPosts.length - (startIdx + i))); });
     renderPetPages(petPosts.length);
   }
 
   function loadPet() {
     return apiList().then(function (posts) {
       petPosts = posts.filter(function (p) { return p.category === "bunny-board"; });
+      petPosts.sort(function (a, b) { return ((b.createdAt || 0) > (a.createdAt || 0)) ? 1 : (((b.createdAt || 0) < (a.createdAt || 0)) ? -1 : 0); });
       renderPet();
     }).catch(function () { petPosts = []; renderPet(); });
   }
