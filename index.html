@@ -676,7 +676,9 @@
   .cmt-item b { color: var(--text-strong); }
   .cmt-item .cmt-del { float: right; border: none; background: none; cursor: pointer; color: var(--muted); }
   .cmt-form { display: flex; gap: 6px; margin-top: 8px; }
-  .cmt-form input { flex: 1; min-width: 0; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+  .cmt-form input { min-width: 0; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+  .cmt-form input[id$="CmtAuthor"] { flex: 1; }
+  .cmt-form input[id$="CmtInput"] { flex: 2; }
   .cmt-toggle { border: none; background: none; cursor: pointer; color: var(--muted); font-size: .85rem; }
   .board-table th:last-child, .board-table td:last-child { white-space: nowrap; }
   body:not(.is-admin) .board-table .board-empty { cursor: default; }
