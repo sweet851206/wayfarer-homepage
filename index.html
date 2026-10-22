@@ -663,6 +663,8 @@
   .board-table tbody tr:hover { background: var(--surface-soft); }
   .board-table .board-title { font-weight: 600; }
   body:not(.is-admin) .board-table .board-empty { cursor: default; }
+  .ai-page-bar { display: flex; gap: 8px; justify-content: center; margin: 18px 0 4px; flex-wrap: wrap; }
+  .ai-page-bar .ai-cat-btn:disabled { opacity: .45; cursor: default; transform: none; }
 
   .section-add-btn.repair-add {
     background: linear-gradient(135deg, var(--repair), #34D399);
@@ -2323,6 +2325,7 @@
         <thead><tr><th style="width:64px">No</th><th>제목</th><th style="width:110px">등록일</th></tr></thead>
         <tbody id="aiBoardBody"></tbody>
       </table>
+      <div class="ai-page-bar" id="aiPageBar"></div>
     </div>
 
     <div class="ai-toolbar">
@@ -3996,6 +3999,34 @@
   /* ---------- AI 자유게시판 (travel 패턴 미러) ---------- */
   var aiBoardBody = $("#aiBoardBody");
   var aiPosts = [];
+  var aiPageBar = $("#aiPageBar");
+  var aiPage = 1;
+  var AI_PAGE_SIZE = 10;
+
+  function renderAiPages(total) {
+    if (!aiPageBar) return;
+    aiPageBar.textContent = "";
+    var maxPage = Math.max(1, Math.ceil(total / AI_PAGE_SIZE));
+    if (aiPage > maxPage) aiPage = maxPage;
+    if (aiPage < 1) aiPage = 1;
+
+    function mk(label, page, active, disabled) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "ai-cat-btn" + (active ? " active" : "");
+      b.textContent = label;
+      if (disabled) b.disabled = true;
+      else b.addEventListener("click", function () { aiPage = page; renderAi(); });
+      aiPageBar.appendChild(b);
+    }
+
+    mk("‹ 이전", aiPage - 1, false, aiPage === 1);
+    var start = Math.max(1, aiPage - 2);
+    var end = Math.min(maxPage, start + 4);
+    start = Math.max(1, end - 4);
+    for (var p = start; p <= end; p++) mk(String(p), p, p === aiPage, false);
+    mk("› 다음", aiPage + 1, false, aiPage === maxPage);
+  }
 
   function makeAiRow(p, i) {
     var tr = document.createElement("tr");
@@ -4014,6 +4045,9 @@
   }
 
   function renderAi() {
+    var maxPage = Math.max(1, Math.ceil(aiPosts.length / AI_PAGE_SIZE));
+    if (aiPage > maxPage) aiPage = maxPage;
+    if (aiPage < 1) aiPage = 1;
     aiBoardBody.textContent = "";
     if (!aiPosts.length) {
       var tr = document.createElement("tr");
@@ -4024,9 +4058,14 @@
       td.textContent = "등록된 글이 없습니다.";
       tr.appendChild(td);
       aiBoardBody.appendChild(tr);
+      renderAiPages(0);
       return;
     }
-    aiPosts.forEach(function (p, i) { aiBoardBody.appendChild(makeAiRow(p, i)); });
+    var startIdx = (aiPage - 1) * AI_PAGE_SIZE;
+    aiPosts.slice(startIdx, startIdx + AI_PAGE_SIZE).forEach(function (p, i) {
+      aiBoardBody.appendChild(makeAiRow(p, startIdx + i));
+    });
+    renderAiPages(aiPosts.length);
   }
 
   function loadAi() {
@@ -4116,6 +4155,7 @@
         aiPicked = [];
         renderAiPreview();
         closeDlg(aiFormDlg);
+        aiPage = 1; /* 서버 목록은 최신순(ORDER BY created_at DESC) → 새 글은 1페이지 */
         return loadAi();
       })
       .catch(function (err) { aiErrorEl.textContent = "등록 실패: " + ((err && err.message) || err); })
@@ -5284,7 +5324,7 @@
 
   function loadBunny() {
     return apiList3().then(function (posts) {
-      bunnyPosts = posts;
+      bunnyPosts = posts.filter(function (p) { return p.category === "bunny"; });
       renderBunny();
     }).catch(function () { bunnyPosts = []; renderBunny(); });
   }

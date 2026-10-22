@@ -1,25 +1,32 @@
+var ALLOWED_BOARDS = ["travel", "bunny", "repair", "ai", "branding", "travel-board", "repair-board", "bunny-board"];
+function pickBoard(v, fallback) {
+  v = String(v || "");
+  return ALLOWED_BOARDS.indexOf(v) >= 0 ? v : fallback;
+}
+
 export async function listPosts(db, board) {
   const r = await db.prepare(
-    "SELECT id,title,content,date,created_at,files FROM posts WHERE board=? ORDER BY created_at DESC"
-  ).bind(board).all();
+    "SELECT id,board,title,content,date,created_at,files FROM posts ORDER BY created_at DESC"
+  ).all();
   return (r.results || []).map(function (row) {
     var files = [];
     try { files = JSON.parse(row.files || "[]"); } catch (e) {}
     return {
       id: row.id, title: row.title, content: row.content, date: row.date,
-      category: board, createdAt: row.created_at, files: files
+      category: row.board, createdAt: row.created_at, files: files
     };
   });
 }
 
 export async function createPost(req, db, bucket, board) {
   const fd = await req.formData();
+  const boardName = pickBoard(fd.get("category"), board);
   const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   const files = [];
   const uploads = fd.getAll("files[]");
   for (const f of uploads) {
     if (typeof f === "string" || !f.name) continue;
-    const key = board + "/" + id + "/" + f.name;
+    const key = boardName + "/" + id + "/" + f.name;
     await bucket.put(key, await f.arrayBuffer(), {
       httpMetadata: { contentType: f.type || "application/octet-stream" }
     });
@@ -32,7 +39,7 @@ export async function createPost(req, db, bucket, board) {
   await db.prepare(
     "INSERT INTO posts(id,board,title,content,date,created_at,files) VALUES(?,?,?,?,?,?,?)"
   ).bind(
-    id, board,
+    id, boardName,
     String(fd.get("title") || ""), String(fd.get("content") || ""),
     String(fd.get("date") || ""), created, JSON.stringify(files)
   ).run();
@@ -44,10 +51,10 @@ export async function updatePost(req, db, board) {
   const id = String(fd.get("id") || "");
   if (!id) return { ok: false, message: "no id" };
   await db.prepare(
-    "UPDATE posts SET title=?, content=?, date=? WHERE id=? AND board=?"
+    "UPDATE posts SET title=?, content=?, date=? WHERE id=?"
   ).bind(
     String(fd.get("title") || ""), String(fd.get("content") || ""),
-    String(fd.get("date") || ""), id, board
+    String(fd.get("date") || ""), id
   ).run();
   return { ok: true, id: id };
 }
@@ -64,15 +71,15 @@ export async function deletePost(req, db, bucket, board) {
   }
   if (!id) return { ok: false, message: "no id" };
   const row = await db.prepare(
-    "SELECT files FROM posts WHERE id=? AND board=?"
-  ).bind(id, board).first();
+    "SELECT files FROM posts WHERE id=?"
+  ).bind(id).first();
   if (row) {
     try {
       const files = JSON.parse(row.files || "[]");
       for (const f of files) { if (f.key) await bucket.delete(f.key); }
     } catch (e) {}
   }
-  await db.prepare("DELETE FROM posts WHERE id=? AND board=?").bind(id, board).run();
+  await db.prepare("DELETE FROM posts WHERE id=?").bind(id).run();
   return { ok: true };
 }
 
