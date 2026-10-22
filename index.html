@@ -2679,6 +2679,17 @@
       </div>
     </div>
 
+    <div class="pet-diary-subhead">
+      <h3>📝 자유게시판</h3>
+      <button type="button" class="section-add-btn bunny-add admin-only" data-category="bunny-board" style="margin:0;">＋ 새 글 등록</button>
+    </div>
+    <div class="board-table-wrap">
+      <table class="board-table">
+        <thead><tr><th style="width:64px">No</th><th>제목</th><th style="width:110px">등록일</th></tr></thead>
+        <tbody id="petBoardBody"></tbody>
+      </table>
+    </div>
+
     <div class="ai-toolbar">
       <div class="ai-toolbar-top">
         <div class="ai-search-wrap">
@@ -3223,6 +3234,58 @@
       <button type="button" class="btn btn-primary admin-only" id="rpViewEdit">수정</button>
       <button type="button" class="btn btn-danger admin-only" id="rpViewDelete">삭제</button>
       <button type="button" class="btn btn-ghost" data-close="rpViewDialog">닫기</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- ===== Pets 자유게시판 등록/상세 다이얼로그 ===== -->
+<dialog id="petFormDialog" aria-label="새 Pets 글 등록">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="petFormDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title">새 Pets 글</h3>
+    <form id="petForm" novalidate>
+      <div class="field">
+        <label for="petTitle">제목 *</label>
+        <input type="text" id="petTitle" maxlength="120" placeholder="예: 오늘의 펫 기록">
+      </div>
+      <div class="field">
+        <label for="petDate">날짜</label>
+        <input type="date" id="petDate">
+      </div>
+      <div class="field">
+        <label for="petContent">내용</label>
+        <textarea id="petContent" placeholder="펫 내용을 적어주세요"></textarea>
+      </div>
+      <div class="field">
+        <label for="petFiles">사진·파일 (여러 개)</label>
+        <div class="attach-row">
+          <label class="file-btn" for="petFiles">파일 선택</label>
+          <input type="file" id="petFiles" class="sr" multiple>
+          <span id="petFileCount">선택된 파일 없음</span>
+        </div>
+        <div class="preview-grid" id="petPreview"></div>
+      </div>
+      <div class="form-error" id="petFormError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="petFormDialog">취소</button>
+        <button type="submit" class="btn btn-primary" id="petSubmit">등록</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog id="petViewDialog" aria-label="Pets 글 상세">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="petViewDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title" id="petViewTitle"></h3>
+    <div class="post-date" id="petViewDate"></div>
+    <div class="view-photos" id="petViewPhotos"></div>
+    <div id="petViewContent"></div>
+    <div class="file-list" id="petViewFiles" hidden></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-primary admin-only" id="petViewEdit">수정</button>
+      <button type="button" class="btn btn-danger admin-only" id="petViewDelete">삭제</button>
+      <button type="button" class="btn btn-ghost" data-close="petViewDialog">닫기</button>
     </div>
   </div>
 </dialog>
@@ -4853,6 +4916,235 @@
   }
 
   loadRp();
+
+  /* ---------- Pets 자유게시판 (Repair 패턴 미러) ---------- */
+  var petBoardBody = $("#petBoardBody");
+  var petPosts = [];
+
+  function makePetRow(p, i) {
+    var tr = document.createElement("tr");
+    tr.setAttribute("data-id", p.id);
+    var no = document.createElement("td");
+    no.textContent = String(p.id).slice(-4) || String(i + 1);
+    var ti = document.createElement("td");
+    ti.className = "board-title";
+    ti.textContent = p.title || "(제목 없음)";
+    var dt = document.createElement("td");
+    dt.textContent = postDate(p) || "—";
+    tr.appendChild(no);
+    tr.appendChild(ti);
+    tr.appendChild(dt);
+    return tr;
+  }
+
+  function renderPet() {
+    petBoardBody.textContent = "";
+    if (!petPosts.length) {
+      var tr = document.createElement("tr");
+      var td = document.createElement("td");
+      td.colSpan = 3;
+      td.className = "board-empty";
+      td.style.cssText = "text-align:center;color:var(--muted)";
+      td.textContent = "등록된 글이 없습니다.";
+      tr.appendChild(td);
+      petBoardBody.appendChild(tr);
+      return;
+    }
+    petPosts.forEach(function (p, i) { petBoardBody.appendChild(makePetRow(p, i)); });
+  }
+
+  function loadPet() {
+    return apiList().then(function (posts) {
+      petPosts = posts.filter(function (p) { return p.category === "bunny-board"; });
+      renderPet();
+    }).catch(function () { petPosts = []; renderPet(); });
+  }
+
+  /* ---------- Pets 등록 폼 ---------- */
+  var petFormDlg = $("#petFormDialog"),
+      petForm = $("#petForm"),
+      petTitleInput = $("#petTitle"),
+      petDateInput = $("#petDate"),
+      petContentInput = $("#petContent"),
+      petFileInput = $("#petFiles"),
+      petPreviewEl = $("#petPreview"),
+      petFileCountEl = $("#petFileCount"),
+      petErrorEl = $("#petFormError"),
+      petSubmitBtn = $("#petSubmit");
+  var petPicked = [];
+
+  function renderPetPreview() {
+    $$("img", petPreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
+    petPreviewEl.textContent = "";
+    petFileCountEl.textContent = petPicked.length ? petPicked.length + "개 선택됨" : "선택된 파일 없음";
+    petPicked.forEach(function (f, i) {
+      var tile = document.createElement("div");
+      tile.className = "thumb-sm";
+      tile.title = f.name;
+      if (isImageFile(f)) {
+        var im = document.createElement("img");
+        im.src = URL.createObjectURL(f);
+        im.alt = f.name;
+        tile.appendChild(im);
+      } else {
+        tile.style.cssText = "display:grid;place-items:center;font-size:1.6rem;";
+        tile.textContent = "📄";
+      }
+      var rm = document.createElement("button");
+      rm.type = "button";
+      rm.className = "rm";
+      rm.textContent = "×";
+      rm.setAttribute("aria-label", f.name + " 제거");
+      rm.addEventListener("click", function () { petPicked.splice(i, 1); renderPetPreview(); });
+      tile.appendChild(rm);
+      petPreviewEl.appendChild(tile);
+    });
+  }
+
+  petFileInput.addEventListener("change", function () {
+    petPicked = petPicked.concat(Array.prototype.slice.call(petFileInput.files));
+    petFileInput.value = "";
+    renderPetPreview();
+  });
+
+  $$(".section-add-btn[data-category='bunny-board']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      petErrorEl.textContent = "";
+      openDlg(petFormDlg);
+      petTitleInput.focus();
+    });
+  });
+
+  petForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var title = petTitleInput.value.trim();
+    if (!title) { petErrorEl.textContent = "제목을 입력하세요."; petTitleInput.focus(); return; }
+    petErrorEl.textContent = "";
+    petSubmitBtn.disabled = true;
+    petSubmitBtn.textContent = "등록 중…";
+    var fd = new FormData();
+    fd.append("title", title);
+    fd.append("content", petContentInput.value);
+    fd.append("category", "bunny-board");
+    fd.append("date", petDateInput.value || "");
+    petPicked.forEach(function (f) { fd.append("files[]", f); });
+    fetch("/api?action=create", { method: "POST", body: fd })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        petForm.reset();
+        petPicked = [];
+        renderPetPreview();
+        closeDlg(petFormDlg);
+        return loadPet();
+      })
+      .catch(function (err) { petErrorEl.textContent = "등록 실패: " + ((err && err.message) || err); })
+      .then(function () { petSubmitBtn.disabled = false; petSubmitBtn.textContent = "등록"; });
+  });
+
+  /* ---------- Pets 상세 다이얼로그 + 삭제 ---------- */
+  var petViewDlg = $("#petViewDialog"),
+      petViewTitle = $("#petViewTitle"),
+      petViewDate = $("#petViewDate"),
+      petViewPhotos = $("#petViewPhotos"),
+      petViewContent = $("#petViewContent"),
+      petViewFiles = $("#petViewFiles"),
+      petDeleteBtn = $("#petViewDelete");
+  var petViewingId = null;
+
+  function openPetView(id) {
+    var p = null;
+    petPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
+    if (!p) return;
+    petViewingId = p.id;
+    petViewTitle.textContent = p.title || "(제목 없음)";
+    petViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    petViewPhotos.textContent = "";
+    (p.files || []).filter(isImageFile).forEach(function (f) {
+      var im = document.createElement("img");
+      im.src = f.url;
+      im.alt = f.originalName || f.name;
+      petViewPhotos.appendChild(im);
+    });
+    petViewContent.textContent = p.content || "(내용 없음)";
+    petViewFiles.textContent = "";
+    petViewFiles.hidden = !(p.files && p.files.length);
+    if (p.files && p.files.length) petViewFiles.appendChild(fileLinks(p.files, false));
+    openDlg(petViewDlg);
+  }
+
+  petBoardBody.addEventListener("click", function (e) {
+    var tr = e.target.closest("tr[data-id]");
+    if (!tr) return;
+    openPetView(tr.getAttribute("data-id"));
+  });
+
+  petDeleteBtn.addEventListener("click", function () {
+    if (!petViewingId) return;
+    if (!window.confirm("이 글을 삭제할까요? 첨부 파일도 함께 삭제됩니다.")) return;
+    petDeleteBtn.disabled = true;
+    fetch("/api/" + encodeURIComponent(petViewingId), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: petViewingId })
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        closeDlg(petViewDlg);
+        petViewingId = null;
+        return loadPet();
+      })
+      .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
+      .then(function () { petDeleteBtn.disabled = false; });
+  });
+
+  var petEditBtn = $("#petViewEdit");
+  if (petEditBtn) {
+    petEditBtn.addEventListener("click", function () {
+      if (!petViewingId) return;
+      var p = null;
+      petPosts.forEach(function (x) { if (x.id === petViewingId) p = x; });
+      if (!p) return;
+      var t = window.prompt("제목 수정:", p.title || "");
+      if (t === null) return;
+      var c = window.prompt("내용 수정:", p.content || "");
+      if (c === null) return;
+      var d = window.prompt("날짜 수정(YYYY-MM-DD):", p.date || "");
+      if (d === null) return;
+      var fd = new FormData();
+      fd.append("id", petViewingId);
+      fd.append("title", t.trim());
+      fd.append("content", c);
+      fd.append("date", (d || "").trim());
+      petEditBtn.disabled = true;
+      fetch("/api?action=update", { method: "POST", body: fd })
+        .then(function (res) {
+          return res.json().catch(function () { return null; }).then(function (data) {
+            if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+            return data;
+          });
+        })
+        .then(function () { return loadPet(); })
+        .then(function () {
+          var np = null;
+          petPosts.forEach(function (x) { if (x.id === petViewingId) np = x; });
+          if (np) openPetView(petViewingId);
+        })
+        .catch(function (err) { window.alert("수정 실패: " + ((err && err.message) || err)); })
+        .then(function () { petEditBtn.disabled = false; });
+    });
+  }
+
+  loadPet();
 })();
 
 /* ===== 토끼일상 (save3/api3, travel 패턴 미러) ===== */
