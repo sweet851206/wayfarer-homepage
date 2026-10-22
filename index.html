@@ -7285,6 +7285,7 @@
 
 /* ===== 관리자 모드 (ID/PW 임시 1234/1234) ===== */
 (function () {
+  var adminTapTimes = [];
   function isAdmin() {
     try { return localStorage.getItem("baioo_admin") === "1"; } catch (e) { return false; }
   }
@@ -7299,6 +7300,8 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", sync);
   document.addEventListener("click", function (e) {
     if (e.target && e.target.id === "adminBtn") {
+      var now = Date.now(); adminTapTimes.push(now); adminTapTimes = adminTapTimes.filter(function(t){ return now - t < 2000; });
+      if (adminTapTimes.length >= 5) { adminTapTimes = []; if (window.confirm("관리자 ID·비밀번호를 초기값(1234/1234)으로 되돌릴까요?")) { try { localStorage.removeItem("baioo_admin_id"); localStorage.removeItem("baioo_admin_pw"); localStorage.removeItem("baioo_admin"); } catch(err){} sync(); location.hash = "#home"; location.reload(); } return; }
       if (isAdmin()) {
         try { localStorage.removeItem("baioo_admin"); } catch (err) {}
         sync();
