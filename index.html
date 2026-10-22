@@ -2584,6 +2584,17 @@
       </div>
     </div>
 
+    <div class="pet-diary-subhead">
+      <h3>📝 자유게시판</h3>
+      <button type="button" class="section-add-btn repair-add admin-only" data-category="repair-board" style="margin:0;">＋ 새 글 등록</button>
+    </div>
+    <div class="board-table-wrap">
+      <table class="board-table">
+        <thead><tr><th style="width:64px">No</th><th>제목</th><th style="width:110px">등록일</th></tr></thead>
+        <tbody id="rpBoardBody"></tbody>
+      </table>
+    </div>
+
     <div class="ai-toolbar">
       <div class="ai-toolbar-top">
         <div class="ai-search-wrap">
@@ -3160,6 +3171,58 @@
       <button type="button" class="btn btn-primary admin-only" id="trViewEdit">수정</button>
       <button type="button" class="btn btn-danger admin-only" id="trViewDelete">삭제</button>
       <button type="button" class="btn btn-ghost" data-close="trViewDialog">닫기</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- ===== Repair 자유게시판 등록/상세 다이얼로그 ===== -->
+<dialog id="rpFormDialog" aria-label="새 Repair 글 등록">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="rpFormDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title">새 Repair 글</h3>
+    <form id="rpForm" novalidate>
+      <div class="field">
+        <label for="rpTitle">제목 *</label>
+        <input type="text" id="rpTitle" maxlength="120" placeholder="예: 오늘의 진단 기록">
+      </div>
+      <div class="field">
+        <label for="rpDate">날짜</label>
+        <input type="date" id="rpDate">
+      </div>
+      <div class="field">
+        <label for="rpContent">내용</label>
+        <textarea id="rpContent" placeholder="진단 내용을 적어주세요"></textarea>
+      </div>
+      <div class="field">
+        <label for="rpFiles">사진·파일 (여러 개)</label>
+        <div class="attach-row">
+          <label class="file-btn" for="rpFiles">파일 선택</label>
+          <input type="file" id="rpFiles" class="sr" multiple>
+          <span id="rpFileCount">선택된 파일 없음</span>
+        </div>
+        <div class="preview-grid" id="rpPreview"></div>
+      </div>
+      <div class="form-error" id="rpFormError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="rpFormDialog">취소</button>
+        <button type="submit" class="btn btn-primary" id="rpSubmit">등록</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog id="rpViewDialog" aria-label="Repair 글 상세">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="rpViewDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title" id="rpViewTitle"></h3>
+    <div class="post-date" id="rpViewDate"></div>
+    <div class="view-photos" id="rpViewPhotos"></div>
+    <div id="rpViewContent"></div>
+    <div class="file-list" id="rpViewFiles" hidden></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-primary admin-only" id="rpViewEdit">수정</button>
+      <button type="button" class="btn btn-danger admin-only" id="rpViewDelete">삭제</button>
+      <button type="button" class="btn btn-ghost" data-close="rpViewDialog">닫기</button>
     </div>
   </div>
 </dialog>
@@ -4561,6 +4624,235 @@
   }
 
   loadTr();
+
+  /* ---------- Repair 자유게시판 (Travel 패턴 미러) ---------- */
+  var rpBoardBody = $("#rpBoardBody");
+  var rpPosts = [];
+
+  function makeRpRow(p, i) {
+    var tr = document.createElement("tr");
+    tr.setAttribute("data-id", p.id);
+    var no = document.createElement("td");
+    no.textContent = String(p.id).slice(-4) || String(i + 1);
+    var ti = document.createElement("td");
+    ti.className = "board-title";
+    ti.textContent = p.title || "(제목 없음)";
+    var dt = document.createElement("td");
+    dt.textContent = postDate(p) || "—";
+    tr.appendChild(no);
+    tr.appendChild(ti);
+    tr.appendChild(dt);
+    return tr;
+  }
+
+  function renderRp() {
+    rpBoardBody.textContent = "";
+    if (!rpPosts.length) {
+      var tr = document.createElement("tr");
+      var td = document.createElement("td");
+      td.colSpan = 3;
+      td.className = "board-empty";
+      td.style.cssText = "text-align:center;color:var(--muted)";
+      td.textContent = "등록된 글이 없습니다.";
+      tr.appendChild(td);
+      rpBoardBody.appendChild(tr);
+      return;
+    }
+    rpPosts.forEach(function (p, i) { rpBoardBody.appendChild(makeRpRow(p, i)); });
+  }
+
+  function loadRp() {
+    return apiList().then(function (posts) {
+      rpPosts = posts.filter(function (p) { return p.category === "repair-board"; });
+      renderRp();
+    }).catch(function () { rpPosts = []; renderRp(); });
+  }
+
+  /* ---------- Repair 등록 폼 ---------- */
+  var rpFormDlg = $("#rpFormDialog"),
+      rpForm = $("#rpForm"),
+      rpTitleInput = $("#rpTitle"),
+      rpDateInput = $("#rpDate"),
+      rpContentInput = $("#rpContent"),
+      rpFileInput = $("#rpFiles"),
+      rpPreviewEl = $("#rpPreview"),
+      rpFileCountEl = $("#rpFileCount"),
+      rpErrorEl = $("#rpFormError"),
+      rpSubmitBtn = $("#rpSubmit");
+  var rpPicked = [];
+
+  function renderRpPreview() {
+    $$("img", rpPreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
+    rpPreviewEl.textContent = "";
+    rpFileCountEl.textContent = rpPicked.length ? rpPicked.length + "개 선택됨" : "선택된 파일 없음";
+    rpPicked.forEach(function (f, i) {
+      var tile = document.createElement("div");
+      tile.className = "thumb-sm";
+      tile.title = f.name;
+      if (isImageFile(f)) {
+        var im = document.createElement("img");
+        im.src = URL.createObjectURL(f);
+        im.alt = f.name;
+        tile.appendChild(im);
+      } else {
+        tile.style.cssText = "display:grid;place-items:center;font-size:1.6rem;";
+        tile.textContent = "📄";
+      }
+      var rm = document.createElement("button");
+      rm.type = "button";
+      rm.className = "rm";
+      rm.textContent = "×";
+      rm.setAttribute("aria-label", f.name + " 제거");
+      rm.addEventListener("click", function () { rpPicked.splice(i, 1); renderRpPreview(); });
+      tile.appendChild(rm);
+      rpPreviewEl.appendChild(tile);
+    });
+  }
+
+  rpFileInput.addEventListener("change", function () {
+    rpPicked = rpPicked.concat(Array.prototype.slice.call(rpFileInput.files));
+    rpFileInput.value = "";
+    renderRpPreview();
+  });
+
+  $$(".section-add-btn[data-category='repair-board']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      rpErrorEl.textContent = "";
+      openDlg(rpFormDlg);
+      rpTitleInput.focus();
+    });
+  });
+
+  rpForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var title = rpTitleInput.value.trim();
+    if (!title) { rpErrorEl.textContent = "제목을 입력하세요."; rpTitleInput.focus(); return; }
+    rpErrorEl.textContent = "";
+    rpSubmitBtn.disabled = true;
+    rpSubmitBtn.textContent = "등록 중…";
+    var fd = new FormData();
+    fd.append("title", title);
+    fd.append("content", rpContentInput.value);
+    fd.append("category", "repair-board");
+    fd.append("date", rpDateInput.value || "");
+    rpPicked.forEach(function (f) { fd.append("files[]", f); });
+    fetch("/api?action=create", { method: "POST", body: fd })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        rpForm.reset();
+        rpPicked = [];
+        renderRpPreview();
+        closeDlg(rpFormDlg);
+        return loadRp();
+      })
+      .catch(function (err) { rpErrorEl.textContent = "등록 실패: " + ((err && err.message) || err); })
+      .then(function () { rpSubmitBtn.disabled = false; rpSubmitBtn.textContent = "등록"; });
+  });
+
+  /* ---------- Repair 상세 다이얼로그 + 삭제 ---------- */
+  var rpViewDlg = $("#rpViewDialog"),
+      rpViewTitle = $("#rpViewTitle"),
+      rpViewDate = $("#rpViewDate"),
+      rpViewPhotos = $("#rpViewPhotos"),
+      rpViewContent = $("#rpViewContent"),
+      rpViewFiles = $("#rpViewFiles"),
+      rpDeleteBtn = $("#rpViewDelete");
+  var rpViewingId = null;
+
+  function openRpView(id) {
+    var p = null;
+    rpPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
+    if (!p) return;
+    rpViewingId = p.id;
+    rpViewTitle.textContent = p.title || "(제목 없음)";
+    rpViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    rpViewPhotos.textContent = "";
+    (p.files || []).filter(isImageFile).forEach(function (f) {
+      var im = document.createElement("img");
+      im.src = f.url;
+      im.alt = f.originalName || f.name;
+      rpViewPhotos.appendChild(im);
+    });
+    rpViewContent.textContent = p.content || "(내용 없음)";
+    rpViewFiles.textContent = "";
+    rpViewFiles.hidden = !(p.files && p.files.length);
+    if (p.files && p.files.length) rpViewFiles.appendChild(fileLinks(p.files, false));
+    openDlg(rpViewDlg);
+  }
+
+  rpBoardBody.addEventListener("click", function (e) {
+    var tr = e.target.closest("tr[data-id]");
+    if (!tr) return;
+    openRpView(tr.getAttribute("data-id"));
+  });
+
+  rpDeleteBtn.addEventListener("click", function () {
+    if (!rpViewingId) return;
+    if (!window.confirm("이 글을 삭제할까요? 첨부 파일도 함께 삭제됩니다.")) return;
+    rpDeleteBtn.disabled = true;
+    fetch("/api/" + encodeURIComponent(rpViewingId), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: rpViewingId })
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        closeDlg(rpViewDlg);
+        rpViewingId = null;
+        return loadRp();
+      })
+      .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
+      .then(function () { rpDeleteBtn.disabled = false; });
+  });
+
+  var rpEditBtn = $("#rpViewEdit");
+  if (rpEditBtn) {
+    rpEditBtn.addEventListener("click", function () {
+      if (!rpViewingId) return;
+      var p = null;
+      rpPosts.forEach(function (x) { if (x.id === rpViewingId) p = x; });
+      if (!p) return;
+      var t = window.prompt("제목 수정:", p.title || "");
+      if (t === null) return;
+      var c = window.prompt("내용 수정:", p.content || "");
+      if (c === null) return;
+      var d = window.prompt("날짜 수정(YYYY-MM-DD):", p.date || "");
+      if (d === null) return;
+      var fd = new FormData();
+      fd.append("id", rpViewingId);
+      fd.append("title", t.trim());
+      fd.append("content", c);
+      fd.append("date", (d || "").trim());
+      rpEditBtn.disabled = true;
+      fetch("/api?action=update", { method: "POST", body: fd })
+        .then(function (res) {
+          return res.json().catch(function () { return null; }).then(function (data) {
+            if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+            return data;
+          });
+        })
+        .then(function () { return loadRp(); })
+        .then(function () {
+          var np = null;
+          rpPosts.forEach(function (x) { if (x.id === rpViewingId) np = x; });
+          if (np) openRpView(rpViewingId);
+        })
+        .catch(function (err) { window.alert("수정 실패: " + ((err && err.message) || err)); })
+        .then(function () { rpEditBtn.disabled = false; });
+    });
+  }
+
+  loadRp();
 })();
 
 /* ===== 토끼일상 (save3/api3, travel 패턴 미러) ===== */
