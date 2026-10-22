@@ -666,6 +666,9 @@
   .board-table .board-title { font-weight: 600; }
   .board-view-panel { position: relative; margin-top: 14px; margin-bottom: 22px; padding: 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-soft); }
   .board-view-panel .x-close { position: absolute; top: 8px; right: 10px; }
+  .vote-row { display: flex; gap: 10px; margin: 12px 0; }
+  .vote-btn { border: 1px solid var(--border); background: #fff; border-radius: 999px; padding: 8px 14px; cursor: pointer; font-weight: 700; }
+  .vote-btn:disabled { opacity: .5; cursor: default; }
   .board-table th:last-child, .board-table td:last-child { white-space: nowrap; }
   body:not(.is-admin) .board-table .board-empty { cursor: default; }
   .ai-page-bar { display: flex; gap: 8px; justify-content: center; margin: 18px 0 4px; flex-wrap: wrap; }
@@ -2339,6 +2342,10 @@
       <div class="view-photos" id="aiInlinePhotos"></div>
       <div id="aiInlineContent"></div>
       <div class="file-list" id="aiInlineFiles" hidden></div>
+      <div class="vote-row">
+        <button type="button" class="vote-btn" id="aiInlineLike">❤ 추천 <span id="aiLikeCount">0</span></button>
+        <button type="button" class="vote-btn" id="aiInlineDislike">💔 비추천 <span id="aiDislikeCount">0</span></button>
+      </div>
       <div class="dlg-actions">
         <button type="button" class="btn btn-primary admin-only" id="aiInlineEdit">수정</button>
         <button type="button" class="btn btn-danger admin-only" id="aiInlineDelete">삭제</button>
@@ -2441,6 +2448,10 @@
       <div class="view-photos" id="brInlinePhotos"></div>
       <div id="brInlineContent"></div>
       <div class="file-list" id="brInlineFiles" hidden></div>
+      <div class="vote-row">
+        <button type="button" class="vote-btn" id="brInlineLike">❤ 추천 <span id="brLikeCount">0</span></button>
+        <button type="button" class="vote-btn" id="brInlineDislike">💔 비추천 <span id="brDislikeCount">0</span></button>
+      </div>
       <div class="dlg-actions">
         <button type="button" class="btn btn-primary admin-only" id="brInlineEdit">수정</button>
         <button type="button" class="btn btn-danger admin-only" id="brInlineDelete">삭제</button>
@@ -2543,6 +2554,10 @@
       <div class="view-photos" id="trInlinePhotos"></div>
       <div id="trInlineContent"></div>
       <div class="file-list" id="trInlineFiles" hidden></div>
+      <div class="vote-row">
+        <button type="button" class="vote-btn" id="trInlineLike">❤ 추천 <span id="trLikeCount">0</span></button>
+        <button type="button" class="vote-btn" id="trInlineDislike">💔 비추천 <span id="trDislikeCount">0</span></button>
+      </div>
       <div class="dlg-actions">
         <button type="button" class="btn btn-primary admin-only" id="trInlineEdit">수정</button>
         <button type="button" class="btn btn-danger admin-only" id="trInlineDelete">삭제</button>
@@ -2653,6 +2668,10 @@
       <div class="view-photos" id="rpInlinePhotos"></div>
       <div id="rpInlineContent"></div>
       <div class="file-list" id="rpInlineFiles" hidden></div>
+      <div class="vote-row">
+        <button type="button" class="vote-btn" id="rpInlineLike">❤ 추천 <span id="rpLikeCount">0</span></button>
+        <button type="button" class="vote-btn" id="rpInlineDislike">💔 비추천 <span id="rpDislikeCount">0</span></button>
+      </div>
       <div class="dlg-actions">
         <button type="button" class="btn btn-primary admin-only" id="rpInlineEdit">수정</button>
         <button type="button" class="btn btn-danger admin-only" id="rpInlineDelete">삭제</button>
@@ -2761,6 +2780,10 @@
       <div class="view-photos" id="petInlinePhotos"></div>
       <div id="petInlineContent"></div>
       <div class="file-list" id="petInlineFiles" hidden></div>
+      <div class="vote-row">
+        <button type="button" class="vote-btn" id="petInlineLike">❤ 추천 <span id="petLikeCount">0</span></button>
+        <button type="button" class="vote-btn" id="petInlineDislike">💔 비추천 <span id="petDislikeCount">0</span></button>
+      </div>
       <div class="dlg-actions">
         <button type="button" class="btn btn-primary admin-only" id="petInlineEdit">수정</button>
         <button type="button" class="btn btn-danger admin-only" id="petInlineDelete">삭제</button>
@@ -3775,6 +3798,22 @@
   if (logoHome) { logoHome.addEventListener("click", mainStartsSound); }
 
   /* ---------- API ---------- */
+  window.BaiooVote = window.BaiooVote || {
+    key: function (id) { return "baioo_voted_" + id; },
+    voted: function (id) { try { return localStorage.getItem(this.key(id)); } catch (e) { return null; } },
+    label: function (p) { var l = (+p.likes) || 0, d = (+p.dislikes) || 0; return "❤" + l + " 💔" + d; },
+    send: function (id, kind, cb) {
+      if (this.voted(id)) { window.alert("이미 투표했습니다. (브라우저당 1회)"); return; }
+      fetch("/api?action=vote", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: id, kind: kind }) })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (!data || !data.ok) throw new Error((data && data.message) || "vote fail");
+          try { localStorage.setItem(window.BaiooVote.key(id), kind); } catch (e) {}
+          if (cb) cb(data);
+        })
+        .catch(function (err) { window.alert("투표 실패: " + ((err && err.message) || err)); });
+    }
+  };
   function apiList() {
     return fetch("/api?action=list", { headers: { Accept: "application/json" } })
       .then(function (res) { return res.json(); })
@@ -4104,7 +4143,7 @@
     no.textContent = String(p.id).slice(-4) || String(i + 1);
     var ti = document.createElement("td");
     ti.className = "board-title";
-    ti.textContent = p.title || "(제목 없음)";
+    ti.textContent = (p.title || "(제목 없음)") + " " + window.BaiooVote.label(p);
     var dt = document.createElement("td");
     dt.textContent = postDate(p) || "—";
     tr.appendChild(no);
@@ -4265,6 +4304,9 @@
       fl.hidden = !(p.files && p.files.length);
       if (p.files && p.files.length) fl.appendChild(fileLinks(p.files, false));
     }
+    var alc = $("#aiLikeCount"), adc = $("#aiDislikeCount");
+    if (alc) alc.textContent = (+p.likes) || 0;
+    if (adc) adc.textContent = (+p.dislikes) || 0;
     if (panel) {
       panel.hidden = false;
       if (panel.scrollIntoView) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -4285,6 +4327,27 @@
   if (aiInlineDelete) aiInlineDelete.addEventListener("click", function () { aiDeleteBtn.click(); });
   var aiInlineEdit = $("#aiInlineEdit");
   if (aiInlineEdit) aiInlineEdit.addEventListener("click", function () { aiEditBtn.click(); });
+  var aiInlineLike = $("#aiInlineLike"), aiInlineDislike = $("#aiInlineDislike");
+  if (aiInlineLike) aiInlineLike.addEventListener("click", function () {
+    if (!aiViewingId) return;
+    window.BaiooVote.send(aiViewingId, "like", function (data) {
+      var lc = $("#aiLikeCount"), dc = $("#aiDislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      aiPosts.forEach(function (x) { if (String(x.id) === String(aiViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderAi();
+    });
+  });
+  if (aiInlineDislike) aiInlineDislike.addEventListener("click", function () {
+    if (!aiViewingId) return;
+    window.BaiooVote.send(aiViewingId, "dislike", function (data) {
+      var lc = $("#aiLikeCount"), dc = $("#aiDislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      aiPosts.forEach(function (x) { if (String(x.id) === String(aiViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderAi();
+    });
+  });
 
   aiDeleteBtn.addEventListener("click", function () {
     if (!aiViewingId) return;
@@ -4431,7 +4494,7 @@
     no.textContent = String(p.id).slice(-4) || String(i + 1);
     var ti = document.createElement("td");
     ti.className = "board-title";
-    ti.textContent = p.title || "(제목 없음)";
+    ti.textContent = (p.title || "(제목 없음)") + " " + window.BaiooVote.label(p);
     var dt = document.createElement("td");
     dt.textContent = postDate(p) || "—";
     tr.appendChild(no);
@@ -4589,6 +4652,9 @@
       fl.hidden = !(p.files && p.files.length);
       if (p.files && p.files.length) fl.appendChild(fileLinks(p.files, false));
     }
+    var blc = $("#brLikeCount"), bdc = $("#brDislikeCount");
+    if (blc) blc.textContent = (+p.likes) || 0;
+    if (bdc) bdc.textContent = (+p.dislikes) || 0;
     if (panel) {
       panel.hidden = false;
       if (panel.scrollIntoView) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -4609,6 +4675,27 @@
   if (brInlineDelete) brInlineDelete.addEventListener("click", function () { brDeleteBtn.click(); });
   var brInlineEdit = $("#brInlineEdit");
   if (brInlineEdit) brInlineEdit.addEventListener("click", function () { var b = $("#brViewEdit"); if (b) b.click(); });
+  var brInlineLike = $("#brInlineLike"), brInlineDislike = $("#brInlineDislike");
+  if (brInlineLike) brInlineLike.addEventListener("click", function () {
+    if (!brViewingId) return;
+    window.BaiooVote.send(brViewingId, "like", function (data) {
+      var lc = $("#brLikeCount"), dc = $("#brDislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      brPosts.forEach(function (x) { if (String(x.id) === String(brViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderBr();
+    });
+  });
+  if (brInlineDislike) brInlineDislike.addEventListener("click", function () {
+    if (!brViewingId) return;
+    window.BaiooVote.send(brViewingId, "dislike", function (data) {
+      var lc = $("#brLikeCount"), dc = $("#brDislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      brPosts.forEach(function (x) { if (String(x.id) === String(brViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderBr();
+    });
+  });
 
   brDeleteBtn.addEventListener("click", function () {
     if (!brViewingId) return;
@@ -4712,7 +4799,7 @@
     no.textContent = String(p.id).slice(-4) || String(i + 1);
     var ti = document.createElement("td");
     ti.className = "board-title";
-    ti.textContent = p.title || "(제목 없음)";
+    ti.textContent = (p.title || "(제목 없음)") + " " + window.BaiooVote.label(p);
     var dt = document.createElement("td");
     dt.textContent = postDate(p) || "—";
     tr.appendChild(no);
@@ -4870,6 +4957,9 @@
       fl.hidden = !(p.files && p.files.length);
       if (p.files && p.files.length) fl.appendChild(fileLinks(p.files, false));
     }
+    var tlc = $("#trLikeCount"), tdc = $("#trDislikeCount");
+    if (tlc) tlc.textContent = (+p.likes) || 0;
+    if (tdc) tdc.textContent = (+p.dislikes) || 0;
     if (panel) {
       panel.hidden = false;
       if (panel.scrollIntoView) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -4890,6 +4980,27 @@
   if (trInlineDelete) trInlineDelete.addEventListener("click", function () { trDeleteBtn.click(); });
   var trInlineEdit = $("#trInlineEdit");
   if (trInlineEdit) trInlineEdit.addEventListener("click", function () { var b = $("#trViewEdit"); if (b) b.click(); });
+  var trInlineLike = $("#trInlineLike"), trInlineDislike = $("#trInlineDislike");
+  if (trInlineLike) trInlineLike.addEventListener("click", function () {
+    if (!trViewingId) return;
+    window.BaiooVote.send(trViewingId, "like", function (data) {
+      var lc = $("#trLikeCount"), dc = $("#trDislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      trPosts.forEach(function (x) { if (String(x.id) === String(trViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderTr();
+    });
+  });
+  if (trInlineDislike) trInlineDislike.addEventListener("click", function () {
+    if (!trViewingId) return;
+    window.BaiooVote.send(trViewingId, "dislike", function (data) {
+      var lc = $("#trLikeCount"), dc = $("#trDislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      trPosts.forEach(function (x) { if (String(x.id) === String(trViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderTr();
+    });
+  });
 
   trDeleteBtn.addEventListener("click", function () {
     if (!trViewingId) return;
@@ -4993,7 +5104,7 @@
     no.textContent = String(p.id).slice(-4) || String(i + 1);
     var ti = document.createElement("td");
     ti.className = "board-title";
-    ti.textContent = p.title || "(제목 없음)";
+    ti.textContent = (p.title || "(제목 없음)") + " " + window.BaiooVote.label(p);
     var dt = document.createElement("td");
     dt.textContent = postDate(p) || "—";
     tr.appendChild(no);
@@ -5151,6 +5262,9 @@
       fl.hidden = !(p.files && p.files.length);
       if (p.files && p.files.length) fl.appendChild(fileLinks(p.files, false));
     }
+    var rlc = $("#rpLikeCount"), rdc = $("#rpDislikeCount");
+    if (rlc) rlc.textContent = (+p.likes) || 0;
+    if (rdc) rdc.textContent = (+p.dislikes) || 0;
     if (panel) {
       panel.hidden = false;
       if (panel.scrollIntoView) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -5171,6 +5285,27 @@
   if (rpInlineDelete) rpInlineDelete.addEventListener("click", function () { rpDeleteBtn.click(); });
   var rpInlineEdit = $("#rpInlineEdit");
   if (rpInlineEdit) rpInlineEdit.addEventListener("click", function () { var b = $("#rpViewEdit"); if (b) b.click(); });
+  var rpInlineLike = $("#rpInlineLike"), rpInlineDislike = $("#rpInlineDislike");
+  if (rpInlineLike) rpInlineLike.addEventListener("click", function () {
+    if (!rpViewingId) return;
+    window.BaiooVote.send(rpViewingId, "like", function (data) {
+      var lc = $("#rpLikeCount"), dc = $("#rpDislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      rpPosts.forEach(function (x) { if (String(x.id) === String(rpViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderRp();
+    });
+  });
+  if (rpInlineDislike) rpInlineDislike.addEventListener("click", function () {
+    if (!rpViewingId) return;
+    window.BaiooVote.send(rpViewingId, "dislike", function (data) {
+      var lc = $("#rpLikeCount"), dc = $("#rpDislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      rpPosts.forEach(function (x) { if (String(x.id) === String(rpViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderRp();
+    });
+  });
 
   rpDeleteBtn.addEventListener("click", function () {
     if (!rpViewingId) return;
@@ -5274,7 +5409,7 @@
     no.textContent = String(p.id).slice(-4) || String(i + 1);
     var ti = document.createElement("td");
     ti.className = "board-title";
-    ti.textContent = p.title || "(제목 없음)";
+    ti.textContent = (p.title || "(제목 없음)") + " " + window.BaiooVote.label(p);
     var dt = document.createElement("td");
     dt.textContent = postDate(p) || "—";
     tr.appendChild(no);
@@ -5432,6 +5567,9 @@
       fl.hidden = !(p.files && p.files.length);
       if (p.files && p.files.length) fl.appendChild(fileLinks(p.files, false));
     }
+    var plc = $("#petLikeCount"), pdc = $("#petDislikeCount");
+    if (plc) plc.textContent = (+p.likes) || 0;
+    if (pdc) pdc.textContent = (+p.dislikes) || 0;
     if (panel) {
       panel.hidden = false;
       if (panel.scrollIntoView) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -5452,6 +5590,27 @@
   if (petInlineDelete) petInlineDelete.addEventListener("click", function () { petDeleteBtn.click(); });
   var petInlineEdit = $("#petInlineEdit");
   if (petInlineEdit) petInlineEdit.addEventListener("click", function () { var b = $("#petViewEdit"); if (b) b.click(); });
+  var petInlineLike = $("#petInlineLike"), petInlineDislike = $("#petInlineDislike");
+  if (petInlineLike) petInlineLike.addEventListener("click", function () {
+    if (!petViewingId) return;
+    window.BaiooVote.send(petViewingId, "like", function (data) {
+      var lc = $("#petLikeCount"), dc = $("#petDislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      petPosts.forEach(function (x) { if (String(x.id) === String(petViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderPet();
+    });
+  });
+  if (petInlineDislike) petInlineDislike.addEventListener("click", function () {
+    if (!petViewingId) return;
+    window.BaiooVote.send(petViewingId, "dislike", function (data) {
+      var lc = $("#petLikeCount"), dc = $("#petDislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      petPosts.forEach(function (x) { if (String(x.id) === String(petViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderPet();
+    });
+  });
 
   petDeleteBtn.addEventListener("click", function () {
     if (!petViewingId) return;

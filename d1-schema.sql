@@ -5,7 +5,9 @@ CREATE TABLE IF NOT EXISTS posts (
   content TEXT DEFAULT '',
   date TEXT DEFAULT '',
   created_at TEXT NOT NULL,
-  files TEXT DEFAULT '[]'
+  files TEXT DEFAULT '[]',
+  likes INTEGER DEFAULT 0,
+  dislikes INTEGER DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS idx_posts_board ON posts(board, created_at DESC);
 CREATE TABLE IF NOT EXISTS visits (id TEXT PRIMARY KEY, count INTEGER NOT NULL);

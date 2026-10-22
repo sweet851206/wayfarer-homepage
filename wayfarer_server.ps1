@@ -162,7 +162,7 @@ while($listener.IsListening){
           [IO.File]::WriteAllBytes((Join-Path $folder $name),$part.Data)
           $files += [pscustomobject]@{name=$name;originalName=$original;type=$part.ContentType;size=$part.Data.Length;url="/save/$id/$([Uri]::EscapeDataString($name))"}
         }
-        $post=[pscustomobject]@{id=$id;category=$category;title=$title;content=$content;date=$date;createdAt=[DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds();files=@($files)}
+        $post=[pscustomobject]@{id=$id;category=$category;title=$title;content=$content;date=$date;createdAt=[DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds();files=@($files);likes=0;dislikes=0}
         $posts=Load-Posts
         $posts=@($post)+@($posts)
         Save-Posts $posts
@@ -194,7 +194,7 @@ while($listener.IsListening){
           [IO.File]::WriteAllBytes((Join-Path $folder $name),$part.Data)
           $files += [pscustomobject]@{name=$name;originalName=$original;type=$part.ContentType;size=$part.Data.Length;url="/save3/$id/$([Uri]::EscapeDataString($name))"}
         }
-        $post=[pscustomobject]@{id=$id;category=$category;title=$title;content=$content;date=$date;createdAt=[DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds();files=@($files)}
+        $post=[pscustomobject]@{id=$id;category=$category;title=$title;content=$content;date=$date;createdAt=[DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds();files=@($files);likes=0;dislikes=0}
         $posts=Load-Posts3
         $posts=@($post)+@($posts)
         Save-Posts3 $posts
@@ -232,6 +232,34 @@ while($listener.IsListening){
 
     if($path -eq "/api" -and $method -eq "POST" -and $ctx.Request.ContentType -like "application/json*"){
       # reserved
+    }
+
+    if($path -eq "/api" -and $method -eq "POST"){
+      $action=$ctx.Request.QueryString["action"]
+      if($action -eq "vote"){
+        $body=Read-BodyBytes $ctx.Request.InputStream $ctx.Request.ContentLength64
+        try { $obj=[Text.Encoding]::UTF8.GetString($body)|ConvertFrom-Json } catch { $obj=$null }
+        $vid=$obj.id; $kind=$obj.kind
+        $likes=0; $dislikes=0
+        $posts=Load-Posts
+        $posts=@($posts|ForEach-Object { if($_.id -eq $vid){ if($kind -eq "like"){ $_.likes=([int]$_.likes)+1 } elseif($kind -eq "dislike"){ $_.dislikes=([int]$_.dislikes)+1 }; $likes=[int]$_.likes; $dislikes=[int]$_.dislikes }; $_ })
+        Save-Posts $posts
+        Send-Json $ctx @{ok=$true;id=$vid;likes=$likes;dislikes=$dislikes}; continue
+      }
+    }
+
+    if($path -eq "/api3" -and $method -eq "POST"){
+      $action=$ctx.Request.QueryString["action"]
+      if($action -eq "vote"){
+        $body=Read-BodyBytes $ctx.Request.InputStream $ctx.Request.ContentLength64
+        try { $obj=[Text.Encoding]::UTF8.GetString($body)|ConvertFrom-Json } catch { $obj=$null }
+        $vid=$obj.id; $kind=$obj.kind
+        $likes=0; $dislikes=0
+        $posts=Load-Posts3
+        $posts=@($posts|ForEach-Object { if($_.id -eq $vid){ if($kind -eq "like"){ $_.likes=([int]$_.likes)+1 } elseif($kind -eq "dislike"){ $_.dislikes=([int]$_.dislikes)+1 }; $likes=[int]$_.likes; $dislikes=[int]$_.dislikes }; $_ })
+        Save-Posts3 $posts
+        Send-Json $ctx @{ok=$true;id=$vid;likes=$likes;dislikes=$dislikes}; continue
+      }
     }
 
     if($path -like "/api/*" -and $method -eq "POST"){

@@ -1,4 +1,4 @@
-import { listPosts, createPost, updatePost, deletePost, json } from "../_store.js";
+import { listPosts, createPost, updatePost, deletePost, votePost, json } from "../_store.js";
 
 export async function onRequest(context) {
   const { request, env } = context;
@@ -7,6 +7,9 @@ export async function onRequest(context) {
   try {
     if (request.method === "GET" && action === "list") {
       return json({ ok: true, posts: await listPosts(env.BLOG_DB, "bunny") });
+    }
+    if (request.method === "POST" && action === "vote") {
+      return json(await votePost(request, env.BLOG_DB));
     }
     if (request.method === "POST" && action === "create") {
       return json(await createPost(request, env.BLOG_DB, env.BLOG_FILES, "bunny"));

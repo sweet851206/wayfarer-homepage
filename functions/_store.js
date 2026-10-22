@@ -5,15 +5,18 @@ function pickBoard(v, fallback) {
 }
 
 export async function listPosts(db, board) {
+  try { await db.prepare("ALTER TABLE posts ADD COLUMN likes INTEGER DEFAULT 0").run(); } catch (e) {}
+  try { await db.prepare("ALTER TABLE posts ADD COLUMN dislikes INTEGER DEFAULT 0").run(); } catch (e) {}
   const r = await db.prepare(
-    "SELECT id,board,title,content,date,created_at,files FROM posts ORDER BY created_at DESC"
+    "SELECT id,board,title,content,date,created_at,files,COALESCE(likes,0) AS likes,COALESCE(dislikes,0) AS dislikes FROM posts ORDER BY created_at DESC"
   ).all();
   return (r.results || []).map(function (row) {
     var files = [];
     try { files = JSON.parse(row.files || "[]"); } catch (e) {}
     return {
       id: row.id, title: row.title, content: row.content, date: row.date,
-      category: row.board, createdAt: row.created_at, files: files
+      category: row.board, createdAt: row.created_at, files: files,
+      likes: row.likes || 0, dislikes: row.dislikes || 0
     };
   });
 }
@@ -37,11 +40,11 @@ export async function createPost(req, db, bucket, board) {
   }
   const created = new Date().toISOString();
   await db.prepare(
-    "INSERT INTO posts(id,board,title,content,date,created_at,files) VALUES(?,?,?,?,?,?,?)"
+    "INSERT INTO posts(id,board,title,content,date,created_at,files,likes,dislikes) VALUES(?,?,?,?,?,?,?,?,?)"
   ).bind(
     id, boardName,
     String(fd.get("title") || ""), String(fd.get("content") || ""),
-    String(fd.get("date") || ""), created, JSON.stringify(files)
+    String(fd.get("date") || ""), created, JSON.stringify(files), 0, 0
   ).run();
   return { ok: true, id: id };
 }
@@ -81,6 +84,22 @@ export async function deletePost(req, db, bucket, board) {
   }
   await db.prepare("DELETE FROM posts WHERE id=?").bind(id).run();
   return { ok: true };
+}
+
+export async function votePost(req, db) {
+  var id = "", kind = "";
+  try {
+    const b = await req.json();
+    id = String((b && b.id) || "");
+    kind = String((b && b.kind) || "");
+  } catch (e) {}
+  if (!id || (kind !== "like" && kind !== "dislike")) return { ok: false, message: "bad vote" };
+  try { await db.prepare("ALTER TABLE posts ADD COLUMN likes INTEGER DEFAULT 0").run(); } catch (e) {}
+  try { await db.prepare("ALTER TABLE posts ADD COLUMN dislikes INTEGER DEFAULT 0").run(); } catch (e) {}
+  if (kind === "like") await db.prepare("UPDATE posts SET likes=COALESCE(likes,0)+1 WHERE id=?").bind(id).run();
+  else await db.prepare("UPDATE posts SET dislikes=COALESCE(dislikes,0)+1 WHERE id=?").bind(id).run();
+  const row = await db.prepare("SELECT COALESCE(likes,0) AS likes, COALESCE(dislikes,0) AS dislikes FROM posts WHERE id=?").bind(id).first();
+  return { ok: true, id: id, likes: (row && row.likes) || 0, dislikes: (row && row.dislikes) || 0 };
 }
 
 export function json(data, status) {
