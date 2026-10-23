@@ -10059,8 +10059,10 @@ async function startAdminBg() {
     var m = await import("https://unpkg.com/shaders@4.0.5/dist/js/bundle.js");
     await m.createShader(c, {
       components: [
-        { type: "Swirl", props: { colorA: "#3dd812", colorB: "#2bf03b" } },
-        { type: "Blob", props: { colorA: "#fce656", colorB: "#e9ac1e", highlightColor: "#03b2ff", size: 0.8, deformation: 0.7, softness: 1 } }
+        { type: "LinearGradient", props: { colorA: "#bfdbfe", colorB: "#e0eaff", start: { x: 0, y: 1 }, end: { x: 1, y: 0 }, colorSpace: "oklch" } },
+        { type: "Blob", props: { colorA: "#60a5fa", colorB: "#3b82f6", highlightColor: "#ffffff", highlightIntensity: 0.4, size: 0.85, deformation: 0.5, softness: 0.9, speed: 0.25, center: { x: 0.65, y: 0.35 } } },
+        { type: "DotGrid", props: { color: "#3b82f6", density: 40, dotSize: 0.08, twinkle: 0.2 } },
+        { type: "FilmGrain", props: { strength: 0.12 } }
       ]
     });
   } catch (e) { console.warn("adminBg skip:", e); }
