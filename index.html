@@ -684,8 +684,6 @@
   .vote-btn { border: 1px solid var(--border); background: #fff; border-radius: 999px; padding: 8px 14px; cursor: pointer; font-weight: 700; color: #e11d48; }
   .vote-btn:disabled { opacity: .5; cursor: default; }
   .vote-red { color: #e11d48; font-weight: 700; white-space: nowrap; font-size: .8em; margin-right: 2px; }
-  .board-table td:last-child { padding-top: 6px; padding-bottom: 6px; }
-  .board-table td:last-child .board-sub { font-size: .8em; color: var(--muted); white-space: nowrap; line-height: 1.5; }
   .row-del { margin-left: 6px; background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0 2px; }
   .cmt-wrap { margin-top: 14px; border-top: 1px dashed var(--border); padding-top: 12px; }
   .cmt-list { display: flex; flex-direction: column; gap: 8px; margin: 8px 0; }
@@ -4263,14 +4261,12 @@
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
-    var sub = document.createElement("div");
-    sub.className = "board-sub";
+    dt.appendChild(document.createTextNode("  "));
     var vw = document.createElement("span");
     vw.className = "board-views";
     vw.textContent = "views " + (((+p.views) || 0));
-    sub.appendChild(vw);
-    sub.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
-    dt.appendChild(sub);
+    dt.appendChild(vw);
+    dt.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
     var del = document.createElement("button");
     del.type = "button";
     del.className = "row-del admin-only";
@@ -4696,14 +4692,12 @@
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
-    var sub = document.createElement("div");
-    sub.className = "board-sub";
+    dt.appendChild(document.createTextNode("  "));
     var vw = document.createElement("span");
     vw.className = "board-views";
     vw.textContent = "views " + (((+p.views) || 0));
-    sub.appendChild(vw);
-    sub.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
-    dt.appendChild(sub);
+    dt.appendChild(vw);
+    dt.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
     var del = document.createElement("button");
     del.type = "button";
     del.className = "row-del admin-only";
@@ -5076,14 +5070,12 @@
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
-    var sub = document.createElement("div");
-    sub.className = "board-sub";
+    dt.appendChild(document.createTextNode("  "));
     var vw = document.createElement("span");
     vw.className = "board-views";
     vw.textContent = "views " + (((+p.views) || 0));
-    sub.appendChild(vw);
-    sub.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
-    dt.appendChild(sub);
+    dt.appendChild(vw);
+    dt.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
     var del = document.createElement("button");
     del.type = "button";
     del.className = "row-del admin-only";
@@ -5456,14 +5448,12 @@
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
-    var sub = document.createElement("div");
-    sub.className = "board-sub";
+    dt.appendChild(document.createTextNode("  "));
     var vw = document.createElement("span");
     vw.className = "board-views";
     vw.textContent = "views " + (((+p.views) || 0));
-    sub.appendChild(vw);
-    sub.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
-    dt.appendChild(sub);
+    dt.appendChild(vw);
+    dt.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
     var del = document.createElement("button");
     del.type = "button";
     del.className = "row-del admin-only";
@@ -5836,14 +5826,12 @@
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
-    var sub = document.createElement("div");
-    sub.className = "board-sub";
+    dt.appendChild(document.createTextNode("  "));
     var vw = document.createElement("span");
     vw.className = "board-views";
     vw.textContent = "views " + (((+p.views) || 0));
-    sub.appendChild(vw);
-    sub.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
-    dt.appendChild(sub);
+    dt.appendChild(vw);
+    dt.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
     var del = document.createElement("button");
     del.type = "button";
     del.className = "row-del admin-only";
