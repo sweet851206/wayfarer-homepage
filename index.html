@@ -6568,7 +6568,7 @@
   if (!likedMap || typeof likedMap !== "object") likedMap = {};
 
   function getAllIdeas() {
-    return customIdeas.concat(SEED_IDEAS);
+    return customIdeas.slice();
   }
 
   function getLikeCount(idea) {
@@ -8068,7 +8068,7 @@
   var likedMap = loadJson(STORAGE_LIKES, {});
   if (!likedMap || typeof likedMap !== "object") likedMap = {};
 
-  function getAll() { return customPets.concat(SEED_PETS); }
+  function getAll() { return customPets.slice(); }
   function getLikes(item) { return Number(item.baseLikes || 0) + (likedMap[item.id] ? 1 : 0); }
 
   var gridEl = $("#petIdeaGrid");
@@ -8558,7 +8558,7 @@
   var likedMap = loadJson(STORAGE_LIKES, {});
   if (!likedMap || typeof likedMap !== "object") likedMap = {};
 
-  function getAll() { return customTrips.concat(SEED_TRIPS); }
+  function getAll() { return customTrips.slice(); }
   function getLikes(item) { return Number(item.baseLikes || 0) + (likedMap[item.id] ? 1 : 0); }
 
   var gridEl = $("#trIdeaGrid");
@@ -9048,7 +9048,7 @@
   var likedMap = loadJson(STORAGE_LIKES, {});
   if (!likedMap || typeof likedMap !== "object") likedMap = {};
 
-  function getAll() { return customDiags.concat(SEED_DIAGS); }
+  function getAll() { return customDiags.slice(); }
   function getLikes(item) { return Number(item.baseLikes || 0) + (likedMap[item.id] ? 1 : 0); }
 
   var gridEl = $("#rpIdeaGrid");
