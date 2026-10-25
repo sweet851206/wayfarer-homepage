@@ -7078,7 +7078,7 @@
       return;
     }
 
-    list.forEach(function (item) {
+    baiooCardPage(gridEl, state, renderAll, list).forEach(function (item) {
       gridEl.appendChild(createIdeaCard(item));
     });
   }
@@ -7741,7 +7741,7 @@
       return;
     }
 
-    list.forEach(function (item) {
+    baiooCardPage(gridEl, state, renderAll, list).forEach(function (item) {
       gridEl.appendChild(createBrandCard(item));
     });
   }
@@ -8860,7 +8860,7 @@
       return;
     }
 
-    list.forEach(function (item) {
+    baiooCardPage(gridEl, state, renderAll, list).forEach(function (item) {
       gridEl.appendChild(createBrandCard(item));
     });
   }
@@ -9330,7 +9330,7 @@
       return;
     }
 
-    list.forEach(function (item) {
+    baiooCardPage(gridEl, state, renderAll, list).forEach(function (item) {
       var card = document.createElement("article");
       card.className = "ai-card";
       card.tabIndex = 0;
@@ -9733,7 +9733,7 @@
       return;
     }
 
-    list.forEach(function (item) {
+    baiooCardPage(gridEl, state, renderAll, list).forEach(function (item) {
       var card = document.createElement("article");
       card.className = "ai-card";
       card.tabIndex = 0;
@@ -10136,7 +10136,7 @@
       return;
     }
 
-    list.forEach(function (item) {
+    baiooCardPage(gridEl, state, renderAll, list).forEach(function (item) {
       var card = document.createElement("article");
       card.className = "ai-card";
       card.tabIndex = 0;
@@ -10584,7 +10584,7 @@
     if (countEl) countEl.textContent = "총 " + list.length + "개의 BAIOO 스토리";
     gridEl.textContent = "";
 
-    list.forEach(function (item) {
+    baiooCardPage(gridEl, state, renderAll, list).forEach(function (item) {
       var card = document.createElement("article");
       card.className = "ai-card";
       card.tabIndex = 0;
@@ -10851,6 +10851,38 @@
   });
   sync();
 })();
+
+/* ===== 카드 9개씩 페이징 (전 섹션 공용) ===== */
+var BAIOO_CARDS_PER_PAGE = 9;
+function baiooCardPage(gridEl, state, renderAll, list) {
+  var bar = gridEl._pageBar;
+  if (!bar) {
+    bar = document.createElement("div");
+    bar.className = "ai-page-bar";
+    gridEl._pageBar = bar;
+    if (gridEl.parentNode) gridEl.parentNode.insertBefore(bar, gridEl.nextSibling);
+  }
+  bar.textContent = "";
+  var maxPage = Math.max(1, Math.ceil(list.length / BAIOO_CARDS_PER_PAGE));
+  if (!(state.page >= 1 && state.page <= maxPage)) state.page = 1;
+  if (maxPage > 1) {
+    (function (st, rn) {
+      function mk(label, page, active, disabled) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "ai-cat-btn" + (active ? " active" : "");
+        b.textContent = label;
+        if (disabled) b.disabled = true;
+        else b.addEventListener("click", function () { st.page = page; rn(); });
+        bar.appendChild(b);
+      }
+      mk("‹ 이전", st.page - 1, false, st.page === 1);
+      for (var p = 1; p <= maxPage; p++) mk(String(p), p, p === st.page, false);
+      mk("다음 ›", st.page + 1, false, st.page === maxPage);
+    })(state, renderAll);
+  }
+  return list.slice((state.page - 1) * BAIOO_CARDS_PER_PAGE, state.page * BAIOO_CARDS_PER_PAGE);
+}
 
 /* ===== 아이디어 공유 동기화 (D1 ideas, 5개 허브 공용) ===== */
 function ideaServerUpsert(board, item) {
