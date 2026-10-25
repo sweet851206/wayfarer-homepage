@@ -4047,6 +4047,7 @@
       errorEl = $("#travelFormError"),
       submitBtn = $("#travelSubmit");
   var picked = [];
+  var editingId = null;
 
   function renderPreview() {
     $$("img", previewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
@@ -4084,7 +4085,13 @@
 
   $$(".section-add-btn[data-category='travel']").forEach(function (b) {
     b.addEventListener("click", function () {
+      editingId = null;
+      form.reset();
+      picked = [];
+      renderPreview();
       errorEl.textContent = "";
+      var _dt = $("#travelFormDialog .dlg-title"); if (_dt) _dt.textContent = "새 여행 글";
+      submitBtn.textContent = "등록";
       openDlg(formDlg);
       titleInput.focus();
     });
@@ -4096,14 +4103,15 @@
     if (!title) { errorEl.textContent = "제목을 입력하세요."; titleInput.focus(); return; }
     errorEl.textContent = "";
     submitBtn.disabled = true;
-    submitBtn.textContent = "등록 중…";
+    submitBtn.textContent = editingId ? "저장 중…" : "등록 중…";
     var fd = new FormData();
+    if (editingId) fd.append("id", editingId);
     fd.append("title", title);
     fd.append("content", contentInput.value);
     fd.append("category", "travel");
     fd.append("date", dateInput.value || "");
     picked.forEach(function (f) { fd.append("files[]", f); });
-    fetch("/api?action=create", { method: "POST", body: fd })
+    fetch(editingId ? "/api?action=update" : "/api?action=create", { method: "POST", body: fd })
       .then(function (res) {
         return res.json().catch(function () { return null; }).then(function (data) {
           if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
@@ -4115,10 +4123,12 @@
         picked = [];
         renderPreview();
         closeDlg(formDlg);
+        editingId = null;
+        var _dt2 = $("#travelFormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 여행 글";
         return loadTravel();
       })
-      .catch(function (err) { errorEl.textContent = "등록 실패: " + ((err && err.message) || err); })
-      .then(function () { submitBtn.disabled = false; submitBtn.textContent = "등록"; });
+      .catch(function (err) { errorEl.textContent = "실패: " + ((err && err.message) || err); })
+      .then(function () { submitBtn.disabled = false; submitBtn.textContent = editingId ? "저장" : "등록"; });
   });
 
   /* ---------- 상세 다이얼로그 + 삭제 ---------- */
@@ -4183,33 +4193,18 @@
       var p = null;
       travelPosts.forEach(function (x) { if (x.id === viewingId) p = x; });
       if (!p) return;
-      var t = window.prompt("제목 수정:", p.title || "");
-      if (t === null) return;
-      var c = window.prompt("내용 수정:", p.content || "");
-      if (c === null) return;
-      var d = window.prompt("날짜 수정(YYYY-MM-DD):", p.date || "");
-      if (d === null) return;
-      var fd = new FormData();
-      fd.append("id", viewingId);
-      fd.append("title", t.trim());
-      fd.append("content", c);
-      fd.append("date", (d || "").trim());
-      editBtn.disabled = true;
-      fetch("/api?action=update", { method: "POST", body: fd })
-        .then(function (res) {
-          return res.json().catch(function () { return null; }).then(function (data) {
-            if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
-            return data;
-          });
-        })
-        .then(function () { return loadTravel(); })
-        .then(function () {
-          var np = null;
-          travelPosts.forEach(function (x) { if (x.id === viewingId) np = x; });
-          if (np) openView(viewingId);
-        })
-        .catch(function (err) { window.alert("수정 실패: " + ((err && err.message) || err)); })
-        .then(function () { editBtn.disabled = false; });
+      editingId = viewingId;
+      titleInput.value = p.title || "";
+      dateInput.value = p.date || "";
+      contentInput.value = p.content || "";
+      picked = [];
+      renderPreview();
+      errorEl.textContent = "";
+      var vdt = $("#travelFormDialog .dlg-title"); if (vdt) vdt.textContent = "여행 글 수정";
+      submitBtn.textContent = "저장";
+      if (viewDlg && viewDlg.open) closeDlg(viewDlg);
+      openDlg(formDlg);
+      titleInput.focus();
     });
   }
 
@@ -4326,6 +4321,7 @@
       aiErrorEl = $("#aiFormError"),
       aiSubmitBtn = $("#aiSubmit");
   var aiPicked = [];
+  var aiEditingId = null;
 
   function renderAiPreview() {
     $$("img", aiPreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
@@ -4363,7 +4359,13 @@
 
   $$(".section-add-btn[data-category='ai']").forEach(function (b) {
     b.addEventListener("click", function () {
+      aiEditingId = null;
+      aiForm.reset();
+      aiPicked = [];
+      renderAiPreview();
       aiErrorEl.textContent = "";
+      var _dt = $("#aiFormDialog .dlg-title"); if (_dt) _dt.textContent = "새 AI 글";
+      aiSubmitBtn.textContent = "등록";
       openDlg(aiFormDlg);
       aiTitleInput.focus();
     });
@@ -4375,14 +4377,15 @@
     if (!title) { aiErrorEl.textContent = "제목을 입력하세요."; aiTitleInput.focus(); return; }
     aiErrorEl.textContent = "";
     aiSubmitBtn.disabled = true;
-    aiSubmitBtn.textContent = "등록 중…";
+    aiSubmitBtn.textContent = aiEditingId ? "저장 중…" : "등록 중…";
     var fd = new FormData();
+    if (aiEditingId) fd.append("id", aiEditingId);
     fd.append("title", title);
     fd.append("content", aiContentInput.value);
     fd.append("category", "ai");
     fd.append("date", aiDateInput.value || "");
     aiPicked.forEach(function (f) { fd.append("files[]", f); });
-    fetch("/api?action=create", { method: "POST", body: fd })
+    fetch(aiEditingId ? "/api?action=update" : "/api?action=create", { method: "POST", body: fd })
       .then(function (res) {
         return res.json().catch(function () { return null; }).then(function (data) {
           if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
@@ -4394,11 +4397,13 @@
         aiPicked = [];
         renderAiPreview();
         closeDlg(aiFormDlg);
+        aiEditingId = null;
+        var _dt2 = $("#aiFormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 AI 글";
         aiPage = 1; /* 서버 목록은 최신순(ORDER BY created_at DESC) → 새 글은 1페이지 */
         return loadAi();
       })
-      .catch(function (err) { aiErrorEl.textContent = "등록 실패: " + ((err && err.message) || err); })
-      .then(function () { aiSubmitBtn.disabled = false; aiSubmitBtn.textContent = "등록"; });
+      .catch(function (err) { aiErrorEl.textContent = "실패: " + ((err && err.message) || err); })
+      .then(function () { aiSubmitBtn.disabled = false; aiSubmitBtn.textContent = aiEditingId ? "저장" : "등록"; });
   });
 
   /* ---------- AI 상세 다이얼로그 + 삭제 ---------- */
@@ -4575,33 +4580,18 @@
       var p = null;
       aiPosts.forEach(function (x) { if (x.id === aiViewingId) p = x; });
       if (!p) return;
-      var t = window.prompt("제목 수정:", p.title || "");
-      if (t === null) return;
-      var c = window.prompt("내용 수정:", p.content || "");
-      if (c === null) return;
-      var d = window.prompt("날짜 수정(YYYY-MM-DD):", p.date || "");
-      if (d === null) return;
-      var fd = new FormData();
-      fd.append("id", aiViewingId);
-      fd.append("title", t.trim());
-      fd.append("content", c);
-      fd.append("date", (d || "").trim());
-      aiEditBtn.disabled = true;
-      fetch("/api?action=update", { method: "POST", body: fd })
-        .then(function (res) {
-          return res.json().catch(function () { return null; }).then(function (data) {
-            if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
-            return data;
-          });
-        })
-        .then(function () { return loadAi(); })
-        .then(function () {
-          var np = null;
-          aiPosts.forEach(function (x) { if (x.id === aiViewingId) np = x; });
-          if (np) openAiView(aiViewingId);
-        })
-        .catch(function (err) { window.alert("수정 실패: " + ((err && err.message) || err)); })
-        .then(function () { aiEditBtn.disabled = false; });
+      aiEditingId = aiViewingId;
+      aiTitleInput.value = p.title || "";
+      aiDateInput.value = p.date || "";
+      aiContentInput.value = p.content || "";
+      aiPicked = [];
+      renderAiPreview();
+      aiErrorEl.textContent = "";
+      var adt = $("#aiFormDialog .dlg-title"); if (adt) adt.textContent = "AI 글 수정";
+      aiSubmitBtn.textContent = "저장";
+      if (aiViewDlg && aiViewDlg.open) closeDlg(aiViewDlg);
+      openDlg(aiFormDlg);
+      aiTitleInput.focus();
     });
   }
 
@@ -4755,6 +4745,7 @@
       brErrorEl = $("#brFormError"),
       brSubmitBtn = $("#brSubmit");
   var brPicked = [];
+  var brEditingId = null;
 
   function renderBrPreview() {
     $$("img", brPreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
@@ -4792,7 +4783,13 @@
 
   $$(".section-add-btn[data-category='branding']").forEach(function (b) {
     b.addEventListener("click", function () {
+      brEditingId = null;
+      brForm.reset();
+      brPicked = [];
+      renderBrPreview();
       brErrorEl.textContent = "";
+      var _dt = $("#brFormDialog .dlg-title"); if (_dt) _dt.textContent = "새 Branding 글";
+      brSubmitBtn.textContent = "등록";
       openDlg(brFormDlg);
       brTitleInput.focus();
     });
@@ -4804,14 +4801,15 @@
     if (!title) { brErrorEl.textContent = "제목을 입력하세요."; brTitleInput.focus(); return; }
     brErrorEl.textContent = "";
     brSubmitBtn.disabled = true;
-    brSubmitBtn.textContent = "등록 중…";
+    brSubmitBtn.textContent = brEditingId ? "저장 중…" : "등록 중…";
     var fd = new FormData();
+    if (brEditingId) fd.append("id", brEditingId);
     fd.append("title", title);
     fd.append("content", brContentInput.value);
     fd.append("category", "branding");
     fd.append("date", brDateInput.value || "");
     brPicked.forEach(function (f) { fd.append("files[]", f); });
-    fetch("/api?action=create", { method: "POST", body: fd })
+    fetch(brEditingId ? "/api?action=update" : "/api?action=create", { method: "POST", body: fd })
       .then(function (res) {
         return res.json().catch(function () { return null; }).then(function (data) {
           if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
@@ -4823,10 +4821,12 @@
         brPicked = [];
         renderBrPreview();
         closeDlg(brFormDlg);
+        brEditingId = null;
+        var _dt2 = $("#brFormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 Branding 글";
         return loadBr();
       })
-      .catch(function (err) { brErrorEl.textContent = "등록 실패: " + ((err && err.message) || err); })
-      .then(function () { brSubmitBtn.disabled = false; brSubmitBtn.textContent = "등록"; });
+      .catch(function (err) { brErrorEl.textContent = "실패: " + ((err && err.message) || err); })
+      .then(function () { brSubmitBtn.disabled = false; brSubmitBtn.textContent = brEditingId ? "저장" : "등록"; });
   });
 
   /* ---------- Branding 상세 다이얼로그 + 삭제 ---------- */
@@ -4996,33 +4996,18 @@
       var p = null;
       brPosts.forEach(function (x) { if (x.id === brViewingId) p = x; });
       if (!p) return;
-      var t = window.prompt("제목 수정:", p.title || "");
-      if (t === null) return;
-      var c = window.prompt("내용 수정:", p.content || "");
-      if (c === null) return;
-      var d = window.prompt("날짜 수정(YYYY-MM-DD):", p.date || "");
-      if (d === null) return;
-      var fd = new FormData();
-      fd.append("id", brViewingId);
-      fd.append("title", t.trim());
-      fd.append("content", c);
-      fd.append("date", (d || "").trim());
-      brEditBtn.disabled = true;
-      fetch("/api?action=update", { method: "POST", body: fd })
-        .then(function (res) {
-          return res.json().catch(function () { return null; }).then(function (data) {
-            if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
-            return data;
-          });
-        })
-        .then(function () { return loadBr(); })
-        .then(function () {
-          var np = null;
-          brPosts.forEach(function (x) { if (x.id === brViewingId) np = x; });
-          if (np) openBrView(brViewingId);
-        })
-        .catch(function (err) { window.alert("수정 실패: " + ((err && err.message) || err)); })
-        .then(function () { brEditBtn.disabled = false; });
+      brEditingId = brViewingId;
+      brTitleInput.value = p.title || "";
+      brDateInput.value = p.date || "";
+      brContentInput.value = p.content || "";
+      brPicked = [];
+      renderBrPreview();
+      brErrorEl.textContent = "";
+      var bdt = $("#brFormDialog .dlg-title"); if (bdt) bdt.textContent = "Branding 글 수정";
+      brSubmitBtn.textContent = "저장";
+      if (brViewDlg && brViewDlg.open) closeDlg(brViewDlg);
+      openDlg(brFormDlg);
+      brTitleInput.focus();
     });
   }
 
@@ -5133,6 +5118,7 @@
       trErrorEl = $("#trFormError"),
       trSubmitBtn = $("#trSubmit");
   var trPicked = [];
+  var trEditingId = null;
 
   function renderTrPreview() {
     $$("img", trPreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
@@ -5170,7 +5156,13 @@
 
   $$(".section-add-btn[data-category='travel-board']").forEach(function (b) {
     b.addEventListener("click", function () {
+      trEditingId = null;
+      trForm.reset();
+      trPicked = [];
+      renderTrPreview();
       trErrorEl.textContent = "";
+      var _dt = $("#trFormDialog .dlg-title"); if (_dt) _dt.textContent = "새 Travel 글";
+      trSubmitBtn.textContent = "등록";
       openDlg(trFormDlg);
       trTitleInput.focus();
     });
@@ -5182,14 +5174,15 @@
     if (!title) { trErrorEl.textContent = "제목을 입력하세요."; trTitleInput.focus(); return; }
     trErrorEl.textContent = "";
     trSubmitBtn.disabled = true;
-    trSubmitBtn.textContent = "등록 중…";
+    trSubmitBtn.textContent = trEditingId ? "저장 중…" : "등록 중…";
     var fd = new FormData();
+    if (trEditingId) fd.append("id", trEditingId);
     fd.append("title", title);
     fd.append("content", trContentInput.value);
     fd.append("category", "travel-board");
     fd.append("date", trDateInput.value || "");
     trPicked.forEach(function (f) { fd.append("files[]", f); });
-    fetch("/api?action=create", { method: "POST", body: fd })
+    fetch(trEditingId ? "/api?action=update" : "/api?action=create", { method: "POST", body: fd })
       .then(function (res) {
         return res.json().catch(function () { return null; }).then(function (data) {
           if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
@@ -5201,10 +5194,12 @@
         trPicked = [];
         renderTrPreview();
         closeDlg(trFormDlg);
+        trEditingId = null;
+        var _dt2 = $("#trFormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 Travel 글";
         return loadTr();
       })
-      .catch(function (err) { trErrorEl.textContent = "등록 실패: " + ((err && err.message) || err); })
-      .then(function () { trSubmitBtn.disabled = false; trSubmitBtn.textContent = "등록"; });
+      .catch(function (err) { trErrorEl.textContent = "실패: " + ((err && err.message) || err); })
+      .then(function () { trSubmitBtn.disabled = false; trSubmitBtn.textContent = trEditingId ? "저장" : "등록"; });
   });
 
   /* ---------- Travel 상세 다이얼로그 + 삭제 ---------- */
@@ -5374,33 +5369,18 @@
       var p = null;
       trPosts.forEach(function (x) { if (x.id === trViewingId) p = x; });
       if (!p) return;
-      var t = window.prompt("제목 수정:", p.title || "");
-      if (t === null) return;
-      var c = window.prompt("내용 수정:", p.content || "");
-      if (c === null) return;
-      var d = window.prompt("날짜 수정(YYYY-MM-DD):", p.date || "");
-      if (d === null) return;
-      var fd = new FormData();
-      fd.append("id", trViewingId);
-      fd.append("title", t.trim());
-      fd.append("content", c);
-      fd.append("date", (d || "").trim());
-      trEditBtn.disabled = true;
-      fetch("/api?action=update", { method: "POST", body: fd })
-        .then(function (res) {
-          return res.json().catch(function () { return null; }).then(function (data) {
-            if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
-            return data;
-          });
-        })
-        .then(function () { return loadTr(); })
-        .then(function () {
-          var np = null;
-          trPosts.forEach(function (x) { if (x.id === trViewingId) np = x; });
-          if (np) openTrView(trViewingId);
-        })
-        .catch(function (err) { window.alert("수정 실패: " + ((err && err.message) || err)); })
-        .then(function () { trEditBtn.disabled = false; });
+      trEditingId = trViewingId;
+      trTitleInput.value = p.title || "";
+      trDateInput.value = p.date || "";
+      trContentInput.value = p.content || "";
+      trPicked = [];
+      renderTrPreview();
+      trErrorEl.textContent = "";
+      var tdt = $("#trFormDialog .dlg-title"); if (tdt) tdt.textContent = "Travel 글 수정";
+      trSubmitBtn.textContent = "저장";
+      if (trViewDlg && trViewDlg.open) closeDlg(trViewDlg);
+      openDlg(trFormDlg);
+      trTitleInput.focus();
     });
   }
 
@@ -5511,6 +5491,7 @@
       rpErrorEl = $("#rpFormError"),
       rpSubmitBtn = $("#rpSubmit");
   var rpPicked = [];
+  var rpEditingId = null;
 
   function renderRpPreview() {
     $$("img", rpPreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
@@ -5548,7 +5529,13 @@
 
   $$(".section-add-btn[data-category='repair-board']").forEach(function (b) {
     b.addEventListener("click", function () {
+      rpEditingId = null;
+      rpForm.reset();
+      rpPicked = [];
+      renderRpPreview();
       rpErrorEl.textContent = "";
+      var _dt = $("#rpFormDialog .dlg-title"); if (_dt) _dt.textContent = "새 Repair 글";
+      rpSubmitBtn.textContent = "등록";
       openDlg(rpFormDlg);
       rpTitleInput.focus();
     });
@@ -5560,14 +5547,15 @@
     if (!title) { rpErrorEl.textContent = "제목을 입력하세요."; rpTitleInput.focus(); return; }
     rpErrorEl.textContent = "";
     rpSubmitBtn.disabled = true;
-    rpSubmitBtn.textContent = "등록 중…";
+    rpSubmitBtn.textContent = rpEditingId ? "저장 중…" : "등록 중…";
     var fd = new FormData();
+    if (rpEditingId) fd.append("id", rpEditingId);
     fd.append("title", title);
     fd.append("content", rpContentInput.value);
     fd.append("category", "repair-board");
     fd.append("date", rpDateInput.value || "");
     rpPicked.forEach(function (f) { fd.append("files[]", f); });
-    fetch("/api?action=create", { method: "POST", body: fd })
+    fetch(rpEditingId ? "/api?action=update" : "/api?action=create", { method: "POST", body: fd })
       .then(function (res) {
         return res.json().catch(function () { return null; }).then(function (data) {
           if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
@@ -5579,10 +5567,12 @@
         rpPicked = [];
         renderRpPreview();
         closeDlg(rpFormDlg);
+        rpEditingId = null;
+        var _dt2 = $("#rpFormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 Repair 글";
         return loadRp();
       })
-      .catch(function (err) { rpErrorEl.textContent = "등록 실패: " + ((err && err.message) || err); })
-      .then(function () { rpSubmitBtn.disabled = false; rpSubmitBtn.textContent = "등록"; });
+      .catch(function (err) { rpErrorEl.textContent = "실패: " + ((err && err.message) || err); })
+      .then(function () { rpSubmitBtn.disabled = false; rpSubmitBtn.textContent = rpEditingId ? "저장" : "등록"; });
   });
 
   /* ---------- Repair 상세 다이얼로그 + 삭제 ---------- */
@@ -5752,33 +5742,18 @@
       var p = null;
       rpPosts.forEach(function (x) { if (x.id === rpViewingId) p = x; });
       if (!p) return;
-      var t = window.prompt("제목 수정:", p.title || "");
-      if (t === null) return;
-      var c = window.prompt("내용 수정:", p.content || "");
-      if (c === null) return;
-      var d = window.prompt("날짜 수정(YYYY-MM-DD):", p.date || "");
-      if (d === null) return;
-      var fd = new FormData();
-      fd.append("id", rpViewingId);
-      fd.append("title", t.trim());
-      fd.append("content", c);
-      fd.append("date", (d || "").trim());
-      rpEditBtn.disabled = true;
-      fetch("/api?action=update", { method: "POST", body: fd })
-        .then(function (res) {
-          return res.json().catch(function () { return null; }).then(function (data) {
-            if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
-            return data;
-          });
-        })
-        .then(function () { return loadRp(); })
-        .then(function () {
-          var np = null;
-          rpPosts.forEach(function (x) { if (x.id === rpViewingId) np = x; });
-          if (np) openRpView(rpViewingId);
-        })
-        .catch(function (err) { window.alert("수정 실패: " + ((err && err.message) || err)); })
-        .then(function () { rpEditBtn.disabled = false; });
+      rpEditingId = rpViewingId;
+      rpTitleInput.value = p.title || "";
+      rpDateInput.value = p.date || "";
+      rpContentInput.value = p.content || "";
+      rpPicked = [];
+      renderRpPreview();
+      rpErrorEl.textContent = "";
+      var rdt = $("#rpFormDialog .dlg-title"); if (rdt) rdt.textContent = "Repair 글 수정";
+      rpSubmitBtn.textContent = "저장";
+      if (rpViewDlg && rpViewDlg.open) closeDlg(rpViewDlg);
+      openDlg(rpFormDlg);
+      rpTitleInput.focus();
     });
   }
 
@@ -5889,6 +5864,7 @@
       petErrorEl = $("#petFormError"),
       petSubmitBtn = $("#petSubmit");
   var petPicked = [];
+  var petEditingId = null;
 
   function renderPetPreview() {
     $$("img", petPreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
@@ -5926,7 +5902,13 @@
 
   $$(".section-add-btn[data-category='bunny-board']").forEach(function (b) {
     b.addEventListener("click", function () {
+      petEditingId = null;
+      petForm.reset();
+      petPicked = [];
+      renderPetPreview();
       petErrorEl.textContent = "";
+      var _dt = $("#petFormDialog .dlg-title"); if (_dt) _dt.textContent = "새 Pets 글";
+      petSubmitBtn.textContent = "등록";
       openDlg(petFormDlg);
       petTitleInput.focus();
     });
@@ -5938,14 +5920,15 @@
     if (!title) { petErrorEl.textContent = "제목을 입력하세요."; petTitleInput.focus(); return; }
     petErrorEl.textContent = "";
     petSubmitBtn.disabled = true;
-    petSubmitBtn.textContent = "등록 중…";
+    petSubmitBtn.textContent = petEditingId ? "저장 중…" : "등록 중…";
     var fd = new FormData();
+    if (petEditingId) fd.append("id", petEditingId);
     fd.append("title", title);
     fd.append("content", petContentInput.value);
     fd.append("category", "bunny-board");
     fd.append("date", petDateInput.value || "");
     petPicked.forEach(function (f) { fd.append("files[]", f); });
-    fetch("/api?action=create", { method: "POST", body: fd })
+    fetch(petEditingId ? "/api?action=update" : "/api?action=create", { method: "POST", body: fd })
       .then(function (res) {
         return res.json().catch(function () { return null; }).then(function (data) {
           if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
@@ -5957,10 +5940,12 @@
         petPicked = [];
         renderPetPreview();
         closeDlg(petFormDlg);
+        petEditingId = null;
+        var _dt2 = $("#petFormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 Pets 글";
         return loadPet();
       })
-      .catch(function (err) { petErrorEl.textContent = "등록 실패: " + ((err && err.message) || err); })
-      .then(function () { petSubmitBtn.disabled = false; petSubmitBtn.textContent = "등록"; });
+      .catch(function (err) { petErrorEl.textContent = "실패: " + ((err && err.message) || err); })
+      .then(function () { petSubmitBtn.disabled = false; petSubmitBtn.textContent = petEditingId ? "저장" : "등록"; });
   });
 
   /* ---------- Pets 상세 다이얼로그 + 삭제 ---------- */
@@ -6130,33 +6115,18 @@
       var p = null;
       petPosts.forEach(function (x) { if (x.id === petViewingId) p = x; });
       if (!p) return;
-      var t = window.prompt("제목 수정:", p.title || "");
-      if (t === null) return;
-      var c = window.prompt("내용 수정:", p.content || "");
-      if (c === null) return;
-      var d = window.prompt("날짜 수정(YYYY-MM-DD):", p.date || "");
-      if (d === null) return;
-      var fd = new FormData();
-      fd.append("id", petViewingId);
-      fd.append("title", t.trim());
-      fd.append("content", c);
-      fd.append("date", (d || "").trim());
-      petEditBtn.disabled = true;
-      fetch("/api?action=update", { method: "POST", body: fd })
-        .then(function (res) {
-          return res.json().catch(function () { return null; }).then(function (data) {
-            if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
-            return data;
-          });
-        })
-        .then(function () { return loadPet(); })
-        .then(function () {
-          var np = null;
-          petPosts.forEach(function (x) { if (x.id === petViewingId) np = x; });
-          if (np) openPetView(petViewingId);
-        })
-        .catch(function (err) { window.alert("수정 실패: " + ((err && err.message) || err)); })
-        .then(function () { petEditBtn.disabled = false; });
+      petEditingId = petViewingId;
+      petTitleInput.value = p.title || "";
+      petDateInput.value = p.date || "";
+      petContentInput.value = p.content || "";
+      petPicked = [];
+      renderPetPreview();
+      petErrorEl.textContent = "";
+      var edt = $("#petFormDialog .dlg-title"); if (edt) edt.textContent = "Pets 글 수정";
+      petSubmitBtn.textContent = "저장";
+      if (petViewDlg && petViewDlg.open) closeDlg(petViewDlg);
+      openDlg(petFormDlg);
+      petTitleInput.focus();
     });
   }
 
@@ -6281,6 +6251,7 @@
       errorEl = $("#bunnyFormError"),
       submitBtn = $("#bunnySubmit");
   var picked = [];
+  var editingId = null;
 
   function renderPreview() {
     if (!previewEl) return;
@@ -6321,7 +6292,13 @@
 
   $$(".section-add-btn[data-category='bunny']").forEach(function (b) {
     b.addEventListener("click", function () {
+      editingId = null;
+      form.reset();
+      picked = [];
+      renderPreview();
       if (errorEl) errorEl.textContent = "";
+      var _dt = $("#bunnyFormDialog .dlg-title"); if (_dt) _dt.textContent = "새 일상 글";
+      submitBtn.textContent = "등록";
       if (formDlg) { if (!formDlg.open) formDlg.showModal(); }
       if (titleInput) titleInput.focus();
     });
@@ -6334,14 +6311,15 @@
       if (!title) { errorEl.textContent = "제목을 입력하세요."; titleInput.focus(); return; }
       errorEl.textContent = "";
       submitBtn.disabled = true;
-      submitBtn.textContent = "등록 중…";
+      submitBtn.textContent = editingId ? "저장 중…" : "등록 중…";
       var fd = new FormData();
+      if (editingId) fd.append("id", editingId);
       fd.append("title", title);
       fd.append("content", contentInput.value);
       fd.append("category", "bunny");
       fd.append("date", dateInput.value || "");
       picked.forEach(function (f) { fd.append("files[]", f); });
-      fetch("/api3?action=create", { method: "POST", body: fd })
+      fetch(editingId ? "/api3?action=update" : "/api3?action=create", { method: "POST", body: fd })
         .then(function (res) {
           return res.json().catch(function () { return null; }).then(function (data) {
             if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
@@ -6353,10 +6331,12 @@
           picked = [];
           renderPreview();
           if (formDlg && formDlg.open) formDlg.close();
+          editingId = null;
+          var _dt2 = $("#bunnyFormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 일상 글";
           return loadBunny();
         })
-        .catch(function (err) { errorEl.textContent = "등록 실패: " + ((err && err.message) || err); })
-        .then(function () { submitBtn.disabled = false; submitBtn.textContent = "등록"; });
+        .catch(function (err) { errorEl.textContent = "실패: " + ((err && err.message) || err); })
+        .then(function () { submitBtn.disabled = false; submitBtn.textContent = editingId ? "저장" : "등록"; });
     });
   }
 
@@ -6423,29 +6403,18 @@
       var p = null;
       bunnyPosts.forEach(function (x) { if (x.id === viewingId) p = x; });
       if (!p) return;
-      var t = window.prompt("제목 수정:", p.title || "");
-      if (t === null) return;
-      var c = window.prompt("내용 수정:", p.content || "");
-      if (c === null) return;
-      var d = window.prompt("날짜 수정(YYYY-MM-DD):", p.date || "");
-      if (d === null) return;
-      var fd = new FormData();
-      fd.append("id", viewingId);
-      fd.append("title", t.trim());
-      fd.append("content", c);
-      fd.append("date", (d || "").trim());
-      editBtn3.disabled = true;
-      fetch("/api3?action=update", { method: "POST", body: fd })
-        .then(function (res) {
-          return res.json().catch(function () { return null; }).then(function (data) {
-            if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
-            return data;
-          });
-        })
-        .then(function () { return loadBunny(); })
-        .then(function () { openBunnyView(viewingId); })
-        .catch(function (err) { window.alert("수정 실패: " + ((err && err.message) || err)); })
-        .then(function () { editBtn3.disabled = false; });
+      editingId = viewingId;
+      titleInput.value = p.title || "";
+      dateInput.value = p.date || "";
+      contentInput.value = p.content || "";
+      picked = [];
+      renderPreview();
+      errorEl.textContent = "";
+      var bdt = $("#bunnyFormDialog .dlg-title"); if (bdt) bdt.textContent = "일상 글 수정";
+      submitBtn.textContent = "저장";
+      if (viewDlg && viewDlg.open) viewDlg.close();
+      if (formDlg && !formDlg.open) formDlg.showModal();
+      titleInput.focus();
     });
   }
 
