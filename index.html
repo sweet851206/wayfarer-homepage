@@ -2343,11 +2343,12 @@
     <div class="ai-hero-banner">
       <div class="ai-banner-left">
         <span class="ai-banner-badge">🚀 BAIOO IDEA DISTRIBUTION</span>
-        <h3>상상을 실행 가능한 프로젝트로, 즉시 배포하고 공유합니다</h3>
-        <p>직접 설계한 AI 에이전트 시스템, 웹 자동화 도구, 실전 프롬프트 레시피를 카테고리별로 탐색하고 원클릭으로 복제해 활용해 보세요.</p>
+        <h3 id="aiHeroTitle">상상을 실행 가능한 프로젝트로, 즉시 배포하고 공유합니다</h3>
+        <p id="aiHeroDesc">직접 설계한 AI 에이전트 시스템, 웹 자동화 도구, 실전 프롬프트 레시피를 카테고리별로 탐색하고 원클릭으로 복제해 활용해 보세요.</p>
         <div class="ai-banner-actions">
           <button type="button" class="ai-btn-primary admin-only" id="aiOpenAddBtn">✨ 새 아이디어 배포하기</button>
           <button type="button" class="ai-btn-ghost" id="aiFilterBookmarkedBtn">♥ 관심 아이디어 모아보기</button>
+          <button type="button" class="ai-btn-ghost admin-only" id="aiHeroEdit">✏️ 문구 수정</button>
         </div>
       </div>
       <div class="ai-stats-grid">
@@ -2577,12 +2578,13 @@
     <div class="ai-hero-banner">
       <div class="ai-banner-left">
         <span class="ai-banner-badge">🧭 BAIOO TRAVEL CURATION</span>
-        <h3>실패 없는 동선과 스마트한 여행 레시피를 공유합니다</h3>
-        <p>부산 영도 오션뷰 코스, 도쿄 골목 투어, 평창 숲속 힐링 루트부터 AI 1분 일정 생성 프롬프트까지 클릭 한 번으로 복사해 떠나보세요.</p>
+        <h3 id="trHeroTitle">실패 없는 동선과 스마트한 여행 레시피를 공유합니다</h3>
+        <p id="trHeroDesc">부산 영도 오션뷰 코스, 도쿄 골목 투어, 평창 숲속 힐링 루트부터 AI 1분 일정 생성 프롬프트까지 클릭 한 번으로 복사해 떠나보세요.</p>
         <div class="ai-banner-actions">
           <button type="button" class="ai-btn-primary admin-only" id="trOpenAddBtn">✨ 새 여행 코스·팁 배포</button>
           <button type="button" class="ai-btn-ghost" id="trFilterBookmarkedBtn">♥ 관심 여행코스 모아보기</button>
           <button type="button" class="ai-btn-ghost section-add-btn admin-only" data-category="travel" style="margin:0;color:var(--text-strong);">📸 사진·여행기 등록</button>
+          <button type="button" class="ai-btn-ghost admin-only" id="trHeroEdit">✏️ 문구 수정</button>
         </div>
       </div>
       <div class="ai-stats-grid">
@@ -2702,12 +2704,13 @@
     <div class="ai-hero-banner">
       <div class="ai-banner-left">
         <span class="ai-banner-badge">🛠️ BAIOO SYSTEM DIAGNOSTICS</span>
-        <h3>복잡한 PC 고장과 성능 저하, 검증된 명령어로 즉시 진단하세요</h3>
-        <p>윈도우 시스템 파일 복구, 부팅 불량·블루스크린 원인 판독, VRAM/메모리 최적화, 네트워크 리셋 스크립트를 원클릭으로 복사해 실행할 수 있습니다.</p>
+        <h3 id="rpHeroTitle">복잡한 PC 고장과 성능 저하, 검증된 명령어로 즉시 진단하세요</h3>
+        <p id="rpHeroDesc">윈도우 시스템 파일 복구, 부팅 불량·블루스크린 원인 판독, VRAM/메모리 최적화, 네트워크 리셋 스크립트를 원클릭으로 복사해 실행할 수 있습니다.</p>
         <div class="ai-banner-actions">
           <button type="button" class="ai-btn-primary admin-only" id="rpOpenAddBtn">✨ 새 진단 레시피 배포</button>
           <button type="button" class="ai-btn-ghost" id="rpFilterBookmarkedBtn">♥ 관심 진단법 모아보기</button>
           <button type="button" class="ai-btn-ghost section-add-btn admin-only" data-category="repair" style="margin:0;color:var(--text-strong);">📝 수리·상담 글 등록</button>
+          <button type="button" class="ai-btn-ghost admin-only" id="rpHeroEdit">✏️ 문구 수정</button>
         </div>
       </div>
       <div class="ai-stats-grid">
@@ -2825,12 +2828,13 @@
     <div class="ai-hero-banner">
       <div class="ai-banner-left">
         <span class="ai-banner-badge">🐾 BAIOO PET CARE &amp; TECH</span>
-        <h3>작은 생명과 더 오래, 더 행복하게 공존하는 케어 레시피</h3>
-        <p>네덜란드 드워프 토토의 실전 급여·건강 데이터부터 AI 기반 펫 케어 체크리스트, 환경 자동화 아이디어를 한곳에서 탐색하고 복제해 보세요.</p>
+        <h3 id="petHeroTitle">작은 생명과 더 오래, 더 행복하게 공존하는 케어 레시피</h3>
+        <p id="petHeroDesc">네덜란드 드워프 토토의 실전 급여·건강 데이터부터 AI 기반 펫 케어 체크리스트, 환경 자동화 아이디어를 한곳에서 탐색하고 복제해 보세요.</p>
         <div class="ai-banner-actions">
           <button type="button" class="ai-btn-primary admin-only" id="petOpenAddBtn">✨ 새 펫 케어·아이디어 배포</button>
           <button type="button" class="ai-btn-ghost" id="petFilterBookmarkedBtn">♥ 관심 케어팁 모아보기</button>
           <button type="button" class="ai-btn-ghost section-add-btn admin-only" data-category="bunny" style="margin:0;color:var(--text-strong);">📸 사진·일상 글 등록</button>
+          <button type="button" class="ai-btn-ghost admin-only" id="petHeroEdit">✏️ 문구 수정</button>
         </div>
       </div>
       <div class="ai-stats-grid">
@@ -2951,12 +2955,13 @@
     <div class="ai-hero-banner">
       <div class="ai-banner-left">
         <span class="ai-banner-badge">🗝️ BAIOO MANIFESTO &amp; ECOSYSTEM</span>
-        <h3>작은 시작이 큰 변화를 연다, 아이디어를 세상에 배포하는 공간</h3>
-        <p>BAIOO(바이오)는 AI 워크플로우, 브랜딩 스튜디오, 여행 큐레이션, PC 자가진단, 스마트 펫케어까지 실전에서 검증된 아이디어를 누구나 복제·활용할 수 있도록 배포하는 크리에이티브 플랫폼입니다.</p>
+        <h3 id="abHeroTitle">작은 시작이 큰 변화를 연다, 아이디어를 세상에 배포하는 공간</h3>
+        <p id="abHeroDesc">BAIOO(바이오)는 AI 워크플로우, 브랜딩 스튜디오, 여행 큐레이션, PC 자가진단, 스마트 펫케어까지 실전에서 검증된 아이디어를 누구나 복제·활용할 수 있도록 배포하는 크리에이티브 플랫폼입니다.</p>
         <div class="ai-banner-actions">
           <a href="#ai" class="ai-btn-primary">🚀 AI 허브 바로가기</a>
           <a href="#branding" class="ai-btn-ghost">✨ 브랜딩 스튜디오</a>
           <a href="#contact" class="ai-btn-ghost">💬 문의·제휴 안내</a>
+          <button type="button" class="ai-btn-ghost admin-only" id="abHeroEdit">✏️ 문구 수정</button>
         </div>
       </div>
       <div class="ai-stats-grid">
@@ -10038,32 +10043,34 @@ function openIdeaForm(ctx) {
   });
 })();
 
-/* ===== 브랜딩 배너 문구 관리자 수정 (원본 위치 직접 편집) ===== */(function () {
-  var t = document.getElementById("brHeroTitle");
-  var d = document.getElementById("brHeroDesc");
-  var b = document.getElementById("brHeroEdit");
-  if (!t || !d || !b) return;
-  var DEF_T = t.textContent, DEF_D = d.textContent;
-  try {
-    var st = localStorage.getItem("baioo_brHeroTitle");
-    var sd = localStorage.getItem("baioo_brHeroDesc");
-    if (st) t.textContent = st;
-    if (sd) d.textContent = sd;
-  } catch (e) {}
-  var editing = false;
-  b.addEventListener("click", function () {
-    if (!document.body.classList.contains("is-admin")) return;
-    editing = !editing;
-    t.contentEditable = editing ? "true" : "false";
-    d.contentEditable = editing ? "true" : "false";
-    b.textContent = editing ? "💾 저장" : "✏️ 문구 수정";
-    if (editing) t.focus();
-    else {
-      var nt = t.textContent.trim(), nd = d.textContent.trim();
-      if (!nt) { nt = DEF_T; t.textContent = nt; }
-      if (!nd) { nd = DEF_D; d.textContent = nd; }
-      try { localStorage.setItem("baioo_brHeroTitle", nt); localStorage.setItem("baioo_brHeroDesc", nd); } catch (e) {}
-    }
+/* ===== 히어로 배너 문구 관리자 수정 6섹션 통일 (원본 위치 직접 편집+localStorage) ===== */(function () {
+  ["ai", "br", "tr", "rp", "pet", "ab"].forEach(function (px) {
+    var t = document.getElementById(px + "HeroTitle");
+    var d = document.getElementById(px + "HeroDesc");
+    var b = document.getElementById(px + "HeroEdit");
+    if (!t || !d || !b) return;
+    var DEF_T = t.textContent, DEF_D = d.textContent;
+    try {
+      var st = localStorage.getItem("baioo_" + px + "HeroTitle");
+      var sd = localStorage.getItem("baioo_" + px + "HeroDesc");
+      if (st) t.textContent = st;
+      if (sd) d.textContent = sd;
+    } catch (e) {}
+    var editing = false;
+    b.addEventListener("click", function () {
+      if (!document.body.classList.contains("is-admin")) return;
+      editing = !editing;
+      t.contentEditable = editing ? "true" : "false";
+      d.contentEditable = editing ? "true" : "false";
+      b.textContent = editing ? "💾 저장" : "✏️ 문구 수정";
+      if (editing) t.focus();
+      else {
+        var nt = t.textContent.trim(), nd = d.textContent.trim();
+        if (!nt) { nt = DEF_T; t.textContent = nt; }
+        if (!nd) { nd = DEF_D; d.textContent = nd; }
+        try { localStorage.setItem("baioo_" + px + "HeroTitle", nt); localStorage.setItem("baioo_" + px + "HeroDesc", nd); } catch (e) {}
+      }
+    });
   });
 })();
 /* ===== 방문자 카운터 (D1 visits, 브라우저당 1회만 +1) ===== */(function () {
