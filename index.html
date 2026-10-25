@@ -221,6 +221,7 @@
   .nav-links .nav-sub a { font-size: .94rem; font-weight: 900; opacity: 1; padding: 0 2px; line-height: 1.2; }
   .br-gate { margin: 4px 0; font-weight: 900; font-size: 1.05rem; scroll-margin-top: 90px; }
   #brGate2 { margin-top: 14px; }
+  .gate-edit { background: none; border: none; cursor: pointer; font-size: .75rem; padding: 0 2px; }
 
   .theme-toggle,
   .menu-btn {
@@ -2283,8 +2284,8 @@
         <li><a href="#ai" data-nav="ai">AI</a></li>
         <li class="has-sub"><a href="#branding" data-nav="branding">Branding agency</a>
           <ul class="nav-sub">
-            <li><a href="#brGate1">— 대문</a></li>
-            <li><a href="#brGate2">— 대문</a></li>
+            <li><a href="#brGate1" id="brGate1Link">— 대문</a> <button type="button" class="gate-edit admin-only" id="brGate1Edit" aria-label="첫 번째 대문명 수정">✏️</button></li>
+            <li><a href="#brGate2" id="brGate2Link">— 대문</a> <button type="button" class="gate-edit admin-only" id="brGate2Edit" aria-label="두 번째 대문명 수정">✏️</button></li>
           </ul>
         </li>
         <li><a href="#travel" data-nav="travel">Travel</a></li>
@@ -10082,6 +10083,24 @@ function openIdeaForm(ctx) {
         if (!nd) { nd = DEF_D; d.textContent = nd; }
         try { localStorage.setItem("baioo_" + px + "HeroTitle", nt); localStorage.setItem("baioo_" + px + "HeroDesc", nd); } catch (e) {}
       }
+    });
+  });
+})();
+/* ===== 브랜딩 대문명 관리자 수정 (네비+섹션 동기화+localStorage) ===== */(function () {
+  [["brGate1", "brGate1Link", "brGate1Edit", "baioo_brGate1Name"], ["brGate2", "brGate2Link", "brGate2Edit", "baioo_brGate2Name"]].forEach(function (c) {
+    var gate = document.getElementById(c[0]);
+    var link = document.getElementById(c[1]);
+    var btn = document.getElementById(c[2]);
+    if (!gate || !link || !btn) return;
+    try { var sv = localStorage.getItem(c[3]); if (sv) { gate.textContent = sv; link.textContent = sv; } } catch (e) {}
+    btn.addEventListener("click", function (ev) {
+      ev.preventDefault(); ev.stopPropagation();
+      if (!document.body.classList.contains("is-admin")) return;
+      var nt = window.prompt("대문명 수정:", link.textContent);
+      if (nt === null) return;
+      nt = nt.trim() || link.textContent;
+      gate.textContent = nt; link.textContent = nt;
+      try { localStorage.setItem(c[3], nt); } catch (e2) {}
     });
   });
 })();
