@@ -6415,6 +6415,7 @@
 
   var listEl = $("#bunnyUserPosts");
   var bunnyPosts = [];
+  var bunnyPage = { page: 1 };
 
   function fileLinks(files, ev) {
     var fl = document.createElement("div");
@@ -6484,7 +6485,7 @@
       listEl.appendChild(empty);
       return;
     }
-    bunnyPosts.forEach(function (p) { listEl.appendChild(makeCard(p)); });
+    baiooCardPage(listEl, bunnyPage, renderBunny, bunnyPosts).forEach(function (p) { listEl.appendChild(makeCard(p)); });
   }
 
   function loadBunny() {
