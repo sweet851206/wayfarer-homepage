@@ -684,6 +684,8 @@
   .vote-btn { border: 1px solid var(--border); background: #fff; border-radius: 999px; padding: 8px 14px; cursor: pointer; font-weight: 700; color: #e11d48; }
   .vote-btn:disabled { opacity: .5; cursor: default; }
   .vote-red { color: #e11d48; font-weight: 700; white-space: nowrap; font-size: .8em; margin-right: 2px; }
+  .board-table td:last-child { padding-top: 6px; padding-bottom: 6px; }
+  .board-table td:last-child .board-sub { font-size: .8em; color: var(--muted); white-space: nowrap; line-height: 1.5; }
   .row-del { margin-left: 6px; background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0 2px; }
   .cmt-wrap { margin-top: 14px; border-top: 1px dashed var(--border); padding-top: 12px; }
   .cmt-list { display: flex; flex-direction: column; gap: 8px; margin: 8px 0; }
@@ -4261,12 +4263,14 @@
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
-    dt.appendChild(document.createTextNode("  "));
+    var sub = document.createElement("div");
+    sub.className = "board-sub";
     var vw = document.createElement("span");
     vw.className = "board-views";
-    vw.textContent = "👁 " + (((+p.views) || 0));
-    dt.appendChild(vw);
-    dt.appendChild(document.createTextNode("  " + (postDate(p) || "—")));
+    vw.textContent = "views " + (((+p.views) || 0));
+    sub.appendChild(vw);
+    sub.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
+    dt.appendChild(sub);
     var del = document.createElement("button");
     del.type = "button";
     del.className = "row-del admin-only";
@@ -4414,7 +4418,7 @@
     aiPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     aiViewingId = p.id;
-    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "👁 " + j.views; } }).catch(function () {});
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "views " + j.views; } }).catch(function () {});
     var panel = $("#aiViewPanel");
     var t = $("#aiInlineTitle"), d = $("#aiInlineDate"), ph = $("#aiInlinePhotos"), c = $("#aiInlineContent"), fl = $("#aiInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
@@ -4692,12 +4696,14 @@
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
-    dt.appendChild(document.createTextNode("  "));
+    var sub = document.createElement("div");
+    sub.className = "board-sub";
     var vw = document.createElement("span");
     vw.className = "board-views";
-    vw.textContent = "👁 " + (((+p.views) || 0));
-    dt.appendChild(vw);
-    dt.appendChild(document.createTextNode("  " + (postDate(p) || "—")));
+    vw.textContent = "views " + (((+p.views) || 0));
+    sub.appendChild(vw);
+    sub.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
+    dt.appendChild(sub);
     var del = document.createElement("button");
     del.type = "button";
     del.className = "row-del admin-only";
@@ -4842,7 +4848,7 @@
     brPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     brViewingId = p.id;
-    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "👁 " + j.views; } }).catch(function () {});
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "views " + j.views; } }).catch(function () {});
     var panel = $("#brViewPanel");
     var t = $("#brInlineTitle"), d = $("#brInlineDate"), ph = $("#brInlinePhotos"), c = $("#brInlineContent"), fl = $("#brInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
@@ -5070,12 +5076,14 @@
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
-    dt.appendChild(document.createTextNode("  "));
+    var sub = document.createElement("div");
+    sub.className = "board-sub";
     var vw = document.createElement("span");
     vw.className = "board-views";
-    vw.textContent = "👁 " + (((+p.views) || 0));
-    dt.appendChild(vw);
-    dt.appendChild(document.createTextNode("  " + (postDate(p) || "—")));
+    vw.textContent = "views " + (((+p.views) || 0));
+    sub.appendChild(vw);
+    sub.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
+    dt.appendChild(sub);
     var del = document.createElement("button");
     del.type = "button";
     del.className = "row-del admin-only";
@@ -5220,7 +5228,7 @@
     trPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     trViewingId = p.id;
-    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "👁 " + j.views; } }).catch(function () {});
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "views " + j.views; } }).catch(function () {});
     var panel = $("#trViewPanel");
     var t = $("#trInlineTitle"), d = $("#trInlineDate"), ph = $("#trInlinePhotos"), c = $("#trInlineContent"), fl = $("#trInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
@@ -5448,12 +5456,14 @@
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
-    dt.appendChild(document.createTextNode("  "));
+    var sub = document.createElement("div");
+    sub.className = "board-sub";
     var vw = document.createElement("span");
     vw.className = "board-views";
-    vw.textContent = "👁 " + (((+p.views) || 0));
-    dt.appendChild(vw);
-    dt.appendChild(document.createTextNode("  " + (postDate(p) || "—")));
+    vw.textContent = "views " + (((+p.views) || 0));
+    sub.appendChild(vw);
+    sub.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
+    dt.appendChild(sub);
     var del = document.createElement("button");
     del.type = "button";
     del.className = "row-del admin-only";
@@ -5598,7 +5608,7 @@
     rpPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     rpViewingId = p.id;
-    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "👁 " + j.views; } }).catch(function () {});
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "views " + j.views; } }).catch(function () {});
     var panel = $("#rpViewPanel");
     var t = $("#rpInlineTitle"), d = $("#rpInlineDate"), ph = $("#rpInlinePhotos"), c = $("#rpInlineContent"), fl = $("#rpInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
@@ -5826,12 +5836,14 @@
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
-    dt.appendChild(document.createTextNode("  "));
+    var sub = document.createElement("div");
+    sub.className = "board-sub";
     var vw = document.createElement("span");
     vw.className = "board-views";
-    vw.textContent = "👁 " + (((+p.views) || 0));
-    dt.appendChild(vw);
-    dt.appendChild(document.createTextNode("  " + (postDate(p) || "—")));
+    vw.textContent = "views " + (((+p.views) || 0));
+    sub.appendChild(vw);
+    sub.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
+    dt.appendChild(sub);
     var del = document.createElement("button");
     del.type = "button";
     del.className = "row-del admin-only";
@@ -5976,7 +5988,7 @@
     petPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     petViewingId = p.id;
-    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "👁 " + j.views; } }).catch(function () {});
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "views " + j.views; } }).catch(function () {});
     var panel = $("#petViewPanel");
     var t = $("#petInlineTitle"), d = $("#petInlineDate"), ph = $("#petInlinePhotos"), c = $("#petInlineContent"), fl = $("#petInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
