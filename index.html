@@ -1818,6 +1818,19 @@
     padding: 18px 20px;
     color: #fff;
     overflow: hidden;
+    position: relative;
+  }
+  .ai-card-visual img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .ai-card-visual .ai-card-cat-label {
+    position: relative;
+    z-index: 1;
+    margin-left: auto;
   }
   .ai-card-emoji {
     font-size: 2.75rem;
@@ -7497,15 +7510,21 @@
 
     var visual = document.createElement("div");
     visual.className = "ai-card-visual";
-    visual.style.background = item.gradient || cMeta.gradient;
-    var emoji = document.createElement("span");
-    emoji.className = "ai-card-emoji";
-    emoji.textContent = item.emoji || cMeta.emoji;
-    var catLabel = document.createElement("span");
-    catLabel.className = "ai-card-cat-label";
-    catLabel.textContent = cMeta.label;
-    visual.appendChild(emoji);
-    visual.appendChild(catLabel);
+    var photoUrl = item.photo || item.image || item.cover || ((item.photos && item.photos[0]) ? (item.photos[0].url || item.photos[0]) : "");
+    if (photoUrl) {
+      visual.style.background = item.gradient || cMeta.gradient;
+      var photo = document.createElement("img");
+      photo.src = photoUrl;
+      photo.alt = item.title || "";
+      photo.loading = "lazy";
+      visual.appendChild(photo);
+      var catLabel = document.createElement("span");
+      catLabel.className = "ai-card-cat-label";
+      catLabel.textContent = cMeta.label;
+      visual.appendChild(catLabel);
+    } else {
+      visual.style.display = "none";
+    }
 
     var title = document.createElement("h3");
     title.className = "ai-card-title";
