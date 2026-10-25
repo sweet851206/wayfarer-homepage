@@ -7293,7 +7293,7 @@
   if (!likedMap || typeof likedMap !== "object") likedMap = {};
 
   function getAllBrands() {
-    return customBrands.concat(SEED_BRANDS);
+    return customBrands.slice();
   }
 
   function getLikeCount(item) {
