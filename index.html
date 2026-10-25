@@ -678,6 +678,7 @@
   .board-table tbody tr { cursor: pointer; }
   .board-table tbody tr:hover { background: var(--surface-soft); }
   .board-table .board-title { font-weight: 600; }
+  .board-table .board-views { margin-left: 100px; }
   .board-view-panel { position: relative; margin-top: 14px; margin-bottom: 22px; padding: 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-soft); }
   .board-view-panel .x-close { position: absolute; top: 8px; right: 10px; }
   .board-view-panel [id$="InlineContent"], .board-view-panel [id$="ViewContent"] { white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word; line-height: 1.7; }
@@ -4258,7 +4259,7 @@
     ti.textContent = p.title || "(제목 없음)";
     var vw = document.createElement("span");
     vw.className = "board-views";
-    vw.textContent = " 조회수: " + String((+p.views) || 0);
+    vw.textContent = " | 조회수: " + String((+p.views) || 0);
     ti.appendChild(vw);
     var dt = document.createElement("td");
     dt.textContent = "";
@@ -4415,7 +4416,7 @@
     aiPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     aiViewingId = p.id;
-    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = " 조회수: " + j.views; } }).catch(function () {});
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = " | 조회수: " + j.views; } }).catch(function () {});
     var panel = $("#aiViewPanel");
     var t = $("#aiInlineTitle"), d = $("#aiInlineDate"), ph = $("#aiInlinePhotos"), c = $("#aiInlineContent"), fl = $("#aiInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
@@ -4689,7 +4690,7 @@
     ti.textContent = p.title || "(제목 없음)";
     var vw = document.createElement("span");
     vw.className = "board-views";
-    vw.textContent = " 조회수: " + String((+p.views) || 0);
+    vw.textContent = " | 조회수: " + String((+p.views) || 0);
     ti.appendChild(vw);
     var dt = document.createElement("td");
     dt.textContent = "";
@@ -4843,7 +4844,7 @@
     brPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     brViewingId = p.id;
-    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = " 조회수: " + j.views; } }).catch(function () {});
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = " | 조회수: " + j.views; } }).catch(function () {});
     var panel = $("#brViewPanel");
     var t = $("#brInlineTitle"), d = $("#brInlineDate"), ph = $("#brInlinePhotos"), c = $("#brInlineContent"), fl = $("#brInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
@@ -5067,7 +5068,7 @@
     ti.textContent = p.title || "(제목 없음)";
     var vw = document.createElement("span");
     vw.className = "board-views";
-    vw.textContent = " 조회수: " + String((+p.views) || 0);
+    vw.textContent = " | 조회수: " + String((+p.views) || 0);
     ti.appendChild(vw);
     var dt = document.createElement("td");
     dt.textContent = "";
@@ -5221,7 +5222,7 @@
     trPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     trViewingId = p.id;
-    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = " 조회수: " + j.views; } }).catch(function () {});
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = " | 조회수: " + j.views; } }).catch(function () {});
     var panel = $("#trViewPanel");
     var t = $("#trInlineTitle"), d = $("#trInlineDate"), ph = $("#trInlinePhotos"), c = $("#trInlineContent"), fl = $("#trInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
@@ -5445,7 +5446,7 @@
     ti.textContent = p.title || "(제목 없음)";
     var vw = document.createElement("span");
     vw.className = "board-views";
-    vw.textContent = " 조회수: " + String((+p.views) || 0);
+    vw.textContent = " | 조회수: " + String((+p.views) || 0);
     ti.appendChild(vw);
     var dt = document.createElement("td");
     dt.textContent = "";
@@ -5599,7 +5600,7 @@
     rpPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     rpViewingId = p.id;
-    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = " 조회수: " + j.views; } }).catch(function () {});
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = " | 조회수: " + j.views; } }).catch(function () {});
     var panel = $("#rpViewPanel");
     var t = $("#rpInlineTitle"), d = $("#rpInlineDate"), ph = $("#rpInlinePhotos"), c = $("#rpInlineContent"), fl = $("#rpInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
@@ -5823,7 +5824,7 @@
     ti.textContent = p.title || "(제목 없음)";
     var vw = document.createElement("span");
     vw.className = "board-views";
-    vw.textContent = " 조회수: " + String((+p.views) || 0);
+    vw.textContent = " | 조회수: " + String((+p.views) || 0);
     ti.appendChild(vw);
     var dt = document.createElement("td");
     dt.textContent = "";
@@ -5977,7 +5978,7 @@
     petPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     petViewingId = p.id;
-    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = " 조회수: " + j.views; } }).catch(function () {});
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = " | 조회수: " + j.views; } }).catch(function () {});
     var panel = $("#petViewPanel");
     var t = $("#petInlineTitle"), d = $("#petInlineDate"), ph = $("#petInlinePhotos"), c = $("#petInlineContent"), fl = $("#petInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
