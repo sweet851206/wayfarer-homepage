@@ -41,6 +41,21 @@ export async function onRequest(context) {
         return json({ ok: false, message: "bad request" }, 400);
       }
       const id = String(b.item.id);
+      if (b.item.photoData && env.BLOG_FILES) {
+        try {
+          const m = String(b.item.photoData).match(/^data:(image\/[a-zA-Z0-9+.-]+);base64,(.+)$/);
+          if (!m) return json({ ok: false, message: "bad photo" }, 400);
+          const bin = Uint8Array.from(atob(m[2]), function (c) { return c.charCodeAt(0); });
+          if (bin.length > 8 * 1024 * 1024) return json({ ok: false, message: "photo too big" }, 400);
+          const ext = (m[1].split("/")[1] || "png").replace(/[^a-z0-9]/gi, "").slice(0, 5) || "png";
+          const key = "ideas/" + b.board + "/" + id + "/photo." + ext;
+          await env.BLOG_FILES.put(key, bin, { httpMetadata: { contentType: m[1] } });
+          b.item.photo = "/files/" + key;
+        } catch (e) {
+          return json({ ok: false, message: "photo upload failed" }, 500);
+        }
+        delete b.item.photoData;
+      }
       await env.BLOG_DB.prepare(
         "INSERT INTO ideas(id,board,data,created_at) VALUES(?,?,?,?) ON CONFLICT(id) DO UPDATE SET data=excluded.data"
       ).bind(id, b.board, JSON.stringify(b.item), new Date().toISOString()).run();
