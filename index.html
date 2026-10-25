@@ -2460,11 +2460,12 @@
     <div class="ai-hero-banner">
       <div class="ai-banner-left">
         <span class="ai-banner-badge">✨ BAIOO BRAND IDENTITY HUB</span>
-        <h3>기억에 남는 이름과 찬란한 비주얼 언어를 설계합니다</h3>
-        <p>글로벌 어감 검증을 거친 브랜드 네이밍부터 슬로건, 클릭 한 번으로 복사되는 HEX 컬러 스와치, 타이포그래피 가이드를 한곳에서 탐색하세요.</p>
+        <h3 id="brHeroTitle">기억에 남는 이름과 찬란한 비주얼 언어를 설계합니다</h3>
+        <p id="brHeroDesc">글로벌 어감 검증을 거친 브랜드 네이밍부터 슬로건, 클릭 한 번으로 복사되는 HEX 컬러 스와치, 타이포그래피 가이드를 한곳에서 탐색하세요.</p>
         <div class="ai-banner-actions">
           <button type="button" class="ai-btn-primary admin-only" id="brOpenAddBtn">✨ 새 브랜드 아이디어 배포</button>
           <button type="button" class="ai-btn-ghost" id="brFilterBookmarkedBtn">♥ 관심 브랜딩 모아보기</button>
+          <button type="button" class="ai-btn-ghost admin-only" id="brHeroEdit">✏️ 문구 수정</button>
         </div>
       </div>
       <div class="ai-stats-grid">
@@ -10037,6 +10038,34 @@ function openIdeaForm(ctx) {
   });
 })();
 
+/* ===== 브랜딩 배너 문구 관리자 수정 (원본 위치 직접 편집) ===== */(function () {
+  var t = document.getElementById("brHeroTitle");
+  var d = document.getElementById("brHeroDesc");
+  var b = document.getElementById("brHeroEdit");
+  if (!t || !d || !b) return;
+  var DEF_T = t.textContent, DEF_D = d.textContent;
+  try {
+    var st = localStorage.getItem("baioo_brHeroTitle");
+    var sd = localStorage.getItem("baioo_brHeroDesc");
+    if (st) t.textContent = st;
+    if (sd) d.textContent = sd;
+  } catch (e) {}
+  var editing = false;
+  b.addEventListener("click", function () {
+    if (!document.body.classList.contains("is-admin")) return;
+    editing = !editing;
+    t.contentEditable = editing ? "true" : "false";
+    d.contentEditable = editing ? "true" : "false";
+    b.textContent = editing ? "💾 저장" : "✏️ 문구 수정";
+    if (editing) t.focus();
+    else {
+      var nt = t.textContent.trim(), nd = d.textContent.trim();
+      if (!nt) { nt = DEF_T; t.textContent = nt; }
+      if (!nd) { nd = DEF_D; d.textContent = nd; }
+      try { localStorage.setItem("baioo_brHeroTitle", nt); localStorage.setItem("baioo_brHeroDesc", nd); } catch (e) {}
+    }
+  });
+})();
 /* ===== 방문자 카운터 (D1 visits, 브라우저당 1회만 +1) ===== */(function () {
   var el = document.getElementById("visitCount");
   function show(n) {
