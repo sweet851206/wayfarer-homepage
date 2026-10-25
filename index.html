@@ -4039,7 +4039,20 @@
     window.scrollTo(0, 0);
     if (name === "home") enterHome(); /* 첫 대문 진입 시 전체 내용 상승 */
   }
-  function route() { showView((location.hash || "#home").replace("#", "") || "home"); }
+  function route() {
+    var h = (location.hash || "#home").replace("#", "") || "home";
+    if (h === "brGate1" || h === "brGate2") {
+      showView("branding");
+      $$(".nav-links a").forEach(function (a) {
+        var href = a.getAttribute("href");
+        a.classList.toggle("active", href === "#" + h || a.dataset.nav === "branding");
+      });
+      var g = document.getElementById(h);
+      if (g) { try { g.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) { g.scrollIntoView(); } }
+      return;
+    }
+    showView(h);
+  }
   window.addEventListener("hashchange", route);
 
   /* ---------- 대문 첫 진입: 전체 내용 아래→위 상승 (JS, 좌측 바 제외) ---------- */
