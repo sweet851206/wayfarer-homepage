@@ -1,4 +1,4 @@
-var ALLOWED_BOARDS = ["travel", "bunny", "repair", "ai", "branding", "travel-board", "repair-board", "bunny-board"];
+var ALLOWED_BOARDS = ["travel", "bunny", "repair", "ai", "branding", "branding2", "travel-board", "repair-board", "bunny-board"];
 function pickBoard(v, fallback) {
   v = String(v || "");
   return ALLOWED_BOARDS.indexOf(v) >= 0 ? v : fallback;

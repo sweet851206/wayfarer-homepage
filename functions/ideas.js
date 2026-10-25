@@ -1,4 +1,4 @@
-var BOARDS = ["ai", "br", "tr", "rp", "pet"];
+var BOARDS = ["ai", "br", "br2", "tr", "rp", "pet"];
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {

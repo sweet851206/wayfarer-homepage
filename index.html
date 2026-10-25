@@ -2574,6 +2574,85 @@
 
     <div class="ai-idea-grid" id="brIdeaGrid"></div>
     <div class="br-gate" id="brGate2">Retail Identity &amp; Typography</div>
+
+<!-- ===== Retail 섹션 (Branding 복제: 자유게시판~카드) ===== -->
+    <div class="pet-diary-subhead">
+      <h3>📝 자유게시판</h3>
+      <button type="button" class="section-add-btn branding-add admin-only" id="br2BoardAddBtn" data-category="branding2" style="margin:0;">＋ 새 글 등록</button>
+    </div>
+    <div class="board-table-wrap">
+      <table class="board-table">
+        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:210px">등록일</th></tr></thead>
+        <tbody id="br2BoardBody"></tbody>
+      </table>
+      <div class="ai-page-bar" id="br2PageBar"></div>
+    </div>
+    <div class="board-view-panel" id="br2ViewPanel" hidden>
+      <button type="button" class="x-close" id="br2ViewClose" aria-label="닫기">×</button>
+      <h3 class="dlg-title" id="br2InlineTitle"></h3>
+      <div class="post-date" id="br2InlineDate"></div>
+      <div class="view-photos" id="br2InlinePhotos"></div>
+      <div id="br2InlineContent"></div>
+      <div class="file-list" id="br2InlineFiles" hidden></div>
+      <div class="vote-row">
+        <button type="button" class="vote-btn" id="br2InlineLike">❤ 추천 <span id="br2LikeCount">0</span></button>
+        <button type="button" class="vote-btn" id="br2InlineDislike">💔 비추천 <span id="br2DislikeCount">0</span></button>
+      </div>
+      <div class="cmt-wrap">
+        <b>💬 댓글 <span id="br2CmtCount">0</span></b>
+        <div class="cmt-list" id="br2CmtList"></div>
+        <button type="button" class="cmt-toggle" id="br2CmtToggle" hidden>더 보기</button>
+        <div class="cmt-form">
+          <input type="text" id="br2CmtAuthor" maxlength="30" placeholder="이름 (익명 가능)">
+          <input type="text" id="br2CmtInput" maxlength="500" placeholder="댓글을 입력하세요">
+          <button type="button" class="vote-btn" id="br2CmtSend">등록</button>
+        </div>
+      </div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-primary admin-only" id="br2InlineEdit">수정</button>
+        <button type="button" class="btn btn-danger admin-only" id="br2InlineDelete">삭제</button>
+      </div>
+    </div>
+
+    <div class="ai-toolbar">
+      <div class="ai-toolbar-top">
+          <button type="button" class="ai-btn-primary admin-only" id="br2OpenAddBtn">✨ 새 리테일 아이디어 배포</button>
+          <button type="button" class="ai-btn-ghost" id="br2FilterBookmarkedBtn">♥ 관심 리테일 모아보기</button>
+        <div class="ai-search-wrap">
+          <span class="ai-search-icon" aria-hidden="true">🔍</span>
+          <input type="search" id="br2SearchInput" class="ai-search-input" placeholder="브랜드명, 슬로건, 컬러 코드(#0EA5E9), 태그 검색..." aria-label="브랜딩 아이디어 검색">
+        </div>
+        <div class="ai-select-group">
+          <select id="br2StatusSelect" class="ai-select" aria-label="브랜딩 상태 필터">
+            <option value="all">모든 상태 (All)</option>
+            <option value="live">✨ LIVE 확정·배포</option>
+            <option value="beta">🧪 DRAFT 시안·검토</option>
+            <option value="concept">📐 CONCEPT 컨셉</option>
+          </select>
+          <select id="br2SortSelect" class="ai-select" aria-label="정렬 기준">
+            <option value="newest">최신 등록순</option>
+            <option value="popular">인기·공감순</option>
+            <option value="title">이름순 (가나다)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="ai-cat-bar" id="br2CategoryBar" role="tablist" aria-label="브랜딩 카테고리 필터">
+        <button type="button" class="ai-cat-btn active" data-cat="all">전체 보기</button>
+        <button type="button" class="ai-cat-btn" data-cat="naming">🏷️ 네이밍·슬로건</button>
+        <button type="button" class="ai-cat-btn" data-cat="visual">🎨 컬러·비주얼</button>
+        <button type="button" class="ai-cat-btn" data-cat="typo">✒️ 로고·타이포</button>
+        <button type="button" class="ai-cat-btn" data-cat="kit">🚀 브랜드 런칭킷</button>
+        <button type="button" class="ai-cat-btn" data-cat="rebrand">💎 리브랜딩 검증</button>
+      </div>
+    </div>
+
+    <div class="ai-status-bar">
+      <div class="ai-active-chips" id="br2ActiveChips"></div>
+      <div class="ai-result-count" id="br2ResultCount">총 6개의 브랜딩 아이디어</div>
+    </div>
+
+    <div class="ai-idea-grid" id="br2IdeaGrid"></div>
   </div>
 </section>
 
@@ -3793,6 +3872,146 @@
       <div class="form-error" id="brAddError" role="alert"></div>
       <div class="dlg-actions">
         <button type="button" class="btn btn-ghost" data-close="brAddDialog">취소</button>
+        <button type="submit" class="btn btn-primary">✨ 즉시 배포</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<!-- ===== Retail 대화상자 (Branding 복제) ===== -->
+<dialog id="br2FormDialog" aria-label="새 Retail 글 등록">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="br2FormDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title">새 Retail 글</h3>
+    <form id="br2Form" novalidate>
+      <div class="field">
+        <label for="br2Title">제목 *</label>
+        <input type="text" id="br2Title" maxlength="120" placeholder="예: 오늘의 브랜딩 기록">
+      </div>
+      <div class="field">
+        <label for="br2Date">날짜</label>
+        <input type="date" id="br2Date">
+      </div>
+      <div class="field">
+        <label for="br2Content">내용</label>
+        <textarea id="br2Content" placeholder="브랜딩 이야기를 적어주세요"></textarea>
+      </div>
+      <div class="field">
+        <label for="br2Files">사진·파일 (여러 개)</label>
+        <div class="attach-row">
+          <label class="file-btn" for="br2Files">파일 선택</label>
+          <input type="file" id="br2Files" class="sr" multiple>
+          <span id="br2FileCount">선택된 파일 없음</span>
+        </div>
+        <div class="preview-grid" id="br2Preview"></div>
+      </div>
+      <div class="form-error" id="br2FormError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="br2FormDialog">취소</button>
+        <button type="submit" class="btn btn-primary" id="br2Submit">등록</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog id="br2ViewDialog" aria-label="Branding 글 상세">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="br2ViewDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title" id="br2ViewTitle"></h3>
+    <div class="post-date" id="br2ViewDate"></div>
+    <div class="view-photos" id="br2ViewPhotos"></div>
+    <div id="br2ViewContent"></div>
+    <div class="file-list" id="br2ViewFiles" hidden></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-primary admin-only" id="br2ViewEdit">수정</button>
+      <button type="button" class="btn btn-danger admin-only" id="br2ViewDelete">삭제</button>
+      <button type="button" class="btn btn-ghost" data-close="br2ViewDialog">닫기</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="br2DetailDialog" aria-label="리테일 아이디어 상세">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="br2DetailDialog" aria-label="닫기">×</button>
+    <div class="ai-detail-meta">
+      <span class="ai-status-pill live" id="br2DetailStatus">✨ LIVE</span>
+      <span class="ai-version-code" id="br2DetailCode">RETAIL-001 · v1.0</span>
+      <span class="post-date" id="br2DetailDate" style="margin:0"></span>
+    </div>
+    <h3 class="dlg-title" id="br2DetailTitle"></h3>
+    <div class="br-slogan-pill" id="br2DetailSlogan"></div>
+    <p id="br2DetailSummary" style="color:var(--text);line-height:1.8;margin-bottom:14px;"></p>
+    <div class="br-swatch-bar" id="br2DetailSwatches"></div>
+    <div class="ai-tag-list" id="br2DetailTags"></div>
+
+    <div class="ai-prompt-label">
+      <span>🎨 브랜드 아이덴티티 가이드 & 프롬프트</span>
+      <button type="button" class="ai-action-btn" id="br2CopyKitBtn">📋 브랜드 키트 복사</button>
+    </div>
+    <pre class="ai-prompt-box" id="br2DetailPrompt"></pre>
+
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-danger" id="br2DeleteCustomBtn" hidden>삭제</button>
+      <button type="button" class="btn btn-ghost" id="br2ShareLinkBtn">🔗 공유 링크 복사</button>
+      <button type="button" class="btn btn-ghost" data-close="br2DetailDialog">닫기</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="br2AddDialog" aria-label="새 리테일 아이디어 배포하기">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="br2AddDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title">✨ 새 리테일 아이디어 배포</h3>
+    <form id="br2AddForm" novalidate>
+      <div class="field">
+        <label for="br2InputTitle">브랜드명 / 프로젝트 제목 *</label>
+        <input type="text" id="br2InputTitle" placeholder="예: BAIOO — 글로벌 AI 네이밍 시스템" required>
+      </div>
+      <div class="field">
+        <label for="br2InputSlogan">핵심 슬로건 (Tagline) *</label>
+        <input type="text" id="br2InputSlogan" placeholder="예: Brilliant AI, Infinite Possibilities" required>
+      </div>
+      <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label for="br2InputCategory">카테고리</label>
+          <select id="br2InputCategory">
+            <option value="naming">🏷️ 네이밍·슬로건</option>
+            <option value="visual">🎨 컬러·비주얼</option>
+            <option value="typo">✒️ 로고·타이포</option>
+            <option value="kit">🚀 브랜드 런칭킷</option>
+            <option value="rebrand">💎 리브랜딩 검증</option>
+          </select>
+        </div>
+        <div>
+          <label for="br2InputStatus">상태</label>
+          <select id="br2InputStatus">
+            <option value="live">✨ LIVE 확정·배포</option>
+            <option value="beta">🧪 DRAFT 시안·검토</option>
+            <option value="concept">📐 CONCEPT 컨셉</option>
+          </select>
+        </div>
+      </div>
+      <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label for="br2InputColors">대표 컬러 HEX (쉼표 구분 3개)</label>
+          <input type="text" id="br2InputColors" placeholder="예: #F43F5E, #8B5CF6, #0F172A" value="#F43F5E, #8B5CF6, #0F172A">
+        </div>
+        <div>
+          <label for="br2InputTags">태그 (쉼표 구분)</label>
+          <input type="text" id="br2InputTags" placeholder="예: 네이밍, 슬로건, 컬러칩">
+        </div>
+      </div>
+      <div class="field">
+        <label for="br2InputSummary">브랜드 기획 의도 및 요약 *</label>
+        <textarea id="br2InputSummary" style="min-height:82px;" placeholder="이 브랜드 아이디어의 탄생 배경과 핵심 컨셉을 적어주세요."></textarea>
+      </div>
+      <div class="field">
+        <label for="br2InputPrompt">브랜드 가이드라인 / 네이밍 스펙</label>
+        <textarea id="br2InputPrompt" style="min-height:110px;" placeholder="복사해서 활용할 수 있는 브랜드 가이드, 톤앤매너, 프롬프트를 적어주세요."></textarea>
+      </div>
+      <div class="form-error" id="br2AddError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="br2AddDialog">취소</button>
         <button type="submit" class="btn btn-primary">✨ 즉시 배포</button>
       </div>
     </form>
@@ -7957,6 +8176,1216 @@
     renderAll();
   });
 })();
+
+/* ===== Retail 자유게시판 + 스튜디오 (Branding 복제) ===== */
+/* ===== Branding 자유게시판 (AI 패턴 미러) ===== */
+(function () {
+  "use strict";
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+
+  function apiList() {
+    return fetch("/api?action=list", { headers: { Accept: "application/json" } })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        var posts = data && data.posts;
+        if (posts && !Array.isArray(posts)) posts = Array.isArray(posts.value) ? posts.value : (posts.id ? [posts] : []);
+        return Array.isArray(posts) ? posts : [];
+      });
+  }
+  function isImageFile(f) {
+    var n = String(f.name || f.originalName || "").toLowerCase();
+    return /^image\//.test(f.type || "") || /\.(png|jpe?g|gif|webp|bmp|svg)$/.test(n);
+  }
+  function postDate(p) {
+    if (p.date) return p.date;
+    if (p.createdAt) { try { return new Date(p.createdAt).toISOString().slice(0, 10); } catch (e) {} }
+    return "";
+  }
+  function fileLinks(files, ev) {
+    var fl = document.createElement("div");
+    fl.className = "file-list";
+    fl.style.marginTop = "12px";
+    files.forEach(function (f) {
+      var a = document.createElement("a");
+      a.href = f.url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.textContent = "📎 " + (f.originalName || f.name);
+      if (ev) a.addEventListener("click", function (e) { e.stopPropagation(); });
+      fl.appendChild(a);
+    });
+    return fl;
+  }
+  function openDlg(d) { if (d && !d.open) d.showModal(); }
+  function closeDlg(d) { if (d && d.open) d.close(); }
+
+  var br2BoardBody = $("#br2BoardBody");
+  var br2Posts = [];
+  var br2PageBar = $("#br2PageBar");
+  var br2Page = 1;
+  var BR2_PAGE_SIZE = 10;
+
+  function renderBr2Pages(total) {
+    if (!br2PageBar) return;
+    br2PageBar.textContent = "";
+    var maxPage = Math.max(1, Math.ceil(total / BR2_PAGE_SIZE));
+    if (br2Page > maxPage) br2Page = maxPage;
+    if (br2Page < 1) br2Page = 1;
+    function mk(label, page, active, disabled) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "ai-cat-btn" + (active ? " active" : "");
+      b.textContent = label;
+      if (disabled) b.disabled = true;
+      else b.addEventListener("click", function () { br2Page = page; renderBr2(); });
+      br2PageBar.appendChild(b);
+    }
+    mk("‹ 이전", br2Page - 1, false, br2Page === 1);
+    var start = Math.max(1, br2Page - 2);
+    var end = Math.min(maxPage, start + 4);
+    start = Math.max(1, end - 4);
+    for (var p = start; p <= end; p++) mk(String(p), p, p === br2Page, false);
+    mk("› 다음", br2Page + 1, false, br2Page === maxPage);
+  }
+
+  function makeBr2Row(p, i) {
+    var tr = document.createElement("tr");
+    tr.setAttribute("data-id", p.id);
+    var no = document.createElement("td");
+    no.textContent = String(i);
+    var ti = document.createElement("td");
+    ti.className = "board-title";
+    ti.textContent = p.title || "(제목 없음)";
+    var vw = document.createElement("span");
+    vw.className = "board-views";
+    vw.textContent = " | 조회수: " + String((+p.views) || 0);
+    ti.appendChild(vw);
+    var dt = document.createElement("td");
+    dt.textContent = "";
+    var vs = document.createElement("span");
+    vs.className = "vote-red";
+    vs.textContent = window.BaiooVote.label(p);
+    dt.appendChild(vs);
+    dt.appendChild(document.createTextNode(" "));
+    dt.appendChild(document.createTextNode(postDate(p) || "—"));
+    var del = document.createElement("button");
+    del.type = "button";
+    del.className = "row-del admin-only";
+    del.textContent = "🗑️";
+    del.setAttribute("data-del", p.id);
+    del.setAttribute("aria-label", "삭제");
+    dt.appendChild(del);
+    tr.appendChild(no);
+    tr.appendChild(ti);
+    tr.appendChild(dt);
+    return tr;
+  }
+
+  function renderBr2() {
+    var maxPage = Math.max(1, Math.ceil(br2Posts.length / BR2_PAGE_SIZE));
+    if (br2Page > maxPage) br2Page = maxPage;
+    if (br2Page < 1) br2Page = 1;
+    br2BoardBody.textContent = "";
+    if (!br2Posts.length) {
+      var tr = document.createElement("tr");
+      var td = document.createElement("td");
+      td.colSpan = 3;
+      td.className = "board-empty";
+      td.style.cssText = "text-align:center;color:var(--muted)";
+      td.textContent = "등록된 글이 없습니다.";
+      tr.appendChild(td);
+      br2BoardBody.appendChild(tr);
+      renderBr2Pages(0);
+      return;
+    }
+    var startIdx = (br2Page - 1) * BR2_PAGE_SIZE;
+    br2Posts.slice(startIdx, startIdx + BR2_PAGE_SIZE).forEach(function (p, i) { br2BoardBody.appendChild(makeBr2Row(p, br2Posts.length - (startIdx + i))); });
+    renderBr2Pages(br2Posts.length);
+  }
+
+  function loadBr2() {
+    return apiList().then(function (posts) {
+      br2Posts = posts.filter(function (p) { return p.category === "branding2"; });
+      br2Posts.sort(function (a, b) { return ((b.createdAt || 0) > (a.createdAt || 0)) ? 1 : (((b.createdAt || 0) < (a.createdAt || 0)) ? -1 : 0); });
+      renderBr2();
+    }).catch(function () { br2Posts = []; renderBr2(); });
+  }
+
+  /* ---------- Branding 등록 폼 ---------- */
+  var br2FormDlg = $("#br2FormDialog"),
+      br2Form = $("#br2Form"),
+      br2TitleInput = $("#br2Title"),
+      br2DateInput = $("#br2Date"),
+      br2ContentInput = $("#br2Content"),
+      br2FileInput = $("#br2Files"),
+      br2PreviewEl = $("#br2Preview"),
+      br2FileCountEl = $("#br2FileCount"),
+      br2ErrorEl = $("#br2FormError"),
+      br2SubmitBtn = $("#br2Submit");
+  var br2Picked = [];
+  var br2EditingId = null;
+
+  function renderBr2Preview() {
+    $$("img", br2PreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
+    br2PreviewEl.textContent = "";
+    br2FileCountEl.textContent = br2Picked.length ? br2Picked.length + "개 선택됨" : "선택된 파일 없음";
+    br2Picked.forEach(function (f, i) {
+      var tile = document.createElement("div");
+      tile.className = "thumb-sm";
+      tile.title = f.name;
+      if (isImageFile(f)) {
+        var im = document.createElement("img");
+        im.src = URL.createObjectURL(f);
+        im.alt = f.name;
+        tile.appendChild(im);
+      } else {
+        tile.style.cssText = "display:grid;place-items:center;font-size:1.6rem;";
+        tile.textContent = "📄";
+      }
+      var rm = document.createElement("button");
+      rm.type = "button";
+      rm.className = "rm";
+      rm.textContent = "×";
+      rm.setAttribute("aria-label", f.name + " 제거");
+      rm.addEventListener("click", function () { br2Picked.splice(i, 1); renderBr2Preview(); });
+      tile.appendChild(rm);
+      br2PreviewEl.appendChild(tile);
+    });
+  }
+
+  br2FileInput.addEventListener("change", function () {
+    br2Picked = br2Picked.concat(Array.prototype.slice.call(br2FileInput.files));
+    br2FileInput.value = "";
+    renderBr2Preview();
+  });
+
+  $$(".section-add-btn[data-category='branding2']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      br2EditingId = null;
+      br2Form.reset();
+      br2Picked = [];
+      renderBr2Preview();
+      br2ErrorEl.textContent = "";
+      var _dt = $("#br2FormDialog .dlg-title"); if (_dt) _dt.textContent = "새 Retail 글";
+      br2SubmitBtn.textContent = "등록";
+      openDlg(br2FormDlg);
+      br2TitleInput.focus();
+    });
+  });
+
+  br2Form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var title = br2TitleInput.value.trim();
+    if (!title) { br2ErrorEl.textContent = "제목을 입력하세요."; br2TitleInput.focus(); return; }
+    br2ErrorEl.textContent = "";
+    br2SubmitBtn.disabled = true;
+    br2SubmitBtn.textContent = br2EditingId ? "저장 중…" : "등록 중…";
+    var fd = new FormData();
+    if (br2EditingId) fd.append("id", br2EditingId);
+    fd.append("title", title);
+    fd.append("content", br2ContentInput.value);
+    fd.append("category", "branding2");
+    fd.append("date", br2DateInput.value || "");
+    br2Picked.forEach(function (f) { fd.append("files[]", f); });
+    fetch(br2EditingId ? "/api?action=update" : "/api?action=create", { method: "POST", body: fd })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        br2Form.reset();
+        br2Picked = [];
+        renderBr2Preview();
+        closeDlg(br2FormDlg);
+        br2EditingId = null;
+        var _dt2 = $("#br2FormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 Retail 글";
+        return loadBr2();
+      })
+      .catch(function (err) { br2ErrorEl.textContent = "실패: " + ((err && err.message) || err); })
+      .then(function () { br2SubmitBtn.disabled = false; br2SubmitBtn.textContent = br2EditingId ? "저장" : "등록"; });
+  });
+
+  /* ---------- Branding 상세 다이얼로그 + 삭제 ---------- */
+  var br2ViewDlg = $("#br2ViewDialog"),
+      br2ViewTitle = $("#br2ViewTitle"),
+      br2ViewDate = $("#br2ViewDate"),
+      br2ViewPhotos = $("#br2ViewPhotos"),
+      br2ViewContent = $("#br2ViewContent"),
+      br2ViewFiles = $("#br2ViewFiles"),
+      br2DeleteBtn = $("#br2ViewDelete");
+  var br2ViewingId = null;
+
+  function openBr2View(id) {
+    var p = null;
+    br2Posts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
+    if (!p) return;
+    br2ViewingId = p.id;
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = " | 조회수: " + j.views; } }).catch(function () {});
+    var panel = $("#br2ViewPanel");
+    var t = $("#br2InlineTitle"), d = $("#br2InlineDate"), ph = $("#br2InlinePhotos"), c = $("#br2InlineContent"), fl = $("#br2InlineFiles");
+    if (t) t.textContent = p.title || "(제목 없음)";
+    if (d) { var dv = document.createElement("span"); dv.className = "vote-red"; dv.textContent = window.BaiooVote.label(p); d.textContent = ""; d.appendChild(document.createTextNode("🗓 ")); d.appendChild(dv); d.appendChild(document.createTextNode("  " + (postDate(p) || "날짜 미정"))); }
+    if (ph) {
+      ph.textContent = "";
+      (p.files || []).filter(isImageFile).forEach(function (f) {
+        var im = document.createElement("img");
+        im.src = f.url;
+        im.alt = f.originalName || f.name;
+        ph.appendChild(im);
+      });
+    }
+    if (c) c.textContent = p.content || "(내용 없음)";
+    if (fl) {
+      fl.textContent = "";
+      fl.hidden = !(p.files && p.files.length);
+      if (p.files && p.files.length) fl.appendChild(fileLinks(p.files, false));
+    }
+    var blc = $("#br2LikeCount"), bdc = $("#br2DislikeCount");
+    if (blc) blc.textContent = (+p.likes) || 0;
+    if (bdc) bdc.textContent = (+p.dislikes) || 0;
+    if (panel) {
+      panel.hidden = false;
+      if (panel.scrollIntoView) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+    br2ViewTitle.textContent = p.title || "(제목 없음)";
+    br2ViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    loadBr2Cmt();
+  }
+
+  br2BoardBody.addEventListener("click", function (e) {
+    var delBtn = e.target.closest("[data-del]");
+    if (delBtn) {
+      e.stopPropagation();
+      var did = delBtn.getAttribute("data-del");
+      if (!window.confirm("이 글을 삭제할까요?")) return;
+      fetch("/api/" + encodeURIComponent(did), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: did }) })
+        .then(function (res) { return res.json(); })
+        .then(function () { return loadBr2(); })
+        .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); });
+      return;
+    }
+    var tr = e.target.closest("tr[data-id]");
+    if (!tr) return;
+    openBr2View(tr.getAttribute("data-id"));
+  });
+
+  var br2ViewClose = $("#br2ViewClose");
+  if (br2ViewClose) br2ViewClose.addEventListener("click", function () { var panel = $("#br2ViewPanel"); if (panel) panel.hidden = true; });
+  var br2InlineDelete = $("#br2InlineDelete");
+  if (br2InlineDelete) br2InlineDelete.addEventListener("click", function () { br2DeleteBtn.click(); });
+  var br2InlineEdit = $("#br2InlineEdit");
+  if (br2InlineEdit) br2InlineEdit.addEventListener("click", function () { var b = $("#br2ViewEdit"); if (b) b.click(); });
+  var br2InlineLike = $("#br2InlineLike"), br2InlineDislike = $("#br2InlineDislike");
+  if (br2InlineLike) br2InlineLike.addEventListener("click", function () {
+    if (!br2ViewingId) return;
+    window.BaiooVote.send(br2ViewingId, "like", function (data) {
+      var lc = $("#br2LikeCount"), dc = $("#br2DislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      br2Posts.forEach(function (x) { if (String(x.id) === String(br2ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderBr2();
+    });
+  });
+  if (br2InlineDislike) br2InlineDislike.addEventListener("click", function () {
+    if (!br2ViewingId) return;
+    window.BaiooVote.send(br2ViewingId, "dislike", function (data) {
+      var lc = $("#br2LikeCount"), dc = $("#br2DislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      br2Posts.forEach(function (x) { if (String(x.id) === String(br2ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderBr2();
+    });
+  });
+
+  var br2CmtList = $("#br2CmtList"), br2CmtCount = $("#br2CmtCount"), br2CmtToggle = $("#br2CmtToggle"),
+      br2CmtAuthor = $("#br2CmtAuthor"), br2CmtInput = $("#br2CmtInput"), br2CmtSend = $("#br2CmtSend");
+  var br2CmtAll = [], br2CmtOpen = false;
+  function renderBr2Cmt() {
+    if (!br2CmtList) return;
+    br2CmtList.textContent = "";
+    var show = br2CmtOpen ? br2CmtAll : br2CmtAll.slice(0, 10);
+    show.forEach(function (cm) {
+      var d = document.createElement("div");
+      d.className = "cmt-item";
+      var isAdmin = document.body.classList.contains("is-admin");
+      d.innerHTML = "<b>" + window.BaiooCmt.esc(cm.author) + "</b> " + window.BaiooCmt.esc(cm.content) + (isAdmin ? ' <button type="button" class="cmt-del" data-cid="' + cm.id + '">삭제</button>' : "");
+      br2CmtList.appendChild(d);
+    });
+    if (br2CmtCount) br2CmtCount.textContent = br2CmtAll.length;
+    if (br2CmtToggle) { br2CmtToggle.hidden = br2CmtAll.length <= 10; br2CmtToggle.textContent = br2CmtOpen ? "접기" : ("더 보기 (" + br2CmtAll.length + ")"); }
+  }
+  function loadBr2Cmt() {
+    if (!br2ViewingId) return;
+    window.BaiooCmt.list(br2ViewingId).then(function (rows) { br2CmtAll = rows || []; br2CmtOpen = false; renderBr2Cmt(); }).catch(function () { br2CmtAll = []; renderBr2Cmt(); });
+  }
+  if (br2CmtToggle) br2CmtToggle.addEventListener("click", function () { br2CmtOpen = !br2CmtOpen; renderBr2Cmt(); });
+  if (br2CmtSend) br2CmtSend.addEventListener("click", function () {
+    if (!br2ViewingId) return;
+    var a = (br2CmtAuthor && br2CmtAuthor.value.trim()) || "익명";
+    var c = (br2CmtInput && br2CmtInput.value.trim()) || "";
+    if (!c) { window.alert("댓글을 입력하세요."); return; }
+    br2CmtSend.disabled = true;
+    window.BaiooCmt.create(br2ViewingId, a, c).then(function (j) {
+      if (!j || !j.ok) throw new Error((j && j.message) || "fail");
+      if (br2CmtInput) br2CmtInput.value = "";
+      loadBr2Cmt();
+    }).catch(function (err) { window.alert("댓글 실패: " + ((err && err.message) || err)); })
+    .then(function () { br2CmtSend.disabled = false; });
+  });
+  if (br2CmtList) br2CmtList.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cid]");
+    if (!b) return;
+    if (!window.confirm("댓글을 삭제할까요?")) return;
+    window.BaiooCmt.remove(b.getAttribute("data-cid")).then(function () { loadBr2Cmt(); });
+  });
+
+  br2DeleteBtn.addEventListener("click", function () {
+    if (!br2ViewingId) return;
+    if (!window.confirm("이 글을 삭제할까요? 첨부 파일도 함께 삭제됩니다.")) return;
+    br2DeleteBtn.disabled = true;
+    fetch("/api/" + encodeURIComponent(br2ViewingId), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: br2ViewingId })
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        closeDlg(br2ViewDlg);
+        br2ViewingId = null;
+        var panel = $("#br2ViewPanel");
+        if (panel) panel.hidden = true;
+        return loadBr2();
+      })
+      .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
+      .then(function () { br2DeleteBtn.disabled = false; });
+  });
+
+  var br2EditBtn = $("#br2ViewEdit");
+  if (br2EditBtn) {
+    br2EditBtn.addEventListener("click", function () {
+      if (!br2ViewingId) return;
+      var p = null;
+      br2Posts.forEach(function (x) { if (x.id === br2ViewingId) p = x; });
+      if (!p) return;
+      br2EditingId = br2ViewingId;
+      br2TitleInput.value = p.title || "";
+      br2DateInput.value = p.date || "";
+      br2ContentInput.value = p.content || "";
+      br2Picked = [];
+      renderBr2Preview();
+      br2ErrorEl.textContent = "";
+      var bdt = $("#br2FormDialog .dlg-title"); if (bdt) bdt.textContent = "Retail 글 수정";
+      br2SubmitBtn.textContent = "저장";
+      if (br2ViewDlg && br2ViewDlg.open) closeDlg(br2ViewDlg);
+      openDlg(br2FormDlg);
+      br2TitleInput.focus();
+    });
+  }
+
+  loadBr2();
+})();
+
+/* ===== BAIOO Retail 스튜디오 (Branding 복제) ===== */
+/* ===== BAIOO Branding Agency 스튜디오 (네이밍·컬러 스와치 복사·필터·등록) ===== */
+(function () {
+  "use strict";
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+
+  var STORAGE_CUSTOM = "baioo_br2_custom_ideas_v1";
+  var STORAGE_LIKES = "baioo_br2_likes_v1";
+
+  var CATEGORY_META = {
+    naming:  { label: "네이밍·슬로건",   emoji: "🏷️", gradient: "linear-gradient(135deg, #F43F5E 0%, #E11D48 100%)" },
+    visual:  { label: "컬러·비주얼",     emoji: "🎨", gradient: "linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%)" },
+    typo:    { label: "로고·타이포",     emoji: "✒️", gradient: "linear-gradient(135deg, #0EA5E9 0%, #3B82F6 100%)" },
+    kit:     { label: "브랜드 런칭킷",   emoji: "🚀", gradient: "linear-gradient(135deg, #F59E0B 0%, #EA580C 100%)" },
+    rebrand: { label: "리브랜딩 검증",   emoji: "💎", gradient: "linear-gradient(135deg, #10B981 0%, #0D9488 100%)" }
+  };
+
+  var STATUS_META = {
+    live:    { label: "✨ LIVE 확정",   cls: "live" },
+    beta:    { label: "🧪 DRAFT 시안",  cls: "beta" },
+    concept: { label: "📐 CONCEPT",     cls: "concept" }
+  };
+
+  var SEED_BRANDS = [
+    {
+      id: "br2-seed-1",
+      code: "RETAIL-001",
+      version: "v2.0",
+      status: "live",
+      category: "naming",
+      emoji: "🏷️",
+      gradient: "linear-gradient(135deg, #F43F5E 0%, #8B5CF6 100%)",
+      title: "BAIOO 마스터 브랜드 아이덴티티",
+      slogan: "Brilliant AI, Infinite Possibilities",
+      colors: ["#0EA5E9", "#6366F1", "#0F172A"],
+      summary: "찬란한 AI와 무한한 가능성을 결합한 5글자 네이밍. 한국어로는 짧게 '바이오(비에이아이오오)'로 발음되며 직관적인 대칭형 시각 밸런스를 갖춤.",
+      tags: ["BAIOO", "마스터브랜드", "슬로건", "네이밍"],
+      date: "2026-10-19",
+      baseLikes: 48,
+      prompt: "[BAIOO 브랜드 마스터 키트]\n- 브랜드명: BAIOO (발음: 비에이아이오오 / 약칭: 바이오)\n- 공식 슬로건: Brilliant AI, Infinite Possibilities (찬란한 AI, 무한한 가능성)\n- 메인 키 카피: AI 세상을 바꾸는 찬란한 열쇠\n- 서브 카피: 작은 시작이 큰 변화를 연다"
+    },
+    {
+      id: "br2-seed-2",
+      code: "RETAIL-002",
+      version: "v1.4",
+      status: "live",
+      category: "rebrand",
+      emoji: "💎",
+      gradient: "linear-gradient(135deg, #10B981 0%, #0EA5E9 100%)",
+      title: "글로벌 영미권 어감 & 상표 리스크 필터링",
+      slogan: "Global Safe Naming Protocol",
+      colors: ["#10B981", "#0284C7", "#1E293B"],
+      summary: "AIOO(선점됨) → BRAIOO/BREIOO/BRIAIOO 검토 중 영미권에서 'BRA' 시작 철자가 속옷을 연상시키는 리스크를 발견해 배제하고 BAIOO로 최종 확정한 검증 프로세스.",
+      tags: ["리스크검증", "영미권어감", "리브랜딩", "의사결정"],
+      date: "2026-10-19",
+      baseLikes: 39,
+      prompt: "[글로벌 네이밍 리스크 필터링 기록]\n1차 후보: AIOO → 도메인/브랜드 선점으로 제외\n2차 후보: BRAIOO / BREIOO / BRIAIOO → 영미권에서 'BRA' 시작 철자의 속옷 연상 리스크 차단\n최종 확정: BAIOO → 부정 연상 없음 + Brilliant AI의 B를 직관적으로 계승"
+    },
+    {
+      id: "br2-seed-3",
+      code: "RETAIL-003",
+      version: "v1.6",
+      status: "live",
+      category: "visual",
+      emoji: "🎨",
+      gradient: "linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)",
+      title: "듀얼 오로라 글래스모피즘 컬러 시스템",
+      slogan: "Adaptive Light & Dark Glass Aesthetics",
+      colors: ["#38BDF8", "#EC4899", "#070B14"],
+      summary: "라이트 모드의 청량한 파스텔 글래스(#F6F8FB)와 다크 모드의 딥 스페이스 네이비(#070B14)를 오가며 섹션별 고유 포인트 컬러를 부여하는 디자인 토큰.",
+      tags: ["컬러시스템", "다크모드", "글래스모피즘", "디자인토큰"],
+      date: "2026-10-18",
+      baseLikes: 34,
+      prompt: "[BAIOO 컬러 토큰 시스템]\n- Light BG: #F6F8FB / Dark BG: #070B14\n- AI Hub Accent: #0EA5E9 (Cyan) + #6366F1 (Indigo)\n- Branding Studio Accent: #F43F5E (Rose) + #8B5CF6 (Violet)\n- Travel: #FF6B35 / Repair: #10B981 / Bunny: #EC4899"
+    },
+    {
+      id: "br2-seed-4",
+      code: "RETAIL-004",
+      version: "v1.2",
+      status: "live",
+      category: "typo",
+      emoji: "✒️",
+      gradient: "linear-gradient(135deg, #0EA5E9 0%, #6366F1 100%)",
+      title: "히어로 타이포그래피 & 로고 스태킹 규격",
+      slogan: "Gasoek One × Nanum Myeongjo × Pretendard",
+      colors: ["#0F172A", "#0EA5E9", "#64748B"],
+      summary: "대문 타이틀의 묵직한 임팩트를 주는 '가석체(Gasoek One)'와 서정적인 여운을 남기는 '나눔명조', 본문 가독성을 책임지는 '프리텐다드' 3중 폰트 페어링.",
+      tags: ["타이포그래피", "폰트페어링", "로고시스템", "가독성"],
+      date: "2026-10-18",
+      baseLikes: 31,
+      prompt: "[BAIOO 타이포그래피 가이드]\n1. 로고(Logo Stack): BAIOO. + 하단 마이크로 슬로건 + 1px 구분 실선\n2. 대문 메인 타이틀: 'Gasoek One' (강렬한 헤드라인 그라데이션)\n3. 대문 서브 문구: 'Nanum Myeongjo' 700/800 (감성적 명조 포인트)\n4. UI & 본문: 'Pretendard' (깔끔한 산세리프 시스템)"
+    },
+    {
+      id: "br2-seed-5",
+      code: "RETAIL-005",
+      version: "v1.0",
+      status: "beta",
+      category: "kit",
+      emoji: "🚀",
+      gradient: "linear-gradient(135deg, #F59E0B 0%, #F43F5E 100%)",
+      title: "220px 사이드바 & 30° 대각선 웨이브 레이아웃",
+      slogan: "Asymmetric Modern Web Architecture",
+      colors: ["#38BDF8", "#2DD4BF", "#F59E0B"],
+      summary: "PC에서는 좌측 220px 고정 네비게이션 바로 안정감을 주고, 대문 배경에는 30° 회전된 2겹의 무한 SVG 물결을 배치해 역동적인 브랜드 첫인상을 완성.",
+      tags: ["레이아웃", "사이드바", "SVG모션", "반응형"],
+      date: "2026-10-17",
+      baseLikes: 26,
+      prompt: "[레이아웃 아키텍처 스펙]\n- PC (761px 이상): 좌측 고정 사이드바 220px + 본문 padding-left 220px\n- 모바일 (760px 이하): 상단 글래스 헤더 + 햄버거 드롭다운 메뉴\n- 대문 모션: 30° 대각선 듀얼 SVG 웨이브 + 첫 진입 시 아래→위 상승 애니메이션"
+    },
+    {
+      id: "br2-seed-6",
+      code: "RETAIL-006",
+      version: "v0.8",
+      status: "concept",
+      category: "naming",
+      emoji: "✨",
+      gradient: "linear-gradient(135deg, #EC4899 0%, #F59E0B 100%)",
+      title: "신규 AI 프로덕트 마이크로 브랜딩 생성기",
+      slogan: "From Idea to Brand in 60 Seconds",
+      colors: ["#EC4899", "#F59E0B", "#1E1B4B"],
+      summary: "새로운 AI 툴이나 서비스를 런칭할 때 5글자 이내의 네이밍 3안, 영문 슬로건, 3색 HEX 팔레트, OG 메타태그 문구를 세트로 뽑아내는 브랜딩 레시피.",
+      tags: ["네이밍생성", "런칭패키지", "OG메타", "템플릿"],
+      date: "2026-10-16",
+      baseLikes: 22,
+      prompt: "[신규 프로젝트 1분 브랜딩 프롬프트]\n입력: [프로젝트 핵심 기능 1줄]\n출력 항목:\n1. 글로벌 발음 충돌 없는 5~6글자 영문 네이밍 3안\n2. 각 네이밍의 약어 풀이(Backronym) 영문 슬로건\n3. 메인·서브·배경 3색 HEX 코드 조합\n4. 검색엔진(meta description / og:title) 공유 문구"
+    }
+  ];
+
+  var state = {
+    category: "all",
+    status: "all",
+    sort: "newest",
+    query: "",
+    bookmarkedOnly: false,
+    activeBrandId: null
+  };
+
+  function loadJson(key, fallback) {
+    try {
+      var raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  function saveJson(key, val) {
+    try {
+      localStorage.setItem(key, JSON.stringify(val));
+    } catch (e) {}
+  }
+
+  var customBrands = loadJson(STORAGE_CUSTOM, []);
+  var editingBrandId = null;
+  if (!Array.isArray(customBrands)) customBrands = [];
+  var likedMap = loadJson(STORAGE_LIKES, {});
+  if (!likedMap || typeof likedMap !== "object") likedMap = {};
+
+  function getAllBrands() {
+    return customBrands.slice();
+  }
+
+  function getLikeCount(item) {
+    return Number(item.baseLikes || 0) + (likedMap[item.id] ? 1 : 0);
+  }
+
+  var gridEl = $("#br2IdeaGrid");
+  var searchInput = $("#br2SearchInput");
+  var statusSelect = $("#br2StatusSelect");
+  var sortSelect = $("#br2SortSelect");
+  var catBar = $("#br2CategoryBar");
+  var chipsEl = $("#br2ActiveChips");
+  var countEl = $("#br2ResultCount");
+  var statTotalEl = $("#br2StatTotal");
+  var statLiveEl = $("#br2StatLive");
+  var statLikesEl = $("#br2StatLikes");
+  var bookmarkFilterBtn = $("#br2FilterBookmarkedBtn");
+  var openAddBtn = $("#br2OpenAddBtn");
+  var toastEl = $("#aiToast");
+  var toastTimer = null;
+
+  function showToast(msg) {
+    if (!toastEl) return;
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toastEl.classList.remove("show");
+    }, 2400);
+  }
+
+  function copyText(text, successMsg) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        showToast(successMsg || "✨ 클립보드에 복사되었습니다!");
+      }).catch(function () {
+        fallbackCopy(text, successMsg);
+      });
+    } else {
+      fallbackCopy(text, successMsg);
+    }
+  }
+
+  function fallbackCopy(text, successMsg) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.cssText = "position:fixed;left:-9999px;top:0;";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      showToast(successMsg || "✨ 클립보드에 복사되었습니다!");
+    } catch (e) {
+      showToast("복사에 실패했습니다.");
+    }
+  }
+
+  function createSwatchBar(colors) {
+    var bar = document.createElement("div");
+    bar.className = "br-swatch-bar";
+    (colors || ["#F43F5E", "#8B5CF6", "#0F172A"]).slice(0, 3).forEach(function (hex) {
+      var chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "br-swatch-chip";
+      chip.style.background = hex;
+      chip.textContent = hex;
+      chip.title = "클릭하여 컬러 코드 " + hex + " 복사";
+      chip.addEventListener("click", function (e) {
+        e.stopPropagation();
+        copyText(hex, "🎨 컬러 코드 " + hex + " 복사 완료!");
+      });
+      bar.appendChild(chip);
+    });
+    return bar;
+  }
+
+  function updateStats() {
+    var all = getAllBrands();
+    var liveCount = 0;
+    var totalLikes = 0;
+    all.forEach(function (item) {
+      if (item.status === "live") liveCount += 1;
+      totalLikes += getLikeCount(item);
+    });
+    if (statTotalEl) statTotalEl.textContent = String(all.length);
+    if (statLiveEl) statLiveEl.textContent = String(liveCount);
+    if (statLikesEl) statLikesEl.textContent = String(totalLikes);
+  }
+
+  function syncControls() {
+    if (searchInput && searchInput.value !== state.query) searchInput.value = state.query;
+    if (statusSelect) statusSelect.value = state.status;
+    if (sortSelect) sortSelect.value = state.sort;
+    if (bookmarkFilterBtn) bookmarkFilterBtn.classList.toggle("active", state.bookmarkedOnly);
+    if (catBar) {
+      $$(".ai-cat-btn", catBar).forEach(function (b) {
+        b.classList.toggle("active", b.getAttribute("data-cat") === state.category);
+      });
+    }
+  }
+
+  function renderChips() {
+    if (!chipsEl) return;
+    chipsEl.textContent = "";
+
+    function addChip(label, onRemove) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "ai-chip";
+      btn.textContent = label + " ×";
+      btn.addEventListener("click", onRemove);
+      chipsEl.appendChild(btn);
+    }
+
+    if (state.category !== "all") {
+      var cMeta = CATEGORY_META[state.category];
+      addChip("카테고리: " + (cMeta ? cMeta.label : state.category), function () {
+        state.category = "all";
+        syncControls();
+        renderAll();
+      });
+    }
+    if (state.status !== "all") {
+      var sMeta = STATUS_META[state.status];
+      addChip("상태: " + (sMeta ? sMeta.label : state.status), function () {
+        state.status = "all";
+        syncControls();
+        renderAll();
+      });
+    }
+    if (state.bookmarkedOnly) {
+      addChip("♥ 관심 브랜딩", function () {
+        state.bookmarkedOnly = false;
+        syncControls();
+        renderAll();
+      });
+    }
+    if (state.query.trim()) {
+      addChip("검색: \"" + state.query.trim() + "\"", function () {
+        state.query = "";
+        syncControls();
+        renderAll();
+      });
+    }
+  }
+
+  function filterAndSortBrands() {
+    var q = state.query.trim().toLowerCase();
+    var filtered = getAllBrands().filter(function (item) {
+      if (state.category !== "all" && item.category !== state.category) return false;
+      if (state.status !== "all" && item.status !== state.status) return false;
+      if (state.bookmarkedOnly && !likedMap[item.id]) return false;
+      if (q) {
+        var hay = [
+          item.title,
+          item.slogan,
+          item.summary,
+          item.code,
+          (item.colors || []).join(" "),
+          (item.tags || []).join(" ")
+        ].join(" ").toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+
+    filtered.sort(function (a, b) {
+      if (state.sort === "popular") return getLikeCount(b) - getLikeCount(a);
+      if (state.sort === "title") return String(a.title).localeCompare(String(b.title), "ko");
+      return String(b.date || "").localeCompare(String(a.date || ""));
+    });
+
+    return filtered;
+  }
+
+  function createBrandCard(item) {
+    var card = document.createElement("article");
+    card.className = "ai-card";
+    card.tabIndex = 0;
+
+    card.addEventListener("mousemove", function (e) {
+      var rect = card.getBoundingClientRect();
+      card.style.setProperty("--mx", (e.clientX - rect.left) + "px");
+      card.style.setProperty("--my", (e.clientY - rect.top) + "px");
+    });
+
+    var sMeta = STATUS_META[item.status] || STATUS_META.live;
+    var cMeta = CATEGORY_META[item.category] || CATEGORY_META.naming;
+
+    var top = document.createElement("div");
+    top.className = "ai-card-top";
+    var pill = document.createElement("span");
+    pill.className = "ai-status-pill " + sMeta.cls;
+    pill.textContent = sMeta.label;
+    var ver = document.createElement("span");
+    ver.className = "ai-version-code";
+    ver.textContent = (item.code || "BRAND") + " · " + (item.version || "v1.0");
+    top.appendChild(pill);
+    top.appendChild(ver);
+
+    var visual = document.createElement("div");
+    visual.className = "ai-card-visual";
+    var photoUrl = item.photo || item.image || item.cover || ((item.photos && item.photos[0]) ? (item.photos[0].url || item.photos[0]) : "");
+    if (photoUrl) {
+      visual.style.background = item.gradient || cMeta.gradient;
+      var photo = document.createElement("img");
+      photo.src = photoUrl;
+      photo.alt = item.title || "";
+      photo.loading = "lazy";
+      visual.appendChild(photo);
+      var catLabel = document.createElement("span");
+      catLabel.className = "ai-card-cat-label";
+      catLabel.textContent = cMeta.label;
+      visual.appendChild(catLabel);
+    } else {
+      visual.style.display = "none";
+    }
+
+    var title = document.createElement("h3");
+    title.className = "ai-card-title";
+    title.textContent = item.title;
+
+    var slogan = document.createElement("div");
+    slogan.className = "br-slogan-pill";
+    slogan.textContent = "“" + (item.slogan || "Brilliant Brand Identity") + "”";
+
+    var desc = document.createElement("p");
+    desc.className = "ai-card-desc";
+    desc.textContent = item.summary;
+
+    var swatches = createSwatchBar(item.colors);
+
+    var tagList = document.createElement("div");
+    tagList.className = "ai-tag-list";
+    (item.tags || []).forEach(function (t) {
+      var tg = document.createElement("span");
+      tg.className = "ai-tag-item";
+      tg.textContent = "#" + t;
+      tagList.appendChild(tg);
+    });
+
+    var foot = document.createElement("div");
+    foot.className = "ai-card-foot";
+
+    var likeBtn = document.createElement("button");
+    likeBtn.type = "button";
+    var isLiked = Boolean(likedMap[item.id]);
+    likeBtn.className = "ai-like-btn" + (isLiked ? " liked" : "");
+    likeBtn.textContent = (isLiked ? "♥ " : "♡ ") + getLikeCount(item);
+    likeBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (likedMap[item.id]) {
+        delete likedMap[item.id];
+        showToast("관심 브랜딩에서 해제했습니다.");
+      } else {
+        likedMap[item.id] = true;
+        showToast("♥ 관심 브랜딩으로 저장했습니다!");
+      }
+      saveJson(STORAGE_LIKES, likedMap);
+      renderAll();
+    });
+
+    var actions = document.createElement("div");
+    actions.className = "ai-card-actions";
+
+    var copyBtn = document.createElement("button");
+    copyBtn.type = "button";
+    copyBtn.className = "ai-action-btn";
+    copyBtn.textContent = "📋 브랜드킷 복사";
+    copyBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      copyText(item.prompt || item.summary, "✨ [" + item.title + "] 브랜드 키트가 복사되었습니다!");
+    });
+
+    var detailBtn = document.createElement("button");
+    detailBtn.type = "button";
+    detailBtn.className = "ai-action-btn";
+    detailBtn.textContent = "상세 열기 →";
+    detailBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      openDetailModal(item.id);
+    });
+
+    actions.appendChild(copyBtn);
+    actions.appendChild(detailBtn);
+    if (String(item.id || "").indexOf("baioo-br2-") === 0) {
+      var br2EdB = document.createElement("button");
+      br2EdB.type = "button";
+      br2EdB.className = "ai-action-btn admin-only";
+      br2EdB.textContent = "✏️ 수정";
+      br2EdB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        editingBrandId = item.id;
+        if (inputTitle) inputTitle.value = item.title || "";
+        if (inputSlogan) inputSlogan.value = item.slogan || "";
+        if (inputCategory) inputCategory.value = item.category || "naming";
+        if (inputStatus) inputStatus.value = item.status || "live";
+        if (inputColors) inputColors.value = (item.colors || []).join(", ");
+        if (inputTags) inputTags.value = (item.tags || []).join(", ");
+        if (inputSummary) inputSummary.value = item.summary || "";
+        if (inputPrompt) inputPrompt.value = item.prompt || "";
+        if (addError) addError.textContent = "";
+        if (addDlg && !addDlg.open) addDlg.showModal();
+        if (inputTitle) inputTitle.focus();
+      });
+      var br2DelB = document.createElement("button");
+      br2DelB.type = "button";
+      br2DelB.className = "ai-action-btn admin-only";
+      br2DelB.textContent = "🗑️ 삭제";
+      br2DelB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (!window.confirm("이 아이디어를 삭제할까요?")) return;
+        customBrands = customBrands.filter(function (c) { return c.id !== item.id; });
+        saveJson(STORAGE_CUSTOM, customBrands);
+        ideaServerDelete("br2", item.id);
+        showToast("삭제되었습니다!");
+        renderAll();
+      });
+      actions.appendChild(br2EdB);
+      actions.appendChild(br2DelB);
+    }
+    foot.appendChild(likeBtn);
+    foot.appendChild(actions);
+
+    card.appendChild(top);
+    card.appendChild(visual);
+    card.appendChild(title);
+    card.appendChild(slogan);
+    card.appendChild(desc);
+    card.appendChild(swatches);
+    card.appendChild(tagList);
+    card.appendChild(foot);
+
+    card.addEventListener("click", function () { openDetailModal(item.id); });
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openDetailModal(item.id);
+      }
+    });
+
+    return card;
+  }
+
+  function renderAll() {
+    if (!gridEl) return;
+    updateStats();
+    renderChips();
+
+    var list = filterAndSortBrands();
+    if (countEl) countEl.textContent = "총 " + list.length + "개의 브랜딩 아이디어";
+
+    gridEl.textContent = "";
+    if (!list.length) {
+      var empty = document.createElement("div");
+      empty.className = "ai-empty-state";
+      var p = document.createElement("p");
+      p.textContent = "조건에 맞는 브랜딩 프로젝트가 없습니다.";
+      var resetBtn = document.createElement("button");
+      resetBtn.type = "button";
+      resetBtn.className = "ai-btn-primary";
+      resetBtn.textContent = "필터 전체 초기화";
+      resetBtn.addEventListener("click", function () {
+        state.category = "all";
+        state.status = "all";
+        state.query = "";
+        state.bookmarkedOnly = false;
+        syncControls();
+        renderAll();
+      });
+      empty.appendChild(p);
+      empty.appendChild(resetBtn);
+      gridEl.appendChild(empty);
+      return;
+    }
+
+    list.forEach(function (item) {
+      gridEl.appendChild(createBrandCard(item));
+    });
+  }
+
+  var detailDlg = $("#br2DetailDialog");
+  var detailStatus = $("#br2DetailStatus");
+  var detailCode = $("#br2DetailCode");
+  var detailDate = $("#br2DetailDate");
+  var detailTitle = $("#br2DetailTitle");
+  var detailSlogan = $("#br2DetailSlogan");
+  var detailSummary = $("#br2DetailSummary");
+  var detailSwatches = $("#br2DetailSwatches");
+  var detailTags = $("#br2DetailTags");
+  var detailPrompt = $("#br2DetailPrompt");
+  var copyKitBtn = $("#br2CopyKitBtn");
+  var shareLinkBtn = $("#br2ShareLinkBtn");
+  var deleteCustomBtn = $("#br2DeleteCustomBtn");
+
+  function openDetailModal(id) {
+    var target = null;
+    getAllBrands().forEach(function (x) { if (x.id === id) target = x; });
+    if (!target || !detailDlg) return;
+
+    state.activeBrandId = id;
+    var sMeta = STATUS_META[target.status] || STATUS_META.live;
+    if (detailStatus) {
+      detailStatus.className = "ai-status-pill " + sMeta.cls;
+      detailStatus.textContent = sMeta.label;
+    }
+    if (detailCode) detailCode.textContent = (target.code || "BRAND") + " · " + (target.version || "v1.0");
+    if (detailDate) detailDate.textContent = "🗓 " + (target.date || "2026-10-19");
+    if (detailTitle) detailTitle.textContent = target.title;
+    if (detailSlogan) detailSlogan.textContent = "“" + (target.slogan || "") + "”";
+    if (detailSummary) detailSummary.textContent = target.summary;
+    if (detailSwatches) {
+      detailSwatches.textContent = "";
+      var bar = createSwatchBar(target.colors);
+      while (bar.firstChild) detailSwatches.appendChild(bar.firstChild);
+    }
+    if (detailTags) {
+      detailTags.textContent = "";
+      (target.tags || []).forEach(function (t) {
+        var tg = document.createElement("span");
+        tg.className = "ai-tag-item";
+        tg.textContent = "#" + t;
+        detailTags.appendChild(tg);
+      });
+    }
+    if (detailPrompt) detailPrompt.textContent = target.prompt || target.summary;
+    if (deleteCustomBtn) {
+      var isCustom = customBrands.some(function (c) { return c.id === id; });
+      deleteCustomBtn.hidden = !isCustom;
+    }
+    if (!detailDlg.open) detailDlg.showModal();
+  }
+
+  if (copyKitBtn) {
+    copyKitBtn.addEventListener("click", function () {
+      var target = null;
+      getAllBrands().forEach(function (x) { if (x.id === state.activeBrandId) target = x; });
+      if (!target) return;
+      copyText(target.prompt || target.summary, "✨ 브랜드 키트가 클립보드에 복사되었습니다!");
+    });
+  }
+
+  if (shareLinkBtn) {
+    shareLinkBtn.addEventListener("click", function () {
+      var target = null;
+      getAllBrands().forEach(function (x) { if (x.id === state.activeBrandId) target = x; });
+      var shareText = target
+        ? "[BAIOO Branding] " + target.title + " (" + target.slogan + ") - " + location.origin + location.pathname + "#branding"
+        : location.href;
+      copyText(shareText, "🔗 브랜딩 공유 링크가 복사되었습니다!");
+    });
+  }
+
+  if (deleteCustomBtn) {
+    deleteCustomBtn.addEventListener("click", function () {
+      if (!state.activeBrandId) return;
+      customBrands = customBrands.filter(function (c) { return c.id !== state.activeBrandId; });
+      saveJson(STORAGE_CUSTOM, customBrands);
+      ideaServerDelete("br2", state.activeBrandId);
+      if (detailDlg && detailDlg.open) detailDlg.close();
+      showToast("브랜딩 아이디어가 삭제되었습니다.");
+      renderAll();
+    });
+  }
+
+  var addDlg = $("#br2AddDialog");
+  var addForm = $("#br2AddForm");
+  var inputTitle = $("#br2InputTitle");
+  var inputSlogan = $("#br2InputSlogan");
+  var inputCategory = $("#br2InputCategory");
+  var inputStatus = $("#br2InputStatus");
+  var inputColors = $("#br2InputColors");
+  var inputTags = $("#br2InputTags");
+  var inputSummary = $("#br2InputSummary");
+  var inputPrompt = $("#br2InputPrompt");
+  var addError = $("#br2AddError");
+
+  if (openAddBtn && addDlg) {
+    openAddBtn.addEventListener("click", function () {
+      editingBrandId = null;
+      if (addForm) addForm.reset();
+      if (inputColors) inputColors.value = "#F43F5E, #8B5CF6, #0F172A";
+      if (addError) addError.textContent = "";
+      if (!addDlg.open) addDlg.showModal();
+      if (inputTitle) inputTitle.focus();
+    });
+  }
+
+  if (addForm) {
+    addForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var titleVal = (inputTitle && inputTitle.value || "").trim();
+      var sloganVal = (inputSlogan && inputSlogan.value || "").trim();
+      var summaryVal = (inputSummary && inputSummary.value || "").trim();
+      if (!titleVal) {
+        if (addError) addError.textContent = "브랜드명 / 프로젝트 제목을 입력해 주세요.";
+        if (inputTitle) inputTitle.focus();
+        return;
+      }
+      if (!sloganVal) {
+        if (addError) addError.textContent = "핵심 슬로건을 입력해 주세요.";
+        if (inputSlogan) inputSlogan.focus();
+        return;
+      }
+      if (!summaryVal) {
+        if (addError) addError.textContent = "브랜드 기획 의도 및 요약을 입력해 주세요.";
+        if (inputSummary) inputSummary.focus();
+        return;
+      }
+
+      var catVal = (inputCategory && inputCategory.value) || "naming";
+      var cMeta = CATEGORY_META[catVal] || CATEGORY_META.naming;
+
+      var rawColors = (inputColors && inputColors.value || "").split(",");
+      var cleanColors = [];
+      rawColors.forEach(function (c) {
+        var trimmed = c.trim();
+        if (/^#[0-9A-Fa-f]{3,8}$/.test(trimmed)) cleanColors.push(trimmed.toUpperCase());
+      });
+      if (!cleanColors.length) cleanColors = ["#F43F5E", "#8B5CF6", "#0F172A"];
+
+      var rawTags = (inputTags && inputTags.value || "").split(",");
+      var cleanTags = [];
+      rawTags.forEach(function (t) {
+        var trimmed = t.trim().replace(/^#/, "");
+        if (trimmed) cleanTags.push(trimmed);
+      });
+      if (!cleanTags.length) cleanTags = ["BAIOO", cMeta.label];
+
+      if (editingBrandId) {
+        var bTarget = null;
+        customBrands.forEach(function (x) { if (x.id === editingBrandId) bTarget = x; });
+        if (bTarget) {
+          bTarget.title = titleVal;
+          bTarget.slogan = sloganVal;
+          bTarget.category = catVal;
+          bTarget.status = (inputStatus && inputStatus.value) || bTarget.status;
+          bTarget.colors = cleanColors;
+          bTarget.tags = cleanTags;
+          bTarget.summary = summaryVal;
+          bTarget.prompt = (inputPrompt && inputPrompt.value.trim()) || ("[" + titleVal + "]\n- 슬로건: " + sloganVal + "\n- 컬러: " + cleanColors.join(", ") + "\n- 설명: " + summaryVal);
+          bTarget.emoji = cMeta.emoji;
+          bTarget.gradient = cMeta.gradient;
+          saveJson(STORAGE_CUSTOM, customBrands);
+          ideaServerUpsert("br2", bTarget);
+          showToast("✨ 수정되었습니다!");
+        }
+        editingBrandId = null;
+      } else {
+        var newBrand = {
+          id: "baioo-br2-" + Date.now(),
+          code: "RETAIL-" + String(getAllBrands().length + 1).padStart(3, "0"),
+          version: "v1.0",
+          status: (inputStatus && inputStatus.value) || "live",
+          category: catVal,
+          emoji: cMeta.emoji,
+          gradient: cMeta.gradient,
+          title: titleVal,
+          slogan: sloganVal,
+          colors: cleanColors,
+          summary: summaryVal,
+          tags: cleanTags,
+          date: new Date().toISOString().slice(0, 10),
+          baseLikes: 1,
+          prompt: (inputPrompt && inputPrompt.value.trim()) || ("[" + titleVal + "]\n- 슬로건: " + sloganVal + "\n- 컬러: " + cleanColors.join(", ") + "\n- 설명: " + summaryVal)
+        };
+
+        customBrands.unshift(newBrand);
+        saveJson(STORAGE_CUSTOM, customBrands);
+        ideaServerUpsert("br2", newBrand);
+        showToast("✨ 새 리테일 아이디어가 스튜디오에 배포되었습니다!");
+      }
+      addForm.reset();
+      if (inputColors) inputColors.value = "#F43F5E, #8B5CF6, #0F172A";
+      if (addDlg && addDlg.open) addDlg.close();
+      renderAll();
+    });
+  }
+
+  if (catBar) {
+    $$(".ai-cat-btn", catBar).forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        state.category = btn.getAttribute("data-cat") || "all";
+        syncControls();
+        renderAll();
+      });
+    });
+  }
+  if (statusSelect) {
+    statusSelect.addEventListener("change", function () {
+      state.status = statusSelect.value || "all";
+      renderAll();
+    });
+  }
+  if (sortSelect) {
+    sortSelect.addEventListener("change", function () {
+      state.sort = sortSelect.value || "newest";
+      renderAll();
+    });
+  }
+  if (searchInput) {
+    searchInput.addEventListener("input", function () {
+      state.query = searchInput.value || "";
+      renderAll();
+    });
+  }
+  if (bookmarkFilterBtn) {
+    bookmarkFilterBtn.addEventListener("click", function () {
+      state.bookmarkedOnly = !state.bookmarkedOnly;
+      syncControls();
+      renderAll();
+    });
+  }
+
+  $$("[data-close='br2DetailDialog'], [data-close='br2AddDialog']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var d = document.getElementById(b.getAttribute("data-close"));
+      if (d && d.open) d.close();
+    });
+  });
+
+  renderAll();
+  ideaServerSync("br2", function () { return customBrands; }, function (items) {
+    customBrands = items;
+    saveJson(STORAGE_CUSTOM, customBrands);
+    renderAll();
+  });
+})();
+
 
 /* ===== BAIOO Pets Care & Idea Hub (#bunny 필터·검색·복사·등록) ===== */
 (function () {
