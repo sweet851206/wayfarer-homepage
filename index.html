@@ -3800,6 +3800,7 @@
     </div>
     <h3 class="dlg-title" id="brDetailTitle"></h3>
     <div class="br-slogan-pill" id="brDetailSlogan"></div>
+    <div class="view-photos" id="brDetailPhoto" hidden></div>
     <p id="brDetailSummary" style="color:var(--text);line-height:1.8;margin-bottom:14px;"></p>
     <div class="br-swatch-bar" id="brDetailSwatches"></div>
     <div class="ai-tag-list" id="brDetailTags"></div>
@@ -3940,6 +3941,7 @@
     </div>
     <h3 class="dlg-title" id="br2DetailTitle"></h3>
     <div class="br-slogan-pill" id="br2DetailSlogan"></div>
+    <div class="view-photos" id="br2DetailPhoto" hidden></div>
     <p id="br2DetailSummary" style="color:var(--text);line-height:1.8;margin-bottom:14px;"></p>
     <div class="br-swatch-bar" id="br2DetailSwatches"></div>
     <div class="ai-tag-list" id="br2DetailTags"></div>
@@ -7754,6 +7756,7 @@
   var detailSwatches = $("#brDetailSwatches");
   var detailTags = $("#brDetailTags");
   var detailPrompt = $("#brDetailPrompt");
+  var detailPhoto = $("#brDetailPhoto");
   var copyKitBtn = $("#brCopyKitBtn");
   var shareLinkBtn = $("#brShareLinkBtn");
   var deleteCustomBtn = $("#brDeleteCustomBtn");
@@ -7789,6 +7792,20 @@
       });
     }
     if (detailPrompt) detailPrompt.textContent = target.prompt || target.summary;
+    if (detailPhoto) {
+      detailPhoto.textContent = "";
+      var photoUrl = target.photo || target.image || target.cover || ((target.photos && target.photos[0]) ? (target.photos[0].url || target.photos[0]) : "");
+      if (photoUrl) {
+        var img = document.createElement("img");
+        img.src = photoUrl;
+        img.alt = target.title || "";
+        img.loading = "lazy";
+        detailPhoto.appendChild(img);
+        detailPhoto.hidden = false;
+      } else {
+        detailPhoto.hidden = true;
+      }
+    }
     if (deleteCustomBtn) {
       var isCustom = customBrands.some(function (c) { return c.id === id; });
       deleteCustomBtn.hidden = !isCustom;
@@ -8858,6 +8875,7 @@
   var detailSwatches = $("#br2DetailSwatches");
   var detailTags = $("#br2DetailTags");
   var detailPrompt = $("#br2DetailPrompt");
+  var detailPhoto = $("#br2DetailPhoto");
   var copyKitBtn = $("#br2CopyKitBtn");
   var shareLinkBtn = $("#br2ShareLinkBtn");
   var deleteCustomBtn = $("#br2DeleteCustomBtn");
@@ -8893,6 +8911,20 @@
       });
     }
     if (detailPrompt) detailPrompt.textContent = target.prompt || target.summary;
+    if (detailPhoto) {
+      detailPhoto.textContent = "";
+      var photoUrl = target.photo || target.image || target.cover || ((target.photos && target.photos[0]) ? (target.photos[0].url || target.photos[0]) : "");
+      if (photoUrl) {
+        var img = document.createElement("img");
+        img.src = photoUrl;
+        img.alt = target.title || "";
+        img.loading = "lazy";
+        detailPhoto.appendChild(img);
+        detailPhoto.hidden = false;
+      } else {
+        detailPhoto.hidden = true;
+      }
+    }
     if (deleteCustomBtn) {
       var isCustom = customBrands.some(function (c) { return c.id === id; });
       deleteCustomBtn.hidden = !isCustom;
