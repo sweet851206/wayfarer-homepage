@@ -219,7 +219,7 @@
   .nav-links li.has-sub { position: relative; }
   .nav-links .nav-sub { list-style: none; margin: 0 0 0 25px; padding: 0; display: flex; flex-direction: column; gap: 10px; }
   .nav-links .nav-sub a { font-size: .94rem; font-weight: 900; opacity: 1; padding: 0 2px; line-height: 1.2; }
-  .br-gate { margin: 4px 0; font-weight: 900; font-size: 1.05rem; scroll-margin-top: 90px; }
+  .br-gate { margin: 4px 0; font-weight: 900; font-size: clamp(1.9rem, 4vw, 2.8rem); line-height: 1.18; letter-spacing: -.05em; scroll-margin-top: 90px; }
   #brGate2 { margin-top: 14px; }
   .gate-edit { background: none; border: none; cursor: pointer; font-size: .75rem; padding: 0 2px; }
 
@@ -2284,8 +2284,8 @@
         <li><a href="#ai" data-nav="ai">AI</a></li>
         <li class="has-sub"><a href="#branding" data-nav="branding">Branding agency</a>
           <ul class="nav-sub">
-            <li><a href="#brGate1" id="brGate1Link">— 대문</a> <button type="button" class="gate-edit admin-only" id="brGate1Edit" aria-label="첫 번째 대문명 수정">✏️</button></li>
-            <li><a href="#brGate2" id="brGate2Link">— 대문</a> <button type="button" class="gate-edit admin-only" id="brGate2Edit" aria-label="두 번째 대문명 수정">✏️</button></li>
+            <li><a href="#brGate1" id="brGate1Link">- Character Concept &amp; Identity</a> <button type="button" class="gate-edit admin-only" id="brGate1Edit" aria-label="첫 번째 대문명 수정">✏️</button></li>
+            <li><a href="#brGate2" id="brGate2Link">- Retail Identity &amp; Typography</a> <button type="button" class="gate-edit admin-only" id="brGate2Edit" aria-label="두 번째 대문명 수정">✏️</button></li>
           </ul>
         </li>
         <li><a href="#travel" data-nav="travel">Travel</a></li>
@@ -2496,7 +2496,7 @@
       </div>
     </div>
 
-    <div class="br-gate" id="brGate1">— 대문</div>
+    <div class="br-gate" id="brGate1">- Character Concept &amp; Identity</div>
     <div class="pet-diary-subhead">
       <h3>📝 자유게시판</h3>
       <button type="button" class="section-add-btn branding-add admin-only" id="brBoardAddBtn" data-category="branding" style="margin:0;">＋ 새 글 등록</button>
@@ -2572,7 +2572,7 @@
     </div>
 
     <div class="ai-idea-grid" id="brIdeaGrid"></div>
-    <div class="br-gate" id="brGate2">— 대문</div>
+    <div class="br-gate" id="brGate2">- Retail Identity &amp; Typography</div>
   </div>
 </section>
 
