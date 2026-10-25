@@ -7,8 +7,9 @@ function pickBoard(v, fallback) {
 export async function listPosts(db, board) {
   try { await db.prepare("ALTER TABLE posts ADD COLUMN likes INTEGER DEFAULT 0").run(); } catch (e) {}
   try { await db.prepare("ALTER TABLE posts ADD COLUMN dislikes INTEGER DEFAULT 0").run(); } catch (e) {}
+  try { await db.prepare("ALTER TABLE posts ADD COLUMN views INTEGER DEFAULT 0").run(); } catch (e) {}
   const r = await db.prepare(
-    "SELECT id,board,title,content,date,created_at,files,COALESCE(likes,0) AS likes,COALESCE(dislikes,0) AS dislikes FROM posts ORDER BY created_at DESC"
+    "SELECT id,board,title,content,date,created_at,files,COALESCE(likes,0) AS likes,COALESCE(dislikes,0) AS dislikes,COALESCE(views,0) AS views FROM posts ORDER BY created_at DESC"
   ).all();
   return (r.results || []).map(function (row) {
     var files = [];
@@ -16,7 +17,7 @@ export async function listPosts(db, board) {
     return {
       id: row.id, title: row.title, content: row.content, date: row.date,
       category: row.board, createdAt: row.created_at, files: files,
-      likes: row.likes || 0, dislikes: row.dislikes || 0
+      likes: row.likes || 0, dislikes: row.dislikes || 0, views: row.views || 0
     };
   });
 }
@@ -100,6 +101,19 @@ export async function votePost(req, db) {
   else await db.prepare("UPDATE posts SET dislikes=COALESCE(dislikes,0)+1 WHERE id=?").bind(id).run();
   const row = await db.prepare("SELECT COALESCE(likes,0) AS likes, COALESCE(dislikes,0) AS dislikes FROM posts WHERE id=?").bind(id).first();
   return { ok: true, id: id, likes: (row && row.likes) || 0, dislikes: (row && row.dislikes) || 0 };
+}
+
+export async function viewPost(req, db) {
+  var id = "";
+  try {
+    const b = await req.json();
+    id = String((b && b.id) || "");
+  } catch (e) {}
+  if (!id) return { ok: false, message: "no id" };
+  try { await db.prepare("ALTER TABLE posts ADD COLUMN views INTEGER DEFAULT 0").run(); } catch (e) {}
+  await db.prepare("UPDATE posts SET views=COALESCE(views,0)+1 WHERE id=?").bind(id).run();
+  const row = await db.prepare("SELECT COALESCE(views,0) AS views FROM posts WHERE id=?").bind(id).first();
+  return { ok: true, id: id, views: (row && row.views) || 0 };
 }
 
 export async function ensureCommentsTable(db) {

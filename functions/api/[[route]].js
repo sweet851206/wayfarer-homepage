@@ -1,4 +1,4 @@
-import { listPosts, createPost, updatePost, deletePost, votePost, listComments, createComment, deleteComment, json } from "../_store.js";
+import { listPosts, createPost, updatePost, deletePost, votePost, viewPost, listComments, createComment, deleteComment, json } from "../_store.js";
 
 export async function onRequest(context) {
   const { request, env } = context;
@@ -19,6 +19,9 @@ export async function onRequest(context) {
     }
     if (request.method === "POST" && action === "vote") {
       return json(await votePost(request, env.BLOG_DB));
+    }
+    if (request.method === "POST" && action === "view") {
+      return json(await viewPost(request, env.BLOG_DB));
     }
     if (request.method === "POST" && action === "create") {
       return json(await createPost(request, env.BLOG_DB, env.BLOG_FILES, "travel"));
