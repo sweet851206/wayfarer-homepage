@@ -672,7 +672,7 @@
   .board-table { width: 100%; border-collapse: collapse; font-size: .95rem; table-layout: fixed; }
   .board-table th, .board-table td { padding: 10px 8px; border-bottom: 1px solid var(--border); text-align: left; }
   .board-table th:first-child, .board-table td:first-child { width: 48px; }
-  .board-table th:last-child, .board-table td:last-child { width: 185px; padding-left: 6px; padding-right: 6px; }
+  .board-table th:last-child, .board-table td:last-child { width: 210px; padding-left: 2px; padding-right: 2px; }
   .board-table thead th { font-weight: 800; color: var(--text-strong); background: var(--surface-soft); }
   .board-table tbody tr { cursor: pointer; }
   .board-table tbody tr:hover { background: var(--surface-soft); }
@@ -2370,7 +2370,7 @@
     </div>
     <div class="board-table-wrap">
       <table class="board-table">
-        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:185px">등록일</th></tr></thead>
+        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:210px">등록일</th></tr></thead>
         <tbody id="aiBoardBody"></tbody>
       </table>
       <div class="ai-page-bar" id="aiPageBar"></div>
@@ -2487,7 +2487,7 @@
     </div>
     <div class="board-table-wrap">
       <table class="board-table">
-        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:185px">등록일</th></tr></thead>
+        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:210px">등록일</th></tr></thead>
         <tbody id="brBoardBody"></tbody>
       </table>
       <div class="ai-page-bar" id="brPageBar"></div>
@@ -2604,7 +2604,7 @@
     </div>
     <div class="board-table-wrap">
       <table class="board-table">
-        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:185px">등록일</th></tr></thead>
+        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:210px">등록일</th></tr></thead>
         <tbody id="trBoardBody"></tbody>
       </table>
       <div class="ai-page-bar" id="trPageBar"></div>
@@ -2729,7 +2729,7 @@
     </div>
     <div class="board-table-wrap">
       <table class="board-table">
-        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:185px">등록일</th></tr></thead>
+        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:210px">등록일</th></tr></thead>
         <tbody id="rpBoardBody"></tbody>
       </table>
       <div class="ai-page-bar" id="rpPageBar"></div>
@@ -2852,7 +2852,7 @@
     </div>
     <div class="board-table-wrap">
       <table class="board-table">
-        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:185px">등록일</th></tr></thead>
+        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:210px">등록일</th></tr></thead>
         <tbody id="petBoardBody"></tbody>
       </table>
       <div class="ai-page-bar" id="petPageBar"></div>
@@ -4261,12 +4261,12 @@
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
-    dt.appendChild(document.createTextNode("  "));
+    dt.appendChild(document.createTextNode(" "));
     var vw = document.createElement("span");
     vw.className = "board-views";
     vw.textContent = "views " + (((+p.views) || 0));
     dt.appendChild(vw);
-    dt.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
+    dt.appendChild(document.createTextNode("·" + (postDate(p) || "—")));
     var del = document.createElement("button");
     del.type = "button";
     del.className = "row-del admin-only";
@@ -4692,12 +4692,12 @@
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
-    dt.appendChild(document.createTextNode("  "));
+    dt.appendChild(document.createTextNode(" "));
     var vw = document.createElement("span");
     vw.className = "board-views";
     vw.textContent = "views " + (((+p.views) || 0));
     dt.appendChild(vw);
-    dt.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
+    dt.appendChild(document.createTextNode("·" + (postDate(p) || "—")));
     var del = document.createElement("button");
     del.type = "button";
     del.className = "row-del admin-only";
@@ -5070,12 +5070,12 @@
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
-    dt.appendChild(document.createTextNode("  "));
+    dt.appendChild(document.createTextNode(" "));
     var vw = document.createElement("span");
     vw.className = "board-views";
     vw.textContent = "views " + (((+p.views) || 0));
     dt.appendChild(vw);
-    dt.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
+    dt.appendChild(document.createTextNode("·" + (postDate(p) || "—")));
     var del = document.createElement("button");
     del.type = "button";
     del.className = "row-del admin-only";
@@ -5448,12 +5448,12 @@
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
-    dt.appendChild(document.createTextNode("  "));
+    dt.appendChild(document.createTextNode(" "));
     var vw = document.createElement("span");
     vw.className = "board-views";
     vw.textContent = "views " + (((+p.views) || 0));
     dt.appendChild(vw);
-    dt.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
+    dt.appendChild(document.createTextNode("·" + (postDate(p) || "—")));
     var del = document.createElement("button");
     del.type = "button";
     del.className = "row-del admin-only";
@@ -5826,12 +5826,12 @@
     vs.className = "vote-red";
     vs.textContent = window.BaiooVote.label(p);
     dt.appendChild(vs);
-    dt.appendChild(document.createTextNode("  "));
+    dt.appendChild(document.createTextNode(" "));
     var vw = document.createElement("span");
     vw.className = "board-views";
     vw.textContent = "views " + (((+p.views) || 0));
     dt.appendChild(vw);
-    dt.appendChild(document.createTextNode(" · " + (postDate(p) || "—")));
+    dt.appendChild(document.createTextNode("·" + (postDate(p) || "—")));
     var del = document.createElement("button");
     del.type = "button";
     del.className = "row-del admin-only";
