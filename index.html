@@ -4264,7 +4264,7 @@
     dt.appendChild(document.createTextNode(" "));
     var vw = document.createElement("span");
     vw.className = "board-views";
-    vw.textContent = "views " + (((+p.views) || 0));
+    vw.textContent = "조회수 " + (((+p.views) || 0));
     dt.appendChild(vw);
     dt.appendChild(document.createTextNode("·" + (postDate(p) || "—")));
     var del = document.createElement("button");
@@ -4414,7 +4414,7 @@
     aiPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     aiViewingId = p.id;
-    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "views " + j.views; } }).catch(function () {});
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "조회수 " + j.views; } }).catch(function () {});
     var panel = $("#aiViewPanel");
     var t = $("#aiInlineTitle"), d = $("#aiInlineDate"), ph = $("#aiInlinePhotos"), c = $("#aiInlineContent"), fl = $("#aiInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
@@ -4695,7 +4695,7 @@
     dt.appendChild(document.createTextNode(" "));
     var vw = document.createElement("span");
     vw.className = "board-views";
-    vw.textContent = "views " + (((+p.views) || 0));
+    vw.textContent = "조회수 " + (((+p.views) || 0));
     dt.appendChild(vw);
     dt.appendChild(document.createTextNode("·" + (postDate(p) || "—")));
     var del = document.createElement("button");
@@ -4842,7 +4842,7 @@
     brPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     brViewingId = p.id;
-    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "views " + j.views; } }).catch(function () {});
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "조회수 " + j.views; } }).catch(function () {});
     var panel = $("#brViewPanel");
     var t = $("#brInlineTitle"), d = $("#brInlineDate"), ph = $("#brInlinePhotos"), c = $("#brInlineContent"), fl = $("#brInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
@@ -5073,7 +5073,7 @@
     dt.appendChild(document.createTextNode(" "));
     var vw = document.createElement("span");
     vw.className = "board-views";
-    vw.textContent = "views " + (((+p.views) || 0));
+    vw.textContent = "조회수 " + (((+p.views) || 0));
     dt.appendChild(vw);
     dt.appendChild(document.createTextNode("·" + (postDate(p) || "—")));
     var del = document.createElement("button");
@@ -5220,7 +5220,7 @@
     trPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     trViewingId = p.id;
-    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "views " + j.views; } }).catch(function () {});
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "조회수 " + j.views; } }).catch(function () {});
     var panel = $("#trViewPanel");
     var t = $("#trInlineTitle"), d = $("#trInlineDate"), ph = $("#trInlinePhotos"), c = $("#trInlineContent"), fl = $("#trInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
@@ -5451,7 +5451,7 @@
     dt.appendChild(document.createTextNode(" "));
     var vw = document.createElement("span");
     vw.className = "board-views";
-    vw.textContent = "views " + (((+p.views) || 0));
+    vw.textContent = "조회수 " + (((+p.views) || 0));
     dt.appendChild(vw);
     dt.appendChild(document.createTextNode("·" + (postDate(p) || "—")));
     var del = document.createElement("button");
@@ -5598,7 +5598,7 @@
     rpPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     rpViewingId = p.id;
-    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "views " + j.views; } }).catch(function () {});
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "조회수 " + j.views; } }).catch(function () {});
     var panel = $("#rpViewPanel");
     var t = $("#rpInlineTitle"), d = $("#rpInlineDate"), ph = $("#rpInlinePhotos"), c = $("#rpInlineContent"), fl = $("#rpInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
@@ -5829,7 +5829,7 @@
     dt.appendChild(document.createTextNode(" "));
     var vw = document.createElement("span");
     vw.className = "board-views";
-    vw.textContent = "views " + (((+p.views) || 0));
+    vw.textContent = "조회수 " + (((+p.views) || 0));
     dt.appendChild(vw);
     dt.appendChild(document.createTextNode("·" + (postDate(p) || "—")));
     var del = document.createElement("button");
@@ -5976,7 +5976,7 @@
     petPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     petViewingId = p.id;
-    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "views " + j.views; } }).catch(function () {});
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = "조회수 " + j.views; } }).catch(function () {});
     var panel = $("#petViewPanel");
     var t = $("#petInlineTitle"), d = $("#petInlineDate"), ph = $("#petInlinePhotos"), c = $("#petInlineContent"), fl = $("#petInlineFiles");
     if (t) t.textContent = p.title || "(제목 없음)";
