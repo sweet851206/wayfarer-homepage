@@ -2327,7 +2327,7 @@
           <ul class="nav-sub">
             <li><a href="#brGate1" id="brGate1Link">Character Concept &amp; Identity</a> <button type="button" class="gate-edit admin-only" id="brGate1Edit" aria-label="첫 번째 대문명 수정">✏️</button></li>
             <li><a href="#brGate2" id="brGate2Link">Retail Identity &amp; Typography</a> <button type="button" class="gate-edit admin-only" id="brGate2Edit" aria-label="두 번째 대문명 수정">✏️</button></li>
-            <li><a href="#brGate3" id="brGate3Link">AI Object_Drop</a> <button type="button" class="gate-edit admin-only" id="brGate3Edit" aria-label="세 번째 대문명 수정">✏️</button></li>
+            <li><a href="#brGate3" id="brGate3Link">Object_Drop</a> <button type="button" class="gate-edit admin-only" id="brGate3Edit" aria-label="세 번째 대문명 수정">✏️</button></li>
           </ul>
         </li>
         <li><a href="#repair" data-nav="repair">AI Computer Diagnostics</a></li>
@@ -2776,7 +2776,7 @@
     <div class="ai-idea-grid" id="br2IdeaGrid"></div>
 
 <!-- ===== AI Object Drop 섹션 (자유게시판~카드) ===== -->
-    <div class="br-gate" id="brGate3">AI Object_Drop</div>
+    <div class="br-gate" id="brGate3">Object_Drop</div>
     <div class="pet-diary-subhead">
       <h3>📝 자유게시판</h3>
       <button type="button" class="section-add-btn branding-add admin-only" id="br3BoardAddBtn" data-category="branding3" style="margin:0;">＋ 새 글 등록</button>
@@ -13805,7 +13805,7 @@ function openIdeaForm(ctx) {
   });
 })();
 /* ===== 브랜딩 대문명 관리자 수정 (네비+섹션 동기화+localStorage) ===== */(function () {
-  [["brGate1", "brGate1Link", "brGate1Edit", "baioo_brGate1NameV2"], ["brGate2", "brGate2Link", "brGate2Edit", "baioo_brGate2NameV2"], ["aiGate2", "aiGate2Link", "aiGate2Edit", "baioo_aiGate2NameV3"]], ["brGate3", "brGate3Link", "brGate3Edit", "baioo_brGate3NameV2"].forEach(function (c) {
+  [["brGate1", "brGate1Link", "brGate1Edit", "baioo_brGate1NameV2"], ["brGate2", "brGate2Link", "brGate2Edit", "baioo_brGate2NameV2"], ["aiGate2", "aiGate2Link", "aiGate2Edit", "baioo_aiGate2NameV3"]], ["brGate3", "brGate3Link", "brGate3Edit", "baioo_brGate3NameV3"].forEach(function (c) {
     var gate = document.getElementById(c[0]);
     var link = document.getElementById(c[1]);
     var btn = document.getElementById(c[2]);
