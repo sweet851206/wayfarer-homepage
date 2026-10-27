@@ -166,6 +166,7 @@
   .logo-stack { display: inline-flex; flex-direction: column; line-height: 1.05; }
   .logo-sub { font-size: .58rem; font-weight: 600; letter-spacing: .06em; white-space: nowrap; opacity: .65; }
   .logo-div { display: none; }
+  .nav-div { display: none; }
 
   .nav-right {
     display: flex;
@@ -1351,6 +1352,8 @@
     }
 
     .nav-links.open { display: flex; }
+    .nav-links { align-items: center; text-align: center; }
+    .nav-links .nav-sub { margin: 0; align-items: center; }
   }
 
   @media (max-width: 640px) {
@@ -1396,7 +1399,7 @@
     .nav-links > li:has(> a[data-nav="ai"]),
     .nav-links > li:has(> a[data-nav="branding"]),
     .nav-links > li:has(> a[data-nav="travel"]) { margin-bottom: 19px; }
-    .nav-div { height: 1px; background: #000; margin: 18px 14px 19px; list-style: none; }
+    .nav-div { display: block; height: 1px; background: #000; margin: 18px 14px 19px; list-style: none; }
     .nav-links a { display: block; padding: 12px 14px; border-radius: 12px; }
     .nav-links a:hover, .nav-links a.active { background: var(--surface-soft); }
     .nav-links a::after { display: none; }
