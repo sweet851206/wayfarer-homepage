@@ -1580,6 +1580,7 @@
     line-height: 1.3;
     margin-bottom: 8px;
     overflow-wrap: break-word;
+    white-space: pre-line;
   }
   .ai-banner-left p {
     color: var(--muted);
@@ -13751,7 +13752,9 @@ function openIdeaForm(ctx) {
       b.textContent = editing ? "💾 저장" : "✏️ 문구 수정";
       if (editing) t.focus();
       else {
-        var nt = t.textContent.replace(/ /g, " ").replace(/\.([가-힣A-Z])/g, ". $1").trim(), nd = d.textContent.replace(/ /g, " ").trim();
+        var rnt = (t.innerText !== undefined ? t.innerText : t.textContent);
+        var rnd = (d.innerText !== undefined ? d.innerText : d.textContent);
+        var nt = rnt.replace(/ /g, " ").replace(/\.([가-힣A-Z])/g, ". $1").trim(), nd = rnd.replace(/ /g, " ").trim();
         if (!nt) { nt = DEF_T; t.textContent = nt; }
         if (!nd) { nd = DEF_D; d.textContent = nd; }
         try { localStorage.setItem("baioo_" + px + "HeroTitle", nt); localStorage.setItem("baioo_" + px + "HeroDesc", nd); } catch (e) {}
