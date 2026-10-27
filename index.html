@@ -4618,7 +4618,7 @@
   if (bgm) { bgm.volume = 0.25; }
   function currentTrack() {
     var tracks = ["bgm1.mp3", "bgm2.mp3", "bgm4.mp3"];
-    try { return localStorage.getItem("baioo-track") || tracks[Math.floor(Math.random() * tracks.length)]; } catch (e) { return "bgm1.mp3"; }
+    return tracks[Math.floor(Math.random() * tracks.length)];
   }
   function setTrack(v, autoplay) {
     try { localStorage.setItem("baioo-track", v); } catch (e) {}
