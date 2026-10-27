@@ -3446,6 +3446,10 @@
         </div>
         <div class="preview-grid" id="travelPreview"></div>
       </div>
+      <div class="field">
+        <label for="travelPw">수정용 비밀번호 *</label>
+        <input type="password" id="travelPw" maxlength="30" autocomplete="off" placeholder="수정할 때 필요합니다 (4자 이상)">
+      </div>
       <div class="form-error" id="travelFormError" role="alert"></div>
       <div class="dlg-actions">
         <button type="button" class="btn btn-ghost" data-close="travelFormDialog">취소</button>
@@ -3497,6 +3501,10 @@
           <span id="aiFileCount">선택된 파일 없음</span>
         </div>
         <div class="preview-grid" id="aiPreview"></div>
+      </div>
+      <div class="field">
+        <label for="aiPw">수정용 비밀번호 *</label>
+        <input type="password" id="aiPw" maxlength="30" autocomplete="off" placeholder="수정할 때 필요합니다 (4자 이상)">
       </div>
       <div class="form-error" id="aiFormError" role="alert"></div>
       <div class="dlg-actions">
@@ -3550,6 +3558,10 @@
         </div>
         <div class="preview-grid" id="brPreview"></div>
       </div>
+      <div class="field">
+        <label for="brPw">수정용 비밀번호 *</label>
+        <input type="password" id="brPw" maxlength="30" autocomplete="off" placeholder="수정할 때 필요합니다 (4자 이상)">
+      </div>
       <div class="form-error" id="brFormError" role="alert"></div>
       <div class="dlg-actions">
         <button type="button" class="btn btn-ghost" data-close="brFormDialog">취소</button>
@@ -3601,6 +3613,10 @@
           <span id="trFileCount">선택된 파일 없음</span>
         </div>
         <div class="preview-grid" id="trPreview"></div>
+      </div>
+      <div class="field">
+        <label for="trPw">수정용 비밀번호 *</label>
+        <input type="password" id="trPw" maxlength="30" autocomplete="off" placeholder="수정할 때 필요합니다 (4자 이상)">
       </div>
       <div class="form-error" id="trFormError" role="alert"></div>
       <div class="dlg-actions">
@@ -3654,6 +3670,10 @@
         </div>
         <div class="preview-grid" id="rpPreview"></div>
       </div>
+      <div class="field">
+        <label for="rpPw">수정용 비밀번호 *</label>
+        <input type="password" id="rpPw" maxlength="30" autocomplete="off" placeholder="수정할 때 필요합니다 (4자 이상)">
+      </div>
       <div class="form-error" id="rpFormError" role="alert"></div>
       <div class="dlg-actions">
         <button type="button" class="btn btn-ghost" data-close="rpFormDialog">취소</button>
@@ -3706,6 +3726,10 @@
         </div>
         <div class="preview-grid" id="petPreview"></div>
       </div>
+      <div class="field">
+        <label for="petPw">수정용 비밀번호 *</label>
+        <input type="password" id="petPw" maxlength="30" autocomplete="off" placeholder="수정할 때 필요합니다 (4자 이상)">
+      </div>
       <div class="form-error" id="petFormError" role="alert"></div>
       <div class="dlg-actions">
         <button type="button" class="btn btn-ghost" data-close="petFormDialog">취소</button>
@@ -3757,6 +3781,10 @@
           <span id="bunnyFileCount">선택된 파일 없음</span>
         </div>
         <div class="preview-grid" id="bunnyPreview"></div>
+      </div>
+      <div class="field">
+        <label for="bunnyPw">수정용 비밀번호 *</label>
+        <input type="password" id="bunnyPw" maxlength="30" autocomplete="off" placeholder="수정할 때 필요합니다 (4자 이상)">
       </div>
       <div class="form-error" id="bunnyFormError" role="alert"></div>
       <div class="dlg-actions">
@@ -4021,6 +4049,10 @@
         </div>
         <div class="preview-grid" id="br2Preview"></div>
       </div>
+      <div class="field">
+        <label for="br2Pw">수정용 비밀번호 *</label>
+        <input type="password" id="br2Pw" maxlength="30" autocomplete="off" placeholder="수정할 때 필요합니다 (4자 이상)">
+      </div>
       <div class="form-error" id="br2FormError" role="alert"></div>
       <div class="dlg-actions">
         <button type="button" class="btn btn-ghost" data-close="br2FormDialog">취소</button>
@@ -4152,6 +4184,10 @@
       <div class="field">
         <label for="ai2Content">내용</label>
         <textarea id="ai2Content" placeholder="영상 이야기를 적어주세요"></textarea>
+      </div>
+      <div class="field">
+        <label for="ai2Pw">수정용 비밀번호 *</label>
+        <input type="password" id="ai2Pw" maxlength="30" autocomplete="off" placeholder="수정할 때 필요합니다 (4자 이상)">
       </div>
       <div class="form-error" id="ai2FormError" role="alert"></div>
       <div class="dlg-actions">
@@ -4582,6 +4618,7 @@
   $$(".section-add-btn[data-category='travel']").forEach(function (b) {
     b.addEventListener("click", function () {
       editingId = null;
+      var pwc = $("#travelPw"); if (pwc) pwc.value = "";
       form.reset();
       picked = [];
       renderPreview();
@@ -4597,6 +4634,8 @@
     e.preventDefault();
     var title = titleInput.value.trim();
     if (!title) { errorEl.textContent = "제목을 입력하세요."; titleInput.focus(); return; }
+    var pwValtravel = ($("#travelPw") ? $("#travelPw").value : "").trim();
+    if (pwValtravel.length < 4) { $("#travelFormError").textContent = "수정용 비밀번호(4자 이상)를 입력하세요."; $("#travelPw").focus(); return; }
     errorEl.textContent = "";
     submitBtn.disabled = true;
     submitBtn.textContent = editingId ? "저장 중…" : "등록 중…";
@@ -4604,6 +4643,7 @@
     if (editingId) fd.append("id", editingId);
     fd.append("title", title);
     fd.append("content", contentInput.value);
+fd.append("pw", pwValtravel);
     fd.append("category", "travel");
     fd.append("date", dateInput.value || "");
     picked.forEach(function (f) { fd.append("files[]", f); });
@@ -4620,6 +4660,7 @@
         renderPreview();
         closeDlg(formDlg);
         editingId = null;
+        var pwc = $("#travelPw"); if (pwc) pwc.value = "";
         var _dt2 = $("#travelFormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 여행 글";
         return loadTravel();
       })
@@ -4690,6 +4731,7 @@
       travelPosts.forEach(function (x) { if (x.id === viewingId) p = x; });
       if (!p) return;
       editingId = viewingId;
+      var pwc = $("#travelPw"); if (pwc) pwc.value = "";
       titleInput.value = p.title || "";
       dateInput.value = p.date || "";
       contentInput.value = p.content || "";
@@ -4856,6 +4898,7 @@
   $$(".section-add-btn[data-category='ai']").forEach(function (b) {
     b.addEventListener("click", function () {
       aiEditingId = null;
+      var pwc = $("#aiPw"); if (pwc) pwc.value = "";
       aiForm.reset();
       aiPicked = [];
       renderAiPreview();
@@ -4871,6 +4914,8 @@
     e.preventDefault();
     var title = aiTitleInput.value.trim();
     if (!title) { aiErrorEl.textContent = "제목을 입력하세요."; aiTitleInput.focus(); return; }
+    var pwValai = ($("#aiPw") ? $("#aiPw").value : "").trim();
+    if (pwValai.length < 4) { $("#aiFormError").textContent = "수정용 비밀번호(4자 이상)를 입력하세요."; $("#aiPw").focus(); return; }
     aiErrorEl.textContent = "";
     aiSubmitBtn.disabled = true;
     aiSubmitBtn.textContent = aiEditingId ? "저장 중…" : "등록 중…";
@@ -4878,6 +4923,7 @@
     if (aiEditingId) fd.append("id", aiEditingId);
     fd.append("title", title);
     fd.append("content", aiContentInput.value);
+    fd.append("pw", pwValai);
     fd.append("category", "ai");
     fd.append("date", aiDateInput.value || "");
     aiPicked.forEach(function (f) { fd.append("files[]", f); });
@@ -4894,6 +4940,7 @@
         renderAiPreview();
         closeDlg(aiFormDlg);
         aiEditingId = null;
+        var pwc = $("#aiPw"); if (pwc) pwc.value = "";
         var _dt2 = $("#aiFormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 AI 글";
         aiPage = 1; /* 서버 목록은 최신순(ORDER BY created_at DESC) → 새 글은 1페이지 */
         return loadAi();
@@ -5077,6 +5124,7 @@
       aiPosts.forEach(function (x) { if (x.id === aiViewingId) p = x; });
       if (!p) return;
       aiEditingId = aiViewingId;
+      var pwc = $("#aiPw"); if (pwc) pwc.value = "";
       aiTitleInput.value = p.title || "";
       aiDateInput.value = p.date || "";
       aiContentInput.value = p.content || "";
@@ -5280,6 +5328,7 @@
   $$(".section-add-btn[data-category='branding']").forEach(function (b) {
     b.addEventListener("click", function () {
       brEditingId = null;
+      var pwc = $("#brPw"); if (pwc) pwc.value = "";
       brForm.reset();
       brPicked = [];
       renderBrPreview();
@@ -5295,6 +5344,8 @@
     e.preventDefault();
     var title = brTitleInput.value.trim();
     if (!title) { brErrorEl.textContent = "제목을 입력하세요."; brTitleInput.focus(); return; }
+    var pwValbr = ($("#brPw") ? $("#brPw").value : "").trim();
+    if (pwValbr.length < 4) { $("#brFormError").textContent = "수정용 비밀번호(4자 이상)를 입력하세요."; $("#brPw").focus(); return; }
     brErrorEl.textContent = "";
     brSubmitBtn.disabled = true;
     brSubmitBtn.textContent = brEditingId ? "저장 중…" : "등록 중…";
@@ -5302,6 +5353,7 @@
     if (brEditingId) fd.append("id", brEditingId);
     fd.append("title", title);
     fd.append("content", brContentInput.value);
+    fd.append("pw", pwValbr);
     fd.append("category", "branding");
     fd.append("date", brDateInput.value || "");
     brPicked.forEach(function (f) { fd.append("files[]", f); });
@@ -5318,6 +5370,7 @@
         renderBrPreview();
         closeDlg(brFormDlg);
         brEditingId = null;
+        var pwc = $("#brPw"); if (pwc) pwc.value = "";
         var _dt2 = $("#brFormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 Branding 글";
         return loadBr();
       })
@@ -5493,6 +5546,7 @@
       brPosts.forEach(function (x) { if (x.id === brViewingId) p = x; });
       if (!p) return;
       brEditingId = brViewingId;
+      var pwc = $("#brPw"); if (pwc) pwc.value = "";
       brTitleInput.value = p.title || "";
       brDateInput.value = p.date || "";
       brContentInput.value = p.content || "";
@@ -5653,6 +5707,7 @@
   $$(".section-add-btn[data-category='travel-board']").forEach(function (b) {
     b.addEventListener("click", function () {
       trEditingId = null;
+      var pwc = $("#trPw"); if (pwc) pwc.value = "";
       trForm.reset();
       trPicked = [];
       renderTrPreview();
@@ -5668,6 +5723,8 @@
     e.preventDefault();
     var title = trTitleInput.value.trim();
     if (!title) { trErrorEl.textContent = "제목을 입력하세요."; trTitleInput.focus(); return; }
+    var pwValtr = ($("#trPw") ? $("#trPw").value : "").trim();
+    if (pwValtr.length < 4) { $("#trFormError").textContent = "수정용 비밀번호(4자 이상)를 입력하세요."; $("#trPw").focus(); return; }
     trErrorEl.textContent = "";
     trSubmitBtn.disabled = true;
     trSubmitBtn.textContent = trEditingId ? "저장 중…" : "등록 중…";
@@ -5675,6 +5732,7 @@
     if (trEditingId) fd.append("id", trEditingId);
     fd.append("title", title);
     fd.append("content", trContentInput.value);
+    fd.append("pw", pwValtr);
     fd.append("category", "travel-board");
     fd.append("date", trDateInput.value || "");
     trPicked.forEach(function (f) { fd.append("files[]", f); });
@@ -5691,6 +5749,7 @@
         renderTrPreview();
         closeDlg(trFormDlg);
         trEditingId = null;
+        var pwc = $("#trPw"); if (pwc) pwc.value = "";
         var _dt2 = $("#trFormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 Travel 글";
         return loadTr();
       })
@@ -5866,6 +5925,7 @@
       trPosts.forEach(function (x) { if (x.id === trViewingId) p = x; });
       if (!p) return;
       trEditingId = trViewingId;
+      var pwc = $("#trPw"); if (pwc) pwc.value = "";
       trTitleInput.value = p.title || "";
       trDateInput.value = p.date || "";
       trContentInput.value = p.content || "";
@@ -6026,6 +6086,7 @@
   $$(".section-add-btn[data-category='repair-board']").forEach(function (b) {
     b.addEventListener("click", function () {
       rpEditingId = null;
+      var pwc = $("#rpPw"); if (pwc) pwc.value = "";
       rpForm.reset();
       rpPicked = [];
       renderRpPreview();
@@ -6041,6 +6102,8 @@
     e.preventDefault();
     var title = rpTitleInput.value.trim();
     if (!title) { rpErrorEl.textContent = "제목을 입력하세요."; rpTitleInput.focus(); return; }
+    var pwValrp = ($("#rpPw") ? $("#rpPw").value : "").trim();
+    if (pwValrp.length < 4) { $("#rpFormError").textContent = "수정용 비밀번호(4자 이상)를 입력하세요."; $("#rpPw").focus(); return; }
     rpErrorEl.textContent = "";
     rpSubmitBtn.disabled = true;
     rpSubmitBtn.textContent = rpEditingId ? "저장 중…" : "등록 중…";
@@ -6048,6 +6111,7 @@
     if (rpEditingId) fd.append("id", rpEditingId);
     fd.append("title", title);
     fd.append("content", rpContentInput.value);
+    fd.append("pw", pwValrp);
     fd.append("category", "repair-board");
     fd.append("date", rpDateInput.value || "");
     rpPicked.forEach(function (f) { fd.append("files[]", f); });
@@ -6064,6 +6128,7 @@
         renderRpPreview();
         closeDlg(rpFormDlg);
         rpEditingId = null;
+        var pwc = $("#rpPw"); if (pwc) pwc.value = "";
         var _dt2 = $("#rpFormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 Repair 글";
         return loadRp();
       })
@@ -6239,6 +6304,7 @@
       rpPosts.forEach(function (x) { if (x.id === rpViewingId) p = x; });
       if (!p) return;
       rpEditingId = rpViewingId;
+      var pwc = $("#rpPw"); if (pwc) pwc.value = "";
       rpTitleInput.value = p.title || "";
       rpDateInput.value = p.date || "";
       rpContentInput.value = p.content || "";
@@ -6399,6 +6465,7 @@
   $$(".section-add-btn[data-category='bunny-board']").forEach(function (b) {
     b.addEventListener("click", function () {
       petEditingId = null;
+      var pwc = $("#petPw"); if (pwc) pwc.value = "";
       petForm.reset();
       petPicked = [];
       renderPetPreview();
@@ -6414,6 +6481,8 @@
     e.preventDefault();
     var title = petTitleInput.value.trim();
     if (!title) { petErrorEl.textContent = "제목을 입력하세요."; petTitleInput.focus(); return; }
+    var pwValpet = ($("#petPw") ? $("#petPw").value : "").trim();
+    if (pwValpet.length < 4) { $("#petFormError").textContent = "수정용 비밀번호(4자 이상)를 입력하세요."; $("#petPw").focus(); return; }
     petErrorEl.textContent = "";
     petSubmitBtn.disabled = true;
     petSubmitBtn.textContent = petEditingId ? "저장 중…" : "등록 중…";
@@ -6421,6 +6490,7 @@
     if (petEditingId) fd.append("id", petEditingId);
     fd.append("title", title);
     fd.append("content", petContentInput.value);
+    fd.append("pw", pwValpet);
     fd.append("category", "bunny-board");
     fd.append("date", petDateInput.value || "");
     petPicked.forEach(function (f) { fd.append("files[]", f); });
@@ -6437,6 +6507,7 @@
         renderPetPreview();
         closeDlg(petFormDlg);
         petEditingId = null;
+        var pwc = $("#petPw"); if (pwc) pwc.value = "";
         var _dt2 = $("#petFormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 Pets 글";
         return loadPet();
       })
@@ -6612,6 +6683,7 @@
       petPosts.forEach(function (x) { if (x.id === petViewingId) p = x; });
       if (!p) return;
       petEditingId = petViewingId;
+      var pwc = $("#petPw"); if (pwc) pwc.value = "";
       petTitleInput.value = p.title || "";
       petDateInput.value = p.date || "";
       petContentInput.value = p.content || "";
@@ -6790,6 +6862,7 @@
   $$(".section-add-btn[data-category='bunny']").forEach(function (b) {
     b.addEventListener("click", function () {
       editingId = null;
+      var pwc = $("#bunnyPw"); if (pwc) pwc.value = "";
       form.reset();
       picked = [];
       renderPreview();
@@ -6806,6 +6879,8 @@
       e.preventDefault();
       var title = titleInput.value.trim();
       if (!title) { errorEl.textContent = "제목을 입력하세요."; titleInput.focus(); return; }
+    var pwValbunny = ($("#bunnyPw") ? $("#bunnyPw").value : "").trim();
+    if (pwValbunny.length < 4) { $("#bunnyFormError").textContent = "수정용 비밀번호(4자 이상)를 입력하세요."; $("#bunnyPw").focus(); return; }
       errorEl.textContent = "";
       submitBtn.disabled = true;
       submitBtn.textContent = editingId ? "저장 중…" : "등록 중…";
@@ -6813,6 +6888,7 @@
       if (editingId) fd.append("id", editingId);
       fd.append("title", title);
       fd.append("content", contentInput.value);
+fd.append("pw", pwValbunny);
       fd.append("category", "bunny");
       fd.append("date", dateInput.value || "");
       picked.forEach(function (f) { fd.append("files[]", f); });
@@ -6829,6 +6905,7 @@
           renderPreview();
           if (formDlg && formDlg.open) formDlg.close();
           editingId = null;
+          var pwc = $("#bunnyPw"); if (pwc) pwc.value = "";
           var _dt2 = $("#bunnyFormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 일상 글";
           return loadBunny();
         })
@@ -6901,6 +6978,7 @@
       bunnyPosts.forEach(function (x) { if (x.id === viewingId) p = x; });
       if (!p) return;
       editingId = viewingId;
+      var pwc = $("#bunnyPw"); if (pwc) pwc.value = "";
       titleInput.value = p.title || "";
       dateInput.value = p.date || "";
       contentInput.value = p.content || "";
@@ -8439,6 +8517,7 @@
   $$(".section-add-btn[data-category='branding2']").forEach(function (b) {
     b.addEventListener("click", function () {
       br2EditingId = null;
+      var pwc = $("#br2Pw"); if (pwc) pwc.value = "";
       br2Form.reset();
       br2Picked = [];
       renderBr2Preview();
@@ -8454,6 +8533,8 @@
     e.preventDefault();
     var title = br2TitleInput.value.trim();
     if (!title) { br2ErrorEl.textContent = "제목을 입력하세요."; br2TitleInput.focus(); return; }
+    var pwValbr2 = ($("#br2Pw") ? $("#br2Pw").value : "").trim();
+    if (pwValbr2.length < 4) { $("#br2FormError").textContent = "수정용 비밀번호(4자 이상)를 입력하세요."; $("#br2Pw").focus(); return; }
     br2ErrorEl.textContent = "";
     br2SubmitBtn.disabled = true;
     br2SubmitBtn.textContent = br2EditingId ? "저장 중…" : "등록 중…";
@@ -8461,6 +8542,7 @@
     if (br2EditingId) fd.append("id", br2EditingId);
     fd.append("title", title);
     fd.append("content", br2ContentInput.value);
+    fd.append("pw", pwValbr2);
     fd.append("category", "branding2");
     fd.append("date", br2DateInput.value || "");
     br2Picked.forEach(function (f) { fd.append("files[]", f); });
@@ -8477,6 +8559,7 @@
         renderBr2Preview();
         closeDlg(br2FormDlg);
         br2EditingId = null;
+        var pwc = $("#br2Pw"); if (pwc) pwc.value = "";
         var _dt2 = $("#br2FormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 Retail 글";
         return loadBr2();
       })
@@ -8652,6 +8735,7 @@
       br2Posts.forEach(function (x) { if (x.id === br2ViewingId) p = x; });
       if (!p) return;
       br2EditingId = br2ViewingId;
+      var pwc = $("#br2Pw"); if (pwc) pwc.value = "";
       br2TitleInput.value = p.title || "";
       br2DateInput.value = p.date || "";
       br2ContentInput.value = p.content || "";
@@ -9526,6 +9610,7 @@
   $$(".section-add-btn[data-category='ai-video']").forEach(function (b) {
     b.addEventListener("click", function () {
       ai2EditingId = null;
+      var pwc = $("#ai2Pw"); if (pwc) pwc.value = "";
       ai2Form.reset();
       ai2ErrorEl.textContent = "";
       var _dt = $("#ai2FormDialog .dlg-title"); if (_dt) _dt.textContent = "새 Video 글";
@@ -9539,6 +9624,8 @@
     e.preventDefault();
     var title = ai2TitleInput.value.trim();
     if (!title) { ai2ErrorEl.textContent = "제목을 입력하세요."; ai2TitleInput.focus(); return; }
+    var pwValai2 = ($("#ai2Pw") ? $("#ai2Pw").value : "").trim();
+    if (pwValai2.length < 4) { $("#ai2FormError").textContent = "수정용 비밀번호(4자 이상)를 입력하세요."; $("#ai2Pw").focus(); return; }
     ai2ErrorEl.textContent = "";
     ai2SubmitBtn.disabled = true;
     ai2SubmitBtn.textContent = ai2EditingId ? "저장 중…" : "등록 중…";
@@ -9546,6 +9633,7 @@
     if (ai2EditingId) fd.append("id", ai2EditingId);
     fd.append("title", title);
     fd.append("content", ai2ContentInput.value);
+    fd.append("pw", pwValai2);
     fd.append("category", "ai-video");
     fd.append("date", ai2DateInput.value || "");
         fetch(ai2EditingId ? "/api?action=update" : "/api?action=create", { method: "POST", body: fd })
@@ -9559,6 +9647,7 @@
         ai2Form.reset();
         closeDlg(ai2FormDlg);
         ai2EditingId = null;
+        var pwc = $("#ai2Pw"); if (pwc) pwc.value = "";
         var _dt2 = $("#ai2FormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 Video 글";
         return loadAi2();
       })
@@ -9741,6 +9830,7 @@
       ai2Posts.forEach(function (x) { if (x.id === ai2ViewingId) p = x; });
       if (!p) return;
       ai2EditingId = ai2ViewingId;
+      var pwc = $("#ai2Pw"); if (pwc) pwc.value = "";
       ai2TitleInput.value = p.title || "";
       ai2DateInput.value = p.date || "";
       ai2ContentInput.value = p.content || "";

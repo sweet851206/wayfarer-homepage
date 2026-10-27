@@ -24,6 +24,10 @@ export async function listPosts(db, board) {
 
 export async function createPost(req, db, bucket, board) {
   const fd = await req.formData();
+  try { await db.prepare("ALTER TABLE posts ADD COLUMN pw TEXT DEFAULT ''").run(); } catch (e) {}
+  const pwRaw = String(fd.get("pw") || "").trim();
+  if (pwRaw.length < 4) return { ok: false, message: "수정용 비밀번호(4자 이상)를 입력하세요." };
+  const pwHash = await sha256hex(pwRaw);
   const boardName = pickBoard(fd.get("category"), board);
   const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   const files = [];
@@ -41,11 +45,11 @@ export async function createPost(req, db, bucket, board) {
   }
   const created = new Date().toISOString();
   await db.prepare(
-    "INSERT INTO posts(id,board,title,content,date,created_at,files,likes,dislikes) VALUES(?,?,?,?,?,?,?,?,?)"
+    "INSERT INTO posts(id,board,title,content,date,created_at,files,likes,dislikes,pw) VALUES(?,?,?,?,?,?,?,?,?,?)"
   ).bind(
     id, boardName,
     String(fd.get("title") || ""), String(fd.get("content") || ""),
-    String(fd.get("date") || ""), created, JSON.stringify(files), 0, 0
+    String(fd.get("date") || ""), created, JSON.stringify(files), 0, 0, pwHash
   ).run();
   return { ok: true, id: id };
 }
@@ -54,6 +58,13 @@ export async function updatePost(req, db, board) {
   const fd = await req.formData();
   const id = String(fd.get("id") || "");
   if (!id) return { ok: false, message: "no id" };
+  try { await db.prepare("ALTER TABLE posts ADD COLUMN pw TEXT DEFAULT ''").run(); } catch (e) {}
+  const stored = await db.prepare("SELECT pw FROM posts WHERE id=?").bind(id).first();
+  const savedPw = stored && stored.pw ? String(stored.pw) : "";
+  if (savedPw) {
+    const tryHash = await sha256hex(String(fd.get("pw") || ""));
+    if (tryHash !== savedPw) return { ok: false, message: "비밀번호가 틀렸습니다." };
+  }
   await db.prepare(
     "UPDATE posts SET title=?, content=?, date=? WHERE id=?"
   ).bind(
@@ -154,6 +165,11 @@ export async function deleteComment(req, db) {
   if (!id) return { ok: false, message: "no id" };
   await db.prepare("DELETE FROM comments WHERE id=?").bind(id).run();
   return { ok: true };
+}
+
+export async function sha256hex(s) {
+  const d = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(String(s || "")));
+  return Array.from(new Uint8Array(d)).map(function (b) { return b.toString(16).padStart(2, "0"); }).join("");
 }
 
 export function json(data, status) {
