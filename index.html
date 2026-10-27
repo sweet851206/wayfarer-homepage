@@ -1386,8 +1386,8 @@
     .nav-links { flex-direction: column; align-items: stretch; gap: 6px; }
     .nav-links > li:has(> a[data-nav="ai"]),
     .nav-links > li:has(> a[data-nav="branding"]),
-    .nav-links > li:has(> a[data-nav="travel"]),
-    .nav-links > li:has(> a[data-nav="repair"]) { margin-bottom: 19px; }
+    .nav-links > li:has(> a[data-nav="travel"]) { margin-bottom: 19px; }
+    .nav-div { height: 1px; background: #000; margin: 18px 14px 19px; list-style: none; }
     .nav-links a { display: block; padding: 12px 14px; border-radius: 12px; }
     .nav-links a:hover, .nav-links a.active { background: var(--surface-soft); }
     .nav-links a::after { display: none; }
@@ -2328,6 +2328,7 @@
           </ul>
         </li>
         <li><a href="#repair" data-nav="repair">AI Computer Diagnostics</a></li>
+        <li class="nav-div" aria-hidden="true"></li>
         <li><a href="#travel" data-nav="travel">Travel</a></li>
         <li><a href="#bunny" data-nav="bunny">Pets</a></li>
         <li><a href="#about" data-nav="about">About</a></li>
