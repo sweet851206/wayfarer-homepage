@@ -10057,15 +10057,10 @@
     title.className = "ai-card-title";
     title.textContent = item.title;
 
-    var slogan = document.createElement("div");
-    slogan.className = "br-slogan-pill";
-    slogan.textContent = "“" + (item.slogan || "Brilliant Brand Identity") + "”";
-
     var desc = document.createElement("p");
     desc.className = "ai-card-desc";
     desc.textContent = item.summary;
 
-    var swatches = createSwatchBar(item.colors);
 
     var tagList = document.createElement("div");
     tagList.className = "ai-tag-list";
@@ -10162,9 +10157,7 @@
     card.appendChild(top);
     card.appendChild(visual);
     card.appendChild(title);
-    card.appendChild(slogan);
     card.appendChild(desc);
-    card.appendChild(swatches);
     card.appendChild(tagList);
     card.appendChild(foot);
 
