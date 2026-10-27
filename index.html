@@ -10023,11 +10023,21 @@
       vd.src = videoUrl;
       vd.controls = true;
       vd.preload = "metadata";
+      vd.autoplay = true;
+      vd.muted = true;
+      vd.loop = true;
+      vd.setAttribute("playsinline", "");
+      vd.setAttribute("muted", "");
+      try { var pp = vd.play(); if (pp && pp.catch) pp.catch(function () {}); } catch (e) {}
       visual.appendChild(vd);
       var catLabel = document.createElement("span");
       catLabel.className = "ai-card-cat-label";
       catLabel.textContent = cMeta.label;
       visual.appendChild(catLabel);
+      var muteBadge = document.createElement("span");
+      muteBadge.className = "ai-card-cat-label";
+      muteBadge.textContent = "🔇 음소거";
+      visual.appendChild(muteBadge);
     } else if (photoUrl) {
       visual.style.background = item.gradient || cMeta.gradient;
       var photo = document.createElement("img");
