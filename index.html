@@ -2312,6 +2312,11 @@
   #contact .back-btn { background: rgba(255,255,255,.1); color: #fff; border-color: rgba(255,255,255,.25); }
   #contact .tag.about { background: rgba(56,189,248,.2); color: #7dd3fc; }
   #contact .ai-banner-badge, #contact .ab-highlight-pill { color: #7dd3fc; }
+  .contact-body { max-width: 760px; margin: 0 auto; text-align: center; color: #fff; }
+  .contact-body h3 { margin: 30px 0 10px; font-size: 1.15rem; color: #fff; }
+  .contact-body p { margin: 0 0 8px; color: rgba(255,255,255,.85); line-height: 1.9; }
+  .contact-mail { font-size: 1.3rem !important; font-weight: 900; color: #fff !important; letter-spacing: -.01em; }
+  .contact-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 18px 0 6px; }
 </style>
 </head>
 <body>
@@ -3357,103 +3362,24 @@
       <p class="ai-lead-sub">아이디어 제안, 브랜딩·AI 협업, 오류 제보까지 언제든 환영합니다</p>
     </div>
 
-    <div class="ai-hero-banner">
-      <div class="ai-banner-left">
-        <span class="ai-banner-badge">✉️ DIRECT CONTACT CHANNEL</span>
-        <h3>공식 문의 메일: sweet85126@hanmail.net</h3>
-        <p>BAIOO 운영자가 직접 확인하고 답변드립니다. 아래 버튼으로 이메일 주소를 원클릭 복사하거나 바로 메일 작성 창을 열 수 있습니다.</p>
-        <div class="ai-banner-actions">
-          <button type="button" class="ai-btn-primary" id="ctCopyEmailBtn">📋 이메일 주소 복사 (sweet85126@hanmail.net)</button>
-          <a href="mailto:sweet85126@hanmail.net?subject=%5BBAIOO%20%EB%AC%B8%EC%9D%98%5D%20%EC%95%88%EB%85%95%ED%95%98%EC%84%B8%EC%9A%94" class="ai-btn-ghost">✉️ 메일 바로 보내기</a>
-        </div>
+        <div class="contact-body">
+      <h3>공식 문의 채널</h3>
+      <p>BAIOO의 모든 문의는 공식 이메일로 받습니다. 상시 수신하며, 운영자가 직접 확인합니다.</p>
+      <p class="contact-mail">sweet85126@hanmail.net</p>
+      <div class="contact-actions">
+        <button type="button" class="ai-btn-primary" id="ctCopyEmailBtn">📋 이메일 주소 복사</button>
+        <a href="mailto:sweet85126@hanmail.net?subject=%5BBAIOO%20%EB%AC%B8%EC%9D%98%5D%20%EC%95%88%EB%85%95%ED%95%98%EC%84%B8%EC%9A%94" class="ai-btn-ghost">✉️ 메일 바로 보내기</a>
+        <button type="button" class="ai-btn-ghost" id="ctCopyTemplateBtn">📋 문의양식 복사</button>
       </div>
-      <div class="ai-stats-grid">
-        <div class="ai-stat-box">
-          <span class="ai-stat-num">24h</span>
-          <span class="ai-stat-label">상시 메일 수신</span>
-        </div>
-        <div class="ai-stat-box">
-          <span class="ai-stat-num">1:1</span>
-          <span class="ai-stat-label">운영자 직접 답변</span>
-        </div>
-        <div class="ai-stat-box">
-          <span class="ai-stat-num">OPEN</span>
-          <span class="ai-stat-label">제휴·피드백 환영</span>
-        </div>
-      </div>
+      <h3>문의 분야</h3>
+      <p>① 광고·제휴·사업 문의 ② AI·브랜딩 협업 및 아이디어 제안 ③ 사이트 오류 신고 ④ 저작권 침해·명예훼손 등 권리침해 신고</p>
+      <h3>문의 시 적어주실 내용</h3>
+      <p>성함(업체명)·연락처·용건과 관련 자료를 함께 보내주시면 더욱 빠른 검토가 가능합니다. 문의양식 복사를 이용하시면 형식이 갖춰집니다.</p>
+      <h3>답변 안내</h3>
+      <p>접수된 순서대로 운영자가 직접 회신드립니다. 권리침해 신고는 확인되는 대로 즉시 조치합니다.</p>
+      <h3>문의 정보의 처리</h3>
+      <p>메일에 담긴 개인정보는 답변 목적으로만 사용하며, 목적 달성 시 지체 없이 파기합니다.</p>
     </div>
-
-    <div class="ai-idea-grid">
-      <article class="ai-card" tabindex="0">
-        <div class="ai-card-top">
-          <span class="ai-status-pill live">💌 OFFICIAL MAIL</span>
-          <span class="ai-version-code">CONTACT-001</span>
-        </div>
-        <div class="ai-card-visual" style="background:linear-gradient(135deg,#0EA5E9 0%,#2563EB 100%);">
-          <span class="ai-card-emoji">📬</span>
-          <span class="ai-card-cat-label">이메일 직통 문의</span>
-        </div>
-        <h3 class="ai-card-title">공식 이메일 문의하기</h3>
-        <div class="ab-highlight-pill">📧 sweet85126@hanmail.net</div>
-        <p class="ai-card-desc">광고·제휴·프로젝트 협업·기타 문의 사항은 공식 이메일로 보내주세요. 확인 후 빠르게 회신드립니다.</p>
-        <div class="ai-tag-list">
-          <span class="ai-tag-item">#공식이메일</span>
-          <span class="ai-tag-item">#제휴문의</span>
-          <span class="ai-tag-item">#원클릭복사</span>
-        </div>
-        <div class="ai-card-foot">
-          <button type="button" class="ai-action-btn" data-copy-email="sweet85126@hanmail.net">📋 주소 복사</button>
-          <a href="mailto:sweet85126@hanmail.net" class="ai-action-btn">✉️ 메일 발송 →</a>
-        </div>
-      </article>
-
-      <article class="ai-card" tabindex="0">
-        <div class="ai-card-top">
-          <span class="ai-status-pill beta">🤝 COLLAB &amp; IDEA</span>
-          <span class="ai-version-code">CONTACT-002</span>
-        </div>
-        <div class="ai-card-visual" style="background:linear-gradient(135deg,#8B5CF6 0%,#EC4899 100%);">
-          <span class="ai-card-emoji">💡</span>
-          <span class="ai-card-cat-label">협업·아이디어 제안</span>
-        </div>
-        <h3 class="ai-card-title">AI · 브랜딩 협업 &amp; 양식 복사</h3>
-        <div class="ab-highlight-pill">✨ 제휴·프로젝트 문의 양식 제공</div>
-        <p class="ai-card-desc">새로운 AI 워크플로우 공동 기획이나 브랜드 네이밍·디자인 제안 시 아래 문의 양식을 복사해 보내주시면 더욱 빠른 검토가 가능합니다.</p>
-        <div class="ai-tag-list">
-          <span class="ai-tag-item">#AI협업</span>
-          <span class="ai-tag-item">#브랜딩제안</span>
-          <span class="ai-tag-item">#문의양식</span>
-        </div>
-        <div class="ai-card-foot">
-          <button type="button" class="ai-action-btn" id="ctCopyTemplateBtn">📋 문의양식 복사</button>
-          <a href="mailto:sweet85126@hanmail.net?subject=%5BBAIOO%20%ED%98%91%EC%97%85%EC%A0%9C%EC%95%88%5D" class="ai-action-btn">✉️ 제안 보내기 →</a>
-        </div>
-      </article>
-
-      <article class="ai-card" tabindex="0">
-        <div class="ai-card-top">
-          <span class="ai-status-pill concept">🧭 OPERATOR</span>
-          <span class="ai-version-code">CONTACT-003</span>
-        </div>
-        <div class="ai-card-visual" style="background:linear-gradient(135deg,#10B981 0%,#059669 100%);">
-          <span class="ai-card-emoji">🧭</span>
-          <span class="ai-card-cat-label">운영자 소통 채널</span>
-        </div>
-        <h3 class="ai-card-title">BAIOO 운영자 직접 소통</h3>
-        <div class="ab-highlight-pill">🐰 AI · 브랜딩 · 여행 · PC진단 · 토토</div>
-        <p class="ai-card-desc">BAIOO 운영자가 모든 메일을 직접 읽고 답합니다. 사이트 오류 신고뿐만 아니라 여행, 컴퓨터 수리·진단, 반려토끼 토토 이야기도 언제나 환영합니다.</p>
-        <div class="ai-tag-list">
-          <span class="ai-tag-item">#BAIOO운영자</span>
-          <span class="ai-tag-item">#오류신고</span>
-          <span class="ai-tag-item">#소통환영</span>
-        </div>
-        <div class="ai-card-foot">
-          <button type="button" class="ai-action-btn" data-copy-email="sweet85126@hanmail.net">📋 이메일 복사</button>
-          <a href="#about" class="ai-action-btn">소개 보기 →</a>
-        </div>
-      </article>
-    </div>
-  </div>
 </section>
 
 <!-- ===== 관리자 ===== -->
