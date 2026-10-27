@@ -13734,7 +13734,7 @@ function openIdeaForm(ctx) {
   function toLines(s) {
     s = String(s || "");
     if (s.indexOf("\n") >= 0) return s;
-    return s.replace(/\. ([가-힣A-Z])/g, ".\n$1");
+    return s.replace(/\.\s+([가-힣A-Z])/g, ".\n$1");
   }
   ["ai", "br", "tr", "rp", "pet", "ab"].forEach(function (px) {
     var t = document.getElementById(px + "HeroTitle");
