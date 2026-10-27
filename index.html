@@ -13784,8 +13784,8 @@ function openIdeaForm(ctx) {
     try {
       var st = localStorage.getItem("baioo_" + px + "HeroTitle");
       var sd = localStorage.getItem("baioo_" + px + "HeroDesc");
-      if (st) t.textContent = st;
-      if (sd) d.textContent = sd;
+      if (st) t.textContent = st.replace(/ /g, " ");
+      if (sd) d.textContent = sd.replace(/ /g, " ");
     } catch (e) {}
     var editing = false;
     b.addEventListener("click", function () {
@@ -13796,7 +13796,7 @@ function openIdeaForm(ctx) {
       b.textContent = editing ? "💾 저장" : "✏️ 문구 수정";
       if (editing) t.focus();
       else {
-        var nt = t.textContent.trim(), nd = d.textContent.trim();
+        var nt = t.textContent.replace(/ /g, " ").trim(), nd = d.textContent.replace(/ /g, " ").trim();
         if (!nt) { nt = DEF_T; t.textContent = nt; }
         if (!nd) { nd = DEF_D; d.textContent = nd; }
         try { localStorage.setItem("baioo_" + px + "HeroTitle", nt); localStorage.setItem("baioo_" + px + "HeroDesc", nd); } catch (e) {}
