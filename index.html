@@ -4324,7 +4324,25 @@
           </select>
         </div>
       </div>
-      <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label for="br3InputPhoto">사진 파일 (8MB 이하)</label>
+          <div class="attach-row">
+            <label class="file-btn" for="br3InputPhoto">사진 선택</label>
+            <input type="file" id="br3InputPhoto" class="sr" accept="image/*">
+            <span id="br3PhotoName">선택된 사진 없음</span>
+          </div>
+        </div>
+        <div>
+          <label for="br3InputVideo">영상 파일 (mp4·webm, 20MB 이하)</label>
+          <div class="attach-row">
+            <label class="file-btn" for="br3InputVideo">영상 선택</label>
+            <input type="file" id="br3InputVideo" class="sr" accept="video/mp4,video/webm,video/*">
+            <span id="br3VideoName">선택된 영상 없음</span>
+          </div>
+        </div>
+      </div>
+<div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
         <div>
           <label for="br3InputColors">대표 컬러 HEX (쉼표 구분 3개)</label>
           <input type="text" id="br3InputColors" placeholder="예: #F43F5E, #8B5CF6, #0F172A" value="#F43F5E, #8B5CF6, #0F172A">
@@ -10323,18 +10341,40 @@ fd.append("pw", pwValbunny);
 
     var visual = document.createElement("div");
     visual.className = "ai-card-visual";
+    var videoUrl = item.video || "";
     var photoUrl = item.photo || item.image || item.cover || ((item.photos && item.photos[0]) ? (item.photos[0].url || item.photos[0]) : "");
-    if (photoUrl) {
+    if (videoUrl) {
+      visual.style.background = item.gradient || cMeta.gradient;
+      var vd = document.createElement("video");
+      vd.src = videoUrl;
+      vd.controls = true;
+      vd.preload = "metadata";
+      vd.autoplay = true;
+      vd.muted = true;
+      vd.loop = true;
+      vd.setAttribute("playsinline", "");
+      vd.setAttribute("muted", "");
+      try { var pp = vd.play(); if (pp && pp.catch) pp.catch(function () {}); } catch (e) {}
+      visual.appendChild(vd);
+      var catLabel = document.createElement("span");
+      catLabel.className = "ai-card-cat-label";
+      catLabel.textContent = cMeta.label;
+      visual.appendChild(catLabel);
+      var muteBadge = document.createElement("span");
+      muteBadge.className = "ai-card-cat-label";
+      muteBadge.textContent = "🔇 음소거";
+      visual.appendChild(muteBadge);
+    } else if (photoUrl) {
       visual.style.background = item.gradient || cMeta.gradient;
       var photo = document.createElement("img");
       photo.src = photoUrl;
       photo.alt = item.title || "";
       photo.loading = "lazy";
       visual.appendChild(photo);
-      var catLabel = document.createElement("span");
-      catLabel.className = "ai-card-cat-label";
-      catLabel.textContent = cMeta.label;
-      visual.appendChild(catLabel);
+      var catLabel2 = document.createElement("span");
+      catLabel2.className = "ai-card-cat-label";
+      catLabel2.textContent = cMeta.label;
+      visual.appendChild(catLabel2);
     } else {
       visual.style.display = "none";
     }
@@ -10550,8 +10590,16 @@ fd.append("pw", pwValbunny);
     if (detailPrompt) detailPrompt.textContent = target.prompt || target.summary;
     if (detailPhoto) {
       detailPhoto.textContent = "";
+      var videoUrl = target.video || "";
       var photoUrl = target.photo || target.image || target.cover || ((target.photos && target.photos[0]) ? (target.photos[0].url || target.photos[0]) : "");
-      if (photoUrl) {
+      if (videoUrl) {
+        var vd2 = document.createElement("video");
+        vd2.src = videoUrl;
+        vd2.controls = true;
+        vd2.preload = "metadata";
+        detailPhoto.appendChild(vd2);
+        detailPhoto.hidden = false;
+      } else if (photoUrl) {
         var img = document.createElement("img");
         img.src = photoUrl;
         img.alt = target.title || "";
@@ -10612,12 +10660,47 @@ fd.append("pw", pwValbunny);
   var inputSummary = $("#br3InputSummary");
   var inputPrompt = $("#br3InputPrompt");
   var addError = $("#br3AddError");
+  var inputPhoto = $("#br3InputPhoto");
+  var photoNameEl = $("#br3PhotoName");
+  var pickedPhoto = null;
+  var inputVideo = $("#br3InputVideo");
+  var videoNameEl = $("#br3VideoName");
+  var pickedVideo = null;
+  if (inputPhoto) {
+    inputPhoto.addEventListener("change", function () {
+      pickedPhoto = null;
+      var f = inputPhoto.files && inputPhoto.files[0];
+      inputPhoto.value = "";
+      if (!f) { if (photoNameEl) photoNameEl.textContent = "선택된 사진 없음"; return; }
+      if (f.size > 8 * 1024 * 1024) { if (addError) addError.textContent = "사진은 8MB 이하만 올릴 수 있습니다."; if (photoNameEl) photoNameEl.textContent = "선택된 사진 없음"; return; }
+      if (addError) addError.textContent = "";
+      var rd = new FileReader();
+      rd.onload = function () { pickedPhoto = String(rd.result || ""); if (photoNameEl) photoNameEl.textContent = f.name; };
+      rd.onerror = function () { if (addError) addError.textContent = "사진을 읽지 못했습니다."; };
+      rd.readAsDataURL(f);
+    });
+  }
+  if (inputVideo) {
+    inputVideo.addEventListener("change", function () {
+      pickedVideo = null;
+      var f = inputVideo.files && inputVideo.files[0];
+      inputVideo.value = "";
+      if (!f) { if (videoNameEl) videoNameEl.textContent = "선택된 영상 없음"; return; }
+      if (f.size > 20 * 1024 * 1024) { if (addError) addError.textContent = "영상은 20MB 이하만 올릴 수 있습니다."; if (videoNameEl) videoNameEl.textContent = "선택된 영상 없음"; return; }
+      if (addError) addError.textContent = "";
+      var rd = new FileReader();
+      rd.onload = function () { pickedVideo = String(rd.result || ""); if (videoNameEl) videoNameEl.textContent = f.name; };
+      rd.onerror = function () { if (addError) addError.textContent = "영상을 읽지 못했습니다."; };
+      rd.readAsDataURL(f);
+    });
+  }
 
   if (openAddBtn && addDlg) {
     openAddBtn.addEventListener("click", function () {
       editingBrandId = null;
       if (addForm) addForm.reset();
       if (inputColors) inputColors.value = "#F43F5E, #8B5CF6, #0F172A";
+      pickedPhoto = null; pickedVideo = null; if (photoNameEl) photoNameEl.textContent = "선택된 사진 없음"; if (videoNameEl) videoNameEl.textContent = "선택된 영상 없음"; if (inputPhoto) inputPhoto.value = ""; if (inputVideo) inputVideo.value = "";
       if (addError) addError.textContent = "";
       if (!addDlg.open) addDlg.showModal();
       if (inputTitle) inputTitle.focus();
@@ -10679,9 +10762,14 @@ fd.append("pw", pwValbunny);
           bTarget.prompt = (inputPrompt && inputPrompt.value.trim()) || ("[" + titleVal + "]\n- 슬로건: " + sloganVal + "\n- 컬러: " + cleanColors.join(", ") + "\n- 설명: " + summaryVal);
           bTarget.emoji = cMeta.emoji;
           bTarget.gradient = cMeta.gradient;
+          if (pickedPhoto) bTarget.photoData = pickedPhoto;
+          if (pickedVideo) bTarget.videoData = pickedVideo;
+          var upEdit = ideaServerUpsert("br3", bTarget);
+          delete bTarget.photoData; delete bTarget.videoData;
           saveJson(STORAGE_CUSTOM, customBrands);
-          ideaServerUpsert("br3", bTarget);
+          if (upEdit && upEdit.then) { upEdit.then(function () { ideaServerSync("br3", function () { return customBrands; }, function (items) { customBrands = items; saveJson(STORAGE_CUSTOM, customBrands); renderAll(); }); }).catch(function () {}); }
           showToast("✨ 수정되었습니다!");
+          pickedPhoto = null; pickedVideo = null;
         }
         editingBrandId = null;
       } else {
@@ -10703,13 +10791,20 @@ fd.append("pw", pwValbunny);
           prompt: (inputPrompt && inputPrompt.value.trim()) || ("[" + titleVal + "]\n- 슬로건: " + sloganVal + "\n- 컬러: " + cleanColors.join(", ") + "\n- 설명: " + summaryVal)
         };
 
+        if (pickedPhoto) newBrand.photoData = pickedPhoto;
+        if (pickedVideo) newBrand.videoData = pickedVideo;
         customBrands.unshift(newBrand);
+        var upNew = ideaServerUpsert("br3", newBrand);
+        delete newBrand.photoData; delete newBrand.videoData;
         saveJson(STORAGE_CUSTOM, customBrands);
-        ideaServerUpsert("br3", newBrand);
-        showToast("✨ 새 오브젝트 아이디어가 스튜디오에 배포되었습니다!");
+        if (upNew && upNew.then) { upNew.then(function () { ideaServerSync("br3", function () { return customBrands; }, function (items) { customBrands = items; saveJson(STORAGE_CUSTOM, customBrands); renderAll(); }); }).catch(function () {}); }
+        showToast((pickedPhoto || pickedVideo) ? "✨ 파일 업로드 중… 곧 표시됩니다!" : "✨ 새 오브젝트 아이디어가 스튜디오에 배포되었습니다!");
+        pickedPhoto = null; pickedVideo = null;
+        if (inputPhoto) inputPhoto.value = ""; if (videoNameEl) videoNameEl.textContent = "선택된 영상 없음"; if (photoNameEl) photoNameEl.textContent = "선택된 사진 없음"; if (inputVideo) inputVideo.value = "";
       }
       addForm.reset();
       if (inputColors) inputColors.value = "#F43F5E, #8B5CF6, #0F172A";
+      pickedPhoto = null; pickedVideo = null; if (photoNameEl) photoNameEl.textContent = "선택된 사진 없음"; if (videoNameEl) videoNameEl.textContent = "선택된 영상 없음"; if (inputPhoto) inputPhoto.value = ""; if (inputVideo) inputVideo.value = "";
       if (addDlg && addDlg.open) addDlg.close();
       renderAll();
     });
