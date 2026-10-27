@@ -2495,37 +2495,6 @@
       </div>
     </div>
 
-    <div class="ai-toolbar">
-      <div class="ai-toolbar-top">
-        <div class="ai-search-wrap">
-          <span class="ai-search-icon" aria-hidden="true">🔍</span>
-          <input type="search" id="aiSearchInput" class="ai-search-input" placeholder="아이디어 제목, 설명, 기술 태그(#에이전트, #자동화 등) 검색..." aria-label="아이디어 검색">
-        </div>
-        <div class="ai-select-group">
-          <select id="aiStatusSelect" class="ai-select" aria-label="배포 상태 필터">
-            <option value="all">모든 상태 (All)</option>
-            <option value="live">🚀 LIVE 배포중</option>
-            <option value="beta">🧪 BETA 테스트</option>
-            <option value="concept">📐 CONCEPT 설계</option>
-          </select>
-          <select id="aiSortSelect" class="ai-select" aria-label="정렬 기준">
-            <option value="newest">최신 배포순</option>
-            <option value="popular">인기·응원순</option>
-            <option value="title">이름순 (가나다)</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="ai-cat-bar" id="aiCategoryBar" role="tablist" aria-label="아이디어 카테고리 필터">
-        <button type="button" class="ai-cat-btn active" data-cat="all">전체 보기</button>
-        <button type="button" class="ai-cat-btn" data-cat="agent">🤖 AI 에이전트</button>
-        <button type="button" class="ai-cat-btn" data-cat="tool">⚡ 자동화·웹툴</button>
-        <button type="button" class="ai-cat-btn" data-cat="prompt">🧠 프롬프트 레시피</button>
-        <button type="button" class="ai-cat-btn" data-cat="creative">🎨 크리에이티브</button>
-        <button type="button" class="ai-cat-btn" data-cat="lab">💡 실험실 (Lab)</button>
-      </div>
-    </div>
-
     <div class="ai-status-bar">
       <div class="ai-active-chips" id="aiActiveChips"></div>
       <div class="ai-result-count" id="aiResultCount">총 6개의 아이디어</div>
@@ -7678,25 +7647,6 @@ fd.append("pw", pwValbunny);
 
     gridEl.textContent = "";
     if (!list.length) {
-      var empty = document.createElement("div");
-      empty.className = "ai-empty-state";
-      var p = document.createElement("p");
-      p.textContent = "조건에 맞는 AI 아이디어가 없습니다.";
-      var resetBtn = document.createElement("button");
-      resetBtn.type = "button";
-      resetBtn.className = "ai-btn-primary";
-      resetBtn.textContent = "필터 전체 초기화";
-      resetBtn.addEventListener("click", function () {
-        state.category = "all";
-        state.status = "all";
-        state.query = "";
-        state.bookmarkedOnly = false;
-        syncControls();
-        renderAll();
-      });
-      empty.appendChild(p);
-      empty.appendChild(resetBtn);
-      gridEl.appendChild(empty);
       return;
     }
 
