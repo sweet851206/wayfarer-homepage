@@ -1252,6 +1252,13 @@
     display: block;
     border: 1px solid var(--border);
   }
+  .view-photos video {
+    width: 100%;
+    border-radius: 20px;
+    display: block;
+    border: 1px solid var(--border);
+    background: #000;
+  }
 
   .about-section {
     background: var(--surface-soft);
@@ -9378,6 +9385,10 @@
     var n = String(f.name || f.originalName || "").toLowerCase();
     return /^image\//.test(f.type || "") || /\.(png|jpe?g|gif|webp|bmp|svg)$/.test(n);
   }
+  function isVideoFile(f) {
+    var n = String(f.name || f.originalName || "").toLowerCase();
+    return /^video\//.test(f.type || "") || /\.(mp4|webm|mov|m4v)$/.test(n);
+  }
   function postDate(p) {
     if (p.date) return p.date;
     if (p.createdAt) { try { return new Date(p.createdAt).toISOString().slice(0, 10); } catch (e) {} }
@@ -9616,6 +9627,13 @@
         im.src = f.url;
         im.alt = f.originalName || f.name;
         ph.appendChild(im);
+      });
+      (p.files || []).filter(isVideoFile).forEach(function (f) {
+        var vd = document.createElement("video");
+        vd.src = f.url;
+        vd.controls = true;
+        vd.preload = "metadata";
+        ph.appendChild(vd);
       });
     }
     if (c) c.textContent = p.content || "(내용 없음)";
