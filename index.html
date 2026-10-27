@@ -1354,11 +1354,16 @@
     .nav-links.open { display: flex; }
     .nav-links { align-items: center; text-align: center; }
     .nav-links .nav-sub { margin: 0; align-items: center; }
+    .nav-links > li:has(> a[data-nav="ai"]),
+    .nav-links > li:has(> a[data-nav="branding"]),
+    .nav-links > li:has(> a[data-nav="travel"]),
+    .nav-links > li:has(> a[data-nav="repair"]),
+    .nav-links > li:has(> a[data-nav="bunny"]) { width: 100%; }
     .nav-links > li:has(> a[data-nav="ai"]) > a,
     .nav-links > li:has(> a[data-nav="branding"]) > a,
     .nav-links > li:has(> a[data-nav="travel"]) > a,
     .nav-links > li:has(> a[data-nav="repair"]) > a,
-    .nav-links > li:has(> a[data-nav="bunny"]) > a { border-radius: 999px; padding: 8px 18px; background: rgba(244,63,94,.22); }
+    .nav-links > li:has(> a[data-nav="bunny"]) > a { display: block; text-align: center; border-radius: 999px; padding: 8px 18px; background: rgba(244,63,94,.22); }
   }
 
   @media (max-width: 640px) {
