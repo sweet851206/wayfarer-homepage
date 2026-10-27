@@ -222,6 +222,7 @@
   .br-gate { margin: 4px 0; font-weight: 900; font-size: clamp(1.9rem, 4vw, 2.8rem); line-height: 1.18; letter-spacing: -.05em; text-align: center; scroll-margin-top: 90px; }
   #brGate2 { margin-top: 50px; }
   #brGate1 { margin-top: 35px; }
+  #aiGate2 { margin-top: 50px; }
   .gate-edit { background: none; border: none; cursor: pointer; font-size: .75rem; padding: 0 2px; }
 
   .theme-toggle,
@@ -2266,7 +2267,7 @@
   .visit-counter b { font-variant-numeric: tabular-nums; letter-spacing: .06em; }
   .admin-only { display: none !important; }
   body.is-admin .admin-only { display: inline-flex !important; }
-  body.board-open-ai #aiBoardAddBtn { display: inline-flex !important; }
+  body.board-open-ai #aiBoardAddBtn, body.board-open-ai #ai2BoardAddBtn { display: inline-flex !important; }
   body.board-open-br #brBoardAddBtn, body.board-open-br #br2BoardAddBtn { display: inline-flex !important; }
   body.board-open-tr #trBoardAddBtn { display: inline-flex !important; }
   body.board-open-rp #rpBoardAddBtn { display: inline-flex !important; }
@@ -2284,7 +2285,12 @@
     <div class="nav-right">
       <ul class="nav-links" id="navLinks">
         <li><a href="#home" data-nav="home">Main</a></li>
-        <li><a href="#ai" data-nav="ai">AI</a></li>
+        <li class="has-sub"><a href="#ai" data-nav="ai">AI</a>
+          <ul class="nav-sub">
+            <li><a href="#ai" id="aiGate1Link">AI Ideas</a></li>
+            <li><a href="#aiGate2" id="aiGate2Link">Created Video</a> <button type="button" class="gate-edit admin-only" id="aiGate2Edit" aria-label="Created Video 이름 수정">✏️</button></li>
+          </ul>
+        </li>
         <li class="has-sub"><a href="#branding" data-nav="branding">Branding agency</a>
           <ul class="nav-sub">
             <li><a href="#brGate1" id="brGate1Link">Character Concept &amp; Identity</a> <button type="button" class="gate-edit admin-only" id="brGate1Edit" aria-label="첫 번째 대문명 수정">✏️</button></li>
@@ -2456,6 +2462,85 @@
     </div>
 
     <div class="ai-idea-grid" id="aiIdeaGrid"></div>
+
+<!-- ===== AI Created Video 섹션 (Retail 복제: 자유게시판~카드) ===== -->
+    <div class="br-gate" id="aiGate2">Created Video</div>
+    <div class="pet-diary-subhead">
+      <h3>📝 자유게시판</h3>
+      <button type="button" class="section-add-btn ai-add admin-only" id="ai2BoardAddBtn" data-category="ai-video" style="margin:0;">＋ 새 글 등록</button>
+    </div>
+    <div class="board-table-wrap">
+      <table class="board-table">
+        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:210px">등록일</th></tr></thead>
+        <tbody id="ai2BoardBody"></tbody>
+      </table>
+      <div class="ai-page-bar" id="ai2PageBar"></div>
+    </div>
+    <div class="board-view-panel" id="ai2ViewPanel" hidden>
+      <button type="button" class="x-close" id="ai2ViewClose" aria-label="닫기">×</button>
+      <h3 class="dlg-title" id="ai2InlineTitle"></h3>
+      <div class="post-date" id="ai2InlineDate"></div>
+      <div class="view-photos" id="ai2InlinePhotos"></div>
+      <div id="ai2InlineContent"></div>
+      <div class="file-list" id="ai2InlineFiles" hidden></div>
+      <div class="vote-row">
+        <button type="button" class="vote-btn" id="ai2InlineLike">❤ 추천 <span id="ai2LikeCount">0</span></button>
+        <button type="button" class="vote-btn" id="ai2InlineDislike">💔 비추천 <span id="ai2DislikeCount">0</span></button>
+      </div>
+      <div class="cmt-wrap">
+        <b>💬 댓글 <span id="ai2CmtCount">0</span></b>
+        <div class="cmt-list" id="ai2CmtList"></div>
+        <button type="button" class="cmt-toggle" id="ai2CmtToggle" hidden>더 보기</button>
+        <div class="cmt-form">
+          <input type="text" id="ai2CmtAuthor" maxlength="30" placeholder="이름 (익명 가능)">
+          <input type="text" id="ai2CmtInput" maxlength="500" placeholder="댓글을 입력하세요">
+          <button type="button" class="vote-btn" id="ai2CmtSend">등록</button>
+        </div>
+      </div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-primary admin-only" id="ai2InlineEdit">수정</button>
+        <button type="button" class="btn btn-danger admin-only" id="ai2InlineDelete">삭제</button>
+      </div>
+    </div>
+
+    <div class="ai-toolbar">
+      <div class="ai-toolbar-top">
+          <button type="button" class="ai-btn-primary admin-only" id="ai2OpenAddBtn">✨ 새 영상 아이디어 배포</button>
+          <button type="button" class="ai-btn-ghost" id="ai2FilterBookmarkedBtn">♥ 관심 영상 모아보기</button>
+        <div class="ai-search-wrap">
+          <span class="ai-search-icon" aria-hidden="true">🔍</span>
+          <input type="search" id="ai2SearchInput" class="ai-search-input" placeholder="영상 제목, 설명, 태그(#숏폼, #스토리 등) 검색..." aria-label="영상 아이디어 검색">
+        </div>
+        <div class="ai-select-group">
+          <select id="ai2StatusSelect" class="ai-select" aria-label="브랜딩 상태 필터">
+            <option value="all">모든 상태 (All)</option>
+            <option value="live">✨ LIVE 확정·배포</option>
+            <option value="beta">🧪 DRAFT 시안·검토</option>
+            <option value="concept">📐 CONCEPT 컨셉</option>
+          </select>
+          <select id="ai2SortSelect" class="ai-select" aria-label="정렬 기준">
+            <option value="newest">최신 등록순</option>
+            <option value="popular">인기·공감순</option>
+            <option value="title">이름순 (가나다)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="ai-cat-bar" id="ai2CategoryBar" role="tablist" aria-label="브랜딩 카테고리 필터">
+          <button type="button" class="ai-cat-btn active" data-cat="all">전체 보기</button>
+          <button type="button" class="ai-cat-btn" data-cat="clip">🎬 숏폼 클립</button>
+          <button type="button" class="ai-cat-btn" data-cat="story">📖 스토리 영상</button>
+          <button type="button" class="ai-cat-btn" data-cat="tutorial">🎓 튜토리얼</button>
+          <button type="button" class="ai-cat-btn" data-cat="lab">💡 실험실 (Lab)</button>
+        </div>
+    </div>
+
+    <div class="ai-status-bar">
+      <div class="ai-active-chips" id="ai2ActiveChips"></div>
+      <div class="ai-result-count" id="ai2ResultCount">총 0개의 영상 아이디어</div>
+    </div>
+
+    <div class="ai-idea-grid" id="ai2IdeaGrid"></div>
 
   </div>
 </section>
@@ -4022,6 +4107,146 @@
   </div>
 </dialog>
 
+<!-- ===== AI Video 대화상자 (Video 복제) ===== -->
+<dialog id="ai2FormDialog" aria-label="새 Video 글 등록">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="ai2FormDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title">새 Video 글</h3>
+    <form id="ai2Form" novalidate>
+      <div class="field">
+        <label for="ai2Title">제목 *</label>
+        <input type="text" id="ai2Title" maxlength="120" placeholder="예: 오늘의 영상 기록">
+      </div>
+      <div class="field">
+        <label for="ai2Date">날짜</label>
+        <input type="date" id="ai2Date">
+      </div>
+      <div class="field">
+        <label for="ai2Content">내용</label>
+        <textarea id="ai2Content" placeholder="영상 이야기를 적어주세요"></textarea>
+      </div>
+      <div class="field">
+        <label for="ai2Files">사진·파일 (여러 개)</label>
+        <div class="attach-row">
+          <label class="file-btn" for="ai2Files">파일 선택</label>
+          <input type="file" id="ai2Files" class="sr" multiple>
+          <span id="ai2FileCount">선택된 파일 없음</span>
+        </div>
+        <div class="preview-grid" id="ai2Preview"></div>
+      </div>
+      <div class="form-error" id="ai2FormError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="ai2FormDialog">취소</button>
+        <button type="submit" class="btn btn-primary" id="ai2Submit">등록</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog id="ai2ViewDialog" aria-label="영상 글 상세">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="ai2ViewDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title" id="ai2ViewTitle"></h3>
+    <div class="post-date" id="ai2ViewDate"></div>
+    <div class="view-photos" id="ai2ViewPhotos"></div>
+    <div id="ai2ViewContent"></div>
+    <div class="file-list" id="ai2ViewFiles" hidden></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-primary admin-only" id="ai2ViewEdit">수정</button>
+      <button type="button" class="btn btn-danger admin-only" id="ai2ViewDelete">삭제</button>
+      <button type="button" class="btn btn-ghost" data-close="ai2ViewDialog">닫기</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="ai2DetailDialog" aria-label="영상 아이디어 상세">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="ai2DetailDialog" aria-label="닫기">×</button>
+    <div class="ai-detail-meta">
+      <span class="ai-status-pill live" id="ai2DetailStatus">✨ LIVE</span>
+      <span class="ai-version-code" id="ai2DetailCode">VIDEO-001 · v1.0</span>
+      <span class="post-date" id="ai2DetailDate" style="margin:0"></span>
+    </div>
+    <h3 class="dlg-title" id="ai2DetailTitle"></h3>
+    <div class="br-slogan-pill" id="ai2DetailSlogan"></div>
+    <div class="view-photos" id="ai2DetailPhoto" hidden></div>
+    <p id="ai2DetailSummary" style="color:var(--text);line-height:1.8;margin-bottom:14px;"></p>
+    <div class="br-swatch-bar" id="ai2DetailSwatches"></div>
+    <div class="ai-tag-list" id="ai2DetailTags"></div>
+
+    <div class="ai-prompt-label">
+      <span>🎨 영상 가이드 & 프롬프트</span>
+      <button type="button" class="ai-action-btn" id="ai2CopyKitBtn">📋 영상 키트 복사</button>
+    </div>
+    <pre class="ai-prompt-box" id="ai2DetailPrompt"></pre>
+
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-danger" id="ai2DeleteCustomBtn" hidden>삭제</button>
+      <button type="button" class="btn btn-ghost" id="ai2ShareLinkBtn">🔗 공유 링크 복사</button>
+      <button type="button" class="btn btn-ghost" data-close="ai2DetailDialog">닫기</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="ai2AddDialog" aria-label="새 영상 아이디어 배포하기">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="ai2AddDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title">✨ 새 영상 아이디어 배포</h3>
+    <form id="ai2AddForm" novalidate>
+      <div class="field">
+        <label for="ai2InputTitle">영상명 / 프로젝트 제목 *</label>
+        <input type="text" id="ai2InputTitle" placeholder="예: 세레나 활쏘기 10초 클립" required>
+      </div>
+      <div class="field">
+        <label for="ai2InputSlogan">핵심 소개 (Tagline) *</label>
+        <input type="text" id="ai2InputSlogan" placeholder="예: MiniMax H3 10초 황금세팅으로 생성" required>
+      </div>
+      <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label for="ai2InputCategory">카테고리</label>
+          <select id="ai2InputCategory">
+            <option value="clip">🎬 숏폼 클립</option>
+            <option value="story">📖 스토리 영상</option>
+            <option value="tutorial">🎓 튜토리얼</option>
+            <option value="lab">💡 실험실 (Lab)</option>
+          </select>
+        </div>
+        <div>
+          <label for="ai2InputStatus">상태</label>
+          <select id="ai2InputStatus">
+            <option value="live">✨ LIVE 확정·배포</option>
+            <option value="beta">🧪 DRAFT 시안·검토</option>
+            <option value="concept">📐 CONCEPT 컨셉</option>
+          </select>
+        </div>
+      </div>
+      <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label for="ai2InputColors">대표 컬러 HEX (쉼표 구분 3개)</label>
+          <input type="text" id="ai2InputColors" placeholder="예: #F43F5E, #8B5CF6, #0F172A" value="#F43F5E, #8B5CF6, #0F172A">
+        </div>
+        <div>
+          <label for="ai2InputTags">태그 (쉼표 구분)</label>
+          <input type="text" id="ai2InputTags" placeholder="예: 숏폼, MiniMax, 세레나">
+        </div>
+      </div>
+      <div class="field">
+        <label for="ai2InputSummary">영상 기획 의도 및 요약 *</label>
+        <textarea id="ai2InputSummary" style="min-height:82px;" placeholder="이 영상 아이디어의 탄생 배경과 핵심 컨셉을 적어주세요."></textarea>
+      </div>
+      <div class="field">
+        <label for="ai2InputPrompt">영상 가이드라인 / 네이밍 스펙</label>
+        <textarea id="ai2InputPrompt" style="min-height:110px;" placeholder="복사해서 활용할 수 있는 영상 가이드, 톤앤매너, 프롬프트를 적어주세요."></textarea>
+      </div>
+      <div class="form-error" id="ai2AddError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="ai2AddDialog">취소</button>
+        <button type="submit" class="btn btn-primary">✨ 즉시 배포</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
 <div id="aiToast" class="ai-toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -4045,11 +4270,11 @@
   }
   function route() {
     var h = (location.hash || "#home").replace("#", "") || "home";
-    if (h === "brGate1" || h === "brGate2") {
-      showView("branding");
+    if (h === "brGate1" || h === "brGate2" || h === "aiGate2") {
+      showView(h === "aiGate2" ? "ai" : "branding");
       $$(".nav-links a").forEach(function (a) {
         var href = a.getAttribute("href");
-        a.classList.toggle("active", href === "#" + h || a.dataset.nav === "branding");
+        a.classList.toggle("active", href === "#" + h || a.dataset.nav === (h === "aiGate2" ? "ai" : "branding"));
       });
       var g = document.getElementById(h);
       if (g) { try { g.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) { g.scrollIntoView(); } }
@@ -9132,6 +9357,1125 @@
 })();
 
 
+/* ===== AI Video 자유게시판 + 스튜디오 (Video 복제) ===== */
+/* ===== Video 자유게시판 (AI 패턴 미러) ===== */
+(function () {
+  "use strict";
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+
+  function apiList() {
+    return fetch("/api?action=list", { headers: { Accept: "application/json" } })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        var posts = data && data.posts;
+        if (posts && !Array.isArray(posts)) posts = Array.isArray(posts.value) ? posts.value : (posts.id ? [posts] : []);
+        return Array.isArray(posts) ? posts : [];
+      });
+  }
+  function isImageFile(f) {
+    var n = String(f.name || f.originalName || "").toLowerCase();
+    return /^image\//.test(f.type || "") || /\.(png|jpe?g|gif|webp|bmp|svg)$/.test(n);
+  }
+  function postDate(p) {
+    if (p.date) return p.date;
+    if (p.createdAt) { try { return new Date(p.createdAt).toISOString().slice(0, 10); } catch (e) {} }
+    return "";
+  }
+  function fileLinks(files, ev) {
+    var fl = document.createElement("div");
+    fl.className = "file-list";
+    fl.style.marginTop = "12px";
+    files.forEach(function (f) {
+      var a = document.createElement("a");
+      a.href = f.url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.textContent = "📎 " + (f.originalName || f.name);
+      if (ev) a.addEventListener("click", function (e) { e.stopPropagation(); });
+      fl.appendChild(a);
+    });
+    return fl;
+  }
+  function openDlg(d) { if (d && !d.open) d.showModal(); }
+  function closeDlg(d) { if (d && d.open) d.close(); }
+
+  var ai2BoardBody = $("#ai2BoardBody");
+  var ai2Posts = [];
+  var ai2PageBar = $("#ai2PageBar");
+  var ai2Page = 1;
+  var AI2_PAGE_SIZE = 10;
+
+  function renderAi2Pages(total) {
+    if (!ai2PageBar) return;
+    ai2PageBar.textContent = "";
+    var maxPage = Math.max(1, Math.ceil(total / AI2_PAGE_SIZE));
+    if (ai2Page > maxPage) ai2Page = maxPage;
+    if (ai2Page < 1) ai2Page = 1;
+    function mk(label, page, active, disabled) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "ai-cat-btn" + (active ? " active" : "");
+      b.textContent = label;
+      if (disabled) b.disabled = true;
+      else b.addEventListener("click", function () { ai2Page = page; renderAi2(); });
+      ai2PageBar.appendChild(b);
+    }
+    mk("‹ 이전", ai2Page - 1, false, ai2Page === 1);
+    var start = Math.max(1, ai2Page - 2);
+    var end = Math.min(maxPage, start + 4);
+    start = Math.max(1, end - 4);
+    for (var p = start; p <= end; p++) mk(String(p), p, p === ai2Page, false);
+    mk("› 다음", ai2Page + 1, false, ai2Page === maxPage);
+  }
+
+  function makeAi2Row(p, i) {
+    var tr = document.createElement("tr");
+    tr.setAttribute("data-id", p.id);
+    var no = document.createElement("td");
+    no.textContent = String(i);
+    var ti = document.createElement("td");
+    ti.className = "board-title";
+    ti.textContent = p.title || "(제목 없음)";
+    var vw = document.createElement("span");
+    vw.className = "board-views";
+    vw.textContent = " | 조회수: " + String((+p.views) || 0);
+    ti.appendChild(vw);
+    var dt = document.createElement("td");
+    dt.textContent = "";
+    var vs = document.createElement("span");
+    vs.className = "vote-red";
+    vs.textContent = window.BaiooVote.label(p);
+    dt.appendChild(vs);
+    dt.appendChild(document.createTextNode(" "));
+    dt.appendChild(document.createTextNode(postDate(p) || "—"));
+    var del = document.createElement("button");
+    del.type = "button";
+    del.className = "row-del admin-only";
+    del.textContent = "🗑️";
+    del.setAttribute("data-del", p.id);
+    del.setAttribute("aria-label", "삭제");
+    dt.appendChild(del);
+    tr.appendChild(no);
+    tr.appendChild(ti);
+    tr.appendChild(dt);
+    return tr;
+  }
+
+  function renderAi2() {
+    var maxPage = Math.max(1, Math.ceil(ai2Posts.length / AI2_PAGE_SIZE));
+    if (ai2Page > maxPage) ai2Page = maxPage;
+    if (ai2Page < 1) ai2Page = 1;
+    ai2BoardBody.textContent = "";
+    if (!ai2Posts.length) {
+      var tr = document.createElement("tr");
+      var td = document.createElement("td");
+      td.colSpan = 3;
+      td.className = "board-empty";
+      td.style.cssText = "text-align:center;color:var(--muted)";
+      td.textContent = "등록된 글이 없습니다.";
+      tr.appendChild(td);
+      ai2BoardBody.appendChild(tr);
+      renderAi2Pages(0);
+      return;
+    }
+    var startIdx = (ai2Page - 1) * AI2_PAGE_SIZE;
+    ai2Posts.slice(startIdx, startIdx + AI2_PAGE_SIZE).forEach(function (p, i) { ai2BoardBody.appendChild(makeAi2Row(p, ai2Posts.length - (startIdx + i))); });
+    renderAi2Pages(ai2Posts.length);
+  }
+
+  function loadAi2() {
+    return apiList().then(function (posts) {
+      ai2Posts = posts.filter(function (p) { return p.category === "ai-video"; });
+      ai2Posts.sort(function (a, b) { return ((b.createdAt || 0) > (a.createdAt || 0)) ? 1 : (((b.createdAt || 0) < (a.createdAt || 0)) ? -1 : 0); });
+      renderAi2();
+    }).catch(function () { ai2Posts = []; renderAi2(); });
+  }
+
+  /* ---------- Video 등록 폼 ---------- */
+  var ai2FormDlg = $("#ai2FormDialog"),
+      ai2Form = $("#ai2Form"),
+      ai2TitleInput = $("#ai2Title"),
+      ai2DateInput = $("#ai2Date"),
+      ai2ContentInput = $("#ai2Content"),
+      ai2FileInput = $("#ai2Files"),
+      ai2PreviewEl = $("#ai2Preview"),
+      ai2FileCountEl = $("#ai2FileCount"),
+      ai2ErrorEl = $("#ai2FormError"),
+      ai2SubmitBtn = $("#ai2Submit");
+  var ai2Picked = [];
+  var ai2EditingId = null;
+
+  function renderAi2Preview() {
+    $$("img", ai2PreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
+    ai2PreviewEl.textContent = "";
+    ai2FileCountEl.textContent = ai2Picked.length ? ai2Picked.length + "개 선택됨" : "선택된 파일 없음";
+    ai2Picked.forEach(function (f, i) {
+      var tile = document.createElement("div");
+      tile.className = "thumb-sm";
+      tile.title = f.name;
+      if (isImageFile(f)) {
+        var im = document.createElement("img");
+        im.src = URL.createObjectURL(f);
+        im.alt = f.name;
+        tile.appendChild(im);
+      } else {
+        tile.style.cssText = "display:grid;place-items:center;font-size:1.6rem;";
+        tile.textContent = "📄";
+      }
+      var rm = document.createElement("button");
+      rm.type = "button";
+      rm.className = "rm";
+      rm.textContent = "×";
+      rm.setAttribute("aria-label", f.name + " 제거");
+      rm.addEventListener("click", function () { ai2Picked.splice(i, 1); renderAi2Preview(); });
+      tile.appendChild(rm);
+      ai2PreviewEl.appendChild(tile);
+    });
+  }
+
+  ai2FileInput.addEventListener("change", function () {
+    ai2Picked = ai2Picked.concat(Array.prototype.slice.call(ai2FileInput.files));
+    ai2FileInput.value = "";
+    renderAi2Preview();
+  });
+
+  $$(".section-add-btn[data-category='ai-video']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      ai2EditingId = null;
+      ai2Form.reset();
+      ai2Picked = [];
+      renderAi2Preview();
+      ai2ErrorEl.textContent = "";
+      var _dt = $("#ai2FormDialog .dlg-title"); if (_dt) _dt.textContent = "새 Video 글";
+      ai2SubmitBtn.textContent = "등록";
+      openDlg(ai2FormDlg);
+      ai2TitleInput.focus();
+    });
+  });
+
+  ai2Form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var title = ai2TitleInput.value.trim();
+    if (!title) { ai2ErrorEl.textContent = "제목을 입력하세요."; ai2TitleInput.focus(); return; }
+    ai2ErrorEl.textContent = "";
+    ai2SubmitBtn.disabled = true;
+    ai2SubmitBtn.textContent = ai2EditingId ? "저장 중…" : "등록 중…";
+    var fd = new FormData();
+    if (ai2EditingId) fd.append("id", ai2EditingId);
+    fd.append("title", title);
+    fd.append("content", ai2ContentInput.value);
+    fd.append("category", "ai-video");
+    fd.append("date", ai2DateInput.value || "");
+    ai2Picked.forEach(function (f) { fd.append("files[]", f); });
+    fetch(ai2EditingId ? "/api?action=update" : "/api?action=create", { method: "POST", body: fd })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        ai2Form.reset();
+        ai2Picked = [];
+        renderAi2Preview();
+        closeDlg(ai2FormDlg);
+        ai2EditingId = null;
+        var _dt2 = $("#ai2FormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 Video 글";
+        return loadAi2();
+      })
+      .catch(function (err) { ai2ErrorEl.textContent = "실패: " + ((err && err.message) || err); })
+      .then(function () { ai2SubmitBtn.disabled = false; ai2SubmitBtn.textContent = ai2EditingId ? "저장" : "등록"; });
+  });
+
+  /* ---------- Video 상세 다이얼로그 + 삭제 ---------- */
+  var ai2ViewDlg = $("#ai2ViewDialog"),
+      ai2ViewTitle = $("#ai2ViewTitle"),
+      ai2ViewDate = $("#ai2ViewDate"),
+      ai2ViewPhotos = $("#ai2ViewPhotos"),
+      ai2ViewContent = $("#ai2ViewContent"),
+      ai2ViewFiles = $("#ai2ViewFiles"),
+      ai2DeleteBtn = $("#ai2ViewDelete");
+  var ai2ViewingId = null;
+
+  function openAi2View(id) {
+    var p = null;
+    ai2Posts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
+    if (!p) return;
+    ai2ViewingId = p.id;
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = " | 조회수: " + j.views; } }).catch(function () {});
+    var panel = $("#ai2ViewPanel");
+    var t = $("#ai2InlineTitle"), d = $("#ai2InlineDate"), ph = $("#ai2InlinePhotos"), c = $("#ai2InlineContent"), fl = $("#ai2InlineFiles");
+    if (t) t.textContent = p.title || "(제목 없음)";
+    if (d) { var dv = document.createElement("span"); dv.className = "vote-red"; dv.textContent = window.BaiooVote.label(p); d.textContent = ""; d.appendChild(document.createTextNode("🗓 ")); d.appendChild(dv); d.appendChild(document.createTextNode("  " + (postDate(p) || "날짜 미정"))); }
+    if (ph) {
+      ph.textContent = "";
+      (p.files || []).filter(isImageFile).forEach(function (f) {
+        var im = document.createElement("img");
+        im.src = f.url;
+        im.alt = f.originalName || f.name;
+        ph.appendChild(im);
+      });
+    }
+    if (c) c.textContent = p.content || "(내용 없음)";
+    if (fl) {
+      fl.textContent = "";
+      fl.hidden = !(p.files && p.files.length);
+      if (p.files && p.files.length) fl.appendChild(fileLinks(p.files, false));
+    }
+    var blc = $("#ai2LikeCount"), bdc = $("#ai2DislikeCount");
+    if (blc) blc.textContent = (+p.likes) || 0;
+    if (bdc) bdc.textContent = (+p.dislikes) || 0;
+    if (panel) {
+      panel.hidden = false;
+      if (panel.scrollIntoView) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+    ai2ViewTitle.textContent = p.title || "(제목 없음)";
+    ai2ViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    loadAi2Cmt();
+  }
+
+  ai2BoardBody.addEventListener("click", function (e) {
+    var delBtn = e.target.closest("[data-del]");
+    if (delBtn) {
+      e.stopPropagation();
+      var did = delBtn.getAttribute("data-del");
+      if (!window.confirm("이 글을 삭제할까요?")) return;
+      fetch("/api/" + encodeURIComponent(did), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: did }) })
+        .then(function (res) { return res.json(); })
+        .then(function () { return loadAi2(); })
+        .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); });
+      return;
+    }
+    var tr = e.target.closest("tr[data-id]");
+    if (!tr) return;
+    openAi2View(tr.getAttribute("data-id"));
+  });
+
+  var ai2ViewClose = $("#ai2ViewClose");
+  if (ai2ViewClose) ai2ViewClose.addEventListener("click", function () { var panel = $("#ai2ViewPanel"); if (panel) panel.hidden = true; });
+  var ai2InlineDelete = $("#ai2InlineDelete");
+  if (ai2InlineDelete) ai2InlineDelete.addEventListener("click", function () { ai2DeleteBtn.click(); });
+  var ai2InlineEdit = $("#ai2InlineEdit");
+  if (ai2InlineEdit) ai2InlineEdit.addEventListener("click", function () { var b = $("#ai2ViewEdit"); if (b) b.click(); });
+  var ai2InlineLike = $("#ai2InlineLike"), ai2InlineDislike = $("#ai2InlineDislike");
+  if (ai2InlineLike) ai2InlineLike.addEventListener("click", function () {
+    if (!ai2ViewingId) return;
+    window.BaiooVote.send(ai2ViewingId, "like", function (data) {
+      var lc = $("#ai2LikeCount"), dc = $("#ai2DislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      ai2Posts.forEach(function (x) { if (String(x.id) === String(ai2ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderAi2();
+    });
+  });
+  if (ai2InlineDislike) ai2InlineDislike.addEventListener("click", function () {
+    if (!ai2ViewingId) return;
+    window.BaiooVote.send(ai2ViewingId, "dislike", function (data) {
+      var lc = $("#ai2LikeCount"), dc = $("#ai2DislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      ai2Posts.forEach(function (x) { if (String(x.id) === String(ai2ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderAi2();
+    });
+  });
+
+  var ai2CmtList = $("#ai2CmtList"), ai2CmtCount = $("#ai2CmtCount"), ai2CmtToggle = $("#ai2CmtToggle"),
+      ai2CmtAuthor = $("#ai2CmtAuthor"), ai2CmtInput = $("#ai2CmtInput"), ai2CmtSend = $("#ai2CmtSend");
+  var ai2CmtAll = [], ai2CmtOpen = false;
+  function renderAi2Cmt() {
+    if (!ai2CmtList) return;
+    ai2CmtList.textContent = "";
+    var show = ai2CmtOpen ? ai2CmtAll : ai2CmtAll.slice(0, 10);
+    show.forEach(function (cm) {
+      var d = document.createElement("div");
+      d.className = "cmt-item";
+      var isAdmin = document.body.classList.contains("is-admin");
+      d.innerHTML = "<b>" + window.BaiooCmt.esc(cm.author) + "</b> " + window.BaiooCmt.esc(cm.content) + (isAdmin ? ' <button type="button" class="cmt-del" data-cid="' + cm.id + '">삭제</button>' : "");
+      ai2CmtList.appendChild(d);
+    });
+    if (ai2CmtCount) ai2CmtCount.textContent = ai2CmtAll.length;
+    if (ai2CmtToggle) { ai2CmtToggle.hidden = ai2CmtAll.length <= 10; ai2CmtToggle.textContent = ai2CmtOpen ? "접기" : ("더 보기 (" + ai2CmtAll.length + ")"); }
+  }
+  function loadAi2Cmt() {
+    if (!ai2ViewingId) return;
+    window.BaiooCmt.list(ai2ViewingId).then(function (rows) { ai2CmtAll = rows || []; ai2CmtOpen = false; renderAi2Cmt(); }).catch(function () { ai2CmtAll = []; renderAi2Cmt(); });
+  }
+  if (ai2CmtToggle) ai2CmtToggle.addEventListener("click", function () { ai2CmtOpen = !ai2CmtOpen; renderAi2Cmt(); });
+  if (ai2CmtSend) ai2CmtSend.addEventListener("click", function () {
+    if (!ai2ViewingId) return;
+    var a = (ai2CmtAuthor && ai2CmtAuthor.value.trim()) || "익명";
+    var c = (ai2CmtInput && ai2CmtInput.value.trim()) || "";
+    if (!c) { window.alert("댓글을 입력하세요."); return; }
+    ai2CmtSend.disabled = true;
+    window.BaiooCmt.create(ai2ViewingId, a, c).then(function (j) {
+      if (!j || !j.ok) throw new Error((j && j.message) || "fail");
+      if (ai2CmtInput) ai2CmtInput.value = "";
+      loadAi2Cmt();
+    }).catch(function (err) { window.alert("댓글 실패: " + ((err && err.message) || err)); })
+    .then(function () { ai2CmtSend.disabled = false; });
+  });
+  if (ai2CmtList) ai2CmtList.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cid]");
+    if (!b) return;
+    if (!window.confirm("댓글을 삭제할까요?")) return;
+    window.BaiooCmt.remove(b.getAttribute("data-cid")).then(function () { loadAi2Cmt(); });
+  });
+
+  ai2DeleteBtn.addEventListener("click", function () {
+    if (!ai2ViewingId) return;
+    if (!window.confirm("이 글을 삭제할까요? 첨부 파일도 함께 삭제됩니다.")) return;
+    ai2DeleteBtn.disabled = true;
+    fetch("/api/" + encodeURIComponent(ai2ViewingId), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: ai2ViewingId })
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        closeDlg(ai2ViewDlg);
+        ai2ViewingId = null;
+        var panel = $("#ai2ViewPanel");
+        if (panel) panel.hidden = true;
+        return loadAi2();
+      })
+      .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
+      .then(function () { ai2DeleteBtn.disabled = false; });
+  });
+
+  var ai2EditBtn = $("#ai2ViewEdit");
+  if (ai2EditBtn) {
+    ai2EditBtn.addEventListener("click", function () {
+      if (!ai2ViewingId) return;
+      var p = null;
+      ai2Posts.forEach(function (x) { if (x.id === ai2ViewingId) p = x; });
+      if (!p) return;
+      ai2EditingId = ai2ViewingId;
+      ai2TitleInput.value = p.title || "";
+      ai2DateInput.value = p.date || "";
+      ai2ContentInput.value = p.content || "";
+      ai2Picked = [];
+      renderAi2Preview();
+      ai2ErrorEl.textContent = "";
+      var bdt = $("#ai2FormDialog .dlg-title"); if (bdt) bdt.textContent = "Video 글 수정";
+      ai2SubmitBtn.textContent = "저장";
+      if (ai2ViewDlg && ai2ViewDlg.open) closeDlg(ai2ViewDlg);
+      openDlg(ai2FormDlg);
+      ai2TitleInput.focus();
+    });
+  }
+
+  loadAi2();
+})();
+
+/* ===== BAIOO AI Video 스튜디오 (Video 복제) ===== */
+/* ===== BAIOO AI Video 스튜디오 (영상 필터·등록) ===== */
+(function () {
+  "use strict";
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+
+  var STORAGE_CUSTOM = "baioo_ai2_custom_ideas_v1";
+  var STORAGE_LIKES = "baioo_ai2_likes_v1";
+
+  var CATEGORY_META = {
+    clip:    { label: "숏폼 클립",  emoji: "🎬", gradient: "linear-gradient(135deg, #F43F5E 0%, #E11D48 100%)" },
+    story:   { label: "스토리 영상", emoji: "📖", gradient: "linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%)" },
+    tutorial:{ label: "튜토리얼",   emoji: "🎓", gradient: "linear-gradient(135deg, #0EA5E9 0%, #3B82F6 100%)" },
+    lab:     { label: "실험실",     emoji: "💡", gradient: "linear-gradient(135deg, #F59E0B 0%, #EA580C 100%)" }
+  };
+
+  var STATUS_META = {
+    live:    { label: "✨ LIVE 확정",   cls: "live" },
+    beta:    { label: "🧪 DRAFT 시안",  cls: "beta" },
+    concept: { label: "📐 CONCEPT",     cls: "concept" }
+  };
+
+  var state = {
+    category: "all",
+    status: "all",
+    sort: "newest",
+    query: "",
+    bookmarkedOnly: false,
+    activeBrandId: null
+  };
+
+  function loadJson(key, fallback) {
+    try {
+      var raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  function saveJson(key, val) {
+    try {
+      localStorage.setItem(key, JSON.stringify(val));
+    } catch (e) {}
+  }
+
+  var customBrands = loadJson(STORAGE_CUSTOM, []);
+  var editingBrandId = null;
+  if (!Array.isArray(customBrands)) customBrands = [];
+  var likedMap = loadJson(STORAGE_LIKES, {});
+  if (!likedMap || typeof likedMap !== "object") likedMap = {};
+
+  function getAllBrands() {
+    return customBrands.slice();
+  }
+
+  function getLikeCount(item) {
+    return Number(item.baseLikes || 0) + (likedMap[item.id] ? 1 : 0);
+  }
+
+  var gridEl = $("#ai2IdeaGrid");
+  var searchInput = $("#ai2SearchInput");
+  var statusSelect = $("#ai2StatusSelect");
+  var sortSelect = $("#ai2SortSelect");
+  var catBar = $("#ai2CategoryBar");
+  var chipsEl = $("#ai2ActiveChips");
+  var countEl = $("#ai2ResultCount");
+  var statTotalEl = $("#ai2StatTotal");
+  var statLiveEl = $("#ai2StatLive");
+  var statLikesEl = $("#ai2StatLikes");
+  var bookmarkFilterBtn = $("#ai2FilterBookmarkedBtn");
+  var openAddBtn = $("#ai2OpenAddBtn");
+  var toastEl = $("#aiToast");
+  var toastTimer = null;
+
+  function showToast(msg) {
+    if (!toastEl) return;
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toastEl.classList.remove("show");
+    }, 2400);
+  }
+
+  function copyText(text, successMsg) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        showToast(successMsg || "✨ 클립보드에 복사되었습니다!");
+      }).catch(function () {
+        fallbackCopy(text, successMsg);
+      });
+    } else {
+      fallbackCopy(text, successMsg);
+    }
+  }
+
+  function fallbackCopy(text, successMsg) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.cssText = "position:fixed;left:-9999px;top:0;";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      showToast(successMsg || "✨ 클립보드에 복사되었습니다!");
+    } catch (e) {
+      showToast("복사에 실패했습니다.");
+    }
+  }
+
+  function createSwatchBar(colors) {
+    var bar = document.createElement("div");
+    bar.className = "br-swatch-bar";
+    (colors || ["#F43F5E", "#8B5CF6", "#0F172A"]).slice(0, 3).forEach(function (hex) {
+      var chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "br-swatch-chip";
+      chip.style.background = hex;
+      chip.textContent = hex;
+      chip.title = "클릭하여 컬러 코드 " + hex + " 복사";
+      chip.addEventListener("click", function (e) {
+        e.stopPropagation();
+        copyText(hex, "🎨 컬러 코드 " + hex + " 복사 완료!");
+      });
+      bar.appendChild(chip);
+    });
+    return bar;
+  }
+
+  function updateStats() {
+    var all = getAllBrands();
+    var liveCount = 0;
+    var totalLikes = 0;
+    all.forEach(function (item) {
+      if (item.status === "live") liveCount += 1;
+      totalLikes += getLikeCount(item);
+    });
+    if (statTotalEl) statTotalEl.textContent = String(all.length);
+    if (statLiveEl) statLiveEl.textContent = String(liveCount);
+    if (statLikesEl) statLikesEl.textContent = String(totalLikes);
+  }
+
+  function syncControls() {
+    if (searchInput && searchInput.value !== state.query) searchInput.value = state.query;
+    if (statusSelect) statusSelect.value = state.status;
+    if (sortSelect) sortSelect.value = state.sort;
+    if (bookmarkFilterBtn) bookmarkFilterBtn.classList.toggle("active", state.bookmarkedOnly);
+    if (catBar) {
+      $$(".ai-cat-btn", catBar).forEach(function (b) {
+        b.classList.toggle("active", b.getAttribute("data-cat") === state.category);
+      });
+    }
+  }
+
+  function renderChips() {
+    if (!chipsEl) return;
+    chipsEl.textContent = "";
+
+    function addChip(label, onRemove) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "ai-chip";
+      btn.textContent = label + " ×";
+      btn.addEventListener("click", onRemove);
+      chipsEl.appendChild(btn);
+    }
+
+    if (state.category !== "all") {
+      var cMeta = CATEGORY_META[state.category];
+      addChip("카테고리: " + (cMeta ? cMeta.label : state.category), function () {
+        state.category = "all";
+        syncControls();
+        renderAll();
+      });
+    }
+    if (state.status !== "all") {
+      var sMeta = STATUS_META[state.status];
+      addChip("상태: " + (sMeta ? sMeta.label : state.status), function () {
+        state.status = "all";
+        syncControls();
+        renderAll();
+      });
+    }
+    if (state.bookmarkedOnly) {
+      addChip("♥ 관심 영상", function () {
+        state.bookmarkedOnly = false;
+        syncControls();
+        renderAll();
+      });
+    }
+    if (state.query.trim()) {
+      addChip("검색: \"" + state.query.trim() + "\"", function () {
+        state.query = "";
+        syncControls();
+        renderAll();
+      });
+    }
+  }
+
+  function filterAndSortBrands() {
+    var q = state.query.trim().toLowerCase();
+    var filtered = getAllBrands().filter(function (item) {
+      if (state.category !== "all" && item.category !== state.category) return false;
+      if (state.status !== "all" && item.status !== state.status) return false;
+      if (state.bookmarkedOnly && !likedMap[item.id]) return false;
+      if (q) {
+        var hay = [
+          item.title,
+          item.slogan,
+          item.summary,
+          item.code,
+          (item.colors || []).join(" "),
+          (item.tags || []).join(" ")
+        ].join(" ").toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+
+    filtered.sort(function (a, b) {
+      if (state.sort === "popular") return getLikeCount(b) - getLikeCount(a);
+      if (state.sort === "title") return String(a.title).localeCompare(String(b.title), "ko");
+      return String(b.date || "").localeCompare(String(a.date || ""));
+    });
+
+    return filtered;
+  }
+
+  function createBrandCard(item) {
+    var card = document.createElement("article");
+    card.className = "ai-card";
+    card.tabIndex = 0;
+
+    card.addEventListener("mousemove", function (e) {
+      var rect = card.getBoundingClientRect();
+      card.style.setProperty("--mx", (e.clientX - rect.left) + "px");
+      card.style.setProperty("--my", (e.clientY - rect.top) + "px");
+    });
+
+    var sMeta = STATUS_META[item.status] || STATUS_META.live;
+    var cMeta = CATEGORY_META[item.category] || CATEGORY_META.clip;
+
+    var top = document.createElement("div");
+    top.className = "ai-card-top";
+    var pill = document.createElement("span");
+    pill.className = "ai-status-pill " + sMeta.cls;
+    pill.textContent = sMeta.label;
+    var ver = document.createElement("span");
+    ver.className = "ai-version-code";
+    ver.textContent = (item.code || "BRAND") + " · " + (item.version || "v1.0");
+    top.appendChild(pill);
+    top.appendChild(ver);
+
+    var visual = document.createElement("div");
+    visual.className = "ai-card-visual";
+    var photoUrl = item.photo || item.image || item.cover || ((item.photos && item.photos[0]) ? (item.photos[0].url || item.photos[0]) : "");
+    if (photoUrl) {
+      visual.style.background = item.gradient || cMeta.gradient;
+      var photo = document.createElement("img");
+      photo.src = photoUrl;
+      photo.alt = item.title || "";
+      photo.loading = "lazy";
+      visual.appendChild(photo);
+      var catLabel = document.createElement("span");
+      catLabel.className = "ai-card-cat-label";
+      catLabel.textContent = cMeta.label;
+      visual.appendChild(catLabel);
+    } else {
+      visual.style.display = "none";
+    }
+
+    var title = document.createElement("h3");
+    title.className = "ai-card-title";
+    title.textContent = item.title;
+
+    var slogan = document.createElement("div");
+    slogan.className = "br-slogan-pill";
+    slogan.textContent = "“" + (item.slogan || "Brilliant Brand Identity") + "”";
+
+    var desc = document.createElement("p");
+    desc.className = "ai-card-desc";
+    desc.textContent = item.summary;
+
+    var swatches = createSwatchBar(item.colors);
+
+    var tagList = document.createElement("div");
+    tagList.className = "ai-tag-list";
+    (item.tags || []).forEach(function (t) {
+      var tg = document.createElement("span");
+      tg.className = "ai-tag-item";
+      tg.textContent = "#" + t;
+      tagList.appendChild(tg);
+    });
+
+    var foot = document.createElement("div");
+    foot.className = "ai-card-foot";
+
+    var likeBtn = document.createElement("button");
+    likeBtn.type = "button";
+    var isLiked = Boolean(likedMap[item.id]);
+    likeBtn.className = "ai-like-btn" + (isLiked ? " liked" : "");
+    likeBtn.textContent = (isLiked ? "♥ " : "♡ ") + getLikeCount(item);
+    likeBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (likedMap[item.id]) {
+        delete likedMap[item.id];
+        showToast("관심 영상에서 해제했습니다.");
+      } else {
+        likedMap[item.id] = true;
+        showToast("♥ 관심 영상으로 저장했습니다!");
+      }
+      saveJson(STORAGE_LIKES, likedMap);
+      renderAll();
+    });
+
+    var actions = document.createElement("div");
+    actions.className = "ai-card-actions";
+
+    var copyBtn = document.createElement("button");
+    copyBtn.type = "button";
+    copyBtn.className = "ai-action-btn";
+    copyBtn.textContent = "📋 영상킷 복사";
+    copyBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      copyText(item.prompt || item.summary, "✨ [" + item.title + "] 영상 키트가 복사되었습니다!");
+    });
+
+    var detailBtn = document.createElement("button");
+    detailBtn.type = "button";
+    detailBtn.className = "ai-action-btn";
+    detailBtn.textContent = "상세 열기 →";
+    detailBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      openDetailModal(item.id);
+    });
+
+    actions.appendChild(copyBtn);
+    actions.appendChild(detailBtn);
+    if (String(item.id || "").indexOf("baioo-ai2-") === 0) {
+      var ai2EdB = document.createElement("button");
+      ai2EdB.type = "button";
+      ai2EdB.className = "ai-action-btn admin-only";
+      ai2EdB.textContent = "✏️ 수정";
+      ai2EdB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        editingBrandId = item.id;
+        if (inputTitle) inputTitle.value = item.title || "";
+        if (inputSlogan) inputSlogan.value = item.slogan || "";
+        if (inputCategory) inputCategory.value = item.category || "clip";
+        if (inputStatus) inputStatus.value = item.status || "live";
+        if (inputColors) inputColors.value = (item.colors || []).join(", ");
+        if (inputTags) inputTags.value = (item.tags || []).join(", ");
+        if (inputSummary) inputSummary.value = item.summary || "";
+        if (inputPrompt) inputPrompt.value = item.prompt || "";
+        if (addError) addError.textContent = "";
+        if (addDlg && !addDlg.open) addDlg.showModal();
+        if (inputTitle) inputTitle.focus();
+      });
+      var ai2DelB = document.createElement("button");
+      ai2DelB.type = "button";
+      ai2DelB.className = "ai-action-btn admin-only";
+      ai2DelB.textContent = "🗑️ 삭제";
+      ai2DelB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (!window.confirm("이 아이디어를 삭제할까요?")) return;
+        customBrands = customBrands.filter(function (c) { return c.id !== item.id; });
+        saveJson(STORAGE_CUSTOM, customBrands);
+        ideaServerDelete("ai2", item.id);
+        showToast("삭제되었습니다!");
+        renderAll();
+      });
+      actions.appendChild(ai2EdB);
+      actions.appendChild(ai2DelB);
+    }
+    foot.appendChild(likeBtn);
+    foot.appendChild(actions);
+
+    card.appendChild(top);
+    card.appendChild(visual);
+    card.appendChild(title);
+    card.appendChild(slogan);
+    card.appendChild(desc);
+    card.appendChild(swatches);
+    card.appendChild(tagList);
+    card.appendChild(foot);
+
+    card.addEventListener("click", function () { openDetailModal(item.id); });
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openDetailModal(item.id);
+      }
+    });
+
+    return card;
+  }
+
+  function renderAll() {
+    if (!gridEl) return;
+    updateStats();
+    renderChips();
+
+    var list = filterAndSortBrands();
+    if (countEl) countEl.textContent = "총 " + list.length + "개의 영상 아이디어";
+
+    gridEl.textContent = "";
+    if (!list.length) {
+      var empty = document.createElement("div");
+      empty.className = "ai-empty-state";
+      var p = document.createElement("p");
+      p.textContent = "조건에 맞는 영상 프로젝트가 없습니다.";
+      var resetBtn = document.createElement("button");
+      resetBtn.type = "button";
+      resetBtn.className = "ai-btn-primary";
+      resetBtn.textContent = "필터 전체 초기화";
+      resetBtn.addEventListener("click", function () {
+        state.category = "all";
+        state.status = "all";
+        state.query = "";
+        state.bookmarkedOnly = false;
+        syncControls();
+        renderAll();
+      });
+      empty.appendChild(p);
+      empty.appendChild(resetBtn);
+      gridEl.appendChild(empty);
+      return;
+    }
+
+    baiooCardPage(gridEl, state, renderAll, list).forEach(function (item) {
+      gridEl.appendChild(createBrandCard(item));
+    });
+  }
+
+  var detailDlg = $("#ai2DetailDialog");
+  var detailStatus = $("#ai2DetailStatus");
+  var detailCode = $("#ai2DetailCode");
+  var detailDate = $("#ai2DetailDate");
+  var detailTitle = $("#ai2DetailTitle");
+  var detailSlogan = $("#ai2DetailSlogan");
+  var detailSummary = $("#ai2DetailSummary");
+  var detailSwatches = $("#ai2DetailSwatches");
+  var detailTags = $("#ai2DetailTags");
+  var detailPrompt = $("#ai2DetailPrompt");
+  var detailPhoto = $("#ai2DetailPhoto");
+  var copyKitBtn = $("#ai2CopyKitBtn");
+  var shareLinkBtn = $("#ai2ShareLinkBtn");
+  var deleteCustomBtn = $("#ai2DeleteCustomBtn");
+
+  function openDetailModal(id) {
+    var target = null;
+    getAllBrands().forEach(function (x) { if (x.id === id) target = x; });
+    if (!target || !detailDlg) return;
+
+    state.activeBrandId = id;
+    var sMeta = STATUS_META[target.status] || STATUS_META.live;
+    if (detailStatus) {
+      detailStatus.className = "ai-status-pill " + sMeta.cls;
+      detailStatus.textContent = sMeta.label;
+    }
+    if (detailCode) detailCode.textContent = (target.code || "BRAND") + " · " + (target.version || "v1.0");
+    if (detailDate) detailDate.textContent = "🗓 " + (target.date || "2026-10-19");
+    if (detailTitle) detailTitle.textContent = target.title;
+    if (detailSlogan) detailSlogan.textContent = "“" + (target.slogan || "") + "”";
+    if (detailSummary) detailSummary.textContent = target.summary;
+    if (detailSwatches) {
+      detailSwatches.textContent = "";
+      var bar = createSwatchBar(target.colors);
+      while (bar.firstChild) detailSwatches.appendChild(bar.firstChild);
+    }
+    if (detailTags) {
+      detailTags.textContent = "";
+      (target.tags || []).forEach(function (t) {
+        var tg = document.createElement("span");
+        tg.className = "ai-tag-item";
+        tg.textContent = "#" + t;
+        detailTags.appendChild(tg);
+      });
+    }
+    if (detailPrompt) detailPrompt.textContent = target.prompt || target.summary;
+    if (detailPhoto) {
+      detailPhoto.textContent = "";
+      var photoUrl = target.photo || target.image || target.cover || ((target.photos && target.photos[0]) ? (target.photos[0].url || target.photos[0]) : "");
+      if (photoUrl) {
+        var img = document.createElement("img");
+        img.src = photoUrl;
+        img.alt = target.title || "";
+        img.loading = "lazy";
+        detailPhoto.appendChild(img);
+        detailPhoto.hidden = false;
+      } else {
+        detailPhoto.hidden = true;
+      }
+    }
+    if (deleteCustomBtn) {
+      var isCustom = customBrands.some(function (c) { return c.id === id; });
+      deleteCustomBtn.hidden = !isCustom;
+    }
+    if (!detailDlg.open) detailDlg.showModal();
+  }
+
+  if (copyKitBtn) {
+    copyKitBtn.addEventListener("click", function () {
+      var target = null;
+      getAllBrands().forEach(function (x) { if (x.id === state.activeBrandId) target = x; });
+      if (!target) return;
+      copyText(target.prompt || target.summary, "✨ 영상 키트가 클립보드에 복사되었습니다!");
+    });
+  }
+
+  if (shareLinkBtn) {
+    shareLinkBtn.addEventListener("click", function () {
+      var target = null;
+      getAllBrands().forEach(function (x) { if (x.id === state.activeBrandId) target = x; });
+      var shareText = target
+        ? "[BAIOO Video] " + target.title + " (" + target.slogan + ") - " + location.origin + location.pathname + "#branding"
+        : location.href;
+      copyText(shareText, "🔗 영상 공유 링크가 복사되었습니다!");
+    });
+  }
+
+  if (deleteCustomBtn) {
+    deleteCustomBtn.addEventListener("click", function () {
+      if (!state.activeBrandId) return;
+      customBrands = customBrands.filter(function (c) { return c.id !== state.activeBrandId; });
+      saveJson(STORAGE_CUSTOM, customBrands);
+      ideaServerDelete("ai2", state.activeBrandId);
+      if (detailDlg && detailDlg.open) detailDlg.close();
+      showToast("영상 아이디어가 삭제되었습니다.");
+      renderAll();
+    });
+  }
+
+  var addDlg = $("#ai2AddDialog");
+  var addForm = $("#ai2AddForm");
+  var inputTitle = $("#ai2InputTitle");
+  var inputSlogan = $("#ai2InputSlogan");
+  var inputCategory = $("#ai2InputCategory");
+  var inputStatus = $("#ai2InputStatus");
+  var inputColors = $("#ai2InputColors");
+  var inputTags = $("#ai2InputTags");
+  var inputSummary = $("#ai2InputSummary");
+  var inputPrompt = $("#ai2InputPrompt");
+  var addError = $("#ai2AddError");
+
+  if (openAddBtn && addDlg) {
+    openAddBtn.addEventListener("click", function () {
+      editingBrandId = null;
+      if (addForm) addForm.reset();
+      if (inputColors) inputColors.value = "#F43F5E, #8B5CF6, #0F172A";
+      if (addError) addError.textContent = "";
+      if (!addDlg.open) addDlg.showModal();
+      if (inputTitle) inputTitle.focus();
+    });
+  }
+
+  if (addForm) {
+    addForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var titleVal = (inputTitle && inputTitle.value || "").trim();
+      var sloganVal = (inputSlogan && inputSlogan.value || "").trim();
+      var summaryVal = (inputSummary && inputSummary.value || "").trim();
+      if (!titleVal) {
+        if (addError) addError.textContent = "영상명 / 프로젝트 제목을 입력해 주세요.";
+        if (inputTitle) inputTitle.focus();
+        return;
+      }
+      if (!sloganVal) {
+        if (addError) addError.textContent = "핵심 슬로건을 입력해 주세요.";
+        if (inputSlogan) inputSlogan.focus();
+        return;
+      }
+      if (!summaryVal) {
+        if (addError) addError.textContent = "영상 기획 의도 및 요약을 입력해 주세요.";
+        if (inputSummary) inputSummary.focus();
+        return;
+      }
+
+      var catVal = (inputCategory && inputCategory.value) || "clip";
+      var cMeta = CATEGORY_META[catVal] || CATEGORY_META.clip;
+
+      var rawColors = (inputColors && inputColors.value || "").split(",");
+      var cleanColors = [];
+      rawColors.forEach(function (c) {
+        var trimmed = c.trim();
+        if (/^#[0-9A-Fa-f]{3,8}$/.test(trimmed)) cleanColors.push(trimmed.toUpperCase());
+      });
+      if (!cleanColors.length) cleanColors = ["#F43F5E", "#8B5CF6", "#0F172A"];
+
+      var rawTags = (inputTags && inputTags.value || "").split(",");
+      var cleanTags = [];
+      rawTags.forEach(function (t) {
+        var trimmed = t.trim().replace(/^#/, "");
+        if (trimmed) cleanTags.push(trimmed);
+      });
+      if (!cleanTags.length) cleanTags = ["BAIOO", cMeta.label];
+
+      if (editingBrandId) {
+        var bTarget = null;
+        customBrands.forEach(function (x) { if (x.id === editingBrandId) bTarget = x; });
+        if (bTarget) {
+          bTarget.title = titleVal;
+          bTarget.slogan = sloganVal;
+          bTarget.category = catVal;
+          bTarget.status = (inputStatus && inputStatus.value) || bTarget.status;
+          bTarget.colors = cleanColors;
+          bTarget.tags = cleanTags;
+          bTarget.summary = summaryVal;
+          bTarget.prompt = (inputPrompt && inputPrompt.value.trim()) || ("[" + titleVal + "]\n- 슬로건: " + sloganVal + "\n- 컬러: " + cleanColors.join(", ") + "\n- 설명: " + summaryVal);
+          bTarget.emoji = cMeta.emoji;
+          bTarget.gradient = cMeta.gradient;
+          saveJson(STORAGE_CUSTOM, customBrands);
+          ideaServerUpsert("ai2", bTarget);
+          showToast("✨ 수정되었습니다!");
+        }
+        editingBrandId = null;
+      } else {
+        var newBrand = {
+          id: "baioo-ai2-" + Date.now(),
+          code: "VIDEO-" + String(getAllBrands().length + 1).padStart(3, "0"),
+          version: "v1.0",
+          status: (inputStatus && inputStatus.value) || "live",
+          category: catVal,
+          emoji: cMeta.emoji,
+          gradient: cMeta.gradient,
+          title: titleVal,
+          slogan: sloganVal,
+          colors: cleanColors,
+          summary: summaryVal,
+          tags: cleanTags,
+          date: new Date().toISOString().slice(0, 10),
+          baseLikes: 1,
+          prompt: (inputPrompt && inputPrompt.value.trim()) || ("[" + titleVal + "]\n- 슬로건: " + sloganVal + "\n- 컬러: " + cleanColors.join(", ") + "\n- 설명: " + summaryVal)
+        };
+
+        customBrands.unshift(newBrand);
+        saveJson(STORAGE_CUSTOM, customBrands);
+        ideaServerUpsert("ai2", newBrand);
+        showToast("✨ 새 영상 아이디어가 스튜디오에 배포되었습니다!");
+      }
+      addForm.reset();
+      if (inputColors) inputColors.value = "#F43F5E, #8B5CF6, #0F172A";
+      if (addDlg && addDlg.open) addDlg.close();
+      renderAll();
+    });
+  }
+
+  if (catBar) {
+    $$(".ai-cat-btn", catBar).forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        state.category = btn.getAttribute("data-cat") || "all";
+        syncControls();
+        renderAll();
+      });
+    });
+  }
+  if (statusSelect) {
+    statusSelect.addEventListener("change", function () {
+      state.status = statusSelect.value || "all";
+      renderAll();
+    });
+  }
+  if (sortSelect) {
+    sortSelect.addEventListener("change", function () {
+      state.sort = sortSelect.value || "newest";
+      renderAll();
+    });
+  }
+  if (searchInput) {
+    searchInput.addEventListener("input", function () {
+      state.query = searchInput.value || "";
+      renderAll();
+    });
+  }
+  if (bookmarkFilterBtn) {
+    bookmarkFilterBtn.addEventListener("click", function () {
+      state.bookmarkedOnly = !state.bookmarkedOnly;
+      syncControls();
+      renderAll();
+    });
+  }
+
+  $$("[data-close='ai2DetailDialog'], [data-close='ai2AddDialog']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var d = document.getElementById(b.getAttribute("data-close"));
+      if (d && d.open) d.close();
+    });
+  });
+
+  renderAll();
+  ideaServerSync("ai2", function () { return customBrands; }, function (items) {
+    customBrands = items;
+    saveJson(STORAGE_CUSTOM, customBrands);
+    renderAll();
+  });
+})();
+
+
 /* ===== BAIOO Pets Care & Idea Hub (#bunny 필터·검색·복사·등록) ===== */
 (function () {
   "use strict";
@@ -11033,7 +12377,7 @@ function openIdeaForm(ctx) {
   });
 })();
 /* ===== 브랜딩 대문명 관리자 수정 (네비+섹션 동기화+localStorage) ===== */(function () {
-  [["brGate1", "brGate1Link", "brGate1Edit", "baioo_brGate1NameV2"], ["brGate2", "brGate2Link", "brGate2Edit", "baioo_brGate2NameV2"]].forEach(function (c) {
+  [["brGate1", "brGate1Link", "brGate1Edit", "baioo_brGate1NameV2"], ["brGate2", "brGate2Link", "brGate2Edit", "baioo_brGate2NameV2"], ["aiGate2", "aiGate2Link", "aiGate2Edit", "baioo_aiGate2NameV2"]].forEach(function (c) {
     var gate = document.getElementById(c[0]);
     var link = document.getElementById(c[1]);
     var btn = document.getElementById(c[2]);
