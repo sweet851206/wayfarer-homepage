@@ -4271,10 +4271,8 @@
       <span class="post-date" id="br3DetailDate" style="margin:0"></span>
     </div>
     <h3 class="dlg-title" id="br3DetailTitle"></h3>
-    <div class="br-slogan-pill" id="br3DetailSlogan"></div>
     <div class="view-photos" id="br3DetailPhoto" hidden></div>
     <p id="br3DetailSummary" style="color:var(--text);line-height:1.8;margin-bottom:14px;"></p>
-    <div class="br-swatch-bar" id="br3DetailSwatches"></div>
     <div class="ai-tag-list" id="br3DetailTags"></div>
 
     <div class="ai-prompt-label">
@@ -4299,10 +4297,6 @@
       <div class="field">
         <label for="br3InputTitle">오브젝트명 / 프로젝트 제목 *</label>
         <input type="text" id="br3InputTitle" placeholder="예: BAIOO — 글로벌 AI 네이밍 시스템" required>
-      </div>
-      <div class="field">
-        <label for="br3InputSlogan">핵심 슬로건 (Tagline) *</label>
-        <input type="text" id="br3InputSlogan" placeholder="예: Brilliant AI, Infinite Possibilities" required>
       </div>
       <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
         <div>
@@ -4342,15 +4336,9 @@
           </div>
         </div>
       </div>
-<div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div>
-          <label for="br3InputColors">대표 컬러 HEX (쉼표 구분 3개)</label>
-          <input type="text" id="br3InputColors" placeholder="예: #F43F5E, #8B5CF6, #0F172A" value="#F43F5E, #8B5CF6, #0F172A">
-        </div>
-        <div>
-          <label for="br3InputTags">태그 (쉼표 구분)</label>
-          <input type="text" id="br3InputTags" placeholder="예: 네이밍, 슬로건, 컬러칩">
-        </div>
+      <div class="field">
+        <label for="br3InputTags">태그 (쉼표 구분)</label>
+        <input type="text" id="br3InputTags" placeholder="예: 네이밍, 슬로건, 컬러칩">
       </div>
       <div class="field">
         <label for="br3InputSummary">오브젝트 기획 의도 및 요약 *</label>
@@ -10196,24 +10184,6 @@ fd.append("pw", pwValbunny);
     }
   }
 
-  function createSwatchBar(colors) {
-    var bar = document.createElement("div");
-    bar.className = "br-swatch-bar";
-    (colors || ["#F43F5E", "#8B5CF6", "#0F172A"]).slice(0, 3).forEach(function (hex) {
-      var chip = document.createElement("button");
-      chip.type = "button";
-      chip.className = "br-swatch-chip";
-      chip.style.background = hex;
-      chip.textContent = hex;
-      chip.title = "클릭하여 컬러 코드 " + hex + " 복사";
-      chip.addEventListener("click", function (e) {
-        e.stopPropagation();
-        copyText(hex, "🎨 컬러 코드 " + hex + " 복사 완료!");
-      });
-      bar.appendChild(chip);
-    });
-    return bar;
-  }
 
   function updateStats() {
     var all = getAllBrands();
@@ -10294,7 +10264,6 @@ fd.append("pw", pwValbunny);
       if (q) {
         var hay = [
           item.title,
-          item.slogan,
           item.summary,
           item.code,
           (item.colors || []).join(" "),
@@ -10383,15 +10352,10 @@ fd.append("pw", pwValbunny);
     title.className = "ai-card-title";
     title.textContent = item.title;
 
-    var slogan = document.createElement("div");
-    slogan.className = "br-slogan-pill";
-    slogan.textContent = "“" + (item.slogan || "Brilliant Brand Identity") + "”";
-
-    var desc = document.createElement("p");
+var desc = document.createElement("p");
     desc.className = "ai-card-desc";
     desc.textContent = item.summary;
 
-    var swatches = createSwatchBar(item.colors);
 
     var tagList = document.createElement("div");
     tagList.className = "ai-tag-list";
@@ -10455,10 +10419,8 @@ fd.append("pw", pwValbunny);
         e.stopPropagation();
         editingBrandId = item.id;
         if (inputTitle) inputTitle.value = item.title || "";
-        if (inputSlogan) inputSlogan.value = item.slogan || "";
         if (inputCategory) inputCategory.value = item.category || "naming";
         if (inputStatus) inputStatus.value = item.status || "live";
-        if (inputColors) inputColors.value = (item.colors || []).join(", ");
         if (inputTags) inputTags.value = (item.tags || []).join(", ");
         if (inputSummary) inputSummary.value = item.summary || "";
         if (inputPrompt) inputPrompt.value = item.prompt || "";
@@ -10488,9 +10450,7 @@ fd.append("pw", pwValbunny);
     card.appendChild(top);
     card.appendChild(visual);
     card.appendChild(title);
-    card.appendChild(slogan);
     card.appendChild(desc);
-    card.appendChild(swatches);
     card.appendChild(tagList);
     card.appendChild(foot);
 
@@ -10547,9 +10507,7 @@ fd.append("pw", pwValbunny);
   var detailCode = $("#br3DetailCode");
   var detailDate = $("#br3DetailDate");
   var detailTitle = $("#br3DetailTitle");
-  var detailSlogan = $("#br3DetailSlogan");
   var detailSummary = $("#br3DetailSummary");
-  var detailSwatches = $("#br3DetailSwatches");
   var detailTags = $("#br3DetailTags");
   var detailPrompt = $("#br3DetailPrompt");
   var detailPhoto = $("#br3DetailPhoto");
@@ -10571,13 +10529,7 @@ fd.append("pw", pwValbunny);
     if (detailCode) detailCode.textContent = (target.code || "BRAND") + " · " + (target.version || "v1.0");
     if (detailDate) detailDate.textContent = "🗓 " + (target.date || "2026-10-19");
     if (detailTitle) detailTitle.textContent = target.title;
-    if (detailSlogan) detailSlogan.textContent = "“" + (target.slogan || "") + "”";
     if (detailSummary) detailSummary.textContent = target.summary;
-    if (detailSwatches) {
-      detailSwatches.textContent = "";
-      var bar = createSwatchBar(target.colors);
-      while (bar.firstChild) detailSwatches.appendChild(bar.firstChild);
-    }
     if (detailTags) {
       detailTags.textContent = "";
       (target.tags || []).forEach(function (t) {
@@ -10631,7 +10583,7 @@ fd.append("pw", pwValbunny);
       var target = null;
       getAllBrands().forEach(function (x) { if (x.id === state.activeBrandId) target = x; });
       var shareText = target
-        ? "[BAIOO Branding] " + target.title + " (" + target.slogan + ") - " + location.origin + location.pathname + "#branding"
+        ? "[BAIOO Branding] " + target.title + " - " + location.origin + location.pathname + "#branding"
         : location.href;
       copyText(shareText, "🔗 브랜딩 공유 링크가 복사되었습니다!");
     });
@@ -10652,10 +10604,8 @@ fd.append("pw", pwValbunny);
   var addDlg = $("#br3AddDialog");
   var addForm = $("#br3AddForm");
   var inputTitle = $("#br3InputTitle");
-  var inputSlogan = $("#br3InputSlogan");
   var inputCategory = $("#br3InputCategory");
   var inputStatus = $("#br3InputStatus");
-  var inputColors = $("#br3InputColors");
   var inputTags = $("#br3InputTags");
   var inputSummary = $("#br3InputSummary");
   var inputPrompt = $("#br3InputPrompt");
@@ -10699,7 +10649,6 @@ fd.append("pw", pwValbunny);
     openAddBtn.addEventListener("click", function () {
       editingBrandId = null;
       if (addForm) addForm.reset();
-      if (inputColors) inputColors.value = "#F43F5E, #8B5CF6, #0F172A";
       pickedPhoto = null; pickedVideo = null; if (photoNameEl) photoNameEl.textContent = "선택된 사진 없음"; if (videoNameEl) videoNameEl.textContent = "선택된 영상 없음"; if (inputPhoto) inputPhoto.value = ""; if (inputVideo) inputVideo.value = "";
       if (addError) addError.textContent = "";
       if (!addDlg.open) addDlg.showModal();
@@ -10711,16 +10660,10 @@ fd.append("pw", pwValbunny);
     addForm.addEventListener("submit", function (e) {
       e.preventDefault();
       var titleVal = (inputTitle && inputTitle.value || "").trim();
-      var sloganVal = (inputSlogan && inputSlogan.value || "").trim();
       var summaryVal = (inputSummary && inputSummary.value || "").trim();
       if (!titleVal) {
         if (addError) addError.textContent = "오브젝트명 / 프로젝트 제목을 입력해 주세요.";
         if (inputTitle) inputTitle.focus();
-        return;
-      }
-      if (!sloganVal) {
-        if (addError) addError.textContent = "핵심 슬로건을 입력해 주세요.";
-        if (inputSlogan) inputSlogan.focus();
         return;
       }
       if (!summaryVal) {
@@ -10732,13 +10675,6 @@ fd.append("pw", pwValbunny);
       var catVal = (inputCategory && inputCategory.value) || "naming";
       var cMeta = CATEGORY_META[catVal] || CATEGORY_META.naming;
 
-      var rawColors = (inputColors && inputColors.value || "").split(",");
-      var cleanColors = [];
-      rawColors.forEach(function (c) {
-        var trimmed = c.trim();
-        if (/^#[0-9A-Fa-f]{3,8}$/.test(trimmed)) cleanColors.push(trimmed.toUpperCase());
-      });
-      if (!cleanColors.length) cleanColors = ["#F43F5E", "#8B5CF6", "#0F172A"];
 
       var rawTags = (inputTags && inputTags.value || "").split(",");
       var cleanTags = [];
@@ -10753,13 +10689,12 @@ fd.append("pw", pwValbunny);
         customBrands.forEach(function (x) { if (x.id === editingBrandId) bTarget = x; });
         if (bTarget) {
           bTarget.title = titleVal;
-          bTarget.slogan = sloganVal;
           bTarget.category = catVal;
           bTarget.status = (inputStatus && inputStatus.value) || bTarget.status;
-          bTarget.colors = cleanColors;
+          bTarget.colors = [];
           bTarget.tags = cleanTags;
           bTarget.summary = summaryVal;
-          bTarget.prompt = (inputPrompt && inputPrompt.value.trim()) || ("[" + titleVal + "]\n- 슬로건: " + sloganVal + "\n- 컬러: " + cleanColors.join(", ") + "\n- 설명: " + summaryVal);
+          bTarget.prompt = (inputPrompt && inputPrompt.value.trim()) || ("[" + titleVal + "]\n- 설명: " + summaryVal);
           bTarget.emoji = cMeta.emoji;
           bTarget.gradient = cMeta.gradient;
           if (pickedPhoto) bTarget.photoData = pickedPhoto;
@@ -10782,13 +10717,12 @@ fd.append("pw", pwValbunny);
           emoji: cMeta.emoji,
           gradient: cMeta.gradient,
           title: titleVal,
-          slogan: sloganVal,
-          colors: cleanColors,
+          colors: [],
           summary: summaryVal,
           tags: cleanTags,
           date: new Date().toISOString().slice(0, 10),
           baseLikes: 1,
-          prompt: (inputPrompt && inputPrompt.value.trim()) || ("[" + titleVal + "]\n- 슬로건: " + sloganVal + "\n- 컬러: " + cleanColors.join(", ") + "\n- 설명: " + summaryVal)
+          prompt: (inputPrompt && inputPrompt.value.trim()) || ("[" + titleVal + "]\n- 설명: " + summaryVal)
         };
 
         if (pickedPhoto) newBrand.photoData = pickedPhoto;
@@ -10803,7 +10737,6 @@ fd.append("pw", pwValbunny);
         if (inputPhoto) inputPhoto.value = ""; if (videoNameEl) videoNameEl.textContent = "선택된 영상 없음"; if (photoNameEl) photoNameEl.textContent = "선택된 사진 없음"; if (inputVideo) inputVideo.value = "";
       }
       addForm.reset();
-      if (inputColors) inputColors.value = "#F43F5E, #8B5CF6, #0F172A";
       pickedPhoto = null; pickedVideo = null; if (photoNameEl) photoNameEl.textContent = "선택된 사진 없음"; if (videoNameEl) videoNameEl.textContent = "선택된 영상 없음"; if (inputPhoto) inputPhoto.value = ""; if (inputVideo) inputVideo.value = "";
       if (addDlg && addDlg.open) addDlg.close();
       renderAll();
