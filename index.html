@@ -2304,7 +2304,7 @@
         <li class="has-sub"><a href="#ai" data-nav="ai">AI</a>
           <ul class="nav-sub">
             <li><a href="#ai" id="aiGate1Link">AI Ideas</a></li>
-            <li><a href="#aiGate2" id="aiGate2Link">Created Video</a> <button type="button" class="gate-edit admin-only" id="aiGate2Edit" aria-label="Created Video 이름 수정">✏️</button></li>
+            <li><a href="#aiGate2" id="aiGate2Link">Created AI Video</a> <button type="button" class="gate-edit admin-only" id="aiGate2Edit" aria-label="Created AI Video 이름 수정">✏️</button></li>
           </ul>
         </li>
         <li class="has-sub"><a href="#branding" data-nav="branding">Branding agency</a>
@@ -2479,8 +2479,8 @@
 
     <div class="ai-idea-grid" id="aiIdeaGrid"></div>
 
-<!-- ===== AI Created Video 섹션 (Retail 복제: 자유게시판~카드) ===== -->
-    <div class="br-gate" id="aiGate2">Created Video</div>
+<!-- ===== AI Created AI Video 섹션 (Retail 복제: 자유게시판~카드) ===== -->
+    <div class="br-gate" id="aiGate2">Created AI Video</div>
     <div class="pet-diary-subhead">
       <h3>📝 자유게시판</h3>
       <button type="button" class="section-add-btn ai-add admin-only" id="ai2BoardAddBtn" data-category="ai-video" style="margin:0;">＋ 새 글 등록</button>
@@ -12416,7 +12416,7 @@ function openIdeaForm(ctx) {
   });
 })();
 /* ===== 브랜딩 대문명 관리자 수정 (네비+섹션 동기화+localStorage) ===== */(function () {
-  [["brGate1", "brGate1Link", "brGate1Edit", "baioo_brGate1NameV2"], ["brGate2", "brGate2Link", "brGate2Edit", "baioo_brGate2NameV2"], ["aiGate2", "aiGate2Link", "aiGate2Edit", "baioo_aiGate2NameV2"]].forEach(function (c) {
+  [["brGate1", "brGate1Link", "brGate1Edit", "baioo_brGate1NameV2"], ["brGate2", "brGate2Link", "brGate2Edit", "baioo_brGate2NameV2"], ["aiGate2", "aiGate2Link", "aiGate2Edit", "baioo_aiGate2NameV3"]].forEach(function (c) {
     var gate = document.getElementById(c[0]);
     var link = document.getElementById(c[1]);
     var btn = document.getElementById(c[2]);
