@@ -2289,6 +2289,16 @@
   body.board-open-rp #rpBoardAddBtn { display: inline-flex !important; }
   body.board-open-pet #petBoardAddBtn { display: inline-flex !important; }
   body:not(.is-admin) #aiDeleteCustomBtn, body:not(.is-admin) #brDeleteCustomBtn { display: none !important; }
+  /* -- 개인정보처리방침: 검정 배경 흰 글씨 중앙 정렬 -- */
+  #privacy { background: #000; }
+  #privacy .overlay { display: none; }
+  #privacy .sec-head h2 { color: #fff; }
+  #privacy .back-btn { background: rgba(255,255,255,.1); color: #fff; border-color: rgba(255,255,255,.25); }
+  .privacy-body { max-width: 760px; margin: 0 auto; text-align: center; color: #fff; }
+  .privacy-body h3 { margin: 30px 0 10px; font-size: 1.15rem; color: #fff; }
+  .privacy-body p { margin: 0 0 8px; color: rgba(255,255,255,.85); line-height: 1.9; }
+  .privacy-body a { color: #7dd3fc; font-weight: 800; }
+  .privacy-date { margin-top: 26px !important; color: rgba(255,255,255,.6) !important; font-size: .9rem; }
 </style>
 </head>
 <body>
@@ -3221,24 +3231,21 @@
       <h2>개인정보처리방침</h2>
     </div>
 
-    <div class="post-grid">
-      <div class="post">
-        <div class="icon-large">📋</div>
-        <h3>수집하는 정보</h3>
-        <p>BAIOO는 회원가입 없이 볼 수 있어 직접 개인정보를 받지 않습니다. 글 등록 시 입력한 제목·내용·사진은 사이트 표시용으로만 저장됩니다.</p>
-      </div>
-
-      <div class="post">
-        <div class="icon-large">🍪</div>
-        <h3>쿠키 및 광고</h3>
-        <p>Google AdSense를 사용하며, Google은 맞춤 광고를 위해 쿠키를 사용할 수 있습니다. 맞춤 광고는 Google 광고 설정에서 해제할 수 있습니다.</p>
-      </div>
-
-      <div class="post">
-        <div class="icon-large">🔗</div>
-        <h3>관련 링크</h3>
-        <p><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google 개인정보처리방침</a><br><a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google 광고 설정(맞춤 광고 해제)</a></p>
-      </div>
+    <div class="privacy-body">
+      <h3>1. 수집하는 정보·목적·보유기간</h3>
+      <p>BAIOO는 회원가입 없이 이용할 수 있어 이름·이메일 같은 개인정보를 직접 받지 않습니다. 글·댓글 등록 시 입력한 제목·내용·첨부파일은 사이트 표시용으로만 저장되며, 목적 달성 시 지체 없이 파기합니다.</p>
+      <h3>2. 쿠키 및 광고 (Google AdSense)</h3>
+      <p>Google의 광고 쿠키 사용으로 Google과 파트너는 이 사이트 방문 기록 및 인터넷상의 다른 사이트 방문 기록을 토대로 광고를 게재할 수 있습니다. 맞춤 광고는 Google 광고 설정에서 해제할 수 있습니다.</p>
+      <p><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google 개인정보처리방침</a> · <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google 광고 설정(맞춤 광고 해제)</a></p>
+      <h3>3. 정보주체의 권리</h3>
+      <p>본인이 쓴 글·댓글의 열람·정정·삭제를 언제든 요구할 수 있으며, 운영자 이메일로 요청하면 지체 없이 조치합니다.</p>
+      <h3>4. 저작권</h3>
+      <p>이 사이트의 글·사진·영상 등 모든 콘텐츠의 저작권은 작성자 및 BAIOO에 있습니다. 허락 없는 무단 복제·배포를 금합니다.</p>
+      <h3>5. 문제 신고 시 삭제 보장</h3>
+      <p>게시된 내용 중 저작권 침해·명예훼손 등 문제가 있으면 알려주십시오. 확인되는 대로 반드시 삭제하겠습니다.</p>
+      <h3>6. 책임자 및 구제처</h3>
+      <p>책임자: BAIOO 운영자 (sweet85126@hanmail.net)<br>개인정보침해 신고센터 (국번없이) 118 · 개인정보분쟁조정위원회 (국번없이) 1833-6972</p>
+      <p class="privacy-date">시행일: 2026년 10월 28일</p>
     </div>
   </div>
 </section>
