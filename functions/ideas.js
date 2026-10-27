@@ -56,6 +56,21 @@ export async function onRequest(context) {
         }
         delete b.item.photoData;
       }
+      if (b.item.videoData && env.BLOG_FILES) {
+        try {
+          const m = String(b.item.videoData).match(/^data:(video\/[a-zA-Z0-9+.-]+);base64,(.+)$/);
+          if (!m) return json({ ok: false, message: "bad video" }, 400);
+          const bin = Uint8Array.from(atob(m[2]), function (c) { return c.charCodeAt(0); });
+          if (bin.length > 20 * 1024 * 1024) return json({ ok: false, message: "video too big" }, 400);
+          const ext = (m[1].split("/")[1] || "mp4").replace(/[^a-z0-9]/gi, "").slice(0, 5) || "mp4";
+          const key = "ideas/" + b.board + "/" + id + "/video." + ext;
+          await env.BLOG_FILES.put(key, bin, { httpMetadata: { contentType: m[1] } });
+          b.item.video = "/files/" + key;
+        } catch (e) {
+          return json({ ok: false, message: "video upload failed" }, 500);
+        }
+        delete b.item.videoData;
+      }
       await env.BLOG_DB.prepare(
         "INSERT INTO ideas(id,board,data,created_at) VALUES(?,?,?,?) ON CONFLICT(id) DO UPDATE SET data=excluded.data"
       ).bind(id, b.board, JSON.stringify(b.item), new Date().toISOString()).run();
