@@ -4617,9 +4617,8 @@
   var bgm = document.getElementById("bgm");
   if (bgm) { bgm.volume = 0.25; }
   function currentTrack() {
-    var v = "bgm1.mp3";
-    try { v = localStorage.getItem("baioo-track") || "bgm1.mp3"; } catch (e) {}
-    return v;
+    var tracks = ["bgm1.mp3", "bgm2.mp3", "bgm4.mp3"];
+    try { return localStorage.getItem("baioo-track") || tracks[Math.floor(Math.random() * tracks.length)]; } catch (e) { return "bgm1.mp3"; }
   }
   function setTrack(v, autoplay) {
     try { localStorage.setItem("baioo-track", v); } catch (e) {}
