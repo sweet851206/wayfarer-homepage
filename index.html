@@ -3398,37 +3398,37 @@
         <div class="icon-large">📝</div>
         <h3>자유게시판 공개 설정 (AI)</h3>
         <p class="ai-lead-sub" id="boardOpenStatus">현재: 관리자만 등록 가능</p>
-        <button type="button" class="btn btn-primary" id="boardOpenToggle">모두에게 등록 공개</button>
+        <button type="button" class="btn btn-primary sw" id="boardOpenToggle">ON</button>
       </div>
       <div class="post">
         <div class="icon-large">📝</div>
         <h3>자유게시판 공개 설정 (Branding)</h3>
         <p class="ai-lead-sub" id="boardOpenStatusBr">현재: 관리자만 등록 가능</p>
-        <button type="button" class="btn btn-primary" id="boardOpenToggleBr">모두에게 등록 공개</button>
+        <button type="button" class="btn btn-primary sw" id="boardOpenToggleBr">ON</button>
       </div>
       <div class="post">
         <div class="icon-large">📝</div>
         <h3>자유게시판 공개 설정 (Travel)</h3>
         <p class="ai-lead-sub" id="boardOpenStatusTr">현재: 관리자만 등록 가능</p>
-        <button type="button" class="btn btn-primary" id="boardOpenToggleTr">모두에게 등록 공개</button>
+        <button type="button" class="btn btn-primary sw" id="boardOpenToggleTr">ON</button>
       </div>
       <div class="post">
         <div class="icon-large">📝</div>
         <h3>자유게시판 공개 설정 (Repair)</h3>
         <p class="ai-lead-sub" id="boardOpenStatusRp">현재: 관리자만 등록 가능</p>
-        <button type="button" class="btn btn-primary" id="boardOpenToggleRp">모두에게 등록 공개</button>
+        <button type="button" class="btn btn-primary sw" id="boardOpenToggleRp">ON</button>
       </div>
       <div class="post">
         <div class="icon-large">📝</div>
         <h3>자유게시판 공개 설정 (Pets)</h3>
         <p class="ai-lead-sub" id="boardOpenStatusPet">현재: 관리자만 등록 가능</p>
-        <button type="button" class="btn btn-primary" id="boardOpenTogglePet">모두에게 등록 공개</button>
+        <button type="button" class="btn btn-primary sw" id="boardOpenTogglePet">ON</button>
       </div>
       <div class="post">
         <div class="icon-large">🚧</div>
         <h3>공사중 모드 (전체)</h3>
         <p class="ai-lead-sub" id="maintStatus">현재: 정상 운영중</p>
-        <button type="button" class="btn btn-primary" id="maintToggle">공사중 ON</button>
+        <button type="button" class="btn btn-primary sw" id="maintToggle">OFF</button>
       </div>
     </div>
   </div>
@@ -13837,6 +13837,7 @@ var desc = document.createElement("p");
   function getBoardOpenTr() { try { return localStorage.getItem("baioo_board_open_tr") !== "0"; } catch (e) { return true; } } // 기본 공개
   function getBoardOpenRp() { try { return localStorage.getItem("baioo_board_open_rp") !== "0"; } catch (e) { return true; } } // 기본 공개
   function getBoardOpenPet() { try { return localStorage.getItem("baioo_board_open_pet") !== "0"; } catch (e) { return true; } } // 기본 공개
+  function setSw(el, on) { if (!el) return; el.textContent = on ? "ON" : "OFF"; el.classList.toggle("on", !!on); }
   function sync() {
     var admin = isAdmin();
     document.body.classList.toggle("is-admin", !!admin);
@@ -13847,31 +13848,31 @@ var desc = document.createElement("p");
     var st = document.getElementById("boardOpenStatus");
     if (st) st.textContent = open ? "현재: 모두 등록 가능" : "현재: 관리자만 등록 가능";
     var tg = document.getElementById("boardOpenToggle");
-    if (tg) tg.textContent = open ? "공개 해제 (관리자만)" : "모두에게 등록 공개";
+    setSw(tg, open);
     var openBr = getBoardOpenBr();
     document.body.classList.toggle("board-open-br", !!openBr);
     var stBr = document.getElementById("boardOpenStatusBr");
     if (stBr) stBr.textContent = openBr ? "현재: 모두 등록 가능" : "현재: 관리자만 등록 가능";
     var tgBr = document.getElementById("boardOpenToggleBr");
-    if (tgBr) tgBr.textContent = openBr ? "공개 해제 (관리자만)" : "모두에게 등록 공개";
+    setSw(tgBr, openBr);
     var openTr = getBoardOpenTr();
     document.body.classList.toggle("board-open-tr", !!openTr);
     var stTr = document.getElementById("boardOpenStatusTr");
     if (stTr) stTr.textContent = openTr ? "현재: 모두 등록 가능" : "현재: 관리자만 등록 가능";
     var tgTr = document.getElementById("boardOpenToggleTr");
-    if (tgTr) tgTr.textContent = openTr ? "공개 해제 (관리자만)" : "모두에게 등록 공개";
+    setSw(tgTr, openTr);
     var openRp = getBoardOpenRp();
     document.body.classList.toggle("board-open-rp", !!openRp);
     var stRp = document.getElementById("boardOpenStatusRp");
     if (stRp) stRp.textContent = openRp ? "현재: 모두 등록 가능" : "현재: 관리자만 등록 가능";
     var tgRp = document.getElementById("boardOpenToggleRp");
-    if (tgRp) tgRp.textContent = openRp ? "공개 해제 (관리자만)" : "모두에게 등록 공개";
+    setSw(tgRp, openRp);
     var openPet = getBoardOpenPet();
     document.body.classList.toggle("board-open-pet", !!openPet);
     var stPet = document.getElementById("boardOpenStatusPet");
     if (stPet) stPet.textContent = openPet ? "현재: 모두 등록 가능" : "현재: 관리자만 등록 가능";
     var tgPet = document.getElementById("boardOpenTogglePet");
-    if (tgPet) tgPet.textContent = openPet ? "공개 해제 (관리자만)" : "모두에게 등록 공개";
+    setSw(tgPet, openPet);
     if ((location.hash || "") === "#admin" && !admin) { location.hash = "#home"; }
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", sync);
@@ -13965,7 +13966,7 @@ async function maintCheck() {
     var st = document.getElementById("maintStatus");
     if (st) st.textContent = on ? "현재: 공사중 (전체 차단)" : "현재: 정상 운영중";
     var tg = document.getElementById("maintToggle");
-    if (tg) tg.textContent = on ? "공사중 OFF" : "공사중 ON";
+    setSw(tg, on);
     var ov = document.getElementById("maintOverlay");
     if (ov) ov.classList.toggle("show", on && !isAdmin());
   } catch (e) {}
@@ -14317,6 +14318,11 @@ setTimeout(maybeAdminBg, 500);
 #admin .post-grid .post .ai-lead-sub { margin: 0; flex: 1 1 160px; }
 #admin .post-grid .post .field { margin: 0; }
 #admin .post-grid .post .btn { margin-left: auto; }
+/* ON/OFF 스위치 */
+.btn.sw { position: relative; width: 70px; height: 34px; padding: 0 12px; border-radius: 999px; font-size: .8rem; font-weight: 800; border: 1px solid var(--border); background: #cbd5e1; color: #fff; text-align: right; flex: none; }
+.btn.sw.on { background: #22c55e; border-color: #22c55e; text-align: left; }
+.btn.sw::after { content: ""; position: absolute; top: 3px; left: 4px; width: 26px; height: 26px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.3); transition: left .2s ease; }
+.btn.sw.on::after { left: 38px; }
 </style>
 <div id="maintOverlay" role="alert"><div><h2>🚧 공사중입니다</h2><p>잠시 후 다시 방문해 주세요.</p></div></div>
 
