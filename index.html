@@ -13827,10 +13827,10 @@ var desc = document.createElement("p");
   }
   function getCred() { try { var id = localStorage.getItem("baioo_admin_id") || "1234"; var pw = localStorage.getItem("baioo_admin_pw") || "1234"; return {id:id, pw:pw}; } catch(e){ return {id:"1234", pw:"1234"}; } }
   function getBoardOpen() { try { return localStorage.getItem("baioo_board_open_ai") !== "0"; } catch (e) { return true; } } // 기본 공개
-  function getBoardOpenBr() { try { return localStorage.getItem("baioo_board_open_br") === "1"; } catch (e) { return false; } }
-  function getBoardOpenTr() { try { return localStorage.getItem("baioo_board_open_tr") === "1"; } catch (e) { return false; } }
-  function getBoardOpenRp() { try { return localStorage.getItem("baioo_board_open_rp") === "1"; } catch (e) { return false; } }
-  function getBoardOpenPet() { try { return localStorage.getItem("baioo_board_open_pet") === "1"; } catch (e) { return false; } }
+  function getBoardOpenBr() { try { return localStorage.getItem("baioo_board_open_br") !== "0"; } catch (e) { return true; } } // 기본 공개
+  function getBoardOpenTr() { try { return localStorage.getItem("baioo_board_open_tr") !== "0"; } catch (e) { return true; } } // 기본 공개
+  function getBoardOpenRp() { try { return localStorage.getItem("baioo_board_open_rp") !== "0"; } catch (e) { return true; } } // 기본 공개
+  function getBoardOpenPet() { try { return localStorage.getItem("baioo_board_open_pet") !== "0"; } catch (e) { return true; } } // 기본 공개
   function sync() {
     var admin = isAdmin();
     document.body.classList.toggle("is-admin", !!admin);
