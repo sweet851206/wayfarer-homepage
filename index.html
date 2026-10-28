@@ -3430,6 +3430,18 @@
         <p class="ai-lead-sub" id="maintStatus">현재: 정상 운영중</p>
         <button type="button" class="btn btn-primary sw" id="maintToggle">OFF</button>
       </div>
+      <div class="post">
+        <div class="icon-large">🖥️</div>
+        <h3>Main 형식</h3>
+        <p class="ai-lead-sub">원을 누르면 형식이 바뀜 (미리보기 아래)</p>
+        <div id="mainLayoutRadios" style="display:flex;gap:14px;flex-wrap:wrap;">
+          <label style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
+            <span style="display:block;width:90px;height:60px;border:2px solid var(--border);border-radius:8px;background:linear-gradient(180deg,var(--surface-soft) 55%,var(--surface) 55%);"></span>
+            <span><input type="radio" name="mainLayout" value="main1" checked> 현재 Main</span>
+          </label>
+        </div>
+        <div id="mainLayoutPreview" class="ai-lead-sub" style="margin-top:8px;">미리보기: 현재 Main 적용중</div>
+      </div>
     </div>
   </div>
 </section>
@@ -13955,6 +13967,7 @@ var desc = document.createElement("p");
   });
   sync();
   maintCheck();
+  maintLayoutCheck();
 })();
 
 /* ===== 공사중 모드 (전체, 서버 저장) ===== */
@@ -13984,6 +13997,42 @@ async function maintSet(on) {
   } catch (e) { alert("통신 오류"); return; }
   maintCheck();
 }
+
+/* ===== Main 형식 (라디오+미리보기, 서버 저장) ===== */
+var MAIN_LAYOUTS = { main1: "현재 Main" };
+function applyMainLayout(layout) {
+  try { document.body.dataset.mainLayout = layout; } catch (e) {}
+  var radios = document.querySelectorAll('input[name="mainLayout"]');
+  for (var i = 0; i < radios.length; i++) radios[i].checked = (radios[i].value === layout);
+  var pv = document.getElementById("mainLayoutPreview");
+  if (pv) pv.textContent = "미리보기: " + (MAIN_LAYOUTS[layout] || layout) + " 적용중";
+}
+async function maintLayoutCheck() {
+  try {
+    var r = await fetch("/maintenance?action=layout", { cache: "no-store" });
+    var j = await r.json();
+    applyMainLayout((j && j.layout) || "main1");
+  } catch (e) { applyMainLayout("main1"); }
+}
+async function maintLayoutSet(layout) {
+  try {
+    var cred = getCred();
+    var r = await fetch("/maintenance?action=layout_set", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ layout: layout, pw: cred.pw })
+    });
+    var j = await r.json();
+    if (!j || !j.ok) { alert("실패: " + ((j && j.message) || "오류")); maintLayoutCheck(); return; }
+  } catch (e) { alert("통신 오류"); return; }
+  applyMainLayout(layout);
+}
+document.addEventListener("change", function (e) {
+  if (e.target && e.target.name === "mainLayout") {
+    if (!isAdmin()) { alert("관리자 로그인 후 사용하세요."); maintLayoutCheck(); return; }
+    maintLayoutSet(e.target.value);
+  }
+});
 
 /* ===== 카드 9개씩 페이징 (전 섹션 공용) ===== */
 var BAIOO_CARDS_PER_PAGE = 9;
