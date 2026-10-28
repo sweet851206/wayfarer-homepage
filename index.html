@@ -13848,6 +13848,7 @@ var desc = document.createElement("p");
     try { return localStorage.getItem("baioo_admin") === "1"; } catch (e) { return false; }
   }
   function getCred() { try { var id = localStorage.getItem("baioo_admin_id") || "1234"; var pw = localStorage.getItem("baioo_admin_pw") || "1234"; return {id:id, pw:pw}; } catch(e){ return {id:"1234", pw:"1234"}; } }
+  try { window.__isAdmin = isAdmin; window.__getCred = getCred; } catch (e) {}
   function getBoardOpen() { try { return localStorage.getItem("baioo_board_open_ai") !== "0"; } catch (e) { return true; } } // 기본 공개
   function getBoardOpenBr() { try { return localStorage.getItem("baioo_board_open_br") !== "0"; } catch (e) { return true; } } // 기본 공개
   function getBoardOpenTr() { try { return localStorage.getItem("baioo_board_open_tr") !== "0"; } catch (e) { return true; } } // 기본 공개
@@ -13990,12 +13991,12 @@ async function maintCheck() {
     var tg = document.getElementById("maintToggle");
     setSw(tg, on);
     var ov = document.getElementById("maintOverlay");
-    if (ov) ov.classList.toggle("show", on && !isAdmin());
+    if (ov) ov.classList.toggle("show", on && !(window.__isAdmin ? window.__isAdmin() : false));
   } catch (e) {}
 }
 async function maintSet(on) {
   try {
-    var cred = getCred();
+    var cred = (window.__getCred ? window.__getCred() : { pw: "1234" });
     var r = await fetch("/maintenance?action=set", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -14015,19 +14016,7 @@ function applyMainLayout(layout) {
   for (var i = 0; i < radios.length; i++) radios[i].checked = (radios[i].value === layout);
   var pv = document.getElementById("mainLayoutPreview");
   if (pv) pv.textContent = "미리보기: " + (MAIN_LAYOUTS[layout] || layout) + " 적용중";
-  var blank = document.getElementById("mainBlank");
-  var peek = false;
-  try { peek = document.body.classList.contains("main2peek"); } catch (e) {}
-  if (blank) blank.style.display = (layout === "main2" && !peek) ? "block" : "none";
-  var bar = document.getElementById("mainBlankBar");
-  if (bar) bar.style.display = (layout === "main2" && isAdmin()) ? "block" : "none";
 }
-document.addEventListener("click", function (e) {
-  if (e.target && e.target.id === "mainBlankBar") {
-    try { document.body.classList.toggle("main2peek"); } catch (err) {}
-    applyMainLayout(document.body.dataset.mainLayout || "main1");
-  }
-});
 async function maintLayoutCheck() {
   try {
     var r = await fetch("/maintenance?action=layout", { cache: "no-store" });
@@ -14037,7 +14026,7 @@ async function maintLayoutCheck() {
 }
 async function maintLayoutSet(layout) {
   try {
-    var cred = getCred();
+    var cred = (window.__getCred ? window.__getCred() : { pw: "1234" });
     var r = await fetch("/maintenance?action=layout_set", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -14050,7 +14039,7 @@ async function maintLayoutSet(layout) {
 }
 document.addEventListener("change", function (e) {
   if (e.target && e.target.name === "mainLayout") {
-    if (!isAdmin()) { alert("관리자 로그인 후 사용하세요."); maintLayoutCheck(); return; }
+    if (!(window.__isAdmin ? window.__isAdmin() : false)) { alert("관리자 로그인 후 사용하세요."); maintLayoutCheck(); return; }
     maintLayoutSet(e.target.value);
   }
 });
@@ -14380,9 +14369,12 @@ setTimeout(maybeAdminBg, 500);
 #maintOverlay { position: fixed; inset: 0; z-index: 99999; display: none; align-items: center; justify-content: center; background: #111; color: #fff; text-align: center; padding: 24px; }
 #maintOverlay.show { display: flex; }
 #maintOverlay h2 { font-size: 1.6rem; margin-bottom: 12px; }
-#mainBlank { position: fixed; inset: 0; z-index: 80000; display: none; background: #fff; }
-body.main2peek #mainBlank { display: none !important; }
-#mainBlankBar { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); z-index: 80001; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); font-size: .8rem; font-weight: 800; cursor: pointer; }
+/* Main 형식 main2: 대문(home)만 흰색 빈 화면 */
+body[data-main-layout="main2"] #home { background: #fff; }
+body[data-main-layout="main2"] #home .overlay { background: #fff; opacity: 1; }
+body[data-main-layout="main2"] #home .container,
+body[data-main-layout="main2"] #home .orb,
+body[data-main-layout="main2"] #home .wave-wrap { display: none; }
 /* 관리자 페이지만 줄 형식 */
 #admin .post-grid { display: block; }
 #admin .post-grid .post { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; padding: 14px 16px; border-radius: 14px; margin-bottom: 10px; }
@@ -14402,8 +14394,6 @@ body.main2peek #mainBlank { display: none !important; }
 #adminDoor:hover { opacity: 1; }
 </style>
 <div id="maintOverlay" role="alert"><div><h2>🚧 공사중입니다</h2><p>잠시 후 다시 방문해 주세요.</p></div></div>
-<div id="mainBlank"></div>
-<button type="button" id="mainBlankBar" style="display:none;">👁 흰색 화면 보는 중 · 눌러서 관리화면 보기</button>
 
 </body>
 </html>
