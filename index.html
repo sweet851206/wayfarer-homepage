@@ -13977,6 +13977,7 @@ var desc = document.createElement("p");
   sync();
   maintCheck();
   maintLayoutCheck();
+})();
 
 /* ===== 공사중 모드 (전체, 서버 저장) ===== */
 async function maintCheck() {
@@ -14053,7 +14054,6 @@ document.addEventListener("change", function (e) {
     maintLayoutSet(e.target.value);
   }
 });
-})();
 
 /* ===== 카드 9개씩 페이징 (전 섹션 공용) ===== */
 var BAIOO_CARDS_PER_PAGE = 9;
