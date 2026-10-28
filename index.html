@@ -3424,6 +3424,12 @@
         <p class="ai-lead-sub" id="boardOpenStatusPet">현재: 관리자만 등록 가능</p>
         <button type="button" class="btn btn-primary" id="boardOpenTogglePet">모두에게 등록 공개</button>
       </div>
+      <div class="post">
+        <div class="icon-large">🚧</div>
+        <h3>공사중 모드 (전체)</h3>
+        <p class="ai-lead-sub" id="maintStatus">현재: 정상 운영중</p>
+        <button type="button" class="btn btn-primary" id="maintToggle">공사중 ON</button>
+      </div>
     </div>
   </div>
 </section>
@@ -13939,9 +13945,44 @@ var desc = document.createElement("p");
       try { localStorage.setItem("baioo_board_open_pet", getBoardOpenPet() ? "0" : "1"); } catch (err) {}
       sync();
     }
+    if (e.target && e.target.id === "maintToggle") {
+      if (!isAdmin()) { alert("관리자 로그인 후 사용하세요."); return; }
+      var cur = document.getElementById("maintStatus");
+      var wantOn = cur ? cur.textContent.indexOf("정상") >= 0 : true;
+      maintSet(wantOn);
+    }
   });
   sync();
+  maintCheck();
 })();
+
+/* ===== 공사중 모드 (전체, 서버 저장) ===== */
+async function maintCheck() {
+  try {
+    var r = await fetch("/maintenance?action=get", { cache: "no-store" });
+    var j = await r.json();
+    var on = !!(j && j.on);
+    var st = document.getElementById("maintStatus");
+    if (st) st.textContent = on ? "현재: 공사중 (전체 차단)" : "현재: 정상 운영중";
+    var tg = document.getElementById("maintToggle");
+    if (tg) tg.textContent = on ? "공사중 OFF" : "공사중 ON";
+    var ov = document.getElementById("maintOverlay");
+    if (ov) ov.classList.toggle("show", on && !isAdmin());
+  } catch (e) {}
+}
+async function maintSet(on) {
+  try {
+    var cred = getCred();
+    var r = await fetch("/maintenance?action=set", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ on: !!on, pw: cred.pw })
+    });
+    var j = await r.json();
+    if (!j || !j.ok) { alert("실패: " + ((j && j.message) || "오류")); return; }
+  } catch (e) { alert("통신 오류"); return; }
+  maintCheck();
+}
 
 /* ===== 카드 9개씩 페이징 (전 섹션 공용) ===== */
 var BAIOO_CARDS_PER_PAGE = 9;
@@ -14262,6 +14303,13 @@ function maybeAdminBg() {
 window.addEventListener("hashchange", function () { setTimeout(maybeAdminBg, 50); });
 setTimeout(maybeAdminBg, 500);
 </script>
+
+<style>
+#maintOverlay { position: fixed; inset: 0; z-index: 99999; display: none; align-items: center; justify-content: center; background: #111; color: #fff; text-align: center; padding: 24px; }
+#maintOverlay.show { display: flex; }
+#maintOverlay h2 { font-size: 1.6rem; margin-bottom: 12px; }
+</style>
+<div id="maintOverlay" role="alert"><div><h2>🚧 공사중입니다</h2><p>잠시 후 다시 방문해 주세요.</p></div></div>
 
 </body>
 </html>
