@@ -20,9 +20,10 @@ async function checkPw(db, pw) {
         "INSERT INTO settings(key,value) VALUES('admin_pw',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value"
       ).bind(hash).run();
     } else {
-    await db.prepare(
-      "INSERT INTO settings(key,value) VALUES('admin_pw',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value"
-    ).bind(hash).run();
+      await db.prepare(
+        "INSERT INTO settings(key,value) VALUES('admin_pw',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value"
+      ).bind(hash).run();
+    }
   }
   return { ok: true };
 }
