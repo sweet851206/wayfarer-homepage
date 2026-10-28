@@ -13895,8 +13895,8 @@ var desc = document.createElement("p");
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", sync);
   document.addEventListener("click", function (e) {
     if (e.target && e.target.id === "adminDoor") {
-      var b = document.getElementById("adminBtn");
-      if (b) b.click();
+      if (isAdmin()) { location.hash = "#admin"; }
+      else { var b = document.getElementById("adminBtn"); if (b) b.click(); }
       return;
     }
     if (e.target && e.target.id === "adminBtn") {
@@ -14335,7 +14335,7 @@ function openIdeaForm(ctx) {
   <a href="#privacy">개인정보처리방침</a> · <a href="#contact">연락처</a> · <button type="button" id="adminBtn" style="background:none;border:none;color:#000;font-size:.9rem;font-weight:600;cursor:pointer;text-decoration:underline;">관리자</button><br>
   © 2026 <span>BAIOO</span>. AI 세상을 바꾸는 찬란한 열쇠.
 </footer>
-<button type="button" id="adminDoor" title="관리자 문" aria-label="관리자 문">🔑</button>
+<button type="button" id="adminDoor" title="관리자 문" aria-label="관리자 문">🚪</button>
 
 <script type="module">
 /* 관리자 배경: Kiwi 느낌 (무료 부품 Swirl+Blob, 실패 시 무시) */
@@ -14390,7 +14390,7 @@ body[data-main-layout="main2"] #home .wave-wrap { display: none; }
 .btn.sw::after { content: ""; position: absolute; top: 3px; left: 4px; width: 26px; height: 26px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.3); transition: left .2s ease; }
 .btn.sw.on::after { left: 38px; }
 /* 작은 관리자 문 (항상 표시) */
-#adminDoor { position: fixed; right: 12px; bottom: 12px; z-index: 90000; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); opacity: .55; font-size: 1.1rem; cursor: pointer; }
+#adminDoor { position: fixed; right: 12px; bottom: 12px; z-index: 90000; width: 40px; height: 40px; border: none; background: transparent; opacity: .55; font-size: 1.4rem; cursor: pointer; }
 #adminDoor:hover { opacity: 1; }
 </style>
 <div id="maintOverlay" role="alert"><div><h2>🚧 공사중입니다</h2><p>잠시 후 다시 방문해 주세요.</p></div></div>
