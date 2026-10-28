@@ -14016,8 +14016,18 @@ function applyMainLayout(layout) {
   var pv = document.getElementById("mainLayoutPreview");
   if (pv) pv.textContent = "미리보기: " + (MAIN_LAYOUTS[layout] || layout) + " 적용중";
   var blank = document.getElementById("mainBlank");
-  if (blank) blank.style.display = (layout === "main2" && !isAdmin()) ? "block" : "none";
+  var peek = false;
+  try { peek = document.body.classList.contains("main2peek"); } catch (e) {}
+  if (blank) blank.style.display = (layout === "main2" && !peek) ? "block" : "none";
+  var bar = document.getElementById("mainBlankBar");
+  if (bar) bar.style.display = (layout === "main2" && isAdmin()) ? "block" : "none";
 }
+document.addEventListener("click", function (e) {
+  if (e.target && e.target.id === "mainBlankBar") {
+    try { document.body.classList.toggle("main2peek"); } catch (err) {}
+    applyMainLayout(document.body.dataset.mainLayout || "main1");
+  }
+});
 async function maintLayoutCheck() {
   try {
     var r = await fetch("/maintenance?action=layout", { cache: "no-store" });
@@ -14371,6 +14381,8 @@ setTimeout(maybeAdminBg, 500);
 #maintOverlay.show { display: flex; }
 #maintOverlay h2 { font-size: 1.6rem; margin-bottom: 12px; }
 #mainBlank { position: fixed; inset: 0; z-index: 80000; display: none; background: #fff; }
+body.main2peek #mainBlank { display: none !important; }
+#mainBlankBar { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); z-index: 80001; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); font-size: .8rem; font-weight: 800; cursor: pointer; }
 /* 관리자 페이지만 줄 형식 */
 #admin .post-grid { display: block; }
 #admin .post-grid .post { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; padding: 14px 16px; border-radius: 14px; margin-bottom: 10px; }
@@ -14391,6 +14403,7 @@ setTimeout(maybeAdminBg, 500);
 </style>
 <div id="maintOverlay" role="alert"><div><h2>🚧 공사중입니다</h2><p>잠시 후 다시 방문해 주세요.</p></div></div>
 <div id="mainBlank"></div>
+<button type="button" id="mainBlankBar" style="display:none;">👁 흰색 화면 보는 중 · 눌러서 관리화면 보기</button>
 
 </body>
 </html>
