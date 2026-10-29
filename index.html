@@ -2329,6 +2329,31 @@
   .privacy-body a { color: #7dd3fc; font-weight: 800; }
   .privacy-date { margin-top: 26px !important; color: rgba(255,255,255,.6) !important; font-size: .9rem; }
   .dlg-body input[type="password"] { background: #fff; color: #111; border: 1px solid #000; }
+  /* -- About 영상 히어로형 (10-29 전면교체, 기존 .ai-* 공유클래스 무영향) -- */
+  #about { background: #000; }
+  #about .overlay { display: none; }
+  #about .back-btn { background: rgba(255,255,255,.1); color: #fff; border-color: rgba(255,255,255,.25); }
+  .abv-hero { position: relative; border-radius: 22px; overflow: hidden; min-height: 46vh; display: flex; align-items: flex-end; background: radial-gradient(120% 140% at 20% 10%, #0EA5E9 0%, #1E1B4B 45%, #000 100%); border: 1px solid rgba(255,255,255,.14); }
+  .abv-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .abv-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,.55) 60%, rgba(0,0,0,.85) 100%); }
+  .abv-copy { position: relative; z-index: 2; padding: 40px 34px; color: #fff; max-width: 640px; }
+  .abv-kicker { display: inline-block; font-size: .78rem; letter-spacing: .18em; font-weight: 800; color: #7dd3fc; background: rgba(56,189,248,.15); border: 1px solid rgba(125,211,252,.4); padding: 6px 12px; border-radius: 999px; margin-bottom: 14px; }
+  .abv-copy h2 { font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.15; margin: 0 0 12px; letter-spacing: -.02em; }
+  .abv-copy p { margin: 0 0 20px; color: rgba(255,255,255,.85); line-height: 1.8; }
+  .abv-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .abv-actions a { padding: 11px 18px; border-radius: 12px; font-weight: 800; text-decoration: none; font-size: .92rem; }
+  .abv-actions a:first-child { background: #fff; color: #000; }
+  .abv-actions a:not(:first-child) { border: 1px solid rgba(255,255,255,.35); color: #fff; }
+  .abv-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0; }
+  .abv-stat { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 14px; padding: 14px; text-align: center; color: #fff; }
+  .abv-stat b { display: block; font-size: 1.3rem; }
+  .abv-stat span { font-size: .8rem; color: rgba(255,255,255,.65); }
+  .abv-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .abv-card { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); border-radius: 14px; padding: 18px; color: #fff; text-decoration: none; }
+  .abv-card h3 { margin: 0 0 8px; font-size: 1.02rem; }
+  .abv-card p { margin: 0; font-size: .88rem; color: rgba(255,255,255,.72); line-height: 1.7; }
+  .abv-note { color: rgba(255,255,255,.45); font-size: .8rem; text-align: center; margin: 14px 0 4px; }
+  @media (max-width: 760px) { .abv-stats, .abv-cards { grid-template-columns: 1fr; } .abv-copy { padding: 30px 20px; } }
   /* -- 이용약관: 개인정보처리방침과 동일 테마 -- */
   #terms { background: #000; }
   #terms .overlay { display: none; }
@@ -3256,65 +3281,35 @@
       <p class="ai-lead-sub">AI 세상을 바꾸는 찬란한 열쇠 — Brilliant AI, Infinite Possibilities</p>
     </div>
 
-    <div class="ai-hero-banner">
-      <div class="ai-banner-left">
-        <span class="ai-banner-badge">🗝️ BAIOO MANIFESTO &amp; ECOSYSTEM</span>
-        <h3 id="abHeroTitle">작은 시작이 큰 변화를 연다, 아이디어를 세상에 배포하는 공간</h3>
-        <p id="abHeroDesc">BAIOO(바이오)는 AI 워크플로우, 브랜딩 스튜디오, 여행 큐레이션, PC 자가진단, 스마트 펫케어까지 실전에서 검증된 아이디어를 누구나 복제·활용할 수 있도록 배포하는 크리에이티브 플랫폼입니다.</p>
-        <div class="ai-banner-actions">
-          <a href="#ai" class="ai-btn-primary">🚀 AI 허브 바로가기</a>
-          <a href="#branding" class="ai-btn-ghost">✨ 브랜딩 스튜디오</a>
-          <a href="#contact" class="ai-btn-ghost">💬 문의·제휴 안내</a>
-          <button type="button" class="ai-btn-ghost admin-only" id="abHeroEdit">✏️ 문구 수정</button>
-        </div>
-      </div>
-      <div class="ai-stats-grid">
-        <div class="ai-stat-box">
-          <span class="ai-stat-num" id="abStatTotal">6</span>
-          <span class="ai-stat-label">핵심 아키텍처·원칙</span>
-        </div>
-        <div class="ai-stat-box">
-          <span class="ai-stat-num">5대</span>
-          <span class="ai-stat-label">전문 배포 허브</span>
-        </div>
-        <div class="ai-stat-box">
-          <span class="ai-stat-num" id="abStatLikes">0</span>
-          <span class="ai-stat-label">누적 응원·공감</span>
+    <div class="abv-hero">
+      <video class="abv-video" autoplay muted loop playsinline preload="metadata" id="abvVideo">
+        <source src="about-hero.mp4" type="video/mp4">
+      </video>
+      <div class="abv-shade"></div>
+      <div class="abv-copy">
+        <span class="abv-kicker">ABOUT BAIOO — VIDEO MANIFESTO</span>
+        <h2>작은 시작이<br>큰 변화를 연다.</h2>
+        <p>BAIOO는 AI·브랜딩·여행·진단·펫 — 검증된 아이디어를 누구나 복제·활용할 수 있게 배포하는 1인 플랫폼입니다.</p>
+        <div class="abv-actions">
+          <a href="#ai">AI 허브 바로가기</a>
+          <a href="#branding">브랜딩 스튜디오</a>
+          <a href="#contact">협업 문의</a>
         </div>
       </div>
     </div>
 
-    <div class="ai-toolbar">
-      <div class="ai-toolbar-top">
-        <div class="ai-search-wrap">
-          <span class="ai-search-icon" aria-hidden="true">🔍</span>
-          <input type="search" id="abSearchInput" class="ai-search-input" placeholder="BAIOO 뜻, 비전, 5대 섹션, 기술 스택, 운영 원칙 검색..." aria-label="BAIOO 소개 검색">
-        </div>
-        <div class="ai-select-group">
-          <select id="abSortSelect" class="ai-select" aria-label="정렬 기준">
-            <option value="newest">기본 순서</option>
-            <option value="popular">인기·공감순</option>
-            <option value="title">이름순 (가나다)</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="ai-cat-bar" id="abCategoryBar" role="tablist" aria-label="소개 카테고리 필터">
-        <button type="button" class="ai-cat-btn active" data-cat="all">전체 보기</button>
-        <button type="button" class="ai-cat-btn" data-cat="vision">🗝️ 비전·브랜드 철학</button>
-        <button type="button" class="ai-cat-btn" data-cat="space">🧭 5대 허브 가이드</button>
-        <button type="button" class="ai-cat-btn" data-cat="tech">⚡ 기술 아키텍처</button>
-        <button type="button" class="ai-cat-btn" data-cat="history">📜 탄생 히스토리</button>
-        <button type="button" class="ai-cat-btn" data-cat="rule">🤝 운영·보안 원칙</button>
-      </div>
+    <div class="abv-stats">
+      <div class="abv-stat"><b>5대</b><span>전문 배포 허브</span></div>
+      <div class="abv-stat"><b>Zero-Build</b><span>단일 HTML · 외부의존성 0</span></div>
+      <div class="abv-stat"><b>회원가입 없음</b><span>열람·복사 자유</span></div>
     </div>
 
-    <div class="ai-status-bar">
-      <div class="ai-active-chips" id="abActiveChips"></div>
-      <div class="ai-result-count" id="abResultCount">총 6개의 BAIOO 스토리</div>
+    <div class="abv-cards">
+      <a class="abv-card" href="#ai"><h3>🗝️ 비전 — 찬란한 열쇠</h3><p>Brilliant AI, Infinite Possibilities. 아이디어를 실제 작동하는 형태로 세상에 배포합니다.</p></a>
+      <a class="abv-card" href="#branding"><h3>🧭 5대 허브</h3><p>AI · 브랜딩 · 여행 · PC진단 · 펫. 각 허브별 레시피와 가이드를 제공합니다.</p></a>
+      <a class="abv-card" href="#contact"><h3>🤝 협업·문의</h3><p>광고·제휴·아이디어 제안 환영. 공식 이메일로 직접 회신합니다.</p></a>
     </div>
-
-    <div class="ai-idea-grid" id="abIdeaGrid"></div>
+    <p class="abv-note">영상 파일(about-hero.mp4)을 같은 폴더에 넣으면 자동 재생됩니다. 미니맥스 608×352·10초 루프 권장.</p>
   </div>
 </section>
 
@@ -13875,6 +13870,16 @@ var desc = document.createElement("p");
   }
 
   renderAll();
+})();
+
+/* ===== About 영상 히어로 (10-29): 파일 없으면 그라디언트 폴백 ===== */
+(function () {
+  var v = document.getElementById("abvVideo");
+  if (!v) return;
+  function fallback() { try { v.style.display = "none"; } catch (e) {} }
+  v.addEventListener("error", fallback, true);
+  var src = v.querySelector("source");
+  if (src) src.addEventListener("error", fallback);
 })();
 
 /* ===== 관리자 모드 (ID/PW 임시 1234/1234) ===== */
