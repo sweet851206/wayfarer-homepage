@@ -2329,6 +2329,11 @@
   .privacy-body a { color: #7dd3fc; font-weight: 800; }
   .privacy-date { margin-top: 26px !important; color: rgba(255,255,255,.6) !important; font-size: .9rem; }
   .dlg-body input[type="password"] { background: #fff; color: #111; border: 1px solid #000; }
+  /* -- 이용약관: 개인정보처리방침과 동일 테마 -- */
+  #terms { background: #000; }
+  #terms .overlay { display: none; }
+  #terms .sec-head h2 { color: #fff; }
+  #terms .back-btn { background: rgba(255,255,255,.1); color: #fff; border-color: rgba(255,255,255,.25); }
   /* -- 연락처: 공식 블랙 테마 -- */
   #contact { background: #000; --bg: #000; --surface: rgba(255,255,255,.06); --surface-soft: rgba(255,255,255,.09); --surface-glass: rgba(10,15,28,.78); --text: #E2E8F0; --text-strong: #fff; --muted: #94A3B8; --border: rgba(255,255,255,.12); --shadow: 0 22px 60px rgba(0,0,0,.35); }
   #contact .overlay { display: none; }
@@ -3373,6 +3378,38 @@
       <h3>문의 정보의 처리</h3>
       <p>메일에 담긴 개인정보는 답변 목적으로만 사용하며, 목적 달성 시 지체 없이 파기합니다.</p>
     </div>
+</section>
+
+<!-- ===== 이용약관 (애드센스 권장) ===== -->
+<section id="terms" class="parallax-section page-view" data-view="terms" hidden>
+  <div class="overlay"></div>
+  <div class="container">
+    <a href="#home" class="back-btn">← 홈으로</a>
+
+    <div class="sec-head">
+      <span class="tag about">TERMS</span>
+      <h2>이용약관</h2>
+    </div>
+
+    <div class="privacy-body">
+      <h3>제1조 (목적)</h3>
+      <p>이 약관은 BAIOO(baioo.app)가 제공하는 여행·AI·브랜딩 정보, 게시판, 댓글 등 모든 서비스 이용 조건을 정합니다.</p>
+      <h3>제2조 (이용 방법)</h3>
+      <p>별도 회원가입 없이 누구나 열람할 수 있습니다. 글·댓글 작성 시 입력한 내용은 사이트 표시용으로만 사용됩니다.</p>
+      <h3>제3조 (저작권)</h3>
+      <p>글·사진·영상 등 모든 콘텐츠의 저작권은 작성자 및 BAIOO에 있습니다. 허락 없는 무단 복제·배포·수집을 금합니다.</p>
+      <h3>제4조 (금지행위)</h3>
+      <p>① 타인 비방·욕설·도배 ② 저작권 침해 게시 ③ 불법 광고·스팸 ④ 사이트를 해킹하거나 정상 운영을 방해하는 행위를 금지합니다.</p>
+      <h3>제5조 (게시물 관리)</h3>
+      <p>금지행위에 해당하거나 저작권 침해·명예훼손 신고가 확인된 글·댓글은 사전 통보 없이 삭제할 수 있습니다. 문제 발견 시 운영자 이메일로 알려주시면 확인 후 즉시 조치합니다.</p>
+      <h3>제6조 (면책)</h3>
+      <p>제공 정보는 참고용이며, 이용 결과에 대해 운영자가 책임지지 않습니다. 외부 링크의 내용은 해당 사이트 운영자에게 책임이 있습니다.</p>
+      <h3>제7조 (광고)</h3>
+      <p>이 사이트는 Google AdSense 광고를 게재할 수 있으며, 광고 쿠키에 대한 안내는 개인정보처리방침을 따릅니다.</p>
+      <p>운영자: BAIOO 운영자 (sweet85126@hanmail.net)</p>
+      <p class="privacy-date">시행일: 2026년 10월 29일</p>
+    </div>
+  </div>
 </section>
 
 <!-- ===== 관리자 ===== -->
@@ -14332,7 +14369,7 @@ function openIdeaForm(ctx) {
 </script>
 
 <footer>
-  <a href="#privacy">개인정보처리방침</a> · <a href="#contact">연락처</a> · <button type="button" id="adminBtn" style="background:none;border:none;color:#000;font-size:.9rem;font-weight:600;cursor:pointer;text-decoration:underline;">관리자</button> · <a href="#about">페이지 소개</a><br>
+  <a href="#privacy">개인정보처리방침</a> · <a href="#terms">이용약관</a> · <a href="#contact">연락처</a> · <button type="button" id="adminBtn" style="background:none;border:none;color:#000;font-size:.9rem;font-weight:600;cursor:pointer;text-decoration:underline;">관리자</button> · <a href="#about">페이지 소개</a><br>
   © 2026 <span>BAIOO</span>. AI 세상을 바꾸는 찬란한 열쇠.
 </footer>
 <button type="button" id="adminDoor" title="관리자 문" aria-label="관리자 문">🚪</button>
