@@ -2420,6 +2420,13 @@
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
   <div class="overlay"></div>
+  <!-- ===== main2 AI 미디어 대문 (사진 스플래시→영상 순환, 글 untouched) ===== -->
+  <div class="m2-stage" id="m2Stage" aria-hidden="true">
+    <img class="m2-photo" id="m2Photo" alt="">
+    <video class="m2-video" id="m2Video" muted loop playsinline preload="metadata"></video>
+    <div class="m2-shade"></div>
+    <div class="m2-cap"><span class="m2-chip">🤖 BAIOO AI MEDIA GATE</span><span class="m2-sub">🔇 무음 자동재생</span></div>
+  </div>
   <div class="wave-wrap" aria-hidden="true">
     <svg class="wave wave-1" viewBox="0 0 2880 120" preserveAspectRatio="none">
       <defs><linearGradient id="waveGrad1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#38BDF8" stop-opacity=".38"/><stop offset=".5" stop-color="#6366F1" stop-opacity=".30"/><stop offset="1" stop-color="#38BDF8" stop-opacity=".38"/></linearGradient></defs>
@@ -3455,7 +3462,7 @@
           </label>
           <label style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
             <span style="display:block;width:90px;height:60px;border:2px solid var(--border);border-radius:8px;background:#fff;"></span>
-            <span><input type="radio" name="mainLayout" value="main2"> 흰색 빈 화면</span>
+            <span><input type="radio" name="mainLayout" value="main2"> AI 미디어 대문</span>
           </label>
         </div>
         <div id="mainLayoutPreview" class="ai-lead-sub" style="margin-top:8px;">미리보기: 현재 Main 적용중</div>
@@ -14032,8 +14039,66 @@ async function maintSet(on) {
   maintCheck();
 }
 
+/* ===== main2 AI 미디어 대문 (사진→영상 순환, main1 무영향) ===== */(function () {
+  var M2_PHOTOS = []; /* 사진 첨부 후 파일명 추가 (m2-photo-01.jpg …) */
+  var M2_VIDEOS = ["about-hero.mp4"]; /* MiniMax 영상 추가 시 파일명 append */
+  var PHOTO_MS = 2800;
+  var stage = document.getElementById("m2Stage");
+  var photo = document.getElementById("m2Photo");
+  var video = document.getElementById("m2Video");
+  if (!stage || !photo || !video) return;
+  var reduced = false;
+  try { reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+  var vi = 0, timer = 0, active = false;
+  function isM2() { try { return document.body.dataset.mainLayout === "main2"; } catch (e) { return false; } }
+  function isHome() { return (location.hash || "#home").replace("#", "") === "home"; }
+  function stop() {
+    active = false;
+    if (timer) { clearTimeout(timer); timer = 0; }
+    try { video.pause(); } catch (e) {}
+    photo.classList.remove("show");
+    video.classList.remove("show");
+  }
+  function playVideos() {
+    if (!M2_VIDEOS.length) return;
+    if (reduced) { video.src = M2_VIDEOS[0]; video.classList.add("show"); return; }
+    video.classList.add("show");
+    video.src = M2_VIDEOS[vi % M2_VIDEOS.length];
+    try { var p = video.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {}
+  }
+  video.addEventListener("ended", function () {
+    if (!active) return;
+    vi++;
+    video.classList.remove("show");
+    setTimeout(function () { if (active) playVideos(); }, 350);
+  });
+  function nextPhoto(i) {
+    if (!active) return;
+    if (i >= M2_PHOTOS.length) { photo.classList.remove("show"); playVideos(); return; }
+    photo.src = M2_PHOTOS[i];
+    photo.classList.remove("show");
+    void photo.offsetWidth;
+    photo.classList.add("show");
+    timer = setTimeout(function () { nextPhoto(i + 1); }, PHOTO_MS);
+  }
+  function start() {
+    if (active) return;
+    if (!isM2() || !isHome()) return;
+    active = true;
+    try { stage.setAttribute("aria-hidden", "false"); } catch (e) {}
+    if (M2_PHOTOS.length && !reduced) nextPhoto(0);
+    else { photo.classList.remove("show"); playVideos(); }
+  }
+  function sync() { if (isM2() && isHome()) start(); else stop(); }
+  window.addEventListener("hashchange", function () { setTimeout(sync, 60); });
+  try {
+    var mo = new MutationObserver(sync);
+    mo.observe(document.body, { attributes: true, attributeFilter: ["data-main-layout"] });
+  } catch (e) {}
+  sync();
+})();
 /* ===== Main 형식 (라디오+미리보기, 서버 저장) ===== */
-var MAIN_LAYOUTS = { main1: "현재 Main", main2: "흰색 빈 화면" };
+var MAIN_LAYOUTS = { main1: "현재 Main", main2: "AI 미디어 대문" };
 function applyMainLayout(layout) {
   try { document.body.dataset.mainLayout = layout; } catch (e) {}
   var radios = document.querySelectorAll('input[name="mainLayout"]');
@@ -14411,12 +14476,22 @@ setTimeout(maybeAdminBg, 500);
 #maintOverlay { position: fixed; inset: 0; z-index: 99999; display: none; align-items: center; justify-content: center; background: #111; color: #fff; text-align: center; padding: 24px; }
 #maintOverlay.show { display: flex; }
 #maintOverlay h2 { font-size: 1.6rem; margin-bottom: 12px; }
-/* Main 형식 main2: 대문(home)만 흰색 빈 화면 */
-body[data-main-layout="main2"] #home { background: #fff; }
-body[data-main-layout="main2"] #home .overlay { background: #fff; opacity: 1; }
+/* Main 형식 main2: AI 미디어 대문 (사진 스플래시→영상 순환) */
+.m2-stage { display: none; }
+body[data-main-layout="main2"] #home { background: #000; position: relative; overflow: hidden; }
 body[data-main-layout="main2"] #home .container,
 body[data-main-layout="main2"] #home .orb,
+body[data-main-layout="main2"] #home .overlay,
 body[data-main-layout="main2"] #home .wave-wrap { display: none; }
+body[data-main-layout="main2"] #home .m2-stage { display: block; position: absolute; inset: 0; z-index: 2; }
+.m2-photo, .m2-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .8s ease; }
+.m2-photo.show, .m2-video.show { opacity: 1; }
+.m2-photo.show { animation: m2kb 3.2s ease-out forwards; }
+@keyframes m2kb { from { transform: scale(1); } to { transform: scale(1.08); } }
+.m2-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.25), transparent 40%, rgba(0,0,0,.45)); pointer-events: none; }
+.m2-cap { position: absolute; left: 20px; bottom: 18px; display: flex; gap: 8px; align-items: center; }
+.m2-chip { font-size: .75rem; font-weight: 800; letter-spacing: .12em; color: #7dd3fc; background: rgba(0,0,0,.55); border: 1px solid rgba(125,211,252,.4); padding: 6px 12px; border-radius: 999px; }
+.m2-sub { font-size: .75rem; color: rgba(255,255,255,.7); }
 /* 관리자 페이지만 줄 형식 */
 #admin .post-grid { display: block; }
 #admin .post-grid .post { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; padding: 14px 16px; border-radius: 14px; margin-bottom: 10px; }
