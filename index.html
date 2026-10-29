@@ -14063,6 +14063,11 @@ async function maintSet(on) {
     video.classList.remove("show");
     setTimeout(function () { if (active) play(); }, 350);
   });
+  video.addEventListener("error", function () {
+    if (!active) return;
+    vi++;
+    setTimeout(function () { if (active) play(); }, 350);
+  }, true);
   video.addEventListener("timeupdate", function () {
     if (!active) return;
     try {
