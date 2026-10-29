@@ -3453,6 +3453,10 @@
             <span style="display:block;width:90px;height:60px;border:2px solid var(--border);border-radius:8px;background:linear-gradient(180deg,var(--surface-soft) 55%,var(--surface) 55%);"></span>
             <span><input type="radio" name="mainLayout" value="main1" checked> 현재 Main</span>
           </label>
+          <label style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
+            <span style="display:block;width:90px;height:60px;border:2px solid var(--border);border-radius:8px;background:#fff;"></span>
+            <span><input type="radio" name="mainLayout" value="main2"> 흰색 빈 화면</span>
+          </label>
         </div>
         <div id="mainLayoutPreview" class="ai-lead-sub" style="margin-top:8px;">미리보기: 현재 Main 적용중</div>
       </div>
@@ -14029,9 +14033,8 @@ async function maintSet(on) {
 }
 
 /* ===== Main 형식 (라디오+미리보기, 서버 저장) ===== */
-var MAIN_LAYOUTS = { main1: "현재 Main" };
+var MAIN_LAYOUTS = { main1: "현재 Main", main2: "흰색 빈 화면" };
 function applyMainLayout(layout) {
-  if (layout !== "main1") layout = "main1";
   try { document.body.dataset.mainLayout = layout; } catch (e) {}
   var radios = document.querySelectorAll('input[name="mainLayout"]');
   for (var i = 0; i < radios.length; i++) radios[i].checked = (radios[i].value === layout);
@@ -14408,6 +14411,12 @@ setTimeout(maybeAdminBg, 500);
 #maintOverlay { position: fixed; inset: 0; z-index: 99999; display: none; align-items: center; justify-content: center; background: #111; color: #fff; text-align: center; padding: 24px; }
 #maintOverlay.show { display: flex; }
 #maintOverlay h2 { font-size: 1.6rem; margin-bottom: 12px; }
+/* Main 형식 main2: 대문(home)만 흰색 빈 화면 */
+body[data-main-layout="main2"] #home { background: #fff; }
+body[data-main-layout="main2"] #home .overlay { background: #fff; opacity: 1; }
+body[data-main-layout="main2"] #home .container,
+body[data-main-layout="main2"] #home .orb,
+body[data-main-layout="main2"] #home .wave-wrap { display: none; }
 /* 관리자 페이지만 줄 형식 */
 #admin .post-grid { display: block; }
 #admin .post-grid .post { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; padding: 14px 16px; border-radius: 14px; margin-bottom: 10px; }
