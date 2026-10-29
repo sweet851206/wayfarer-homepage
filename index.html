@@ -3279,13 +3279,11 @@
         <source src="about-hero.mp4" type="video/mp4">
       </video>
       <div class="abv-copy">
-        <span class="abv-kicker">ABOUT BAIOO — VIDEO MANIFESTO</span>
-        <h2>작은 시작이<br>큰 변화를 연다.</h2>
-        <p>BAIOO는 AI·브랜딩·여행·진단·펫 — 검증된 아이디어를 누구나 복제·활용할 수 있게 배포하는 1인 플랫폼입니다.</p>
+        <span class="abv-kicker" id="abKicker">ABOUT BAIOO — VIDEO MANIFESTO</span>
+        <h2 id="abHeroTitle">작은 시작이<br>큰 변화를 연다.</h2>
+        <p id="abHeroDesc">BAIOO는 AI·브랜딩·여행·진단·펫 — 검증된 아이디어를 누구나 복제·활용할 수 있게 배포하는 1인 플랫폼입니다.</p>
         <div class="abv-actions">
-          <a href="#ai">AI 허브 바로가기</a>
-          <a href="#branding">브랜딩 스튜디오</a>
-          <a href="#contact">협업 문의</a>
+          <button type="button" class="ai-btn-ghost admin-only" id="abHeroEdit">✏️ 문구 수정</button>
         </div>
       </div>
     </div>
@@ -14300,7 +14298,7 @@ function openIdeaForm(ctx) {
     try {
       var st = localStorage.getItem("baioo_" + px + "HeroTitle");
       var sd = localStorage.getItem("baioo_" + px + "HeroDesc");
-      if (st) t.textContent = toLines(st.replace(/ /g, " ").replace(/\.([가-힣A-Z])/g, ". $1"));
+      if (st) t.innerHTML = toLines(st.replace(/ /g, " ").replace(/\.([가-힣A-Z])/g, ". $1")).replace(/\n/g, "<br>");
       if (sd) d.textContent = sd.replace(/ /g, " ");
     } catch (e) {}
     var editing = false;
@@ -14320,6 +14318,24 @@ function openIdeaForm(ctx) {
         try { localStorage.setItem("baioo_" + px + "HeroTitle", nt); localStorage.setItem("baioo_" + px + "HeroDesc", nd); } catch (e) {}
       }
     });
+  });
+})();
+/* ===== About 키커 문구 관리자 수정 (abHeroEdit 공용 버튼) ===== */(function () {
+  var k = document.getElementById("abKicker");
+  var b = document.getElementById("abHeroEdit");
+  if (!k || !b) return;
+  var DEF_K = k.textContent;
+  try { var sk = localStorage.getItem("baioo_abHeroKicker"); if (sk) k.textContent = sk; } catch (e) {}
+  var editing = false;
+  b.addEventListener("click", function () {
+    if (!document.body.classList.contains("is-admin")) return;
+    editing = !editing;
+    k.contentEditable = editing ? "true" : "false";
+    if (!editing) {
+      var nk = (k.innerText !== undefined ? k.innerText : k.textContent).trim();
+      if (!nk) { nk = DEF_K; k.textContent = nk; }
+      try { localStorage.setItem("baioo_abHeroKicker", nk); } catch (e) {}
+    }
   });
 })();
 /* ===== 브랜딩 대문명 관리자 수정 (네비+섹션 동기화+localStorage) ===== */(function () {
