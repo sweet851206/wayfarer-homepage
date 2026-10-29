@@ -14040,9 +14040,9 @@ async function maintSet(on) {
 }
 
 /* ===== main2 AI 미디어 대문 (사진→영상 순환, main1 무영향) ===== */(function () {
-  var M2_PHOTOS = ["m2-photo-01.png", "m2-photo-02.png", "m2-photo-03.png"]; /* 사진 첨부 후 파일명 추가 (m2-photo-01.jpg …) */
-  var M2_VIDEOS = ["m2-video-01.mp4", "m2-video-02.mp4", "m2-video-03.mp4", "about-hero.mp4"]; /* MiniMax 영상 추가 시 파일명 append */
-  var PHOTO_MS = 2800;
+  var M2_PHOTOS = ["m2-photo-new.jpg"]; /* 새 사진으로 완전교체 */
+  var M2_VIDEOS = ["m2-video-new.mp4", "about-hero.mp4"]; /* 새 영상+열쇠 순환 */
+  var PHOTO_MS = 2000;
   var stage = document.getElementById("m2Stage");
   var photo = document.getElementById("m2Photo");
   var video = document.getElementById("m2Video");
