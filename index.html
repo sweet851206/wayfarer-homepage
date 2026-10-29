@@ -14040,8 +14040,8 @@ async function maintSet(on) {
 }
 
 /* ===== main2 AI 미디어 대문 (사진→영상 순환, main1 무영향) ===== */(function () {
-  var M2_PHOTOS = []; /* 사진 첨부 후 파일명 추가 (m2-photo-01.jpg …) */
-  var M2_VIDEOS = ["about-hero.mp4"]; /* MiniMax 영상 추가 시 파일명 append */
+  var M2_PHOTOS = ["m2-photo-01.png", "m2-photo-02.png", "m2-photo-03.png"]; /* 사진 첨부 후 파일명 추가 (m2-photo-01.jpg …) */
+  var M2_VIDEOS = ["m2-video-01.mp4", "m2-video-02.mp4", "m2-video-03.mp4", "about-hero.mp4"]; /* MiniMax 영상 추가 시 파일명 append */
   var PHOTO_MS = 2800;
   var stage = document.getElementById("m2Stage");
   var photo = document.getElementById("m2Photo");
