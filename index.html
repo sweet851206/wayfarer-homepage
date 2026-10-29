@@ -2329,11 +2329,13 @@
   .privacy-body a { color: #7dd3fc; font-weight: 800; }
   .privacy-date { margin-top: 26px !important; color: rgba(255,255,255,.6) !important; font-size: .9rem; }
   .dlg-body input[type="password"] { background: #fff; color: #111; border: 1px solid #000; }
-  /* -- About 영상 히어로형 (10-29 전면교체, 기존 .ai-* 공유클래스 무영향) -- */
-  #about { background: #000; }
+  /* -- About 영상 히어로형 (10-29 전면교체, 바탕 흰색) -- */
+  #about { background: #fff; }
   #about .overlay { display: none; }
-  #about .back-btn { background: rgba(255,255,255,.1); color: #fff; border-color: rgba(255,255,255,.25); }
-  .abv-hero { position: relative; border-radius: 22px; overflow: hidden; min-height: 46vh; display: flex; align-items: flex-end; background: radial-gradient(120% 140% at 20% 10%, #0EA5E9 0%, #1E1B4B 45%, #000 100%); border: 1px solid rgba(255,255,255,.14); }
+  #about .back-btn { background: #111; color: #fff; border-color: #111; }
+  #about .visit-counter { color: rgba(0,0,0,.55); }
+  #about .visit-counter b { color: #111; }
+  .abv-hero { position: relative; border-radius: 22px; overflow: hidden; min-height: 46vh; display: flex; align-items: flex-end; background: radial-gradient(120% 140% at 20% 10%, #0EA5E9 0%, #1E1B4B 45%, #000 100%); border: 1px solid rgba(0,0,0,.12); }
   .abv-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .abv-copy { position: relative; z-index: 2; padding: 40px 34px; color: #fff; max-width: 640px; text-shadow: 0 2px 12px rgba(0,0,0,.7); }
   .abv-kicker { display: inline-block; font-size: .78rem; letter-spacing: .18em; font-weight: 800; color: #7dd3fc; background: rgba(56,189,248,.15); border: 1px solid rgba(125,211,252,.4); padding: 6px 12px; border-radius: 999px; margin-bottom: 14px; }
@@ -2343,16 +2345,12 @@
   .abv-actions a { padding: 11px 18px; border-radius: 12px; font-weight: 800; text-decoration: none; font-size: .92rem; }
   .abv-actions a:first-child { background: #fff; color: #000; }
   .abv-actions a:not(:first-child) { border: 1px solid rgba(255,255,255,.35); color: #fff; }
-  .abv-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0; }
-  .abv-stat { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 14px; padding: 14px; text-align: center; color: #fff; }
-  .abv-stat b { display: block; font-size: 1.3rem; }
-  .abv-stat span { font-size: .8rem; color: rgba(255,255,255,.65); }
   .abv-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .abv-card { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); border-radius: 14px; padding: 18px; color: #fff; text-decoration: none; }
+  .abv-card { background: #fff; border: 1px solid rgba(0,0,0,.12); border-radius: 14px; padding: 18px; color: #111; text-decoration: none; }
   .abv-card h3 { margin: 0 0 8px; font-size: 1.02rem; }
-  .abv-card p { margin: 0; font-size: .88rem; color: rgba(255,255,255,.72); line-height: 1.7; }
-  .abv-note { color: rgba(255,255,255,.45); font-size: .8rem; text-align: center; margin: 14px 0 4px; }
-  @media (max-width: 760px) { .abv-stats, .abv-cards { grid-template-columns: 1fr; } .abv-copy { padding: 30px 20px; } }
+  .abv-card p { margin: 0; font-size: .88rem; color: rgba(0,0,0,.65); line-height: 1.7; }
+  .abv-note { color: rgba(0,0,0,.5); font-size: .8rem; text-align: center; margin: 14px 0 4px; }
+  @media (max-width: 760px) { .abv-cards { grid-template-columns: 1fr; } .abv-copy { padding: 30px 20px; } }
   /* -- 이용약관: 개인정보처리방침과 동일 테마 -- */
   #terms { background: #000; }
   #terms .overlay { display: none; }
@@ -3293,7 +3291,7 @@
       <a class="abv-card" href="#branding"><h3>🧭 5대 허브</h3><p>AI · 브랜딩 · 여행 · PC진단 · 펫. 각 허브별 레시피와 가이드를 제공합니다.</p></a>
       <a class="abv-card" href="#contact"><h3>🤝 협업·문의</h3><p>광고·제휴·아이디어 제안 환영. 공식 이메일로 직접 회신합니다.</p></a>
     </div>
-    <p class="abv-note">황금 열쇠 영상 · MiniMax 로컬 생성 10초 루프</p></p>
+    <p class="abv-note">황금 열쇠 영상 · MiniMax 로컬 생성 10초 루프</p>
   </div>
 </section>
 
