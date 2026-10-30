@@ -692,7 +692,7 @@
   .board-view-panel { position: relative; margin-top: 14px; margin-bottom: 22px; padding: 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-soft); }
   .board-view-panel .x-close { position: absolute; top: 8px; right: 10px; }
   .board-view-panel [id$="InlineContent"], .board-view-panel [id$="ViewContent"] { white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word; line-height: 1.7; }
-  .board-view-panel [id$="InlinePhotos"] video { max-width: 100%; width: 100%; border-radius: 12px; margin-top: 8px; background: #000; }
+  .board-view-panel [id$="InlinePhotos"] video, .board-view-panel [id$="Photos"] video { max-width: 100%; width: 100%; border-radius: 12px; margin-top: 8px; background: #000; }
   .vote-row { display: flex; gap: 10px; margin: 12px 0; }
   .vote-btn { border: 1px solid var(--border); background: #fff; border-radius: 999px; padding: 8px 14px; cursor: pointer; font-weight: 700; color: #e11d48; }
   .vote-btn:disabled { opacity: .5; cursor: default; }
@@ -3491,7 +3491,7 @@
         <textarea id="travelContent" placeholder="여행 이야기를 적어주세요"></textarea>
       </div>
       <div class="field">
-        <label for="travelFiles">사진·파일 (여러 개)</label>
+        <label for="travelFiles">사진·영상·파일 (여러 개)</label>
         <div class="attach-row">
           <label class="file-btn" for="travelFiles">파일 선택</label>
           <input type="file" id="travelFiles" class="sr" multiple>
@@ -3547,7 +3547,7 @@
         <textarea id="aiContent" placeholder="AI 이야기를 적어주세요"></textarea>
       </div>
       <div class="field">
-        <label for="aiFiles">사진·파일 (여러 개)</label>
+        <label for="aiFiles">사진·영상·파일 (여러 개)</label>
         <div class="attach-row">
           <label class="file-btn" for="aiFiles">파일 선택</label>
           <input type="file" id="aiFiles" class="sr" multiple>
@@ -3603,7 +3603,7 @@
         <textarea id="brContent" placeholder="브랜딩 이야기를 적어주세요"></textarea>
       </div>
       <div class="field">
-        <label for="brFiles">사진·파일 (여러 개)</label>
+        <label for="brFiles">사진·영상·파일 (여러 개)</label>
         <div class="attach-row">
           <label class="file-btn" for="brFiles">파일 선택</label>
           <input type="file" id="brFiles" class="sr" multiple>
@@ -3659,7 +3659,7 @@
         <textarea id="trContent" placeholder="여행 이야기를 적어주세요"></textarea>
       </div>
       <div class="field">
-        <label for="trFiles">사진·파일 (여러 개)</label>
+        <label for="trFiles">사진·영상·파일 (여러 개)</label>
         <div class="attach-row">
           <label class="file-btn" for="trFiles">파일 선택</label>
           <input type="file" id="trFiles" class="sr" multiple>
@@ -3715,7 +3715,7 @@
         <textarea id="rpContent" placeholder="진단 내용을 적어주세요"></textarea>
       </div>
       <div class="field">
-        <label for="rpFiles">사진·파일 (여러 개)</label>
+        <label for="rpFiles">사진·영상·파일 (여러 개)</label>
         <div class="attach-row">
           <label class="file-btn" for="rpFiles">파일 선택</label>
           <input type="file" id="rpFiles" class="sr" multiple>
@@ -3771,7 +3771,7 @@
         <textarea id="petContent" placeholder="펫 내용을 적어주세요"></textarea>
       </div>
       <div class="field">
-        <label for="petFiles">사진·파일 (여러 개)</label>
+        <label for="petFiles">사진·영상·파일 (여러 개)</label>
         <div class="attach-row">
           <label class="file-btn" for="petFiles">파일 선택</label>
           <input type="file" id="petFiles" class="sr" multiple>
@@ -3827,7 +3827,7 @@
         <textarea id="bunnyContent" placeholder="토토의 하루를 적어주세요"></textarea>
       </div>
       <div class="field">
-        <label for="bunnyFiles">사진·파일 (여러 개)</label>
+        <label for="bunnyFiles">사진·영상·파일 (여러 개)</label>
         <div class="attach-row">
           <label class="file-btn" for="bunnyFiles">파일 선택</label>
           <input type="file" id="bunnyFiles" class="sr" multiple>
@@ -4149,7 +4149,7 @@
         <textarea id="br2Content" placeholder="브랜딩 이야기를 적어주세요"></textarea>
       </div>
       <div class="field">
-        <label for="br2Files">사진·파일 (여러 개)</label>
+        <label for="br2Files">사진·영상·파일 (여러 개)</label>
         <div class="attach-row">
           <label class="file-btn" for="br2Files">파일 선택</label>
           <input type="file" id="br2Files" class="sr" multiple>
@@ -4312,7 +4312,7 @@
         <textarea id="br3Content" placeholder="브랜딩 이야기를 적어주세요"></textarea>
       </div>
       <div class="field">
-        <label for="br3Files">사진·파일 (여러 개)</label>
+        <label for="br3Files">사진·영상·파일 (여러 개)</label>
         <div class="attach-row">
           <label class="file-btn" for="br3Files">파일 선택</label>
           <input type="file" id="br3Files" class="sr" multiple>
@@ -4798,6 +4798,14 @@
       im.loading = "lazy";
       im.style.cssText = "width:100%;height:100%;object-fit:cover;border-radius:20px;display:block;";
       photo.appendChild(im);
+    } else if ((p.files || []).some(function (f) { var tt = String(f.type || ""); var nn = String(f.name || f.originalName || "").toLowerCase(); return /^video\//.test(tt) || /\.(mp4|webm|mov|m4v)$/.test(nn); })) {
+      var vd0 = document.createElement("video");
+      vd0.src = (p.files || []).filter(function (f) { var tt = String(f.type || ""); var nn = String(f.name || f.originalName || "").toLowerCase(); return /^video\//.test(tt) || /\.(mp4|webm|mov|m4v)$/.test(nn); })[0].url;
+      vd0.muted = true;
+      vd0.preload = "metadata";
+      vd0.playsInline = true;
+      vd0.style.cssText = "width:100%;height:100%;object-fit:cover;border-radius:20px;display:block;background:#000;";
+      photo.appendChild(vd0);
     } else {
       photo.style.cssText = "display:grid;place-items:center;font-size:3.2rem;background:linear-gradient(135deg,var(--travel-soft),var(--surface-soft));";
       photo.textContent = "🧭";
@@ -4975,6 +4983,13 @@ fd.append("pw", pwValtravel);
       im.src = f.url;
       im.alt = f.originalName || f.name;
       viewPhotos.appendChild(im);
+    });
+    (p.files || []).filter(function (f) { var tt = String(f.type || ""); var nn = String(f.name || f.originalName || "").toLowerCase(); return /^video\//.test(tt) || /\.(mp4|webm|mov|m4v)$/.test(nn); }).forEach(function (f) {
+      var vd = document.createElement("video");
+      vd.src = f.url;
+      vd.controls = true;
+      vd.preload = "metadata";
+      viewPhotos.appendChild(vd);
     });
     viewContent.textContent = p.content || "(내용 없음)";
     viewFiles.textContent = "";
@@ -5260,6 +5275,13 @@ fd.append("pw", pwValtravel);
         im.src = f.url;
         im.alt = f.originalName || f.name;
         ph.appendChild(im);
+      });
+      (p.files || []).filter(function (f) { var tt = String(f.type || ""); var nn = String(f.name || f.originalName || "").toLowerCase(); return /^video\//.test(tt) || /\.(mp4|webm|mov|m4v)$/.test(nn); }).forEach(function (f) {
+        var vd = document.createElement("video");
+        vd.src = f.url;
+        vd.controls = true;
+        vd.preload = "metadata";
+        ph.appendChild(vd);
       });
     }
     if (c) c.textContent = p.content || "(내용 없음)";
@@ -5689,6 +5711,13 @@ fd.append("pw", pwValtravel);
         im.src = f.url;
         im.alt = f.originalName || f.name;
         ph.appendChild(im);
+      });
+      (p.files || []).filter(function (f) { var tt = String(f.type || ""); var nn = String(f.name || f.originalName || "").toLowerCase(); return /^video\//.test(tt) || /\.(mp4|webm|mov|m4v)$/.test(nn); }).forEach(function (f) {
+        var vd = document.createElement("video");
+        vd.src = f.url;
+        vd.controls = true;
+        vd.preload = "metadata";
+        ph.appendChild(vd);
       });
     }
     if (c) c.textContent = p.content || "(내용 없음)";
@@ -6841,6 +6870,13 @@ fd.append("pw", pwValtravel);
         im.alt = f.originalName || f.name;
         ph.appendChild(im);
       });
+      (p.files || []).filter(function (f) { var tt = String(f.type || ""); var nn = String(f.name || f.originalName || "").toLowerCase(); return /^video\//.test(tt) || /\.(mp4|webm|mov|m4v)$/.test(nn); }).forEach(function (f) {
+        var vd = document.createElement("video");
+        vd.src = f.url;
+        vd.controls = true;
+        vd.preload = "metadata";
+        ph.appendChild(vd);
+      });
     }
     if (c) c.textContent = p.content || "(내용 없음)";
     if (fl) {
@@ -7060,6 +7096,14 @@ fd.append("pw", pwValtravel);
       im.loading = "lazy";
       im.style.cssText = "width:100%;height:100%;object-fit:cover;border-radius:20px;display:block;";
       photo.appendChild(im);
+    } else if ((p.files || []).some(function (f) { var tt = String(f.type || ""); var nn = String(f.name || f.originalName || "").toLowerCase(); return /^video\//.test(tt) || /\.(mp4|webm|mov|m4v)$/.test(nn); })) {
+      var vd0 = document.createElement("video");
+      vd0.src = (p.files || []).filter(function (f) { var tt = String(f.type || ""); var nn = String(f.name || f.originalName || "").toLowerCase(); return /^video\//.test(tt) || /\.(mp4|webm|mov|m4v)$/.test(nn); })[0].url;
+      vd0.muted = true;
+      vd0.preload = "metadata";
+      vd0.playsInline = true;
+      vd0.style.cssText = "width:100%;height:100%;object-fit:cover;border-radius:20px;display:block;background:#000;";
+      photo.appendChild(vd0);
     } else {
       photo.style.cssText = "display:grid;place-items:center;font-size:3.2rem;background:linear-gradient(135deg,var(--bunny-soft),var(--surface-soft));";
       photo.textContent = "🐰";
@@ -7234,6 +7278,13 @@ fd.append("pw", pwValbunny);
       im.src = f.url;
       im.alt = f.originalName || f.name;
       viewPhotos.appendChild(im);
+    });
+    (p.files || []).filter(function (f) { var tt = String(f.type || ""); var nn = String(f.name || f.originalName || "").toLowerCase(); return /^video\//.test(tt) || /\.(mp4|webm|mov|m4v)$/.test(nn); }).forEach(function (f) {
+      var vd = document.createElement("video");
+      vd.src = f.url;
+      vd.controls = true;
+      vd.preload = "metadata";
+      viewPhotos.appendChild(vd);
     });
     viewContent.textContent = p.content || "(내용 없음)";
     viewFiles.textContent = "";
@@ -9006,6 +9057,13 @@ fd.append("pw", pwValbunny);
         im.alt = f.originalName || f.name;
         ph.appendChild(im);
       });
+      (p.files || []).filter(function (f) { var tt = String(f.type || ""); var nn = String(f.name || f.originalName || "").toLowerCase(); return /^video\//.test(tt) || /\.(mp4|webm|mov|m4v)$/.test(nn); }).forEach(function (f) {
+        var vd = document.createElement("video");
+        vd.src = f.url;
+        vd.controls = true;
+        vd.preload = "metadata";
+        ph.appendChild(vd);
+      });
     }
     if (c) c.textContent = p.content || "(내용 없음)";
     if (fl) {
@@ -10197,6 +10255,13 @@ fd.append("pw", pwValbunny);
         im.src = f.url;
         im.alt = f.originalName || f.name;
         ph.appendChild(im);
+      });
+      (p.files || []).filter(function (f) { var tt = String(f.type || ""); var nn = String(f.name || f.originalName || "").toLowerCase(); return /^video\//.test(tt) || /\.(mp4|webm|mov|m4v)$/.test(nn); }).forEach(function (f) {
+        var vd = document.createElement("video");
+        vd.src = f.url;
+        vd.controls = true;
+        vd.preload = "metadata";
+        ph.appendChild(vd);
       });
     }
     if (c) c.textContent = p.content || "(내용 없음)";
