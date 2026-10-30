@@ -2451,6 +2451,40 @@
       <p class="hero-sub rise rise-2b">작은 시작이 큰 변화를 연다</p>
     </div>
   </div>
+  <!-- ===== main3 미디어 카드 대문: 첫줄=관리자 추천, 둘째줄=방문자 게시판 ===== -->
+  <div class="m3-wrap" id="m3Wrap">
+    <div class="m3-row">
+      <div class="m3-row-head">
+        <div>
+          <h3 class="m3-row-title">관리자 추천</h3>
+          <p class="m3-row-sub">BAIOO가 고른 영상·이미지</p>
+        </div>
+        <div class="m3-row-btns">
+          <button type="button" class="ai-btn-primary admin-only" id="m3aAddBtn">＋ 등록</button>
+          <button type="button" class="m3-arrow" id="m3aPrev" aria-label="이전">‹</button>
+          <button type="button" class="m3-arrow" id="m3aNext" aria-label="다음">›</button>
+        </div>
+      </div>
+      <div class="m3-track" id="m3aTrack"></div>
+    </div>
+    <div class="m3-banner">
+      <div class="m3-banner-text"><strong>BAIOO 미디어 카드 대문</strong><span>첫 줄은 관리자 추천 · 둘째 줄은 방문자도 직접 올릴 수 있습니다</span></div>
+    </div>
+    <div class="m3-row">
+      <div class="m3-row-head">
+        <div>
+          <h3 class="m3-row-title">방문자 게시판</h3>
+          <p class="m3-row-sub">여러분의 영상·이미지를 올려보세요 (사진 8MB·영상 20MB 이하)</p>
+        </div>
+        <div class="m3-row-btns">
+          <button type="button" class="ai-btn-primary" id="m3bAddBtn">＋ 올리기</button>
+          <button type="button" class="m3-arrow" id="m3bPrev" aria-label="이전">‹</button>
+          <button type="button" class="m3-arrow" id="m3bNext" aria-label="다음">›</button>
+        </div>
+      </div>
+      <div class="m3-track" id="m3bTrack"></div>
+    </div>
+  </div>
 </section>
 
 <section id="ai" class="parallax-section page-view" data-view="ai" hidden>
@@ -3464,6 +3498,10 @@
           <label style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
             <span style="display:block;width:90px;height:60px;border:2px solid var(--border);border-radius:8px;background:#fff;"></span>
             <span><input type="radio" name="mainLayout" value="main2"> 미디어 대문</span>
+          </label>
+          <label style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
+            <span style="display:block;width:90px;height:60px;border:2px solid var(--border);border-radius:8px;background:linear-gradient(180deg,#fff 30%,#e0e7ff 30%);"></span>
+            <span><input type="radio" name="mainLayout" value="main3"> 미디어 카드</span>
           </label>
         </div>
         <div id="mainLayoutPreview" class="ai-lead-sub" style="margin-top:8px;">미리보기: 현재 Main 적용중</div>
@@ -14173,8 +14211,164 @@ async function maintSet(on) {
   } catch (e) {}
   sync();
 })();
+/* ===== main3 미디어 카드 대문 (m3a=관리자 추천, m3b=방문자 게시판) ===== */
+(function () {
+  function loadLs(k) { try { var v = JSON.parse(localStorage.getItem(k) || "[]"); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
+  function saveLs(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function isAdmin() { try { return document.body.classList.contains("is-admin"); } catch (e) { return false; } }
+  function setupRow(cfg) {
+    if (!setupRow._vio) {
+      try {
+        setupRow._vio = new IntersectionObserver(function (ents) {
+          ents.forEach(function (en) {
+            try {
+              if (en.isIntersecting) { en.target.muted = true; var p = en.target.play(); if (p && p.catch) p.catch(function () {}); }
+              else { en.target.pause(); }
+            } catch (e) {}
+          });
+        }, { threshold: 0.25 });
+      } catch (e) { setupRow._vio = null; }
+    }
+    var list = loadLs(cfg.lsKey);
+    var track = document.getElementById(cfg.trackId);
+    function render() {
+      if (!track) return;
+      track.textContent = "";
+      if (!list.length) {
+        var em = document.createElement("div");
+        em.className = "m3-empty";
+        em.textContent = cfg.emptyText;
+        track.appendChild(em);
+        return;
+      }
+      list.forEach(function (it) { track.appendChild(makeCard(it)); });
+    }
+    function commit(nl) { list = nl; saveLs(cfg.lsKey, list); render(); }
+    function refreshFromServer(items) {
+      var ids = {};
+      (items || []).forEach(function (x) { if (x && x.id) ids[x.id] = true; });
+      commit((items || []).concat(list.filter(function (x) { return x && x.id && !ids[x.id]; })));
+    }
+    function openForm(editItem) {
+      if (cfg.adminOnly && !isAdmin()) { alert("관리자 로그인 후 사용하세요."); return; }
+      var init = editItem ? { title: editItem.title, extra: editItem.extra, category: editItem.category, status: "live", tags: editItem.tags, summary: editItem.summary } : null;
+      openIdeaForm({
+        dlgTitle: editItem ? cfg.dlgTitle + " 수정" : cfg.dlgTitle,
+        extraLabel: "한 줄 소개",
+        titlePh: "예: 저녁노을 타임랩스",
+        extraPh: "짧은 소개 한 줄",
+        categories: [["clip", "🎬 숏폼"], ["photo", "🖼️ 사진"], ["etc", "📌 기타"]],
+        statuses: [["live", "공개"]],
+        tagsPh: "예: 노을, 타임랩스",
+        summaryPh: "상세 설명 (선택)",
+        submitLabel: editItem ? "수정하기" : "올리기",
+        initial: init,
+        onSubmit: function (d) {
+          if (editItem) {
+            editItem.title = d.title;
+            editItem.extra = d.extra || "";
+            editItem.tags = d.tags || [];
+            editItem.summary = d.summary || "";
+            if (d.photoData) editItem.photoData = d.photoData;
+            if (d.videoData) editItem.videoData = d.videoData;
+            var p1 = ideaServerUpsert(cfg.board, editItem);
+            delete editItem.photoData; delete editItem.videoData;
+            saveLs(cfg.lsKey, list); render();
+            if (p1 && p1.then) p1.then(function () { ideaServerSync(cfg.board, function () { return list; }, refreshFromServer); }).catch(function () {});
+          } else {
+            var it = {
+              id: "m3-" + Date.now().toString(36),
+              title: d.title,
+              extra: d.extra || "",
+              category: d.category || "clip",
+              status: "live",
+              tags: d.tags || [],
+              summary: d.summary || "",
+              date: new Date().toISOString().slice(0, 10)
+            };
+            if (d.photoData) it.photoData = d.photoData;
+            if (d.videoData) it.videoData = d.videoData;
+            commit([it].concat(list));
+            var p2 = ideaServerUpsert(cfg.board, it);
+            delete it.photoData; delete it.videoData;
+            saveLs(cfg.lsKey, list);
+            if (p2 && p2.then) p2.then(function () { ideaServerSync(cfg.board, function () { return list; }, refreshFromServer); }).catch(function () {});
+          }
+        }
+      });
+    }
+    function makeCard(item) {
+      var card = document.createElement("article");
+      card.className = "m3-card";
+      var box = document.createElement("div");
+      box.className = "m3-card-media";
+      var vu = item.video || "", pu = (!vu && (item.photo || item.image || item.cover)) || "";
+      if (vu) {
+        var vd = document.createElement("video");
+        vd.src = vu; vd.controls = true; vd.preload = "metadata"; vd.loop = true; vd.muted = true;
+        try { vd.playsInline = true; } catch (e) {}
+        if (setupRow._vio) { try { setupRow._vio.observe(vd); } catch (e) {} }
+        box.appendChild(vd);
+      } else if (pu) {
+        var im = document.createElement("img");
+        im.src = pu; im.alt = String(item.title || ""); im.loading = "lazy";
+        box.appendChild(im);
+      } else {
+        var sp = document.createElement("span");
+        sp.className = "m3-card-none"; sp.textContent = "🖼️";
+        box.appendChild(sp);
+      }
+      card.appendChild(box);
+      var bd = document.createElement("div");
+      bd.className = "m3-card-body";
+      var tt = document.createElement("h4");
+      tt.className = "m3-card-title"; tt.textContent = String(item.title || "(제목 없음)");
+      bd.appendChild(tt);
+      if (item.extra) { var dd = document.createElement("p"); dd.className = "m3-card-desc"; dd.textContent = String(item.extra); bd.appendChild(dd); }
+      if (isAdmin()) {
+        var btns = document.createElement("div");
+        btns.className = "m3-card-btns";
+        var eb = document.createElement("button");
+        eb.type = "button"; eb.className = "ai-action-btn"; eb.textContent = "✏️ 수정";
+        eb.addEventListener("click", function (ev) { ev.stopPropagation(); openForm(item); });
+        var db = document.createElement("button");
+        db.type = "button"; db.className = "ai-action-btn"; db.textContent = "🗑️ 삭제";
+        db.addEventListener("click", function (ev) {
+          ev.stopPropagation();
+          if (!window.confirm("이 카드를 삭제할까요?")) return;
+          commit(list.filter(function (x) { return x.id !== item.id; }));
+          ideaServerDelete(cfg.board, item.id);
+        });
+        btns.appendChild(eb); btns.appendChild(db); bd.appendChild(btns);
+      }
+      card.appendChild(bd);
+      return card;
+    }
+    var addBtn = document.getElementById(cfg.addBtnId);
+    if (addBtn) addBtn.addEventListener("click", function () { openForm(null); });
+    function scrollByAmt(dir) {
+      if (!track) return;
+      try { track.scrollBy({ left: dir * 430, behavior: "smooth" }); }
+      catch (e) { track.scrollLeft += dir * 430; }
+    }
+    var pv = document.getElementById(cfg.prevId);
+    var nx = document.getElementById(cfg.nextId);
+    if (pv) pv.addEventListener("click", function () { scrollByAmt(-1); });
+    if (nx) nx.addEventListener("click", function () { scrollByAmt(1); });
+    render();
+    ideaServerSync(cfg.board, function () { return list; }, refreshFromServer);
+    try {
+      var mo = new MutationObserver(function () { render(); });
+      mo.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+    } catch (e) {}
+  }
+  if (document.getElementById("m3Wrap")) {
+    setupRow({ board: "m3a", lsKey: "baioo-m3a", trackId: "m3aTrack", addBtnId: "m3aAddBtn", prevId: "m3aPrev", nextId: "m3aNext", dlgTitle: "관리자 추천 등록", emptyText: "아직 등록된 추천이 없습니다.", adminOnly: true });
+    setupRow({ board: "m3b", lsKey: "baioo-m3b", trackId: "m3bTrack", addBtnId: "m3bAddBtn", prevId: "m3bPrev", nextId: "m3bNext", dlgTitle: "방문자 게시판 올리기", emptyText: "아직 올라온 게시물이 없습니다. 첫 번째로 올려보세요!", adminOnly: false });
+  }
+})();
 /* ===== Main 형식 (라디오+미리보기, 서버 저장) ===== */
-var MAIN_LAYOUTS = { main1: "현재 Main", main2: "미디어 대문" };
+var MAIN_LAYOUTS = { main1: "현재 Main", main2: "미디어 대문", main3: "미디어 카드" };
 function applyMainLayout(layout) {
   try { document.body.dataset.mainLayout = layout; } catch (e) {}
   var radios = document.querySelectorAll('input[name="mainLayout"]');
@@ -14561,6 +14755,34 @@ body[data-main-layout="main2"] #home .container { position: relative; z-index: 2
 body[data-main-layout="main2"] #home .wave-wrap { z-index: 2; }
 .m2-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .8s ease; }
 .m2-video.show { opacity: 1; }
+/* Main 형식 main3: 미디어 카드 대문 (첫줄=관리자, 둘째줄=방문자, 흰바탕) */
+.m3-wrap { display: none; position: relative; z-index: 2; width: 100%; padding: 6px 0 52px; }
+body[data-main-layout="main3"] .m3-wrap { display: block; }
+.m3-row { max-width: 1200px; margin: 26px auto 0; padding: 0 20px; }
+.m3-row-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.m3-row-title { margin: 0; font-size: 1.25rem; }
+.m3-row-sub { margin: 4px 0 0; font-size: .85rem; opacity: .65; }
+.m3-row-btns { display: flex; align-items: center; gap: 8px; flex: none; }
+.m3-arrow { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); font-size: 1.2rem; line-height: 1; cursor: pointer; }
+.m3-arrow:hover { background: var(--surface-soft); }
+.m3-track { display: flex; gap: 14px; overflow-x: auto; padding: 4px 2px 12px; scroll-behavior: smooth; }
+.m3-card { flex: 0 0 200px; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); }
+.m3-card-media { width: 100%; height: 260px; background: var(--surface-soft); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.m3-card-media img, .m3-card-media video { width: 100%; height: 100%; object-fit: cover; }
+.m3-card-none { font-size: 2rem; opacity: .4; }
+.m3-card-body { padding: 10px 12px 12px; }
+.m3-card-title { margin: 0 0 4px; font-size: .95rem; }
+.m3-card-desc { margin: 0; font-size: .8rem; opacity: .65; }
+.m3-card-btns { display: flex; gap: 6px; margin-top: 8px; }
+.m3-empty { padding: 26px 12px; font-size: .9rem; opacity: .6; }
+.m3-banner { max-width: 1200px; margin: 26px auto 0; padding: 0 20px; }
+.m3-banner-text { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; border-radius: 14px; padding: 14px 18px; background: linear-gradient(90deg, #7c3aed, #ec4899, #f59e0b); color: #fff; font-size: .95rem; }
+.m3-banner-text span { font-size: .82rem; opacity: .9; }
+/* 카드 크기 제각각 */
+.m3-track .m3-card:nth-child(3n) { flex-basis: 250px; }
+.m3-track .m3-card:nth-child(3n) .m3-card-media { height: 320px; }
+.m3-track .m3-card:nth-child(4n+2) { flex-basis: 170px; }
+.m3-track .m3-card:nth-child(4n+2) .m3-card-media { height: 210px; }
 /* 관리자 페이지만 줄 형식 */
 #admin .post-grid { display: block; }
 #admin .post-grid .post { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; padding: 14px 16px; border-radius: 14px; margin-bottom: 10px; }
