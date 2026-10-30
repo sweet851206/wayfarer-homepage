@@ -692,6 +692,7 @@
   .board-view-panel { position: relative; margin-top: 14px; margin-bottom: 22px; padding: 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-soft); }
   .board-view-panel .x-close { position: absolute; top: 8px; right: 10px; }
   .board-view-panel [id$="InlineContent"], .board-view-panel [id$="ViewContent"] { white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word; line-height: 1.7; }
+  .board-view-panel [id$="InlinePhotos"] video { max-width: 100%; width: 100%; border-radius: 12px; margin-top: 8px; background: #000; }
   .vote-row { display: flex; gap: 10px; margin: 12px 0; }
   .vote-btn { border: 1px solid var(--border); background: #fff; border-radius: 999px; padding: 8px 14px; cursor: pointer; font-weight: 700; color: #e11d48; }
   .vote-btn:disabled { opacity: .5; cursor: default; }
@@ -6068,6 +6069,13 @@ fd.append("pw", pwValtravel);
         im.alt = f.originalName || f.name;
         ph.appendChild(im);
       });
+      (p.files || []).filter(function (f) { var tt = String(f.type || ""); var nn = String(f.name || f.originalName || "").toLowerCase(); return /^video\//.test(tt) || /\.(mp4|webm|mov|m4v)$/.test(nn); }).forEach(function (f) {
+        var vd = document.createElement("video");
+        vd.src = f.url;
+        vd.controls = true;
+        vd.preload = "metadata";
+        ph.appendChild(vd);
+      });
     }
     if (c) c.textContent = p.content || "(내용 없음)";
     if (fl) {
@@ -6446,6 +6454,13 @@ fd.append("pw", pwValtravel);
         im.src = f.url;
         im.alt = f.originalName || f.name;
         ph.appendChild(im);
+      });
+      (p.files || []).filter(function (f) { var tt = String(f.type || ""); var nn = String(f.name || f.originalName || "").toLowerCase(); return /^video\//.test(tt) || /\.(mp4|webm|mov|m4v)$/.test(nn); }).forEach(function (f) {
+        var vd = document.createElement("video");
+        vd.src = f.url;
+        vd.controls = true;
+        vd.preload = "metadata";
+        ph.appendChild(vd);
       });
     }
     if (c) c.textContent = p.content || "(내용 없음)";
