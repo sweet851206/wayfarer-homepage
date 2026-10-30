@@ -3907,6 +3907,9 @@
       <div class="field">
         <label for="ideaFormTitle">제목 *</label>
         <input type="text" id="ideaFormTitle" maxlength="120">
+        <div class="emoji-pick" id="ideaEmojiPick" aria-label="이모지 넣기">
+          <button type="button" data-e="✨">✨</button><button type="button" data-e="🚀">🚀</button><button type="button" data-e="🎬">🎬</button><button type="button" data-e="🖼️">🖼️</button><button type="button" data-e="🐾">🐾</button><button type="button" data-e="🌅">🌅</button><button type="button" data-e="🎵">🎵</button><button type="button" data-e="💡">💡</button><button type="button" data-e="🔥">🔥</button><button type="button" data-e="❤️">❤️</button><button type="button" data-e="👍">👍</button><button type="button" data-e="🎉">🎉</button><button type="button" data-e="📌">📌</button><button type="button" data-e="⭐">⭐</button>
+        </div>
       </div>
       <div class="field">
         <label for="ideaFormExtra" id="ideaFormExtraLabel">핵심 한 줄</label>
@@ -14523,6 +14526,29 @@ function ideaMediaBind() {
       rd.readAsDataURL(f);
     });
   }
+  var ep = document.getElementById("ideaEmojiPick");
+  if (ep && !ep.dataset.bound) {
+    ep.dataset.bound = "1";
+    ["ideaFormTitle", "ideaFormExtra", "ideaFormTags", "ideaFormSummary"].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener("focus", function () { ep.dataset.target = id; });
+    });
+    ep.addEventListener("click", function (e) {
+      var b = e.target && e.target.closest ? e.target.closest("button[data-e]") : null;
+      if (!b) return;
+      var emo = b.getAttribute("data-e") || "";
+      var tgt = document.getElementById(ep.dataset.target || "ideaFormTitle") || document.getElementById("ideaFormTitle");
+      if (!tgt) return;
+      try {
+        var s = (tgt.selectionStart == null ? tgt.value.length : tgt.selectionStart);
+        var en = (tgt.selectionEnd == null ? tgt.value.length : tgt.selectionEnd);
+        tgt.value = tgt.value.slice(0, s) + emo + tgt.value.slice(en);
+        var pos = s + emo.length;
+        tgt.focus();
+        tgt.setSelectionRange(pos, pos);
+      } catch (err) { tgt.value += emo; tgt.focus(); }
+    });
+  }
 }
 function openIdeaForm(ctx) {
   ideaFormCtx = ctx;
@@ -14810,6 +14836,10 @@ body[data-main-layout="main3"] .m3-empty { color: var(--muted); }
 .m3-arrow { background: #fff; border-color: #CBD5E1; color: #0F172A; }
 .m3-arrow:hover { background: var(--surface-soft); }
 .m3-card .ai-action-btn:hover { border-color: #0EA5E9; color: #0EA5E9; }
+/* 공용 등록창 이모지 빠른넣기 */
+.emoji-pick { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.emoji-pick button { font-size: 1.15rem; line-height: 1; padding: 4px 6px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-soft); cursor: pointer; }
+.emoji-pick button:hover { border-color: #0EA5E9; }
 /* 관리자 페이지만 줄 형식 */
 #admin .post-grid { display: block; }
 #admin .post-grid .post { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; padding: 14px 16px; border-radius: 14px; margin-bottom: 10px; }
