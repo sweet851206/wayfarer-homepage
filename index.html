@@ -14623,7 +14623,7 @@ function openIdeaForm(ctx) {
       var st = localStorage.getItem("baioo_" + px + "HeroTitle");
       var sd = localStorage.getItem("baioo_" + px + "HeroDesc");
       if (st) t.innerHTML = toLines(st.replace(/ /g, " ").replace(/\.([가-힣A-Z])/g, ". $1")).replace(/\n/g, "<br>");
-      if (sd) d.textContent = sd.replace(/ /g, " ");
+      if (sd) d.innerHTML = toLines(sd.replace(/ /g, " ").replace(/\.([가-힣A-Z])/g, ". $1")).replace(/\n/g, "<br>");
     } catch (e) {}
     var editing = false;
     b.addEventListener("click", function () {
