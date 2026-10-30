@@ -3907,9 +3907,6 @@
       <div class="field">
         <label for="ideaFormTitle">제목 *</label>
         <input type="text" id="ideaFormTitle" maxlength="120">
-        <div class="emoji-pick" id="ideaEmojiPick" aria-label="이모지 넣기">
-          <button type="button" data-e="✨">✨</button><button type="button" data-e="🚀">🚀</button><button type="button" data-e="🎬">🎬</button><button type="button" data-e="🖼️">🖼️</button><button type="button" data-e="🐾">🐾</button><button type="button" data-e="🌅">🌅</button><button type="button" data-e="🎵">🎵</button><button type="button" data-e="💡">💡</button><button type="button" data-e="🔥">🔥</button><button type="button" data-e="❤️">❤️</button><button type="button" data-e="👍">👍</button><button type="button" data-e="🎉">🎉</button><button type="button" data-e="📌">📌</button><button type="button" data-e="⭐">⭐</button>
-        </div>
       </div>
       <div class="field">
         <label for="ideaFormExtra" id="ideaFormExtraLabel">핵심 한 줄</label>
@@ -14526,30 +14523,92 @@ function ideaMediaBind() {
       rd.readAsDataURL(f);
     });
   }
-  var ep = document.getElementById("ideaEmojiPick");
-  if (ep && !ep.dataset.bound) {
-    ep.dataset.bound = "1";
-    ["ideaFormTitle", "ideaFormExtra", "ideaFormTags", "ideaFormSummary"].forEach(function (id) {
-      var el = document.getElementById(id);
-      if (el) el.addEventListener("focus", function () { ep.dataset.target = id; });
-    });
-    ep.addEventListener("click", function (e) {
-      var b = e.target && e.target.closest ? e.target.closest("button[data-e]") : null;
-      if (!b) return;
-      var emo = b.getAttribute("data-e") || "";
-      var tgt = document.getElementById(ep.dataset.target || "ideaFormTitle") || document.getElementById("ideaFormTitle");
-      if (!tgt) return;
-      try {
-        var s = (tgt.selectionStart == null ? tgt.value.length : tgt.selectionStart);
-        var en = (tgt.selectionEnd == null ? tgt.value.length : tgt.selectionEnd);
-        tgt.value = tgt.value.slice(0, s) + emo + tgt.value.slice(en);
-        var pos = s + emo.length;
-        tgt.focus();
-        tgt.setSelectionRange(pos, pos);
-      } catch (err) { tgt.value += emo; tgt.focus(); }
-    });
-  }
 }
+/* ===== 전역 이모지 팔레트 (다이얼로그 글쓰기+댓글 공용) ===== */
+(function () {
+  var EMOJIS = ["😀","😁","😂","🤣","😊","😍","😎","🤔","😭","😡","👍","👎","🙏","👏","💪","🔥","✨","🎉","❤️","💡","📌","⭐","🎬","🎵","🖼️","🌅","🐾","🚀","✅","❌","➡️","💬"];
+  var target = null;
+  function insertInto(el, emo) {
+    if (!el) return;
+    try {
+      if (el.isContentEditable) {
+        el.focus();
+        if (!document.execCommand("insertText", false, emo)) {
+          var sel = window.getSelection();
+          if (sel && sel.rangeCount) {
+            var r = sel.getRangeAt(0);
+            r.deleteContents();
+            r.insertNode(document.createTextNode(emo));
+            r.collapse(false);
+          }
+        }
+        return;
+      }
+      var s = (el.selectionStart == null ? el.value.length : el.selectionStart);
+      var en = (el.selectionEnd == null ? el.value.length : el.selectionEnd);
+      el.value = el.value.slice(0, s) + emo + el.value.slice(en);
+      var pos = s + emo.length;
+      el.focus();
+      try { el.setSelectionRange(pos, pos); } catch (e) {}
+    } catch (e) { try { el.value += emo; el.focus(); } catch (e2) {} }
+  }
+  function ensurePalette() {
+    var dlg = document.getElementById("emojiPaletteDialog");
+    if (dlg) return dlg;
+    dlg = document.createElement("dialog");
+    dlg.id = "emojiPaletteDialog";
+    dlg.setAttribute("aria-label", "이모지 선택");
+    var body = document.createElement("div");
+    body.className = "dlg-body";
+    var x = document.createElement("button");
+    x.type = "button"; x.className = "x-close"; x.setAttribute("aria-label", "닫기"); x.textContent = "×";
+    x.addEventListener("click", function () { if (dlg.open) dlg.close(); });
+    var h = document.createElement("h3");
+    h.className = "dlg-title"; h.textContent = "이모지 선택";
+    var grid = document.createElement("div");
+    grid.className = "emoji-grid";
+    EMOJIS.forEach(function (e) {
+      var b = document.createElement("button");
+      b.type = "button"; b.textContent = e; b.setAttribute("aria-label", "이모지 " + e);
+      b.addEventListener("click", function () {
+        insertInto(target, e);
+        if (dlg.open) dlg.close();
+      });
+      grid.appendChild(b);
+    });
+    body.appendChild(x); body.appendChild(h); body.appendChild(grid);
+    dlg.appendChild(body);
+    document.body.appendChild(dlg);
+    return dlg;
+  }
+  function attach(root) {
+    var fields = root.querySelectorAll('dialog:not(#emojiPaletteDialog) input[type="text"], dialog:not(#emojiPaletteDialog) textarea, .cmt-form input[type="text"]');
+    for (var i = 0; i < fields.length; i++) {
+      (function (el) {
+        if (el.dataset.emojiAttached === "1") return;
+        el.dataset.emojiAttached = "1";
+        var b = document.createElement("button");
+        b.type = "button"; b.className = "emoji-mini-btn"; b.textContent = "😊"; b.setAttribute("aria-label", "이모지 넣기");
+        b.addEventListener("click", function (ev) {
+          ev.preventDefault(); ev.stopPropagation();
+          target = el;
+          var dlg = ensurePalette();
+          if (!dlg.open) { try { dlg.showModal(); } catch (e) {} }
+        });
+        if (el.parentNode) el.parentNode.insertBefore(b, el.nextSibling);
+      })(fields[i]);
+    }
+  }
+  function boot() {
+    attach(document);
+    try {
+      var mo = new MutationObserver(function () { attach(document); });
+      mo.observe(document.body, { childList: true, subtree: true });
+    } catch (e) {}
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+})();
 function openIdeaForm(ctx) {
   ideaFormCtx = ctx;
   var t = document.getElementById("ideaFormDlgTitle");
@@ -14836,10 +14895,13 @@ body[data-main-layout="main3"] .m3-empty { color: var(--muted); }
 .m3-arrow { background: #fff; border-color: #CBD5E1; color: #0F172A; }
 .m3-arrow:hover { background: var(--surface-soft); }
 .m3-card .ai-action-btn:hover { border-color: #0EA5E9; color: #0EA5E9; }
-/* 공용 등록창 이모지 빠른넣기 */
-.emoji-pick { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
-.emoji-pick button { font-size: 1.15rem; line-height: 1; padding: 4px 6px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-soft); cursor: pointer; }
-.emoji-pick button:hover { border-color: #0EA5E9; }
+/* 전역 이모지 팔레트 (모든 글쓰기 공용) */
+.emoji-mini-btn { flex: none; align-self: center; font-size: 1.05rem; line-height: 1; padding: 5px 8px; margin-left: 6px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-soft); cursor: pointer; }
+.emoji-mini-btn:hover { border-color: #0EA5E9; }
+#emojiPaletteDialog .dlg-body { max-width: 360px; }
+.emoji-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 10px; }
+.emoji-grid button { font-size: 1.4rem; line-height: 1; padding: 7px 2px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-soft); cursor: pointer; }
+.emoji-grid button:hover { border-color: #0EA5E9; }
 /* 관리자 페이지만 줄 형식 */
 #admin .post-grid { display: block; }
 #admin .post-grid .post { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; padding: 14px 16px; border-radius: 14px; margin-bottom: 10px; }
