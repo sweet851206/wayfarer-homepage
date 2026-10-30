@@ -14805,6 +14805,11 @@ body[data-main-layout="main3"] .hero h1.hero-key {
 body[data-main-layout="main3"] .m3-row-title { color: var(--text-strong); }
 body[data-main-layout="main3"] .m3-row-sub { color: var(--muted); opacity: 1; }
 body[data-main-layout="main3"] .m3-empty { color: var(--muted); }
+/* m3 버튼 고정 색상 (#ai 전용 변수와 무관하게) */
+.m3-row-btns .ai-btn-primary { background: linear-gradient(135deg, #0EA5E9, #6366F1); color: #fff; }
+.m3-arrow { background: #fff; border-color: #CBD5E1; color: #0F172A; }
+.m3-arrow:hover { background: var(--surface-soft); }
+.m3-card .ai-action-btn:hover { border-color: #0EA5E9; color: #0EA5E9; }
 /* 관리자 페이지만 줄 형식 */
 #admin .post-grid { display: block; }
 #admin .post-grid .post { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; padding: 14px 16px; border-radius: 14px; margin-bottom: 10px; }
