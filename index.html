@@ -14783,6 +14783,32 @@ body[data-main-layout="main3"] .m3-wrap { display: block; }
 .m3-track .m3-card:nth-child(3n) .m3-card-media { height: 320px; }
 .m3-track .m3-card:nth-child(4n+2) { flex-basis: 170px; }
 .m3-track .m3-card:nth-child(4n+2) .m3-card-media { height: 210px; }
+/* main3: 3부분(뱃지·제목·부문구) 상단 고정 + 검정 그라데이션 배경 */
+body[data-main-layout="main3"] #home { display: block; min-height: 0; padding: 84px 0 0; background: #000; }
+body[data-main-layout="main3"] #home .wave-wrap { display: none; }
+body[data-main-layout="main3"] #home .overlay {
+  background:
+    radial-gradient(55% 40% at 15% 0%, rgba(124, 58, 237, .38), transparent 70%),
+    radial-gradient(50% 38% at 88% 8%, rgba(236, 72, 153, .30), transparent 70%),
+    radial-gradient(60% 45% at 50% 100%, rgba(14, 165, 233, .25), transparent 70%),
+    linear-gradient(180deg, #050507 0%, #0b0b14 60%, #050507 100%);
+  opacity: 1;
+  -webkit-mask-image: none; mask-image: none;
+}
+body[data-main-layout="main3"] .hero h1 { margin: 14px auto 12px; font-size: clamp(1.8rem, 4vw, 2.8rem); }
+body[data-main-layout="main3"] .hero-sub { margin: 0 auto 10px; color: rgba(255,255,255,.75); }
+body[data-main-layout="main3"] .hero-badge { color: #7DD3FC; }
+body[data-main-layout="main3"] .hero-badge span { color: #7DD3FC; }
+body[data-main-layout="main3"] .hero h1.hero-key {
+  background: linear-gradient(115deg, #38BDF8 0%, #2DD4BF 35%, #A78BFA 65%, #FBBF24 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+body[data-main-layout="main3"] .m3-row-title { color: #fff; }
+body[data-main-layout="main3"] .m3-row-sub { color: rgba(255,255,255,.6); opacity: 1; }
+body[data-main-layout="main3"] .m3-arrow { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.22); color: #fff; }
+body[data-main-layout="main3"] .m3-arrow:hover { background: rgba(255,255,255,.16); }
+body[data-main-layout="main3"] .m3-empty { color: rgba(255,255,255,.6); }
 /* 관리자 페이지만 줄 형식 */
 #admin .post-grid { display: block; }
 #admin .post-grid .post { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; padding: 14px 16px; border-radius: 14px; margin-bottom: 10px; }
