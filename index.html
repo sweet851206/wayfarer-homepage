@@ -2418,7 +2418,7 @@
         <option value="bgm2.mp3">Bach</option>
         <option value="bgm4.mp3">Debussy</option>
       </select>
-      <audio id="bgm" loop preload="auto"></audio>
+      <audio id="bgm" loop preload="auto" muted></audio>
       </div>
       <button class="menu-btn" id="menuBtn" aria-label="메뉴 열기">☰</button>
     </div>
@@ -4745,14 +4745,14 @@
     window.__baiooSound = mode;
     try { localStorage.setItem("baioo-sound", mode); } catch (e) {}
     if (!bgm) return;
+    try { bgm.muted = !isOn; } catch (e) {}
     if (isOn) { try { var p = bgm.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {} }
     else { bgm.pause(); }
   }
   if (soundToggle) {
-    var savedSound = "off";
-    try { savedSound = localStorage.getItem("baioo-sound") || "off"; } catch (e) {}
+    try { if (bgm) bgm.muted = true; } catch (e) {}
     setTrack(currentTrack(), false);
-    applySound(savedSound);
+    applySound("off");
     soundToggle.addEventListener("click", function () {
       setTrack(currentTrack(), false);
       applySound(window.__baiooSound === "on" ? "off" : "on");
