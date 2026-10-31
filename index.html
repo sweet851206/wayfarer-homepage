@@ -2812,7 +2812,7 @@
           <button type="button" class="ai-btn-ghost" id="br2FilterBookmarkedBtn">♥ 관심 리테일 모아보기</button>
         <div class="ai-search-wrap">
           <span class="ai-search-icon" aria-hidden="true">🔍</span>
-          <input type="search" id="br2SearchInput" class="ai-search-input" placeholder="브랜드명, 슬로건, 컬러 코드(#0EA5E9), 태그 검색..." aria-label="브랜딩 아이디어 검색">
+          <input type="search" id="br2SearchInput" class="ai-search-input" placeholder="봄·여름·가을·겨울·상점·바다·하늘·산 검색..." aria-label="브랜딩 아이디어 검색">
         </div>
         <div class="ai-select-group">
           <select id="br2StatusSelect" class="ai-select" aria-label="브랜딩 상태 필터">
@@ -2829,13 +2829,16 @@
         </div>
       </div>
 
-      <div class="ai-cat-bar" id="br2CategoryBar" role="tablist" aria-label="브랜딩 카테고리 필터">
+      <div class="ai-cat-bar" id="br2CategoryBar" role="tablist" aria-label="리테일 카테고리 필터">
         <button type="button" class="ai-cat-btn active" data-cat="all">전체 보기</button>
-        <button type="button" class="ai-cat-btn" data-cat="naming">🏷️ 네이밍·슬로건</button>
-        <button type="button" class="ai-cat-btn" data-cat="visual">🎨 컬러·비주얼</button>
-        <button type="button" class="ai-cat-btn" data-cat="typo">✒️ 로고·타이포</button>
-        <button type="button" class="ai-cat-btn" data-cat="kit">🚀 브랜드 런칭킷</button>
-        <button type="button" class="ai-cat-btn" data-cat="rebrand">💎 리브랜딩 검증</button>
+        <button type="button" class="ai-cat-btn" data-cat="spring">🌸 봄</button>
+        <button type="button" class="ai-cat-btn" data-cat="summer">☀️ 여름</button>
+        <button type="button" class="ai-cat-btn" data-cat="autumn">🍂 가을</button>
+        <button type="button" class="ai-cat-btn" data-cat="winter">❄️ 겨울</button>
+        <button type="button" class="ai-cat-btn" data-cat="shop">🏬 상점</button>
+        <button type="button" class="ai-cat-btn" data-cat="sea">🌊 바다</button>
+        <button type="button" class="ai-cat-btn" data-cat="sky">☁️ 하늘</button>
+        <button type="button" class="ai-cat-btn" data-cat="mountain">⛰️ 산</button>
       </div>
     </div>
 
@@ -4268,11 +4271,14 @@
         <div>
           <label for="br2InputCategory">카테고리</label>
           <select id="br2InputCategory">
-            <option value="naming">🏷️ 네이밍·슬로건</option>
-            <option value="visual">🎨 컬러·비주얼</option>
-            <option value="typo">✒️ 로고·타이포</option>
-            <option value="kit">🚀 브랜드 런칭킷</option>
-            <option value="rebrand">💎 리브랜딩 검증</option>
+            <option value="spring">🌸 봄</option>
+            <option value="summer">☀️ 여름</option>
+            <option value="autumn">🍂 가을</option>
+            <option value="winter">❄️ 겨울</option>
+            <option value="shop">🏬 상점</option>
+            <option value="sea">🌊 바다</option>
+            <option value="sky">☁️ 하늘</option>
+            <option value="mountain">⛰️ 산</option>
           </select>
         </div>
         <div>
@@ -4291,7 +4297,7 @@
         </div>
         <div>
           <label for="br2InputTags">태그 (쉼표 구분)</label>
-          <input type="text" id="br2InputTags" placeholder="예: 네이밍, 슬로건, 컬러칩">
+          <input type="text" id="br2InputTags" placeholder="예: 봄, 상점, 바다">
         </div>
       </div>
       <div class="field">
@@ -9271,11 +9277,19 @@ fd.append("pw", pwValbunny);
   var STORAGE_LIKES = "baioo_br2_likes_v1";
 
   var CATEGORY_META = {
-    naming:  { label: "네이밍·슬로건",   emoji: "🏷️", gradient: "linear-gradient(135deg, #F43F5E 0%, #E11D48 100%)" },
-    visual:  { label: "컬러·비주얼",     emoji: "🎨", gradient: "linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%)" },
-    typo:    { label: "로고·타이포",     emoji: "✒️", gradient: "linear-gradient(135deg, #0EA5E9 0%, #3B82F6 100%)" },
-    kit:     { label: "브랜드 런칭킷",   emoji: "🚀", gradient: "linear-gradient(135deg, #F59E0B 0%, #EA580C 100%)" },
-    rebrand: { label: "리브랜딩 검증",   emoji: "💎", gradient: "linear-gradient(135deg, #10B981 0%, #0D9488 100%)" }
+    spring:   { label: "봄",   emoji: "🌸", gradient: "linear-gradient(135deg, #F9A8D4 0%, #EC4899 100%)" },
+    summer:   { label: "여름", emoji: "☀️", gradient: "linear-gradient(135deg, #F59E0B 0%, #EF4444 100%)" },
+    autumn:   { label: "가을", emoji: "🍂", gradient: "linear-gradient(135deg, #D97706 0%, #92400E 100%)" },
+    winter:   { label: "겨울", emoji: "❄️", gradient: "linear-gradient(135deg, #38BDF8 0%, #6366F1 100%)" },
+    shop:     { label: "상점", emoji: "🏬", gradient: "linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)" },
+    sea:      { label: "바다", emoji: "🌊", gradient: "linear-gradient(135deg, #0EA5E9 0%, #0D9488 100%)" },
+    sky:      { label: "하늘", emoji: "☁️", gradient: "linear-gradient(135deg, #7DD3FC 0%, #3B82F6 100%)" },
+    mountain: { label: "산",   emoji: "⛰️", gradient: "linear-gradient(135deg, #10B981 0%, #065F46 100%)" },
+    naming:  { label: "네이밍·슬로건", emoji: "🏷️", gradient: "linear-gradient(135deg, #F43F5E 0%, #E11D48 100%)" },
+    visual:  { label: "컬러·비주얼", emoji: "🎨", gradient: "linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%)" },
+    typo:    { label: "로고·타이포", emoji: "✒️", gradient: "linear-gradient(135deg, #0EA5E9 0%, #3B82F6 100%)" },
+    kit:     { label: "브랜드 런칭킷", emoji: "🚀", gradient: "linear-gradient(135deg, #F59E0B 0%, #EA580C 100%)" },
+    rebrand: { label: "리브랜딩 검증", emoji: "💎", gradient: "linear-gradient(135deg, #10B981 0%, #0D9488 100%)" }
   };
 
   var STATUS_META = {
