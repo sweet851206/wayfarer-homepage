@@ -14324,9 +14324,8 @@ async function maintSet(on) {
             editItem.summary = d.summary || "";
             if (d.photoData) editItem.photoData = d.photoData;
             if (d.videoData) editItem.videoData = d.videoData;
-            var p1 = ideaServerUpsert(cfg.board, editItem);
-            delete editItem.photoData; delete editItem.videoData;
             saveLs(cfg.lsKey, list); render();
+            var p1 = ideaServerUpsert(cfg.board, Object.assign({}, editItem));
             if (p1 && p1.then) p1.then(function () { ideaServerSync(cfg.board, function () { return list; }, refreshFromServer); }).catch(function () {});
           } else {
             var it = {
@@ -14342,9 +14341,7 @@ async function maintSet(on) {
             if (d.photoData) it.photoData = d.photoData;
             if (d.videoData) it.videoData = d.videoData;
             commit([it].concat(list));
-            var p2 = ideaServerUpsert(cfg.board, it);
-            delete it.photoData; delete it.videoData;
-            saveLs(cfg.lsKey, list);
+            var p2 = ideaServerUpsert(cfg.board, Object.assign({}, it));
             if (p2 && p2.then) p2.then(function () { ideaServerSync(cfg.board, function () { return list; }, refreshFromServer); }).catch(function () {});
           }
         }
@@ -14355,7 +14352,7 @@ async function maintSet(on) {
       card.className = "m3-card";
       var box = document.createElement("div");
       box.className = "m3-card-media";
-      var vu = item.video || "", pu = (!vu && (item.photo || item.image || item.cover)) || "";
+      var vu = item.video || item.videoData || "", pu = (!vu && (item.photo || item.image || item.cover || item.photoData)) || "";
       if (vu) {
         var vd = document.createElement("video");
         vd.src = vu; vd.controls = true; vd.preload = "none"; vd.loop = true; vd.muted = true;
