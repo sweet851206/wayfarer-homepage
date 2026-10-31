@@ -14358,9 +14358,13 @@ async function maintSet(on) {
       var vu = item.video || "", pu = (!vu && (item.photo || item.image || item.cover)) || "";
       if (vu) {
         var vd = document.createElement("video");
-        vd.src = vu; vd.controls = true; vd.preload = "metadata"; vd.loop = true; vd.muted = true;
+        vd.src = vu; vd.controls = true; vd.preload = "none"; vd.loop = true; vd.muted = true;
         try { vd.playsInline = true; } catch (e) {}
-        if (setupRow._vio) { try { setupRow._vio.observe(vd); } catch (e) {} }
+        (function (v, c) {
+          try { v.pause(); } catch (e) {}
+          c.addEventListener("mouseenter", function () { try { var p = v.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {} });
+          c.addEventListener("mouseleave", function () { try { v.pause(); } catch (e) {} });
+        })(vd, card);
         box.appendChild(vd);
       } else if (pu) {
         var im = document.createElement("img");
