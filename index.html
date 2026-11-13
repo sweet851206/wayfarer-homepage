@@ -2452,86 +2452,6 @@
   .hf-chip:nth-child(4) i { background: #8B5CF6; }
   .hf-chip:nth-child(5) i { background: #F59E0B; }
 
-  /* ── AI 숏츠 9:16 쇼케이스 레일 ── */
-  .hf-shorts-showcase { display: block; max-width: 1180px; margin: 46px auto 0; text-align: left; }
-  .hf-sc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
-  .hf-sc-title { margin: 0; font-size: clamp(1.3rem, 2.6vw, 1.8rem); font-weight: 900; letter-spacing: -.03em; color: var(--text-strong); }
-  .hf-sc-meta { font-size: .8rem; font-weight: 800; letter-spacing: .08em; color: var(--muted); }
-  .hf-sc-rail { display: grid; grid-template-columns: repeat(6, minmax(140px, 1fr)); gap: 14px; }
-  @media (max-width: 1100px) { .hf-sc-rail { grid-template-columns: repeat(3, 1fr); } }
-  @media (max-width: 620px) { .hf-sc-rail { grid-template-columns: repeat(2, 1fr); } }
-
-  .hf-short-card {
-    position: relative;
-    aspect-ratio: 9 / 16;
-    border-radius: 18px;
-    overflow: hidden;
-    background: #0B1020;
-    border: 1px solid rgba(255,255,255,.14);
-    box-shadow: 0 14px 34px rgba(15,23,42,.12);
-    cursor: pointer;
-    transition: transform .28s cubic-bezier(.22,.61,.36,1), box-shadow .28s ease, border-color .28s ease;
-  }
-  .hf-short-card:hover, .hf-short-card:focus-visible {
-    transform: translateY(-6px) scale(1.03);
-    border-color: rgba(56,189,248,.55);
-    box-shadow: 0 22px 48px rgba(56,189,248,.22), 0 0 0 1px rgba(56,189,248,.35);
-    outline: none;
-  }
-  .hf-sc-media { position: absolute; inset: 0; }
-  .hf-sc-media video { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .hf-sc-badge, .hf-sc-state {
-    position: absolute; z-index: 3;
-    padding: 5px 10px; border-radius: 999px;
-    color: #fff; font-size: .68rem; font-weight: 800; letter-spacing: .04em;
-    background: rgba(9,14,26,.62);
-    border: 1px solid rgba(56,189,248,.35);
-    backdrop-filter: blur(8px);
-  }
-  .hf-sc-badge { top: 10px; left: 10px; }
-  .hf-sc-state { top: 10px; right: 10px; color: #E2E8F0; border-color: rgba(255,255,255,.18); }
-  .hf-sc-scrim {
-    position: absolute; inset: 0; z-index: 2;
-    display: flex; flex-direction: column; justify-content: flex-end; gap: 4px;
-    padding: 14px 12px;
-    background: linear-gradient(180deg, transparent 45%, rgba(6,10,20,.55) 70%, rgba(6,10,20,.88) 100%);
-  }
-  .hf-sc-name { margin: 0; font-size: .92rem; font-weight: 900; letter-spacing: -.02em; line-height: 1.3; color: #fff; }
-  .hf-sc-pipe { margin: 0; font-size: .72rem; font-weight: 700; color: rgba(226,232,240,.82); }
-  .hf-sc-act { margin-top: 6px; font-size: .7rem; font-weight: 800; color: #7DD3FC; }
-
-  /* ── 숏츠 뷰어 모달 ── */
-  #hfShortsModal {
-    --ai-cyan: #0EA5E9;
-    --ai-indigo: #6366F1;
-    width: min(1080px, calc(100% - 32px));
-    border-radius: 26px;
-  }
-  #hfShortsModal .dlg-body { display: grid; grid-template-columns: minmax(220px, 320px) 1fr; gap: 22px; padding: 28px; }
-  @media (max-width: 760px) { #hfShortsModal .dlg-body { grid-template-columns: 1fr; } }
-  .hf-modal-player { aspect-ratio: 9 / 16; border-radius: 16px; overflow: hidden; background: #05070F; border: 1px solid var(--border); }
-  .hf-modal-player video { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .hf-modal-info { min-width: 0; padding-right: 26px; }
-  .hf-modal-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 6px 14px; border-radius: 999px; margin-bottom: 12px;
-    background: rgba(14,165,233,.12); color: var(--ai-cyan);
-    border: 1px solid rgba(14,165,233,.25);
-    font-size: .76rem; font-weight: 900; letter-spacing: .06em;
-  }
-  .hf-modal-title { margin: 0 0 8px; font-size: 1.25rem; font-weight: 900; letter-spacing: -.03em; color: var(--text-strong); }
-  .hf-modal-pipe { margin: 0 0 14px; font-size: .9rem; color: var(--muted); }
-  .hf-modal-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-  .hf-modal-chips .hf-chip { background: var(--surface-soft); }
-  .hf-modal-prompt label { display: block; font-size: .78rem; font-weight: 800; letter-spacing: .06em; color: var(--muted); margin-bottom: 8px; }
-  .hf-modal-prompt textarea {
-    width: 100%; min-height: 120px; resize: vertical;
-    padding: 12px 14px; border-radius: 14px;
-    border: 1px solid var(--border); background: var(--surface-soft);
-    color: var(--text); font-family: var(--font); font-size: .88rem; line-height: 1.6;
-  }
-  .hf-modal-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
-
 </style>
 <!-- Google AdSense 자동광고 (승인 심사 코드) -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3975727077002539"
@@ -2611,7 +2531,6 @@
 
       <div class="hero-cta rise rise-4">
         <a class="cta cta-primary" href="#ai" data-nav="ai">AI Video 스튜디오 열기</a>
-        <a class="cta cta-ghost" href="#hfShortsShowcase">숏츠 쇼케이스 보기</a>
       </div>
 
       <div class="hf-chips rise rise-4">
@@ -2623,75 +2542,6 @@
       </div>
     </div>
 
-    <!-- ===== AI 숏츠 9:16 쇼케이스 레일 (클릭 → 크게 보기) ===== -->
-    <div class="hf-shorts-showcase" id="hfShortsShowcase">
-      <div class="hf-sc-head">
-        <h2 class="hf-sc-title">AI Shorts Showcase</h2>
-        <span class="hf-sc-meta">9:16 · 6 clips · Click to view prompt</span>
-      </div>
-      <div class="hf-sc-rail">
-        <article class="hf-short-card" data-src="m2-video-01.mp4" data-badge="R2V · MiniMax H3" data-name="Cinematic Character Motion" data-pipe="H3 R2V · 1080×1920 · Motion Lock" data-prompt="cinematic character walk, volumetric light, 35mm anamorphic, shallow depth of field, film grain, R2V motion lock, 9:16 vertical">
-          <div class="hf-sc-media"><video muted loop playsinline preload="metadata" src="m2-video-01.mp4"></video></div>
-          <span class="hf-sc-badge">R2V · MiniMax H3</span>
-          <span class="hf-sc-state">▶ 크게 보기</span>
-          <div class="hf-sc-scrim">
-            <p class="hf-sc-name">Cinematic Character Motion</p>
-            <p class="hf-sc-pipe">H3 R2V · 1080×1920</p>
-            <p class="hf-sc-act">▶ 크게 보기 · 프롬프트</p>
-          </div>
-        </article>
-        <article class="hf-short-card" data-src="m2-video-02.mp4" data-badge="Wan 2.2 · 3D Previz" data-name="Dynamic Camera Orbit" data-pipe="Wan 2.2 TI2V · Blender Previz" data-prompt="dynamic camera orbit around product, studio HDRI, neon rim light, Blender 3D previz, smooth motion, 9:16 vertical">
-          <div class="hf-sc-media"><video muted loop playsinline preload="metadata" src="m2-video-02.mp4"></video></div>
-          <span class="hf-sc-badge">Wan 2.2 · 3D Previz</span>
-          <span class="hf-sc-state">▶ 크게 보기</span>
-          <div class="hf-sc-scrim">
-            <p class="hf-sc-name">Dynamic Camera Orbit</p>
-            <p class="hf-sc-pipe">Wan 2.2 TI2V · Previz</p>
-            <p class="hf-sc-act">▶ 크게 보기 · 프롬프트</p>
-          </div>
-        </article>
-        <article class="hf-short-card" data-src="m2-video-03.mp4" data-badge="AI Shorts · 60fps" data-name="Neon Studio Sequence" data-pipe="ComfyUI · 60fps Upscale" data-prompt="neon studio sequence, holographic panels, fast cut montage, 60fps upscale, high contrast, vertical short format">
-          <div class="hf-sc-media"><video muted loop playsinline preload="metadata" src="m2-video-03.mp4"></video></div>
-          <span class="hf-sc-badge">AI Shorts · 60fps</span>
-          <span class="hf-sc-state">▶ 크게 보기</span>
-          <div class="hf-sc-scrim">
-            <p class="hf-sc-name">Neon Studio Sequence</p>
-            <p class="hf-sc-pipe">ComfyUI · 60fps</p>
-            <p class="hf-sc-act">▶ 크게 보기 · 프롬프트</p>
-          </div>
-        </article>
-        <article class="hf-short-card" data-src="m2bg-01.mp4" data-badge="Key Visual · 3s Cut" data-name="Opening Key Sequence" data-pipe="Key Visual · Brand Opening" data-prompt="brand opening key visual, glowing key symbol, slow push-in, clean gradient light, premium tech look">
-          <div class="hf-sc-media"><video muted loop playsinline preload="metadata" src="m2bg-01.mp4"></video></div>
-          <span class="hf-sc-badge">Key Visual · 3s Cut</span>
-          <span class="hf-sc-state">▶ 크게 보기</span>
-          <div class="hf-sc-scrim">
-            <p class="hf-sc-name">Opening Key Sequence</p>
-            <p class="hf-sc-pipe">Key Visual · Opening</p>
-            <p class="hf-sc-act">▶ 크게 보기 · 프롬프트</p>
-          </div>
-        </article>
-        <article class="hf-short-card" data-src="m2bg-03.mp4" data-badge="Audio Sync · MV" data-name="Rhythm &amp; Motion Study" data-pipe="Audio Sync · Beat Cut" data-prompt="rhythm and motion study, beat-synced camera moves, audio reactive light pulses, music video style, vertical framing">
-          <div class="hf-sc-media"><video muted loop playsinline preload="metadata" src="m2bg-03.mp4"></video></div>
-          <span class="hf-sc-badge">Audio Sync · MV</span>
-          <span class="hf-sc-state">▶ 크게 보기</span>
-          <div class="hf-sc-scrim">
-            <p class="hf-sc-name">Rhythm &amp; Motion Study</p>
-            <p class="hf-sc-pipe">Audio Sync · Beat Cut</p>
-            <p class="hf-sc-act">▶ 크게 보기 · 프롬프트</p>
-          </div>
-        </article>
-        <article class="hf-short-card" data-src="m2bg-04b.mp4" data-badge="Action · R2V Lock" data-name="High-Speed Archer Cut" data-pipe="R2V Lock · High Speed" data-prompt="high-speed archer action cut, motion blur, R2V identity lock, dramatic backlight, slow motion impact, vertical short">
-          <div class="hf-sc-media"><video muted loop playsinline preload="metadata" src="m2bg-04b.mp4"></video></div>
-          <span class="hf-sc-badge">Action · R2V Lock</span>
-          <span class="hf-sc-state">▶ 크게 보기</span>
-          <div class="hf-sc-scrim">
-            <p class="hf-sc-name">High-Speed Archer Cut</p>
-            <p class="hf-sc-pipe">R2V Lock · High Speed</p>
-            <p class="hf-sc-act">▶ 크게 보기 · 프롬프트</p>
-          </div>
-        </article>
-      </div>
-    </div>
   </div>
   <!-- ===== main3 미디어 카드 대문: 첫줄=관리자 추천, 둘째줄=방문자 게시판 ===== -->
   <div class="m3-wrap" id="m3Wrap">
@@ -3761,34 +3611,6 @@
     </div>
   </div>
 </section>
-
-<!-- ===== AI 숏츠 크게 보기 모달 ===== -->
-<dialog id="hfShortsModal" aria-label="AI 숏츠 크게 보기">
-  <button type="button" class="x-close" data-close="hfShortsModal" aria-label="닫기">×</button>
-  <div class="dlg-body hf-modal-body">
-    <div class="hf-modal-player">
-      <video id="hfShortsPlayer" muted loop playsinline preload="metadata"></video>
-    </div>
-    <div class="hf-modal-info">
-      <span class="hf-modal-badge" id="hfShortsBadge">AI SHORTS</span>
-      <h3 class="hf-modal-title" id="hfShortsTitle">숏츠</h3>
-      <p class="hf-modal-pipe" id="hfShortsPipe">워크플로</p>
-      <div class="hf-modal-chips">
-        <span class="hf-chip"><i></i>MiniMax H3</span>
-        <span class="hf-chip"><i></i>Wan 2.2 TI2V</span>
-        <span class="hf-chip"><i></i>ComfyUI</span>
-      </div>
-      <div class="hf-modal-prompt">
-        <label for="hfShortsPrompt">PROMPT</label>
-        <textarea id="hfShortsPrompt" rows="5" readonly></textarea>
-      </div>
-      <div class="hf-modal-actions">
-        <button type="button" class="ai-btn-primary" id="hfShortsCopy">📋 프롬프트 복사</button>
-        <a class="ai-btn-ghost" href="#ai" data-nav="ai">AI 섹션 전체 작업 보기 →</a>
-      </div>
-    </div>
-  </div>
-</dialog>
 
 <!-- ===== 여행 등록/상세 다이얼로그 (t_bfa1d4af) ===== -->
 <dialog id="travelFormDialog" aria-label="새 여행 글 등록">
@@ -15078,90 +14900,6 @@ window.addEventListener("hashchange", function () { setTimeout(maybeAdminBg, 50)
 setTimeout(maybeAdminBg, 500);
 </script>
 
-<script>
-/* ══ AI 숏츠 쇼케이스: 9:16 레일 자동재생 + 크게 보기 모달 ══ */
-(function () {
-  var rail = document.getElementById("hfShortsShowcase");
-  var modal = document.getElementById("hfShortsModal");
-  if (!rail || !modal) return;
-
-  var player = document.getElementById("hfShortsPlayer");
-  var badgeEl = document.getElementById("hfShortsBadge");
-  var titleEl = document.getElementById("hfShortsTitle");
-  var pipeEl = document.getElementById("hfShortsPipe");
-  var promptEl = document.getElementById("hfShortsPrompt");
-  var copyBtn = document.getElementById("hfShortsCopy");
-  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  /* 기존 레일과 같은 방식의 IntersectionObserver (setupRow._vio 패턴) */
-  var vio = null;
-  try {
-    vio = new IntersectionObserver(function (ents) {
-      ents.forEach(function (en) {
-        try {
-          if (en.isIntersecting) { en.target.muted = true; var p = en.target.play(); if (p && p.catch) p.catch(function () {}); }
-          else { en.target.pause(); }
-        } catch (e) {}
-      });
-    }, { threshold: 0.25 });
-  } catch (e) { vio = null; }
-
-  var cards = Array.prototype.slice.call(rail.querySelectorAll(".hf-short-card"));
-  cards.forEach(function (card) {
-    card.setAttribute("role", "button");
-    card.setAttribute("tabindex", "0");
-    card.setAttribute("aria-label", (card.getAttribute("data-name") || "숏츠") + " 크게 보기");
-
-    var v = card.querySelector("video");
-    if (v && !reduce && vio) vio.observe(v);
-
-    function openShort() {
-      badgeEl.textContent = card.getAttribute("data-badge") || "AI SHORTS";
-      titleEl.textContent = card.getAttribute("data-name") || "숏츠";
-      pipeEl.textContent = card.getAttribute("data-pipe") || "";
-      promptEl.value = card.getAttribute("data-prompt") || "";
-      if (player) {
-        player.src = card.getAttribute("data-src") || "";
-        player.muted = true;
-      }
-      modal.showModal();
-      if (player && !reduce) {
-        try { var p = player.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {}
-      }
-    }
-
-    card.addEventListener("click", openShort);
-    card.addEventListener("keydown", function (e) {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openShort(); }
-    });
-  });
-
-  /* 배경(백드롭) 클릭으로 닫기 — ESC는 dialog가 기본 처리 */
-  modal.addEventListener("click", function (e) { if (e.target === modal) modal.close(); });
-  modal.addEventListener("close", function () { try { player.pause(); } catch (e) {} });
-
-  /* 프롬프트 복사 */
-  if (copyBtn) {
-    copyBtn.addEventListener("click", function () {
-      var txt = promptEl.value || "";
-      function done() {
-        copyBtn.textContent = "✓ 복사됨";
-        setTimeout(function () { copyBtn.textContent = "📋 프롬프트 복사"; }, 1600);
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(txt).then(done, function () { promptEl.select(); try { document.execCommand("copy"); } catch (e) {} done(); });
-      } else {
-        promptEl.select(); try { document.execCommand("copy"); } catch (e) {} done();
-      }
-    });
-  }
-
-  /* 모달 안의 AI 이동 링크: 모달 닫고 이동 */
-  modal.querySelectorAll("[data-nav]").forEach(function (a) {
-    a.addEventListener("click", function () { modal.close(); });
-  });
-})();
-</script>
 
 <style>
 #maintOverlay { position: fixed; inset: 0; z-index: 99999; display: none; align-items: center; justify-content: center; background: #111; color: #fff; text-align: center; padding: 24px; }
