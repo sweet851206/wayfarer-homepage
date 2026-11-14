@@ -12655,17 +12655,7 @@ document.addEventListener("change", function (e) {
 });
 
 /* ===== 상단 추천 띠 (헤더 위 고정, 관리자 편집) ===== */
-var RECO_DEFAULTS = [
-  { name: "OpenCode", url: "https://opencode.ai" },
-  { name: "Claude", url: "https://claude.ai" },
-  { name: "Gemini", url: "https://gemini.google.com" },
-  { name: "Higgsfield", url: "https://higgsfield.ai" },
-  { name: "CapCut", url: "https://www.capcut.com" },
-  { name: "Civitai", url: "https://civitai.com/" },
-  { name: "Hermes", url: "https://huggingface.co/models?search=nous+hermes" },
-  { name: "Ollama", url: "https://ollama.com" },
-  { name: "Blender", url: "https://www.blender.org" }
-];
+var RECO_DEFAULTS = [];
 function loadRecoList() {
   try {
     var raw = localStorage.getItem("baioo_reco_ticker");
@@ -12695,6 +12685,7 @@ function renderRecoAdmin() {
   var box = document.getElementById("recoAdminList");
   if (!box) return;
   var list = loadRecoList();
+  if (!list.length) list = [{}, {}, {}, {}, {}, {}, {}, {}, {}];
   box.textContent = "";
   list.forEach(function (it, idx) {
     var row = document.createElement("div");
