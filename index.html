@@ -12645,8 +12645,36 @@ function fillDetailMedia(el, item) {
     el.appendChild(im); el.hidden = false;
   } else { el.hidden = true; }
 }
+function dataURLtoFile(u, fallbackName) {
+  try {
+    var m = String(u || "").match(/^data:([^;,]+)?;base64,(.*)$/);
+    if (!m || !m[2]) return null;
+    var mime = m[1] || "application/octet-stream";
+    var bin = atob(m[2]);
+    var arr = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+    var ext = (mime.split("/")[1] || "bin").replace(/[^a-z0-9]/gi, "").slice(0, 5) || "bin";
+    if (typeof File === "undefined") return null;
+    return new File([arr], fallbackName + "." + ext, { type: mime });
+  } catch (e) { return null; }
+}
 function ideaServerUpsert(board, item) {
   try {
+    var hasPhoto = !!item.photoData, hasVideo = !!item.videoData;
+    if (hasPhoto || hasVideo) {
+      var pf = hasPhoto ? dataURLtoFile(item.photoData, "photo") : null;
+      var vf = hasVideo ? dataURLtoFile(item.videoData, "video") : null;
+      if ((!hasPhoto || pf) && (!hasVideo || vf)) {
+        var fd = new FormData();
+        fd.append("board", board);
+        var clean = {};
+        for (var k in item) { if (item.hasOwnProperty(k) && k !== "photoData" && k !== "videoData") clean[k] = item[k]; }
+        fd.append("item", JSON.stringify(clean));
+        if (pf) fd.append("photo", pf);
+        if (vf) fd.append("video", vf);
+        return fetch("/ideas?action=upsert&board=" + encodeURIComponent(board), { method: "POST", body: fd }).catch(function () { return null; });
+      }
+    }
     return fetch("/ideas?action=upsert&board=" + encodeURIComponent(board), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
