@@ -1106,6 +1106,7 @@
 
   .field input[type="text"],
   .field input[type="date"],
+  .field input[type="password"],
   .field textarea {
     width: 100%;
     padding: 13px 15px;
@@ -11348,8 +11349,9 @@ fd.append("pw", pwValbunny);
           location.reload();
         } else {
           var id = window.prompt("관리자 ID:", "");
-          if (id === null) return;
+          if (id === null) return; id = id.trim();
           var pw = window.prompt("비밀번호:", "");
+          if (pw === null) return; pw = pw.trim();
           var c = getCred(); if (id === c.id && pw === c.pw) {
             try { localStorage.setItem("baioo_admin", "1"); } catch (err) {}
             sync();
