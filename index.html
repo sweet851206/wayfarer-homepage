@@ -12696,8 +12696,7 @@ function renderRecoTicker() {
   if (!track || !bar) return;
   var list = loadRecoList();
   track.textContent = "";
-  if (!list.length) { bar.style.display = "none"; var hd0 = document.querySelector("header"); if (hd0) hd0.style.top = "0"; return; }
-  bar.style.display = "";
+  if (!list.length) { syncRecoVis(); return; }
   function appendSet() {
     list.forEach(function (it, idx) {
       if (idx > 0) { var d = document.createElement("span"); d.className = "reco-dot"; d.textContent = "•"; track.appendChild(d); }
@@ -12729,8 +12728,22 @@ function renderRecoTicker() {
   var speed = 10;
   var dur = Math.max(18, Math.min(300, halfWidth / speed));
   track.style.animationDuration = dur + "s";
-  var hd = document.querySelector("header"); if (hd) hd.style.top = "32px";
+  syncRecoVis();
 }
+/* 대문(#home)에서만 띠 표시: 다른 뷰에서는 숨김 */
+function syncRecoVis() {
+  var h = "";
+  try { h = (location.hash || "#home").replace("#", "") || "home"; } catch (e) { h = "home"; }
+  var isHome = (h === "home");
+  var bar = document.getElementById("recoTicker");
+  if (!bar) return;
+  var has = loadRecoList().length > 0;
+  var show = isHome && has;
+  bar.style.display = show ? "" : "none";
+  var hd = document.querySelector("header");
+  if (hd) hd.style.top = show ? "32px" : "0";
+}
+window.addEventListener("hashchange", syncRecoVis);
 function renderRecoAdmin() {
   var box = document.getElementById("recoAdminList");
   if (!box) return;
