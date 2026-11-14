@@ -4298,6 +4298,24 @@
     showView(h);
   }
   window.addEventListener("hashchange", route);
+  /* 대문 CTA: #ai로 이동 후 Created AI Video 게이트까지 부드럽게 스크롤 */
+  (function () {
+    var smooth = true;
+    try { smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+    function goGate() {
+      var g = document.getElementById("aiGate2");
+      if (!g) return;
+      try { g.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" }); }
+      catch (e2) { g.scrollIntoView(); }
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('a.cta-hot[href="#ai"]'), function (b) {
+      b.addEventListener("click", function (ev) {
+        ev.preventDefault();
+        if ((location.hash || "") !== "#ai") { location.hash = "#ai"; setTimeout(goGate, 150); }
+        else { goGate(); }
+      });
+    });
+  })();
 
   /* ---------- 대문 첫 진입: 전체 내용 아래→위 상승 (JS, 좌측 바 제외) ---------- */
   var homeEntered = false;
