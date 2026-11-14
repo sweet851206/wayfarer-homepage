@@ -4805,6 +4805,35 @@ fd.append("pw", pwValtravel);
   loadAi();
 })();
 
+  /* ===== 공용 헬퍼 (travel/repair/pets) ===== */
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+  function apiList() {
+    return fetch("/api?action=list", { headers: { Accept: "application/json" } })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        var posts = data && data.posts;
+        /* PS5.1 ConvertTo-Json: 1개면 bare object, 그 외 ArrayList 래퍼({value,Count}) — 정규화 */
+        if (posts && !Array.isArray(posts)) posts = Array.isArray(posts.value) ? posts.value : (posts.id ? [posts] : []);
+        return Array.isArray(posts) ? posts : [];
+      });
+  }
+  function isImageFile(f) {
+    var n = String(f.name || f.originalName || "").toLowerCase();
+    return /^image\//.test(f.type || "") || /\.(png|jpe?g|gif|webp|bmp|svg)$/.test(n);
+  }
+  function isVideoFile(f) {
+    var n = String(f.name || f.originalName || "").toLowerCase();
+    return /^video\//.test(f.type || "") || /\.(mp4|webm|mov|m4v)$/.test(n);
+  }
+  function postDate(p) {
+    if (p.date) return p.date;
+    if (p.createdAt) { try { return new Date(p.createdAt).toISOString().slice(0, 10); } catch (e) {} }
+    return "";
+  }
+  function openDlg(d) { if (d && !d.open) d.showModal(); }
+  function closeDlg(d) { if (d && d.open) d.close(); }
+
   /* ---------- Travel 자유게시판 (Branding 패턴 미러) ---------- */
   var trBoardBody = $("#trBoardBody");
   var trPosts = [];
