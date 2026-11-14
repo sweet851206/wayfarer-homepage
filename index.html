@@ -152,6 +152,50 @@
     box-shadow: inset 0 1px 0 rgba(56,189,248,.18), 0 16px 40px rgba(0,0,0,.45);
   }
 
+  /* ===== 추천 홈페이지 얇은 띠 (헤더 위 고정, 좌→우 무한) ===== */
+  #recoTicker {
+    position: sticky;
+    top: 0;
+    z-index: 300;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  [data-theme="dark"] #recoTicker { background: #070B14; }
+  header { top: 32px; }
+  #recoTicker .reco-track {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    padding-left: 0;
+    animation: recoSlide 30s linear infinite;
+    will-change: transform;
+  }
+  #recoTicker:hover .reco-track { animation-play-state: paused; }
+  #recoTicker a {
+    color: #0F172A;
+    text-decoration: none;
+    padding: 0 14px;
+    line-height: 32px;
+    font-weight: 600;
+  }
+  [data-theme="dark"] #recoTicker a { color: #FFFFFF; }
+  #recoTicker a:hover { text-decoration: underline; }
+  #recoTicker .reco-dot { opacity: .4; font-weight: 400; }
+  @keyframes recoSlide {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+  }
+  @media (max-width: 640px) {
+    #recoTicker { font-size: 12px; }
+    #recoTicker a { padding: 0 10px; }
+  }
+
   .nav {
     position: relative;
     display: flex;
@@ -2486,6 +2530,8 @@
 </head>
 <body>
 
+<div id="recoTicker" aria-label="추천 홈페이지"><div class="reco-track" id="recoTrack"></div></div>
+
 <header>
   <div class="container nav">
     <a href="#home" class="logo logo-stack"><span class="logo-main"><span class="logo-w">B</span>AIOO<span class="logo-dot">.</span></span><span class="logo-sub">Brilliant AI, Infinite Possibilities</span></a>
@@ -3472,6 +3518,17 @@
           </label>
         </div>
         <div id="mainLayoutPreview" class="ai-lead-sub" style="margin-top:8px;">미리보기: 현재 Main 적용중</div>
+      </div>
+      <div class="post">
+        <div class="icon-large">🔗</div>
+        <h3>상단 추천 띠 (이름+주소)</h3>
+        <p class="ai-lead-sub">대문 맨 위 얇은 띠. 이름·주소 수정 후 저장.</p>
+        <div id="recoAdminList" style="display:flex;flex-direction:column;gap:8px;margin:8px 0;"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button type="button" class="btn btn-ghost" id="recoAddBtn">＋ 추가</button>
+          <button type="button" class="btn btn-primary" id="recoSaveBtn">저장</button>
+          <button type="button" class="btn btn-ghost" id="recoResetBtn">기본값 복원</button>
+        </div>
       </div>
     </div>
   </div>
@@ -12596,6 +12653,93 @@ document.addEventListener("change", function (e) {
     maintLayoutSet(e.target.value);
   }
 });
+
+/* ===== 상단 추천 띠 (헤더 위 고정, 관리자 편집) ===== */
+var RECO_DEFAULTS = [
+  { name: "OpenCode", url: "https://opencode.ai" },
+  { name: "Claude", url: "https://claude.ai" },
+  { name: "Gemini", url: "https://gemini.google.com" },
+  { name: "Higgsfield", url: "https://higgsfield.ai" },
+  { name: "CapCut", url: "https://www.capcut.com" },
+  { name: "Civitai", url: "https://civitai.com/" },
+  { name: "Hermes", url: "https://huggingface.co/models?search=nous+hermes" },
+  { name: "Ollama", url: "https://ollama.com" },
+  { name: "Blender", url: "https://www.blender.org" }
+];
+function loadRecoList() {
+  try {
+    var raw = localStorage.getItem("baioo_reco_ticker");
+    if (!raw) return RECO_DEFAULTS.slice();
+    var arr = JSON.parse(raw);
+    if (!Array.isArray(arr) || !arr.length) return RECO_DEFAULTS.slice();
+    return arr.filter(function (it) { return it && it.name && it.url; });
+  } catch (e) { return RECO_DEFAULTS.slice(); }
+}
+function renderRecoTicker() {
+  var track = document.getElementById("recoTrack");
+  if (!track) return;
+  var list = loadRecoList();
+  track.textContent = "";
+  function fillOnce() {
+    list.forEach(function (it, idx) {
+      if (idx > 0) { var d = document.createElement("span"); d.className = "reco-dot"; d.textContent = "•"; track.appendChild(d); }
+      var a = document.createElement("a");
+      a.href = it.url; a.target = "_blank"; a.rel = "noopener";
+      a.textContent = it.name;
+      track.appendChild(a);
+    });
+  }
+  fillOnce(); fillOnce();
+}
+function renderRecoAdmin() {
+  var box = document.getElementById("recoAdminList");
+  if (!box) return;
+  var list = loadRecoList();
+  box.textContent = "";
+  list.forEach(function (it, idx) {
+    var row = document.createElement("div");
+    row.style.cssText = "display:flex;gap:6px;";
+    row.innerHTML = '<input type="text" data-k="name" placeholder="이름" maxlength="24" style="flex:0 0 110px;">' +
+      '<input type="text" data-k="url" placeholder="https://..." maxlength="200" style="flex:1;">' +
+      '<button type="button" class="btn btn-ghost" data-del>✕</button>';
+    row.querySelector('[data-k="name"]').value = it.name || "";
+    row.querySelector('[data-k="url"]').value = it.url || "";
+    row.querySelector("[data-del]").addEventListener("click", function () { row.remove(); });
+    box.appendChild(row);
+  });
+}
+document.addEventListener("click", function (e) {
+  if (e.target && e.target.id === "recoAddBtn") {
+    var box = document.getElementById("recoAdminList");
+    if (!box) return;
+    var row = document.createElement("div");
+    row.style.cssText = "display:flex;gap:6px;";
+    row.innerHTML = '<input type="text" data-k="name" placeholder="이름" maxlength="24" style="flex:0 0 110px;">' +
+      '<input type="text" data-k="url" placeholder="https://..." maxlength="200" style="flex:1;">' +
+      '<button type="button" class="btn btn-ghost" data-del>✕</button>';
+    row.querySelector("[data-del]").addEventListener("click", function () { row.remove(); });
+    box.appendChild(row);
+  }
+  if (e.target && e.target.id === "recoSaveBtn") {
+    var rows = document.querySelectorAll("#recoAdminList > div");
+    var out = [];
+    rows.forEach(function (r) {
+      var n = (r.querySelector('[data-k="name"]') || {}).value || "";
+      var u = (r.querySelector('[data-k="url"]') || {}).value || "";
+      n = n.trim(); u = u.trim();
+      if (n && u) out.push({ name: n, url: u });
+    });
+    if (!out.length) { alert("1개 이상 입력하세요."); return; }
+    try { localStorage.setItem("baioo_reco_ticker", JSON.stringify(out)); } catch (err) {}
+    renderRecoTicker();
+    alert("저장됨. 대문 맨 위 띠에 바로 반영.");
+  }
+  if (e.target && e.target.id === "recoResetBtn") {
+    try { localStorage.removeItem("baioo_reco_ticker"); } catch (err) {}
+    renderRecoTicker(); renderRecoAdmin();
+  }
+});
+renderRecoTicker(); renderRecoAdmin();
 
 /* ===== 카드 9개씩 페이징 (전 섹션 공용) ===== */
 var BAIOO_CARDS_PER_PAGE = 9;
