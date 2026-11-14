@@ -1418,6 +1418,13 @@
     .hero-card {
       padding: 28px;
     }
+
+    /* 모바일 자유게시판: 긴 제목 한 줄 말줄임 + 날짜칸 축소 */
+    .board-table th, .board-table td { padding: 10px 6px; }
+    .board-table th:first-child, .board-table td:first-child { width: 34px; }
+    .board-table th:last-child, .board-table td:last-child { width: 112px; font-size: .78rem; white-space: normal; }
+    .board-table td.board-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .board-table td.board-title .board-views { font-size: .8em; }
   }
 
   /* ── 좌측 세로 사이드바 (PC 761px 이상만, 모바일은 기존 상단바 유지) ── */
