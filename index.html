@@ -2579,8 +2579,8 @@
     <div class="ai-hero-banner">
       <div class="ai-banner-left">
         <span class="ai-banner-badge">🚀 BAIOO IDEA DISTRIBUTION</span>
-        <h3 id="aiHeroTitle">상상을 실행 가능한 프로젝트로, 즉시 배포하고 공유합니다</h3>
-        <p id="aiHeroDesc">직접 설계한 AI 에이전트 시스템, 웹 자동화 도구, 실전 프롬프트 레시피를 카테고리별로 탐색하고 원클릭으로 복제해 활용해 보세요.</p>
+        <h3 id="aiHeroTitle">세상은 이제 AI가 모든것을 만든다.<br>세상은 이제 AI 사진으로 본다.<br>세상은 이제 AI 제작 영상이 지배한다.</h3>
+        <p id="aiHeroDesc">MiniMax H3 · Wan 2.2 · Qwen Turbo · Blender 3D Previz로 만든 9:16 AI 숏츠를 그대로 보고, 프롬프트를 가져와 같은 결과물을 만듭니다.</p>
         <div class="hf-chips ai-banner-chips">
           <span class="hf-chip"><i></i>WAN 2.2</span>
           <span class="hf-chip"><i></i>H3 R2V</span>
@@ -14781,8 +14781,8 @@ function openIdeaForm(ctx) {
     if (!t || !d || !b) return;
     var DEF_T = t.textContent, DEF_D = d.textContent;
     try {
-      var st = localStorage.getItem("baioo_" + px + "HeroTitle");
-      var sd = localStorage.getItem("baioo_" + px + "HeroDesc");
+      var st = localStorage.getItem("baioo_" + px + "HeroTitle_v2");
+      var sd = localStorage.getItem("baioo_" + px + "HeroDesc_v2");
       if (st) t.innerHTML = toLines(st.replace(/ /g, " ").replace(/\.([가-힣A-Z])/g, ". $1")).replace(/\n/g, "<br>");
       if (sd) d.innerHTML = toLines(sd.replace(/ /g, " ").replace(/\.([가-힣A-Z])/g, ". $1")).replace(/\n/g, "<br>");
     } catch (e) {}
@@ -14800,7 +14800,7 @@ function openIdeaForm(ctx) {
         var nt = toLines(rnt.replace(/ /g, " ").replace(/\.([가-힣A-Z])/g, ". $1")).trim(), nd = rnd.replace(/ /g, " ").trim();
         if (!nt) { nt = DEF_T; t.textContent = nt; }
         if (!nd) { nd = DEF_D; d.textContent = nd; }
-        try { localStorage.setItem("baioo_" + px + "HeroTitle", nt); localStorage.setItem("baioo_" + px + "HeroDesc", nd); } catch (e) {}
+        try { localStorage.setItem("baioo_" + px + "HeroTitle_v2", nt); localStorage.setItem("baioo_" + px + "HeroDesc_v2", nd); } catch (e) {}
       }
     });
   });
