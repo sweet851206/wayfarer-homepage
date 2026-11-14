@@ -493,6 +493,16 @@
   .cta-hot::after { content: ""; position: absolute; top: 0; left: -80%; width: 60%; height: 100%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent); transform: skewX(-20deg); animation: ctaShine 2.6s ease-in-out infinite; pointer-events: none; }
   @keyframes ctaGlow { 0%,100% { box-shadow: 0 14px 32px rgba(14,165,233,.28); transform: scale(1); } 50% { box-shadow: 0 14px 44px rgba(14,165,233,.55), 0 0 0 8px rgba(14,165,233,.12); transform: scale(1.04); } }
   @keyframes ctaShine { 0% { left: -80%; } 60%,100% { left: 130%; } }
+  /* 마스코트: 옆에서 뛰어와서 가리키며 영어로 조르기 */
+  .cta-mascot-link { display: inline-flex; text-decoration: none; }
+  .cta-mascot-wrap { position: relative; display: inline-block; width: 110px; height: 110px; animation: mascotIn .7s ease-out both, mascotHop 1.2s ease-in-out .7s infinite; }
+  @keyframes mascotIn { from { transform: translateX(140px); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes mascotHop { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-10px) rotate(2deg); } }
+  .cta-mascot { width: 110px; height: 110px; object-fit: cover; object-position: 15% center; border-radius: 50%; border: 3px solid rgba(14,165,233,.6); box-shadow: 0 10px 28px rgba(14,165,233,.35); background: #fff; cursor: pointer; }
+  .cta-say { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 10px; background: #fff; color: #0f172a; font-weight: 800; font-size: .85rem; padding: 8px 14px; border-radius: 14px; white-space: nowrap; box-shadow: 0 8px 22px rgba(15,23,42,.18); }
+  .cta-say::after { content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 7px solid transparent; border-top-color: #fff; }
+  @media (max-width: 640px) { .cta-mascot-wrap { width: 76px; height: 76px; } .cta-mascot { width: 76px; height: 76px; } .cta-say { font-size: .72rem; padding: 6px 10px; } }
+  @media (prefers-reduced-motion: reduce) { .cta-hot, .cta-hot::after, .cta-bubble, .cta-mascot-wrap { animation: none !important; } }
   .cta-bubble { position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: #0f172a; color: #fff; font-size: .8rem; font-weight: 800; padding: 6px 14px; border-radius: 999px; white-space: nowrap; animation: ctaBubble 2.6s ease-in-out infinite; }
   .cta-bubble::after { content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: #0f172a; }
   @keyframes ctaBubble { 0%,100% { transform: translateX(-50%) scale(1); } 50% { transform: translateX(-50%) scale(1.08); } }
@@ -2541,6 +2551,12 @@
       <div class="hero-cta rise rise-4 cta-hot-wrap">
         <span class="cta-bubble" aria-hidden="true">👇 Try it!</span>
         <a class="cta cta-primary cta-hot" href="#ai" data-nav="ai">AI Video 스튜디오 열기</a>
+        <a href="#ai" data-nav="ai" class="cta-mascot-link" aria-label="AI Video 스튜디오 열기">
+          <span class="cta-mascot-wrap" aria-hidden="true">
+            <span class="cta-say" id="ctaSay">Press it!</span>
+            <img class="cta-mascot" src="mascot-press.png" alt="">
+          </span>
+        </a>
       </div>
 
       <div class="hf-chips rise rise-4">
@@ -12010,6 +12026,14 @@ function openIdeaForm(ctx) {
       try { localStorage.setItem(c[3], nt); } catch (e2) {}
     });
   });
+})();
+/* ===== 대문 마스코트 영어 조르기 (2.2초 순환) ===== */(function () {
+  var say = document.getElementById("ctaSay");
+  if (!say) return;
+  try { if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return; } catch (e) {}
+  var lines = ["Press it!", "Press press!", "Click here!", "Try it now!", "Push the button!"];
+  var i = 0;
+  setInterval(function () { i = (i + 1) % lines.length; say.textContent = lines[i]; }, 2200);
 })();
 /* ===== 방문자 카운터 (D1 visits, 브라우저당 1회만 +1) ===== */(function () {
   var el = document.getElementById("visitCount");
