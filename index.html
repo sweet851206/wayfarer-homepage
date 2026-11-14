@@ -5509,7 +5509,7 @@ fd.append("pw", pwValtravel);
   var tr2Page = 1;
   var TR2_PAGE_SIZE = 10;
 
-  function renderTrPages(total) {
+  function renderTr2Pages(total) {
     if (!tr2PageBar) return;
     tr2PageBar.textContent = "";
     var maxPage = Math.max(1, Math.ceil(total / TR2_PAGE_SIZE));
@@ -5521,7 +5521,7 @@ fd.append("pw", pwValtravel);
       b.className = "ai-cat-btn" + (active ? " active" : "");
       b.textContent = label;
       if (disabled) b.disabled = true;
-      else b.addEventListener("click", function () { tr2Page = page; renderTr(); });
+      else b.addEventListener("click", function () { tr2Page = page; renderTr2(); });
       tr2PageBar.appendChild(b);
     }
     mk("‹ 이전", tr2Page - 1, false, tr2Page === 1);
@@ -5532,7 +5532,7 @@ fd.append("pw", pwValtravel);
     mk("› 다음", tr2Page + 1, false, tr2Page === maxPage);
   }
 
-  function makeTrRow(p, i) {
+  function makeTr2Row(p, i) {
     var tr = document.createElement("tr");
     tr.setAttribute("data-id", p.id);
     var no = document.createElement("td");
@@ -5565,7 +5565,7 @@ fd.append("pw", pwValtravel);
     return tr;
   }
 
-  function renderTr() {
+  function renderTr2() {
     var maxPage = Math.max(1, Math.ceil(tr2Posts.length / TR2_PAGE_SIZE));
     if (tr2Page > maxPage) tr2Page = maxPage;
     if (tr2Page < 1) tr2Page = 1;
@@ -5579,20 +5579,20 @@ fd.append("pw", pwValtravel);
       td.textContent = "등록된 글이 없습니다.";
       tr.appendChild(td);
       tr2BoardBody.appendChild(tr);
-      renderTrPages(0);
+      renderTr2Pages(0);
       return;
     }
     var startIdx = (tr2Page - 1) * TR2_PAGE_SIZE;
-    tr2Posts.slice(startIdx, startIdx + TR2_PAGE_SIZE).forEach(function (p, i) { tr2BoardBody.appendChild(makeTrRow(p, tr2Posts.length - (startIdx + i))); });
-    renderTrPages(tr2Posts.length);
+    tr2Posts.slice(startIdx, startIdx + TR2_PAGE_SIZE).forEach(function (p, i) { tr2BoardBody.appendChild(makeTr2Row(p, tr2Posts.length - (startIdx + i))); });
+    renderTr2Pages(tr2Posts.length);
   }
 
-  function loadTr() {
+  function loadTr2() {
     return apiList().then(function (posts) {
       tr2Posts = posts.filter(function (p) { return p.category === "travel-visitor"; });
       tr2Posts.sort(function (a, b) { return ((b.createdAt || 0) > (a.createdAt || 0)) ? 1 : (((b.createdAt || 0) < (a.createdAt || 0)) ? -1 : 0); });
-      renderTr();
-    }).catch(function () { tr2Posts = []; renderTr(); });
+      renderTr2();
+    }).catch(function () { tr2Posts = []; renderTr2(); });
   }
 
   /* ---------- Travel 등록 폼 ---------- */
@@ -5609,7 +5609,7 @@ fd.append("pw", pwValtravel);
   var tr2Picked = [];
   var tr2EditingId = null;
 
-  function renderTrPreview() {
+  function renderTr2Preview() {
     $$("img", tr2PreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
     tr2PreviewEl.textContent = "";
     tr2FileCountEl.textContent = tr2Picked.length ? tr2Picked.length + "개 선택됨" : "선택된 파일 없음";
@@ -5631,7 +5631,7 @@ fd.append("pw", pwValtravel);
       rm.className = "rm";
       rm.textContent = "×";
       rm.setAttribute("aria-label", f.name + " 제거");
-      rm.addEventListener("click", function () { tr2Picked.splice(i, 1); renderTrPreview(); });
+      rm.addEventListener("click", function () { tr2Picked.splice(i, 1); renderTr2Preview(); });
       tile.appendChild(rm);
       tr2PreviewEl.appendChild(tile);
     });
@@ -5640,7 +5640,7 @@ fd.append("pw", pwValtravel);
   tr2FileInput.addEventListener("change", function () {
     tr2Picked = tr2Picked.concat(Array.prototype.slice.call(tr2FileInput.files));
     tr2FileInput.value = "";
-    renderTrPreview();
+    renderTr2Preview();
   });
 
   $$(".section-add-btn[data-category='travel-visitor']").forEach(function (b) {
@@ -5649,7 +5649,7 @@ fd.append("pw", pwValtravel);
       var pwc = $("#tr2Pw"); if (pwc) pwc.value = "";
       tr2Form.reset();
       tr2Picked = [];
-      renderTrPreview();
+      renderTr2Preview();
       tr2ErrorEl.textContent = "";
       var _dt = $("#tr2FormDialog .dlg-title"); if (_dt) _dt.textContent = "새 여행 글";
       tr2SubmitBtn.textContent = "등록";
@@ -5685,12 +5685,12 @@ fd.append("pw", pwValtravel);
       .then(function () {
         tr2Form.reset();
         tr2Picked = [];
-        renderTrPreview();
+        renderTr2Preview();
         closeDlg(tr2FormDlg);
         tr2EditingId = null;
         var pwc = $("#tr2Pw"); if (pwc) pwc.value = "";
         var _dt2 = $("#tr2FormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 여행 글";
-        return loadTr();
+        return loadTr2();
       })
       .catch(function (err) { tr2ErrorEl.textContent = "실패: " + ((err && err.message) || err); })
       .then(function () { tr2SubmitBtn.disabled = false; tr2SubmitBtn.textContent = tr2EditingId ? "저장" : "등록"; });
@@ -5706,7 +5706,7 @@ fd.append("pw", pwValtravel);
       tr2DeleteBtn = $("#tr2ViewDelete");
   var tr2ViewingId = null;
 
-  function openTrView(id) {
+  function openTr2View(id) {
     var p = null;
     tr2Posts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
@@ -5747,7 +5747,7 @@ fd.append("pw", pwValtravel);
     }
     tr2ViewTitle.textContent = p.title || "(제목 없음)";
     tr2ViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
-    loadTrCmt();
+    loadTr2Cmt();
   }
 
   tr2BoardBody.addEventListener("click", function (e) {
@@ -5758,13 +5758,13 @@ fd.append("pw", pwValtravel);
       if (!window.confirm("이 글을 삭제할까요?")) return;
       fetch("/api/" + encodeURIComponent(did), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: did }) })
         .then(function (res) { return res.json(); })
-        .then(function () { return loadTr(); })
+        .then(function () { return loadTr2(); })
         .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); });
       return;
     }
     var tr = e.target.closest("tr[data-id]");
     if (!tr) return;
-    openTrView(tr.getAttribute("data-id"));
+    openTr2View(tr.getAttribute("data-id"));
   });
 
   var tr2ViewClose = $("#tr2ViewClose");
@@ -5781,7 +5781,7 @@ fd.append("pw", pwValtravel);
       if (lc) lc.textContent = data.likes;
       if (dc) dc.textContent = data.dislikes;
       tr2Posts.forEach(function (x) { if (String(x.id) === String(tr2ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
-      renderTr();
+      renderTr2();
     });
   });
   if (tr2InlineDislike) tr2InlineDislike.addEventListener("click", function () {
@@ -5791,14 +5791,14 @@ fd.append("pw", pwValtravel);
       if (lc) lc.textContent = data.likes;
       if (dc) dc.textContent = data.dislikes;
       tr2Posts.forEach(function (x) { if (String(x.id) === String(tr2ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
-      renderTr();
+      renderTr2();
     });
   });
 
   var tr2CmtList = $("#tr2CmtList"), tr2CmtCount = $("#tr2CmtCount"), tr2CmtToggle = $("#tr2CmtToggle"),
       tr2CmtAuthor = $("#tr2CmtAuthor"), tr2CmtInput = $("#tr2CmtInput"), tr2CmtSend = $("#tr2CmtSend");
   var tr2CmtAll = [], tr2CmtOpen = false;
-  function renderTrCmt() {
+  function renderTr2Cmt() {
     if (!tr2CmtList) return;
     tr2CmtList.textContent = "";
     var show = tr2CmtOpen ? tr2CmtAll : tr2CmtAll.slice(0, 10);
@@ -5812,11 +5812,11 @@ fd.append("pw", pwValtravel);
     if (tr2CmtCount) tr2CmtCount.textContent = tr2CmtAll.length;
     if (tr2CmtToggle) { tr2CmtToggle.hidden = tr2CmtAll.length <= 10; tr2CmtToggle.textContent = tr2CmtOpen ? "접기" : ("더 보기 (" + tr2CmtAll.length + ")"); }
   }
-  function loadTrCmt() {
+  function loadTr2Cmt() {
     if (!tr2ViewingId) return;
-    window.BaiooCmt.list(tr2ViewingId).then(function (rows) { tr2CmtAll = rows || []; tr2CmtOpen = false; renderTrCmt(); }).catch(function () { tr2CmtAll = []; renderTrCmt(); });
+    window.BaiooCmt.list(tr2ViewingId).then(function (rows) { tr2CmtAll = rows || []; tr2CmtOpen = false; renderTr2Cmt(); }).catch(function () { tr2CmtAll = []; renderTr2Cmt(); });
   }
-  if (tr2CmtToggle) tr2CmtToggle.addEventListener("click", function () { tr2CmtOpen = !tr2CmtOpen; renderTrCmt(); });
+  if (tr2CmtToggle) tr2CmtToggle.addEventListener("click", function () { tr2CmtOpen = !tr2CmtOpen; renderTr2Cmt(); });
   if (tr2CmtSend) tr2CmtSend.addEventListener("click", function () {
     if (!tr2ViewingId) return;
     var a = (tr2CmtAuthor && tr2CmtAuthor.value.trim()) || "익명";
@@ -5826,7 +5826,7 @@ fd.append("pw", pwValtravel);
     window.BaiooCmt.create(tr2ViewingId, a, c).then(function (j) {
       if (!j || !j.ok) throw new Error((j && j.message) || "fail");
       if (tr2CmtInput) tr2CmtInput.value = "";
-      loadTrCmt();
+      loadTr2Cmt();
     }).catch(function (err) { window.alert("댓글 실패: " + ((err && err.message) || err)); })
     .then(function () { tr2CmtSend.disabled = false; });
   });
@@ -5834,7 +5834,7 @@ fd.append("pw", pwValtravel);
     var b = e.target.closest("[data-cid]");
     if (!b) return;
     if (!window.confirm("댓글을 삭제할까요?")) return;
-    window.BaiooCmt.remove(b.getAttribute("data-cid")).then(function () { loadTrCmt(); });
+    window.BaiooCmt.remove(b.getAttribute("data-cid")).then(function () { loadTr2Cmt(); });
   });
 
   tr2DeleteBtn.addEventListener("click", function () {
@@ -5857,7 +5857,7 @@ fd.append("pw", pwValtravel);
         tr2ViewingId = null;
         var panel = $("#tr2ViewPanel");
         if (panel) panel.hidden = true;
-        return loadTr();
+        return loadTr2();
       })
       .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
       .then(function () { tr2DeleteBtn.disabled = false; });
@@ -5876,7 +5876,7 @@ fd.append("pw", pwValtravel);
       tr2DateInput.value = p.date || "";
       tr2ContentInput.value = p.content || "";
       tr2Picked = [];
-      renderTrPreview();
+      renderTr2Preview();
       tr2ErrorEl.textContent = "";
       var tdt = $("#tr2FormDialog .dlg-title"); if (tdt) tdt.textContent = "여행 글 수정";
       tr2SubmitBtn.textContent = "저장";
@@ -5886,7 +5886,7 @@ fd.append("pw", pwValtravel);
     });
   }
 
-  loadTr();
+  loadTr2();
 
   /* ---------- Repair 자유게시판 (Travel 패턴 미러) ---------- */
   var rpBoardBody = $("#rpBoardBody");
@@ -6281,7 +6281,7 @@ fd.append("pw", pwValtravel);
   var rp2Page = 1;
   var RP2_PAGE_SIZE = 10;
 
-  function renderRpPages(total) {
+  function renderRp2Pages(total) {
     if (!rp2PageBar) return;
     rp2PageBar.textContent = "";
     var maxPage = Math.max(1, Math.ceil(total / RP2_PAGE_SIZE));
@@ -6293,7 +6293,7 @@ fd.append("pw", pwValtravel);
       b.className = "ai-cat-btn" + (active ? " active" : "");
       b.textContent = label;
       if (disabled) b.disabled = true;
-      else b.addEventListener("click", function () { rp2Page = page; renderRp(); });
+      else b.addEventListener("click", function () { rp2Page = page; renderRp2(); });
       rp2PageBar.appendChild(b);
     }
     mk("‹ 이전", rp2Page - 1, false, rp2Page === 1);
@@ -6304,7 +6304,7 @@ fd.append("pw", pwValtravel);
     mk("› 다음", rp2Page + 1, false, rp2Page === maxPage);
   }
 
-  function makeRpRow(p, i) {
+  function makeRp2Row(p, i) {
     var tr = document.createElement("tr");
     tr.setAttribute("data-id", p.id);
     var no = document.createElement("td");
@@ -6337,7 +6337,7 @@ fd.append("pw", pwValtravel);
     return tr;
   }
 
-  function renderRp() {
+  function renderRp2() {
     var maxPage = Math.max(1, Math.ceil(rp2Posts.length / RP2_PAGE_SIZE));
     if (rp2Page > maxPage) rp2Page = maxPage;
     if (rp2Page < 1) rp2Page = 1;
@@ -6351,20 +6351,20 @@ fd.append("pw", pwValtravel);
       td.textContent = "등록된 글이 없습니다.";
       tr.appendChild(td);
       rp2BoardBody.appendChild(tr);
-      renderRpPages(0);
+      renderRp2Pages(0);
       return;
     }
     var startIdx = (rp2Page - 1) * RP2_PAGE_SIZE;
-    rp2Posts.slice(startIdx, startIdx + RP2_PAGE_SIZE).forEach(function (p, i) { rp2BoardBody.appendChild(makeRpRow(p, rp2Posts.length - (startIdx + i))); });
-    renderRpPages(rp2Posts.length);
+    rp2Posts.slice(startIdx, startIdx + RP2_PAGE_SIZE).forEach(function (p, i) { rp2BoardBody.appendChild(makeRp2Row(p, rp2Posts.length - (startIdx + i))); });
+    renderRp2Pages(rp2Posts.length);
   }
 
-  function loadRp() {
+  function loadRp2() {
     return apiList().then(function (posts) {
       rp2Posts = posts.filter(function (p) { return p.category === "repair-visitor"; });
       rp2Posts.sort(function (a, b) { return ((b.createdAt || 0) > (a.createdAt || 0)) ? 1 : (((b.createdAt || 0) < (a.createdAt || 0)) ? -1 : 0); });
-      renderRp();
-    }).catch(function () { rp2Posts = []; renderRp(); });
+      renderRp2();
+    }).catch(function () { rp2Posts = []; renderRp2(); });
   }
 
   /* ---------- Repair 등록 폼 ---------- */
@@ -6381,7 +6381,7 @@ fd.append("pw", pwValtravel);
   var rp2Picked = [];
   var rp2EditingId = null;
 
-  function renderRpPreview() {
+  function renderRp2Preview() {
     $$("img", rp2PreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
     rp2PreviewEl.textContent = "";
     rp2FileCountEl.textContent = rp2Picked.length ? rp2Picked.length + "개 선택됨" : "선택된 파일 없음";
@@ -6403,7 +6403,7 @@ fd.append("pw", pwValtravel);
       rm.className = "rm";
       rm.textContent = "×";
       rm.setAttribute("aria-label", f.name + " 제거");
-      rm.addEventListener("click", function () { rp2Picked.splice(i, 1); renderRpPreview(); });
+      rm.addEventListener("click", function () { rp2Picked.splice(i, 1); renderRp2Preview(); });
       tile.appendChild(rm);
       rp2PreviewEl.appendChild(tile);
     });
@@ -6412,7 +6412,7 @@ fd.append("pw", pwValtravel);
   rp2FileInput.addEventListener("change", function () {
     rp2Picked = rp2Picked.concat(Array.prototype.slice.call(rp2FileInput.files));
     rp2FileInput.value = "";
-    renderRpPreview();
+    renderRp2Preview();
   });
 
   $$(".section-add-btn[data-category='repair-visitor']").forEach(function (b) {
@@ -6421,7 +6421,7 @@ fd.append("pw", pwValtravel);
       var pwc = $("#rp2Pw"); if (pwc) pwc.value = "";
       rp2Form.reset();
       rp2Picked = [];
-      renderRpPreview();
+      renderRp2Preview();
       rp2ErrorEl.textContent = "";
       var _dt = $("#rp2FormDialog .dlg-title"); if (_dt) _dt.textContent = "새 진단 글";
       rp2SubmitBtn.textContent = "등록";
@@ -6457,12 +6457,12 @@ fd.append("pw", pwValtravel);
       .then(function () {
         rp2Form.reset();
         rp2Picked = [];
-        renderRpPreview();
+        renderRp2Preview();
         closeDlg(rp2FormDlg);
         rp2EditingId = null;
         var pwc = $("#rp2Pw"); if (pwc) pwc.value = "";
         var _dt2 = $("#rp2FormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 진단 글";
-        return loadRp();
+        return loadRp2();
       })
       .catch(function (err) { rp2ErrorEl.textContent = "실패: " + ((err && err.message) || err); })
       .then(function () { rp2SubmitBtn.disabled = false; rp2SubmitBtn.textContent = rp2EditingId ? "저장" : "등록"; });
@@ -6478,7 +6478,7 @@ fd.append("pw", pwValtravel);
       rp2DeleteBtn = $("#rp2ViewDelete");
   var rp2ViewingId = null;
 
-  function openRpView(id) {
+  function openRp2View(id) {
     var p = null;
     rp2Posts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
@@ -6519,7 +6519,7 @@ fd.append("pw", pwValtravel);
     }
     rp2ViewTitle.textContent = p.title || "(제목 없음)";
     rp2ViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
-    loadRpCmt();
+    loadRp2Cmt();
   }
 
   rp2BoardBody.addEventListener("click", function (e) {
@@ -6530,13 +6530,13 @@ fd.append("pw", pwValtravel);
       if (!window.confirm("이 글을 삭제할까요?")) return;
       fetch("/api/" + encodeURIComponent(did), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: did }) })
         .then(function (res) { return res.json(); })
-        .then(function () { return loadRp(); })
+        .then(function () { return loadRp2(); })
         .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); });
       return;
     }
     var tr = e.target.closest("tr[data-id]");
     if (!tr) return;
-    openRpView(tr.getAttribute("data-id"));
+    openRp2View(tr.getAttribute("data-id"));
   });
 
   var rp2ViewClose = $("#rp2ViewClose");
@@ -6553,7 +6553,7 @@ fd.append("pw", pwValtravel);
       if (lc) lc.textContent = data.likes;
       if (dc) dc.textContent = data.dislikes;
       rp2Posts.forEach(function (x) { if (String(x.id) === String(rp2ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
-      renderRp();
+      renderRp2();
     });
   });
   if (rp2InlineDislike) rp2InlineDislike.addEventListener("click", function () {
@@ -6563,14 +6563,14 @@ fd.append("pw", pwValtravel);
       if (lc) lc.textContent = data.likes;
       if (dc) dc.textContent = data.dislikes;
       rp2Posts.forEach(function (x) { if (String(x.id) === String(rp2ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
-      renderRp();
+      renderRp2();
     });
   });
 
   var rp2CmtList = $("#rp2CmtList"), rp2CmtCount = $("#rp2CmtCount"), rp2CmtToggle = $("#rp2CmtToggle"),
       rp2CmtAuthor = $("#rp2CmtAuthor"), rp2CmtInput = $("#rp2CmtInput"), rp2CmtSend = $("#rp2CmtSend");
   var rp2CmtAll = [], rp2CmtOpen = false;
-  function renderRpCmt() {
+  function renderRp2Cmt() {
     if (!rp2CmtList) return;
     rp2CmtList.textContent = "";
     var show = rp2CmtOpen ? rp2CmtAll : rp2CmtAll.slice(0, 10);
@@ -6584,11 +6584,11 @@ fd.append("pw", pwValtravel);
     if (rp2CmtCount) rp2CmtCount.textContent = rp2CmtAll.length;
     if (rp2CmtToggle) { rp2CmtToggle.hidden = rp2CmtAll.length <= 10; rp2CmtToggle.textContent = rp2CmtOpen ? "접기" : ("더 보기 (" + rp2CmtAll.length + ")"); }
   }
-  function loadRpCmt() {
+  function loadRp2Cmt() {
     if (!rp2ViewingId) return;
-    window.BaiooCmt.list(rp2ViewingId).then(function (rows) { rp2CmtAll = rows || []; rp2CmtOpen = false; renderRpCmt(); }).catch(function () { rp2CmtAll = []; renderRpCmt(); });
+    window.BaiooCmt.list(rp2ViewingId).then(function (rows) { rp2CmtAll = rows || []; rp2CmtOpen = false; renderRp2Cmt(); }).catch(function () { rp2CmtAll = []; renderRp2Cmt(); });
   }
-  if (rp2CmtToggle) rp2CmtToggle.addEventListener("click", function () { rp2CmtOpen = !rp2CmtOpen; renderRpCmt(); });
+  if (rp2CmtToggle) rp2CmtToggle.addEventListener("click", function () { rp2CmtOpen = !rp2CmtOpen; renderRp2Cmt(); });
   if (rp2CmtSend) rp2CmtSend.addEventListener("click", function () {
     if (!rp2ViewingId) return;
     var a = (rp2CmtAuthor && rp2CmtAuthor.value.trim()) || "익명";
@@ -6598,7 +6598,7 @@ fd.append("pw", pwValtravel);
     window.BaiooCmt.create(rp2ViewingId, a, c).then(function (j) {
       if (!j || !j.ok) throw new Error((j && j.message) || "fail");
       if (rp2CmtInput) rp2CmtInput.value = "";
-      loadRpCmt();
+      loadRp2Cmt();
     }).catch(function (err) { window.alert("댓글 실패: " + ((err && err.message) || err)); })
     .then(function () { rp2CmtSend.disabled = false; });
   });
@@ -6606,7 +6606,7 @@ fd.append("pw", pwValtravel);
     var b = e.target.closest("[data-cid]");
     if (!b) return;
     if (!window.confirm("댓글을 삭제할까요?")) return;
-    window.BaiooCmt.remove(b.getAttribute("data-cid")).then(function () { loadRpCmt(); });
+    window.BaiooCmt.remove(b.getAttribute("data-cid")).then(function () { loadRp2Cmt(); });
   });
 
   rp2DeleteBtn.addEventListener("click", function () {
@@ -6629,7 +6629,7 @@ fd.append("pw", pwValtravel);
         rp2ViewingId = null;
         var panel = $("#rp2ViewPanel");
         if (panel) panel.hidden = true;
-        return loadRp();
+        return loadRp2();
       })
       .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
       .then(function () { rp2DeleteBtn.disabled = false; });
@@ -6648,7 +6648,7 @@ fd.append("pw", pwValtravel);
       rp2DateInput.value = p.date || "";
       rp2ContentInput.value = p.content || "";
       rp2Picked = [];
-      renderRpPreview();
+      renderRp2Preview();
       rp2ErrorEl.textContent = "";
       var rdt = $("#rp2FormDialog .dlg-title"); if (rdt) rdt.textContent = "진단 글 수정";
       rp2SubmitBtn.textContent = "저장";
@@ -6658,7 +6658,7 @@ fd.append("pw", pwValtravel);
     });
   }
 
-  loadRp();
+  loadRp2();
 
   /* ---------- Pets 자유게시판 (Repair 패턴 미러) ---------- */
   var petBoardBody = $("#petBoardBody");
@@ -7053,7 +7053,7 @@ fd.append("pw", pwValtravel);
   var pet2Page = 1;
   var PET2_PAGE_SIZE = 10;
 
-  function renderPetPages(total) {
+  function renderPet2Pages(total) {
     if (!pet2PageBar) return;
     pet2PageBar.textContent = "";
     var maxPage = Math.max(1, Math.ceil(total / PET2_PAGE_SIZE));
@@ -7065,7 +7065,7 @@ fd.append("pw", pwValtravel);
       b.className = "ai-cat-btn" + (active ? " active" : "");
       b.textContent = label;
       if (disabled) b.disabled = true;
-      else b.addEventListener("click", function () { pet2Page = page; renderPet(); });
+      else b.addEventListener("click", function () { pet2Page = page; renderPet2(); });
       pet2PageBar.appendChild(b);
     }
     mk("‹ 이전", pet2Page - 1, false, pet2Page === 1);
@@ -7076,7 +7076,7 @@ fd.append("pw", pwValtravel);
     mk("› 다음", pet2Page + 1, false, pet2Page === maxPage);
   }
 
-  function makePetRow(p, i) {
+  function makePet2Row(p, i) {
     var tr = document.createElement("tr");
     tr.setAttribute("data-id", p.id);
     var no = document.createElement("td");
@@ -7109,7 +7109,7 @@ fd.append("pw", pwValtravel);
     return tr;
   }
 
-  function renderPet() {
+  function renderPet2() {
     var maxPage = Math.max(1, Math.ceil(pet2Posts.length / PET2_PAGE_SIZE));
     if (pet2Page > maxPage) pet2Page = maxPage;
     if (pet2Page < 1) pet2Page = 1;
@@ -7123,20 +7123,20 @@ fd.append("pw", pwValtravel);
       td.textContent = "등록된 글이 없습니다.";
       tr.appendChild(td);
       pet2BoardBody.appendChild(tr);
-      renderPetPages(0);
+      renderPet2Pages(0);
       return;
     }
     var startIdx = (pet2Page - 1) * PET2_PAGE_SIZE;
-    pet2Posts.slice(startIdx, startIdx + PET2_PAGE_SIZE).forEach(function (p, i) { pet2BoardBody.appendChild(makePetRow(p, pet2Posts.length - (startIdx + i))); });
-    renderPetPages(pet2Posts.length);
+    pet2Posts.slice(startIdx, startIdx + PET2_PAGE_SIZE).forEach(function (p, i) { pet2BoardBody.appendChild(makePet2Row(p, pet2Posts.length - (startIdx + i))); });
+    renderPet2Pages(pet2Posts.length);
   }
 
-  function loadPet() {
+  function loadPet2() {
     return apiList().then(function (posts) {
       pet2Posts = posts.filter(function (p) { return p.category === "bunny-visitor"; });
       pet2Posts.sort(function (a, b) { return ((b.createdAt || 0) > (a.createdAt || 0)) ? 1 : (((b.createdAt || 0) < (a.createdAt || 0)) ? -1 : 0); });
-      renderPet();
-    }).catch(function () { pet2Posts = []; renderPet(); });
+      renderPet2();
+    }).catch(function () { pet2Posts = []; renderPet2(); });
   }
 
   /* ---------- Pets 등록 폼 ---------- */
@@ -7153,7 +7153,7 @@ fd.append("pw", pwValtravel);
   var pet2Picked = [];
   var pet2EditingId = null;
 
-  function renderPetPreview() {
+  function renderPet2Preview() {
     $$("img", pet2PreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
     pet2PreviewEl.textContent = "";
     pet2FileCountEl.textContent = pet2Picked.length ? pet2Picked.length + "개 선택됨" : "선택된 파일 없음";
@@ -7175,7 +7175,7 @@ fd.append("pw", pwValtravel);
       rm.className = "rm";
       rm.textContent = "×";
       rm.setAttribute("aria-label", f.name + " 제거");
-      rm.addEventListener("click", function () { pet2Picked.splice(i, 1); renderPetPreview(); });
+      rm.addEventListener("click", function () { pet2Picked.splice(i, 1); renderPet2Preview(); });
       tile.appendChild(rm);
       pet2PreviewEl.appendChild(tile);
     });
@@ -7184,7 +7184,7 @@ fd.append("pw", pwValtravel);
   pet2FileInput.addEventListener("change", function () {
     pet2Picked = pet2Picked.concat(Array.prototype.slice.call(pet2FileInput.files));
     pet2FileInput.value = "";
-    renderPetPreview();
+    renderPet2Preview();
   });
 
   $$(".section-add-btn[data-category='bunny-visitor']").forEach(function (b) {
@@ -7193,7 +7193,7 @@ fd.append("pw", pwValtravel);
       var pwc = $("#pet2Pw"); if (pwc) pwc.value = "";
       pet2Form.reset();
       pet2Picked = [];
-      renderPetPreview();
+      renderPet2Preview();
       pet2ErrorEl.textContent = "";
       var _dt = $("#pet2FormDialog .dlg-title"); if (_dt) _dt.textContent = "새 펫 글";
       pet2SubmitBtn.textContent = "등록";
@@ -7229,12 +7229,12 @@ fd.append("pw", pwValtravel);
       .then(function () {
         pet2Form.reset();
         pet2Picked = [];
-        renderPetPreview();
+        renderPet2Preview();
         closeDlg(pet2FormDlg);
         pet2EditingId = null;
         var pwc = $("#pet2Pw"); if (pwc) pwc.value = "";
         var _dt2 = $("#pet2FormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 펫 글";
-        return loadPet();
+        return loadPet2();
       })
       .catch(function (err) { pet2ErrorEl.textContent = "실패: " + ((err && err.message) || err); })
       .then(function () { pet2SubmitBtn.disabled = false; pet2SubmitBtn.textContent = pet2EditingId ? "저장" : "등록"; });
@@ -7250,7 +7250,7 @@ fd.append("pw", pwValtravel);
       pet2DeleteBtn = $("#pet2ViewDelete");
   var pet2ViewingId = null;
 
-  function openPetView(id) {
+  function openPet2View(id) {
     var p = null;
     pet2Posts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
@@ -7291,7 +7291,7 @@ fd.append("pw", pwValtravel);
     }
     pet2ViewTitle.textContent = p.title || "(제목 없음)";
     pet2ViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
-    loadPetCmt();
+    loadPet2Cmt();
   }
 
   pet2BoardBody.addEventListener("click", function (e) {
@@ -7302,13 +7302,13 @@ fd.append("pw", pwValtravel);
       if (!window.confirm("이 글을 삭제할까요?")) return;
       fetch("/api/" + encodeURIComponent(did), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: did }) })
         .then(function (res) { return res.json(); })
-        .then(function () { return loadPet(); })
+        .then(function () { return loadPet2(); })
         .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); });
       return;
     }
     var tr = e.target.closest("tr[data-id]");
     if (!tr) return;
-    openPetView(tr.getAttribute("data-id"));
+    openPet2View(tr.getAttribute("data-id"));
   });
 
   var pet2ViewClose = $("#pet2ViewClose");
@@ -7325,7 +7325,7 @@ fd.append("pw", pwValtravel);
       if (lc) lc.textContent = data.likes;
       if (dc) dc.textContent = data.dislikes;
       pet2Posts.forEach(function (x) { if (String(x.id) === String(pet2ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
-      renderPet();
+      renderPet2();
     });
   });
   if (pet2InlineDislike) pet2InlineDislike.addEventListener("click", function () {
@@ -7335,14 +7335,14 @@ fd.append("pw", pwValtravel);
       if (lc) lc.textContent = data.likes;
       if (dc) dc.textContent = data.dislikes;
       pet2Posts.forEach(function (x) { if (String(x.id) === String(pet2ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
-      renderPet();
+      renderPet2();
     });
   });
 
   var pet2CmtList = $("#pet2CmtList"), pet2CmtCount = $("#pet2CmtCount"), pet2CmtToggle = $("#pet2CmtToggle"),
       pet2CmtAuthor = $("#pet2CmtAuthor"), pet2CmtInput = $("#pet2CmtInput"), pet2CmtSend = $("#pet2CmtSend");
   var pet2CmtAll = [], pet2CmtOpen = false;
-  function renderPetCmt() {
+  function renderPet2Cmt() {
     if (!pet2CmtList) return;
     pet2CmtList.textContent = "";
     var show = pet2CmtOpen ? pet2CmtAll : pet2CmtAll.slice(0, 10);
@@ -7356,11 +7356,11 @@ fd.append("pw", pwValtravel);
     if (pet2CmtCount) pet2CmtCount.textContent = pet2CmtAll.length;
     if (pet2CmtToggle) { pet2CmtToggle.hidden = pet2CmtAll.length <= 10; pet2CmtToggle.textContent = pet2CmtOpen ? "접기" : ("더 보기 (" + pet2CmtAll.length + ")"); }
   }
-  function loadPetCmt() {
+  function loadPet2Cmt() {
     if (!pet2ViewingId) return;
-    window.BaiooCmt.list(pet2ViewingId).then(function (rows) { pet2CmtAll = rows || []; pet2CmtOpen = false; renderPetCmt(); }).catch(function () { pet2CmtAll = []; renderPetCmt(); });
+    window.BaiooCmt.list(pet2ViewingId).then(function (rows) { pet2CmtAll = rows || []; pet2CmtOpen = false; renderPet2Cmt(); }).catch(function () { pet2CmtAll = []; renderPet2Cmt(); });
   }
-  if (pet2CmtToggle) pet2CmtToggle.addEventListener("click", function () { pet2CmtOpen = !pet2CmtOpen; renderPetCmt(); });
+  if (pet2CmtToggle) pet2CmtToggle.addEventListener("click", function () { pet2CmtOpen = !pet2CmtOpen; renderPet2Cmt(); });
   if (pet2CmtSend) pet2CmtSend.addEventListener("click", function () {
     if (!pet2ViewingId) return;
     var a = (pet2CmtAuthor && pet2CmtAuthor.value.trim()) || "익명";
@@ -7370,7 +7370,7 @@ fd.append("pw", pwValtravel);
     window.BaiooCmt.create(pet2ViewingId, a, c).then(function (j) {
       if (!j || !j.ok) throw new Error((j && j.message) || "fail");
       if (pet2CmtInput) pet2CmtInput.value = "";
-      loadPetCmt();
+      loadPet2Cmt();
     }).catch(function (err) { window.alert("댓글 실패: " + ((err && err.message) || err)); })
     .then(function () { pet2CmtSend.disabled = false; });
   });
@@ -7378,7 +7378,7 @@ fd.append("pw", pwValtravel);
     var b = e.target.closest("[data-cid]");
     if (!b) return;
     if (!window.confirm("댓글을 삭제할까요?")) return;
-    window.BaiooCmt.remove(b.getAttribute("data-cid")).then(function () { loadPetCmt(); });
+    window.BaiooCmt.remove(b.getAttribute("data-cid")).then(function () { loadPet2Cmt(); });
   });
 
   pet2DeleteBtn.addEventListener("click", function () {
@@ -7401,7 +7401,7 @@ fd.append("pw", pwValtravel);
         pet2ViewingId = null;
         var panel = $("#pet2ViewPanel");
         if (panel) panel.hidden = true;
-        return loadPet();
+        return loadPet2();
       })
       .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
       .then(function () { pet2DeleteBtn.disabled = false; });
@@ -7420,7 +7420,7 @@ fd.append("pw", pwValtravel);
       pet2DateInput.value = p.date || "";
       pet2ContentInput.value = p.content || "";
       pet2Picked = [];
-      renderPetPreview();
+      renderPet2Preview();
       pet2ErrorEl.textContent = "";
       var edt = $("#pet2FormDialog .dlg-title"); if (edt) edt.textContent = "펫 글 수정";
       pet2SubmitBtn.textContent = "저장";
@@ -7430,7 +7430,7 @@ fd.append("pw", pwValtravel);
     });
   }
 
-  loadPet();
+  loadPet2();
 
 /* ===== 토끼일상 (save3/api3, travel 패턴 미러) ===== */
 (function () {
