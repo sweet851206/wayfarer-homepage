@@ -2359,9 +2359,9 @@
   .admin-only { display: none !important; }
   body.is-admin .admin-only { display: inline-flex !important; }
   body.board-open-ai #ai2BoardAddBtn, body.board-open-ai #ai2InlineEdit { display: inline-flex !important; }
-  body.board-open-tr #trBoardAddBtn, body.board-open-tr #trInlineEdit { display: inline-flex !important; }
-  body.board-open-rp #rpBoardAddBtn, body.board-open-rp #rpInlineEdit { display: inline-flex !important; }
-  body.board-open-pet #petBoardAddBtn, body.board-open-pet #petInlineEdit { display: inline-flex !important; }
+  body.board-open-tr #tr2BoardAddBtn, body.board-open-tr #tr2InlineEdit { display: inline-flex !important; }
+  body.board-open-rp #rp2BoardAddBtn, body.board-open-rp #rp2InlineEdit { display: inline-flex !important; }
+  body.board-open-pet #pet2BoardAddBtn, body.board-open-pet #pet2InlineEdit { display: inline-flex !important; }
   body:not(.is-admin) #aiDeleteCustomBtn { display: none !important; }
   /* -- 개인정보처리방침: 검정 배경 흰 글씨 중앙 정렬 -- */
   #privacy { background: #000; }
@@ -2782,7 +2782,7 @@
     </div>
 
     <div class="pet-diary-subhead">
-      <h3>📝 방문자 게시판</h3>
+      <h3>📝 자유게시판</h3>
       <button type="button" class="section-add-btn travel-add admin-only" id="trBoardAddBtn" data-category="travel-board" style="margin:0;">＋ 새 글 등록</button>
     </div>
     <div class="board-table-wrap">
@@ -2816,6 +2816,44 @@
       <div class="dlg-actions">
         <button type="button" class="btn btn-primary admin-only" id="trInlineEdit">수정</button>
         <button type="button" class="btn btn-danger admin-only" id="trInlineDelete">삭제</button>
+      </div>
+    </div>
+
+    <div class="pet-diary-subhead">
+      <h3>📝 방문자 게시판</h3>
+      <button type="button" class="section-add-btn travel-add admin-only" id="tr2BoardAddBtn" data-category="travel-visitor" style="margin:0;">＋ 새 글 등록</button>
+    </div>
+    <div class="board-table-wrap">
+      <table class="board-table">
+        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:210px">등록일</th></tr></thead>
+        <tbody id="tr2BoardBody"></tbody>
+      </table>
+      <div class="ai-page-bar" id="tr2PageBar"></div>
+    </div>
+    <div class="board-view-panel" id="tr2ViewPanel" hidden>
+      <button type="button" class="x-close" id="tr2ViewClose" aria-label="닫기">×</button>
+      <h3 class="dlg-title" id="tr2InlineTitle"></h3>
+      <div class="post-date" id="tr2InlineDate"></div>
+      <div class="view-photos" id="tr2InlinePhotos"></div>
+      <div id="tr2InlineContent"></div>
+      <div class="file-list" id="tr2InlineFiles" hidden></div>
+      <div class="vote-row">
+        <button type="button" class="vote-btn" id="tr2InlineLike">❤ 추천 <span id="tr2LikeCount">0</span></button>
+        <button type="button" class="vote-btn" id="tr2InlineDislike">💔 비추천 <span id="tr2DislikeCount">0</span></button>
+      </div>
+      <div class="cmt-wrap">
+        <b>💬 댓글 <span id="tr2CmtCount">0</span></b>
+        <div class="cmt-list" id="tr2CmtList"></div>
+        <button type="button" class="cmt-toggle" id="tr2CmtToggle" hidden>더 보기</button>
+        <div class="cmt-form">
+          <input type="text" id="tr2CmtAuthor" maxlength="30" placeholder="이름 (익명 가능)">
+          <input type="text" id="tr2CmtInput" maxlength="500" placeholder="댓글을 입력하세요">
+          <button type="button" class="vote-btn" id="tr2CmtSend">등록</button>
+        </div>
+      </div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-primary admin-only" id="tr2InlineEdit">수정</button>
+        <button type="button" class="btn btn-danger admin-only" id="tr2InlineDelete">삭제</button>
       </div>
     </div>
 
@@ -2908,7 +2946,7 @@
     </div>
 
     <div class="pet-diary-subhead">
-      <h3>📝 방문자 게시판</h3>
+      <h3>📝 자유게시판</h3>
       <button type="button" class="section-add-btn repair-add admin-only" id="rpBoardAddBtn" data-category="repair-board" style="margin:0;">＋ 새 글 등록</button>
     </div>
     <div class="board-table-wrap">
@@ -2942,6 +2980,44 @@
       <div class="dlg-actions">
         <button type="button" class="btn btn-primary admin-only" id="rpInlineEdit">수정</button>
         <button type="button" class="btn btn-danger admin-only" id="rpInlineDelete">삭제</button>
+      </div>
+    </div>
+
+    <div class="pet-diary-subhead">
+      <h3>📝 방문자 게시판</h3>
+      <button type="button" class="section-add-btn repair-add admin-only" id="rp2BoardAddBtn" data-category="repair-visitor" style="margin:0;">＋ 새 글 등록</button>
+    </div>
+    <div class="board-table-wrap">
+      <table class="board-table">
+        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:210px">등록일</th></tr></thead>
+        <tbody id="rp2BoardBody"></tbody>
+      </table>
+      <div class="ai-page-bar" id="rp2PageBar"></div>
+    </div>
+    <div class="board-view-panel" id="rp2ViewPanel" hidden>
+      <button type="button" class="x-close" id="rp2ViewClose" aria-label="닫기">×</button>
+      <h3 class="dlg-title" id="rp2InlineTitle"></h3>
+      <div class="post-date" id="rp2InlineDate"></div>
+      <div class="view-photos" id="rp2InlinePhotos"></div>
+      <div id="rp2InlineContent"></div>
+      <div class="file-list" id="rp2InlineFiles" hidden></div>
+      <div class="vote-row">
+        <button type="button" class="vote-btn" id="rp2InlineLike">❤ 추천 <span id="rp2LikeCount">0</span></button>
+        <button type="button" class="vote-btn" id="rp2InlineDislike">💔 비추천 <span id="rp2DislikeCount">0</span></button>
+      </div>
+      <div class="cmt-wrap">
+        <b>💬 댓글 <span id="rp2CmtCount">0</span></b>
+        <div class="cmt-list" id="rp2CmtList"></div>
+        <button type="button" class="cmt-toggle" id="rp2CmtToggle" hidden>더 보기</button>
+        <div class="cmt-form">
+          <input type="text" id="rp2CmtAuthor" maxlength="30" placeholder="이름 (익명 가능)">
+          <input type="text" id="rp2CmtInput" maxlength="500" placeholder="댓글을 입력하세요">
+          <button type="button" class="vote-btn" id="rp2CmtSend">등록</button>
+        </div>
+      </div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-primary admin-only" id="rp2InlineEdit">수정</button>
+        <button type="button" class="btn btn-danger admin-only" id="rp2InlineDelete">삭제</button>
       </div>
     </div>
 
@@ -3032,7 +3108,7 @@
     </div>
 
     <div class="pet-diary-subhead">
-      <h3>📝 방문자 게시판</h3>
+      <h3>📝 자유게시판</h3>
       <button type="button" class="section-add-btn bunny-add admin-only" id="petBoardAddBtn" data-category="bunny-board" style="margin:0;">＋ 새 글 등록</button>
     </div>
     <div class="board-table-wrap">
@@ -3066,6 +3142,44 @@
       <div class="dlg-actions">
         <button type="button" class="btn btn-primary admin-only" id="petInlineEdit">수정</button>
         <button type="button" class="btn btn-danger admin-only" id="petInlineDelete">삭제</button>
+      </div>
+    </div>
+
+    <div class="pet-diary-subhead">
+      <h3>📝 방문자 게시판</h3>
+      <button type="button" class="section-add-btn bunny-add admin-only" id="pet2BoardAddBtn" data-category="bunny-visitor" style="margin:0;">＋ 새 글 등록</button>
+    </div>
+    <div class="board-table-wrap">
+      <table class="board-table">
+        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:210px">등록일</th></tr></thead>
+        <tbody id="pet2BoardBody"></tbody>
+      </table>
+      <div class="ai-page-bar" id="pet2PageBar"></div>
+    </div>
+    <div class="board-view-panel" id="pet2ViewPanel" hidden>
+      <button type="button" class="x-close" id="pet2ViewClose" aria-label="닫기">×</button>
+      <h3 class="dlg-title" id="pet2InlineTitle"></h3>
+      <div class="post-date" id="pet2InlineDate"></div>
+      <div class="view-photos" id="pet2InlinePhotos"></div>
+      <div id="pet2InlineContent"></div>
+      <div class="file-list" id="pet2InlineFiles" hidden></div>
+      <div class="vote-row">
+        <button type="button" class="vote-btn" id="pet2InlineLike">❤ 추천 <span id="pet2LikeCount">0</span></button>
+        <button type="button" class="vote-btn" id="pet2InlineDislike">💔 비추천 <span id="pet2DislikeCount">0</span></button>
+      </div>
+      <div class="cmt-wrap">
+        <b>💬 댓글 <span id="pet2CmtCount">0</span></b>
+        <div class="cmt-list" id="pet2CmtList"></div>
+        <button type="button" class="cmt-toggle" id="pet2CmtToggle" hidden>더 보기</button>
+        <div class="cmt-form">
+          <input type="text" id="pet2CmtAuthor" maxlength="30" placeholder="이름 (익명 가능)">
+          <input type="text" id="pet2CmtInput" maxlength="500" placeholder="댓글을 입력하세요">
+          <button type="button" class="vote-btn" id="pet2CmtSend">등록</button>
+        </div>
+      </div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-primary admin-only" id="pet2InlineEdit">수정</button>
+        <button type="button" class="btn btn-danger admin-only" id="pet2InlineDelete">삭제</button>
       </div>
     </div>
 
@@ -3482,6 +3596,62 @@
   </div>
 </dialog>
 
+<!-- ===== Travel 방문자게시판 등록/상세 다이얼로그 ===== -->
+<dialog id="tr2FormDialog" aria-label="새 여행 글 등록">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="tr2FormDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title">새 여행 글</h3>
+    <form id="tr2Form" novalidate>
+      <div class="field">
+        <label for="tr2Title">제목 *</label>
+        <input type="text" id="tr2Title" maxlength="120" placeholder="예: 오늘의 여행 기록">
+      </div>
+      <div class="field">
+        <label for="tr2Date">날짜</label>
+        <input type="date" id="tr2Date">
+      </div>
+      <div class="field">
+        <label for="tr2Content">내용</label>
+        <textarea id="tr2Content" placeholder="여행 이야기를 적어주세요"></textarea>
+      </div>
+      <div class="field">
+        <label for="tr2Files">사진·영상·파일 (여러 개)</label>
+        <div class="attach-row">
+          <label class="file-btn" for="tr2Files">파일 선택</label>
+          <input type="file" id="tr2Files" class="sr" multiple>
+          <span id="tr2FileCount">선택된 파일 없음</span>
+        </div>
+        <div class="preview-grid" id="tr2Preview"></div>
+      </div>
+      <div class="field">
+        <label for="tr2Pw">수정용 비밀번호 *</label>
+        <input type="password" id="tr2Pw" maxlength="30" autocomplete="off" placeholder="수정할 때 필요합니다 (4자 이상)">
+      </div>
+      <div class="form-error" id="tr2FormError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="tr2FormDialog">취소</button>
+        <button type="submit" class="btn btn-primary" id="tr2Submit">등록</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog id="tr2ViewDialog" aria-label="여행 글 상세">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="tr2ViewDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title" id="tr2ViewTitle"></h3>
+    <div class="post-date" id="tr2ViewDate"></div>
+    <div class="view-photos" id="tr2ViewPhotos"></div>
+    <div id="tr2ViewContent"></div>
+    <div class="file-list" id="tr2ViewFiles" hidden></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-primary admin-only" id="tr2ViewEdit">수정</button>
+      <button type="button" class="btn btn-danger admin-only" id="tr2ViewDelete">삭제</button>
+      <button type="button" class="btn btn-ghost" data-close="tr2ViewDialog">닫기</button>
+    </div>
+  </div>
+</dialog>
+
 <!-- ===== Repair 자유게시판 등록/상세 다이얼로그 ===== -->
 <dialog id="rpFormDialog" aria-label="새 Repair 글 등록">
   <div class="dlg-body">
@@ -3538,6 +3708,62 @@
   </div>
 </dialog>
 
+<!-- ===== Repair 방문자게시판 등록/상세 다이얼로그 ===== -->
+<dialog id="rp2FormDialog" aria-label="새 진단 글 등록">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="rp2FormDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title">새 진단 글</h3>
+    <form id="rp2Form" novalidate>
+      <div class="field">
+        <label for="rp2Title">제목 *</label>
+        <input type="text" id="rp2Title" maxlength="120" placeholder="예: 오늘의 진단 기록">
+      </div>
+      <div class="field">
+        <label for="rp2Date">날짜</label>
+        <input type="date" id="rp2Date">
+      </div>
+      <div class="field">
+        <label for="rp2Content">내용</label>
+        <textarea id="rp2Content" placeholder="진단 내용을 적어주세요"></textarea>
+      </div>
+      <div class="field">
+        <label for="rp2Files">사진·영상·파일 (여러 개)</label>
+        <div class="attach-row">
+          <label class="file-btn" for="rp2Files">파일 선택</label>
+          <input type="file" id="rp2Files" class="sr" multiple>
+          <span id="rp2FileCount">선택된 파일 없음</span>
+        </div>
+        <div class="preview-grid" id="rp2Preview"></div>
+      </div>
+      <div class="field">
+        <label for="rp2Pw">수정용 비밀번호 *</label>
+        <input type="password" id="rp2Pw" maxlength="30" autocomplete="off" placeholder="수정할 때 필요합니다 (4자 이상)">
+      </div>
+      <div class="form-error" id="rp2FormError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="rp2FormDialog">취소</button>
+        <button type="submit" class="btn btn-primary" id="rp2Submit">등록</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog id="rp2ViewDialog" aria-label="진단 글 상세">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="rp2ViewDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title" id="rp2ViewTitle"></h3>
+    <div class="post-date" id="rp2ViewDate"></div>
+    <div class="view-photos" id="rp2ViewPhotos"></div>
+    <div id="rp2ViewContent"></div>
+    <div class="file-list" id="rp2ViewFiles" hidden></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-primary admin-only" id="rp2ViewEdit">수정</button>
+      <button type="button" class="btn btn-danger admin-only" id="rp2ViewDelete">삭제</button>
+      <button type="button" class="btn btn-ghost" data-close="rp2ViewDialog">닫기</button>
+    </div>
+  </div>
+</dialog>
+
 <!-- ===== Pets 자유게시판 등록/상세 다이얼로그 ===== -->
 <dialog id="petFormDialog" aria-label="새 Pets 글 등록">
   <div class="dlg-body">
@@ -3590,6 +3816,62 @@
       <button type="button" class="btn btn-primary admin-only" id="petViewEdit">수정</button>
       <button type="button" class="btn btn-danger admin-only" id="petViewDelete">삭제</button>
       <button type="button" class="btn btn-ghost" data-close="petViewDialog">닫기</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- ===== Pets 방문자게시판 등록/상세 다이얼로그 ===== -->
+<dialog id="pet2FormDialog" aria-label="새 펫 글 등록">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="pet2FormDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title">새 펫 글</h3>
+    <form id="pet2Form" novalidate>
+      <div class="field">
+        <label for="pet2Title">제목 *</label>
+        <input type="text" id="pet2Title" maxlength="120" placeholder="예: 오늘의 펫 기록">
+      </div>
+      <div class="field">
+        <label for="pet2Date">날짜</label>
+        <input type="date" id="pet2Date">
+      </div>
+      <div class="field">
+        <label for="pet2Content">내용</label>
+        <textarea id="pet2Content" placeholder="펫 내용을 적어주세요"></textarea>
+      </div>
+      <div class="field">
+        <label for="pet2Files">사진·영상·파일 (여러 개)</label>
+        <div class="attach-row">
+          <label class="file-btn" for="pet2Files">파일 선택</label>
+          <input type="file" id="pet2Files" class="sr" multiple>
+          <span id="pet2FileCount">선택된 파일 없음</span>
+        </div>
+        <div class="preview-grid" id="pet2Preview"></div>
+      </div>
+      <div class="field">
+        <label for="pet2Pw">수정용 비밀번호 *</label>
+        <input type="password" id="pet2Pw" maxlength="30" autocomplete="off" placeholder="수정할 때 필요합니다 (4자 이상)">
+      </div>
+      <div class="form-error" id="pet2FormError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="pet2FormDialog">취소</button>
+        <button type="submit" class="btn btn-primary" id="pet2Submit">등록</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog id="pet2ViewDialog" aria-label="펫 글 상세">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="pet2ViewDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title" id="pet2ViewTitle"></h3>
+    <div class="post-date" id="pet2ViewDate"></div>
+    <div class="view-photos" id="pet2ViewPhotos"></div>
+    <div id="pet2ViewContent"></div>
+    <div class="file-list" id="pet2ViewFiles" hidden></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-primary admin-only" id="pet2ViewEdit">수정</button>
+      <button type="button" class="btn btn-danger admin-only" id="pet2ViewDelete">삭제</button>
+      <button type="button" class="btn btn-ghost" data-close="pet2ViewDialog">닫기</button>
     </div>
   </div>
 </dialog>
@@ -5220,6 +5502,392 @@ fd.append("pw", pwValtravel);
 
   loadTr();
 
+  /* ---------- Travel 방문자게시판 ---------- */
+  var tr2BoardBody = $("#tr2BoardBody");
+  var tr2Posts = [];
+  var tr2PageBar = $("#tr2PageBar");
+  var tr2Page = 1;
+  var TR2_PAGE_SIZE = 10;
+
+  function renderTrPages(total) {
+    if (!tr2PageBar) return;
+    tr2PageBar.textContent = "";
+    var maxPage = Math.max(1, Math.ceil(total / TR2_PAGE_SIZE));
+    if (tr2Page > maxPage) tr2Page = maxPage;
+    if (tr2Page < 1) tr2Page = 1;
+    function mk(label, page, active, disabled) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "ai-cat-btn" + (active ? " active" : "");
+      b.textContent = label;
+      if (disabled) b.disabled = true;
+      else b.addEventListener("click", function () { tr2Page = page; renderTr(); });
+      tr2PageBar.appendChild(b);
+    }
+    mk("‹ 이전", tr2Page - 1, false, tr2Page === 1);
+    var start = Math.max(1, tr2Page - 2);
+    var end = Math.min(maxPage, start + 4);
+    start = Math.max(1, end - 4);
+    for (var p = start; p <= end; p++) mk(String(p), p, p === tr2Page, false);
+    mk("› 다음", tr2Page + 1, false, tr2Page === maxPage);
+  }
+
+  function makeTrRow(p, i) {
+    var tr = document.createElement("tr");
+    tr.setAttribute("data-id", p.id);
+    var no = document.createElement("td");
+    no.textContent = String(i);
+    var ti = document.createElement("td");
+    ti.className = "board-title";
+    ti.textContent = p.title || "(제목 없음)";
+    var vw = document.createElement("span");
+    vw.className = "board-views";
+    vw.textContent = " | 조회수: " + String((+p.views) || 0);
+    ti.appendChild(vw);
+    var dt = document.createElement("td");
+    dt.textContent = "";
+    var vs = document.createElement("span");
+    vs.className = "vote-red";
+    vs.textContent = window.BaiooVote.label(p);
+    dt.appendChild(vs);
+    dt.appendChild(document.createTextNode(" "));
+    dt.appendChild(document.createTextNode(postDate(p) || "—"));
+    var del = document.createElement("button");
+    del.type = "button";
+    del.className = "row-del admin-only";
+    del.textContent = "🗑️";
+    del.setAttribute("data-del", p.id);
+    del.setAttribute("aria-label", "삭제");
+    dt.appendChild(del);
+    tr.appendChild(no);
+    tr.appendChild(ti);
+    tr.appendChild(dt);
+    return tr;
+  }
+
+  function renderTr() {
+    var maxPage = Math.max(1, Math.ceil(tr2Posts.length / TR2_PAGE_SIZE));
+    if (tr2Page > maxPage) tr2Page = maxPage;
+    if (tr2Page < 1) tr2Page = 1;
+    tr2BoardBody.textContent = "";
+    if (!tr2Posts.length) {
+      var tr = document.createElement("tr");
+      var td = document.createElement("td");
+      td.colSpan = 3;
+      td.className = "board-empty";
+      td.style.cssText = "text-align:center;color:var(--muted)";
+      td.textContent = "등록된 글이 없습니다.";
+      tr.appendChild(td);
+      tr2BoardBody.appendChild(tr);
+      renderTrPages(0);
+      return;
+    }
+    var startIdx = (tr2Page - 1) * TR2_PAGE_SIZE;
+    tr2Posts.slice(startIdx, startIdx + TR2_PAGE_SIZE).forEach(function (p, i) { tr2BoardBody.appendChild(makeTrRow(p, tr2Posts.length - (startIdx + i))); });
+    renderTrPages(tr2Posts.length);
+  }
+
+  function loadTr() {
+    return apiList().then(function (posts) {
+      tr2Posts = posts.filter(function (p) { return p.category === "travel-visitor"; });
+      tr2Posts.sort(function (a, b) { return ((b.createdAt || 0) > (a.createdAt || 0)) ? 1 : (((b.createdAt || 0) < (a.createdAt || 0)) ? -1 : 0); });
+      renderTr();
+    }).catch(function () { tr2Posts = []; renderTr(); });
+  }
+
+  /* ---------- Travel 등록 폼 ---------- */
+  var tr2FormDlg = $("#tr2FormDialog"),
+      tr2Form = $("#tr2Form"),
+      tr2TitleInput = $("#tr2Title"),
+      tr2DateInput = $("#tr2Date"),
+      tr2ContentInput = $("#tr2Content"),
+      tr2FileInput = $("#tr2Files"),
+      tr2PreviewEl = $("#tr2Preview"),
+      tr2FileCountEl = $("#tr2FileCount"),
+      tr2ErrorEl = $("#tr2FormError"),
+      tr2SubmitBtn = $("#tr2Submit");
+  var tr2Picked = [];
+  var tr2EditingId = null;
+
+  function renderTrPreview() {
+    $$("img", tr2PreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
+    tr2PreviewEl.textContent = "";
+    tr2FileCountEl.textContent = tr2Picked.length ? tr2Picked.length + "개 선택됨" : "선택된 파일 없음";
+    tr2Picked.forEach(function (f, i) {
+      var tile = document.createElement("div");
+      tile.className = "thumb-sm";
+      tile.title = f.name;
+      if (isImageFile(f)) {
+        var im = document.createElement("img");
+        im.src = URL.createObjectURL(f);
+        im.alt = f.name;
+        tile.appendChild(im);
+      } else {
+        tile.style.cssText = "display:grid;place-items:center;font-size:1.6rem;";
+        tile.textContent = "📄";
+      }
+      var rm = document.createElement("button");
+      rm.type = "button";
+      rm.className = "rm";
+      rm.textContent = "×";
+      rm.setAttribute("aria-label", f.name + " 제거");
+      rm.addEventListener("click", function () { tr2Picked.splice(i, 1); renderTrPreview(); });
+      tile.appendChild(rm);
+      tr2PreviewEl.appendChild(tile);
+    });
+  }
+
+  tr2FileInput.addEventListener("change", function () {
+    tr2Picked = tr2Picked.concat(Array.prototype.slice.call(tr2FileInput.files));
+    tr2FileInput.value = "";
+    renderTrPreview();
+  });
+
+  $$(".section-add-btn[data-category='travel-visitor']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      tr2EditingId = null;
+      var pwc = $("#tr2Pw"); if (pwc) pwc.value = "";
+      tr2Form.reset();
+      tr2Picked = [];
+      renderTrPreview();
+      tr2ErrorEl.textContent = "";
+      var _dt = $("#tr2FormDialog .dlg-title"); if (_dt) _dt.textContent = "새 여행 글";
+      tr2SubmitBtn.textContent = "등록";
+      openDlg(tr2FormDlg);
+      tr2TitleInput.focus();
+    });
+  });
+
+  tr2Form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var title = tr2TitleInput.value.trim();
+    if (!title) { tr2ErrorEl.textContent = "제목을 입력하세요."; tr2TitleInput.focus(); return; }
+    var pwValtr = ($("#tr2Pw") ? $("#tr2Pw").value : "").trim();
+    if (pwValtr.length < 4) { $("#tr2FormError").textContent = "수정용 비밀번호(4자 이상)를 입력하세요."; $("#tr2Pw").focus(); return; }
+    tr2ErrorEl.textContent = "";
+    tr2SubmitBtn.disabled = true;
+    tr2SubmitBtn.textContent = tr2EditingId ? "저장 중…" : "등록 중…";
+    var fd = new FormData();
+    if (tr2EditingId) fd.append("id", tr2EditingId);
+    fd.append("title", title);
+    fd.append("content", tr2ContentInput.value);
+    fd.append("pw", pwValtr);
+    fd.append("category", "travel-visitor");
+    fd.append("date", tr2DateInput.value || "");
+    tr2Picked.forEach(function (f) { fd.append("files[]", f); });
+    fetch(tr2EditingId ? "/api?action=update" : "/api?action=create", { method: "POST", body: fd })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        tr2Form.reset();
+        tr2Picked = [];
+        renderTrPreview();
+        closeDlg(tr2FormDlg);
+        tr2EditingId = null;
+        var pwc = $("#tr2Pw"); if (pwc) pwc.value = "";
+        var _dt2 = $("#tr2FormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 여행 글";
+        return loadTr();
+      })
+      .catch(function (err) { tr2ErrorEl.textContent = "실패: " + ((err && err.message) || err); })
+      .then(function () { tr2SubmitBtn.disabled = false; tr2SubmitBtn.textContent = tr2EditingId ? "저장" : "등록"; });
+  });
+
+  /* ---------- Travel 상세 다이얼로그 + 삭제 ---------- */
+  var tr2ViewDlg = $("#tr2ViewDialog"),
+      tr2ViewTitle = $("#tr2ViewTitle"),
+      tr2ViewDate = $("#tr2ViewDate"),
+      tr2ViewPhotos = $("#tr2ViewPhotos"),
+      tr2ViewContent = $("#tr2ViewContent"),
+      tr2ViewFiles = $("#tr2ViewFiles"),
+      tr2DeleteBtn = $("#tr2ViewDelete");
+  var tr2ViewingId = null;
+
+  function openTrView(id) {
+    var p = null;
+    tr2Posts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
+    if (!p) return;
+    tr2ViewingId = p.id;
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = " | 조회수: " + j.views; } }).catch(function () {});
+    var panel = $("#tr2ViewPanel");
+    var t = $("#tr2InlineTitle"), d = $("#tr2InlineDate"), ph = $("#tr2InlinePhotos"), c = $("#tr2InlineContent"), fl = $("#tr2InlineFiles");
+    if (t) t.textContent = p.title || "(제목 없음)";
+    if (d) { var dv = document.createElement("span"); dv.className = "vote-red"; dv.textContent = window.BaiooVote.label(p); d.textContent = ""; d.appendChild(document.createTextNode("🗓 ")); d.appendChild(dv); d.appendChild(document.createTextNode("  " + (postDate(p) || "날짜 미정"))); }
+    if (ph) {
+      ph.textContent = "";
+      (p.files || []).filter(isImageFile).forEach(function (f) {
+        var im = document.createElement("img");
+        im.src = f.url;
+        im.alt = f.originalName || f.name;
+        ph.appendChild(im);
+      });
+      (p.files || []).filter(function (f) { var tt = String(f.type || ""); var nn = String(f.name || f.originalName || "").toLowerCase(); return /^video\//.test(tt) || /\.(mp4|webm|mov|m4v)$/.test(nn); }).forEach(function (f) {
+        var vd = document.createElement("video");
+        vd.src = f.url;
+        vd.controls = true;
+        vd.preload = "metadata";
+        ph.appendChild(vd);
+      });
+    }
+    if (c) c.textContent = p.content || "(내용 없음)";
+    if (fl) {
+      fl.textContent = "";
+      fl.hidden = !(p.files && p.files.length);
+      if (p.files && p.files.length) fl.appendChild(fileLinks(p.files, false));
+    }
+    var tlc = $("#tr2LikeCount"), tdc = $("#tr2DislikeCount");
+    if (tlc) tlc.textContent = (+p.likes) || 0;
+    if (tdc) tdc.textContent = (+p.dislikes) || 0;
+    if (panel) {
+      panel.hidden = false;
+      if (panel.scrollIntoView) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+    tr2ViewTitle.textContent = p.title || "(제목 없음)";
+    tr2ViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    loadTrCmt();
+  }
+
+  tr2BoardBody.addEventListener("click", function (e) {
+    var delBtn = e.target.closest("[data-del]");
+    if (delBtn) {
+      e.stopPropagation();
+      var did = delBtn.getAttribute("data-del");
+      if (!window.confirm("이 글을 삭제할까요?")) return;
+      fetch("/api/" + encodeURIComponent(did), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: did }) })
+        .then(function (res) { return res.json(); })
+        .then(function () { return loadTr(); })
+        .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); });
+      return;
+    }
+    var tr = e.target.closest("tr[data-id]");
+    if (!tr) return;
+    openTrView(tr.getAttribute("data-id"));
+  });
+
+  var tr2ViewClose = $("#tr2ViewClose");
+  if (tr2ViewClose) tr2ViewClose.addEventListener("click", function () { var panel = $("#tr2ViewPanel"); if (panel) panel.hidden = true; });
+  var tr2InlineDelete = $("#tr2InlineDelete");
+  if (tr2InlineDelete) tr2InlineDelete.addEventListener("click", function () { tr2DeleteBtn.click(); });
+  var tr2InlineEdit = $("#tr2InlineEdit");
+  if (tr2InlineEdit) tr2InlineEdit.addEventListener("click", function () { var b = $("#tr2ViewEdit"); if (b) b.click(); });
+  var tr2InlineLike = $("#tr2InlineLike"), tr2InlineDislike = $("#tr2InlineDislike");
+  if (tr2InlineLike) tr2InlineLike.addEventListener("click", function () {
+    if (!tr2ViewingId) return;
+    window.BaiooVote.send(tr2ViewingId, "like", function (data) {
+      var lc = $("#tr2LikeCount"), dc = $("#tr2DislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      tr2Posts.forEach(function (x) { if (String(x.id) === String(tr2ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderTr();
+    });
+  });
+  if (tr2InlineDislike) tr2InlineDislike.addEventListener("click", function () {
+    if (!tr2ViewingId) return;
+    window.BaiooVote.send(tr2ViewingId, "dislike", function (data) {
+      var lc = $("#tr2LikeCount"), dc = $("#tr2DislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      tr2Posts.forEach(function (x) { if (String(x.id) === String(tr2ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderTr();
+    });
+  });
+
+  var tr2CmtList = $("#tr2CmtList"), tr2CmtCount = $("#tr2CmtCount"), tr2CmtToggle = $("#tr2CmtToggle"),
+      tr2CmtAuthor = $("#tr2CmtAuthor"), tr2CmtInput = $("#tr2CmtInput"), tr2CmtSend = $("#tr2CmtSend");
+  var tr2CmtAll = [], tr2CmtOpen = false;
+  function renderTrCmt() {
+    if (!tr2CmtList) return;
+    tr2CmtList.textContent = "";
+    var show = tr2CmtOpen ? tr2CmtAll : tr2CmtAll.slice(0, 10);
+    show.forEach(function (cm) {
+      var d = document.createElement("div");
+      d.className = "cmt-item";
+      var isAdmin = document.body.classList.contains("is-admin");
+      d.innerHTML = "<b>" + window.BaiooCmt.esc(cm.author) + "</b> " + window.BaiooCmt.esc(cm.content) + (isAdmin ? ' <button type="button" class="cmt-del" data-cid="' + cm.id + '">삭제</button>' : "");
+      tr2CmtList.appendChild(d);
+    });
+    if (tr2CmtCount) tr2CmtCount.textContent = tr2CmtAll.length;
+    if (tr2CmtToggle) { tr2CmtToggle.hidden = tr2CmtAll.length <= 10; tr2CmtToggle.textContent = tr2CmtOpen ? "접기" : ("더 보기 (" + tr2CmtAll.length + ")"); }
+  }
+  function loadTrCmt() {
+    if (!tr2ViewingId) return;
+    window.BaiooCmt.list(tr2ViewingId).then(function (rows) { tr2CmtAll = rows || []; tr2CmtOpen = false; renderTrCmt(); }).catch(function () { tr2CmtAll = []; renderTrCmt(); });
+  }
+  if (tr2CmtToggle) tr2CmtToggle.addEventListener("click", function () { tr2CmtOpen = !tr2CmtOpen; renderTrCmt(); });
+  if (tr2CmtSend) tr2CmtSend.addEventListener("click", function () {
+    if (!tr2ViewingId) return;
+    var a = (tr2CmtAuthor && tr2CmtAuthor.value.trim()) || "익명";
+    var c = (tr2CmtInput && tr2CmtInput.value.trim()) || "";
+    if (!c) { window.alert("댓글을 입력하세요."); return; }
+    tr2CmtSend.disabled = true;
+    window.BaiooCmt.create(tr2ViewingId, a, c).then(function (j) {
+      if (!j || !j.ok) throw new Error((j && j.message) || "fail");
+      if (tr2CmtInput) tr2CmtInput.value = "";
+      loadTrCmt();
+    }).catch(function (err) { window.alert("댓글 실패: " + ((err && err.message) || err)); })
+    .then(function () { tr2CmtSend.disabled = false; });
+  });
+  if (tr2CmtList) tr2CmtList.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cid]");
+    if (!b) return;
+    if (!window.confirm("댓글을 삭제할까요?")) return;
+    window.BaiooCmt.remove(b.getAttribute("data-cid")).then(function () { loadTrCmt(); });
+  });
+
+  tr2DeleteBtn.addEventListener("click", function () {
+    if (!tr2ViewingId) return;
+    if (!window.confirm("이 글을 삭제할까요? 첨부 파일도 함께 삭제됩니다.")) return;
+    tr2DeleteBtn.disabled = true;
+    fetch("/api/" + encodeURIComponent(tr2ViewingId), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: tr2ViewingId })
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        closeDlg(tr2ViewDlg);
+        tr2ViewingId = null;
+        var panel = $("#tr2ViewPanel");
+        if (panel) panel.hidden = true;
+        return loadTr();
+      })
+      .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
+      .then(function () { tr2DeleteBtn.disabled = false; });
+  });
+
+  var tr2EditBtn = $("#tr2ViewEdit");
+  if (tr2EditBtn) {
+    tr2EditBtn.addEventListener("click", function () {
+      if (!tr2ViewingId) return;
+      var p = null;
+      tr2Posts.forEach(function (x) { if (x.id === tr2ViewingId) p = x; });
+      if (!p) return;
+      tr2EditingId = tr2ViewingId;
+      var pwc = $("#tr2Pw"); if (pwc) pwc.value = "";
+      tr2TitleInput.value = p.title || "";
+      tr2DateInput.value = p.date || "";
+      tr2ContentInput.value = p.content || "";
+      tr2Picked = [];
+      renderTrPreview();
+      tr2ErrorEl.textContent = "";
+      var tdt = $("#tr2FormDialog .dlg-title"); if (tdt) tdt.textContent = "여행 글 수정";
+      tr2SubmitBtn.textContent = "저장";
+      if (tr2ViewDlg && tr2ViewDlg.open) closeDlg(tr2ViewDlg);
+      openDlg(tr2FormDlg);
+      tr2TitleInput.focus();
+    });
+  }
+
+  loadTr();
+
   /* ---------- Repair 자유게시판 (Travel 패턴 미러) ---------- */
   var rpBoardBody = $("#rpBoardBody");
   var rpPosts = [];
@@ -5606,6 +6274,392 @@ fd.append("pw", pwValtravel);
 
   loadRp();
 
+  /* ---------- Repair 방문자게시판 ---------- */
+  var rp2BoardBody = $("#rp2BoardBody");
+  var rp2Posts = [];
+  var rp2PageBar = $("#rp2PageBar");
+  var rp2Page = 1;
+  var RP2_PAGE_SIZE = 10;
+
+  function renderRpPages(total) {
+    if (!rp2PageBar) return;
+    rp2PageBar.textContent = "";
+    var maxPage = Math.max(1, Math.ceil(total / RP2_PAGE_SIZE));
+    if (rp2Page > maxPage) rp2Page = maxPage;
+    if (rp2Page < 1) rp2Page = 1;
+    function mk(label, page, active, disabled) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "ai-cat-btn" + (active ? " active" : "");
+      b.textContent = label;
+      if (disabled) b.disabled = true;
+      else b.addEventListener("click", function () { rp2Page = page; renderRp(); });
+      rp2PageBar.appendChild(b);
+    }
+    mk("‹ 이전", rp2Page - 1, false, rp2Page === 1);
+    var start = Math.max(1, rp2Page - 2);
+    var end = Math.min(maxPage, start + 4);
+    start = Math.max(1, end - 4);
+    for (var p = start; p <= end; p++) mk(String(p), p, p === rp2Page, false);
+    mk("› 다음", rp2Page + 1, false, rp2Page === maxPage);
+  }
+
+  function makeRpRow(p, i) {
+    var tr = document.createElement("tr");
+    tr.setAttribute("data-id", p.id);
+    var no = document.createElement("td");
+    no.textContent = String(i);
+    var ti = document.createElement("td");
+    ti.className = "board-title";
+    ti.textContent = p.title || "(제목 없음)";
+    var vw = document.createElement("span");
+    vw.className = "board-views";
+    vw.textContent = " | 조회수: " + String((+p.views) || 0);
+    ti.appendChild(vw);
+    var dt = document.createElement("td");
+    dt.textContent = "";
+    var vs = document.createElement("span");
+    vs.className = "vote-red";
+    vs.textContent = window.BaiooVote.label(p);
+    dt.appendChild(vs);
+    dt.appendChild(document.createTextNode(" "));
+    dt.appendChild(document.createTextNode(postDate(p) || "—"));
+    var del = document.createElement("button");
+    del.type = "button";
+    del.className = "row-del admin-only";
+    del.textContent = "🗑️";
+    del.setAttribute("data-del", p.id);
+    del.setAttribute("aria-label", "삭제");
+    dt.appendChild(del);
+    tr.appendChild(no);
+    tr.appendChild(ti);
+    tr.appendChild(dt);
+    return tr;
+  }
+
+  function renderRp() {
+    var maxPage = Math.max(1, Math.ceil(rp2Posts.length / RP2_PAGE_SIZE));
+    if (rp2Page > maxPage) rp2Page = maxPage;
+    if (rp2Page < 1) rp2Page = 1;
+    rp2BoardBody.textContent = "";
+    if (!rp2Posts.length) {
+      var tr = document.createElement("tr");
+      var td = document.createElement("td");
+      td.colSpan = 3;
+      td.className = "board-empty";
+      td.style.cssText = "text-align:center;color:var(--muted)";
+      td.textContent = "등록된 글이 없습니다.";
+      tr.appendChild(td);
+      rp2BoardBody.appendChild(tr);
+      renderRpPages(0);
+      return;
+    }
+    var startIdx = (rp2Page - 1) * RP2_PAGE_SIZE;
+    rp2Posts.slice(startIdx, startIdx + RP2_PAGE_SIZE).forEach(function (p, i) { rp2BoardBody.appendChild(makeRpRow(p, rp2Posts.length - (startIdx + i))); });
+    renderRpPages(rp2Posts.length);
+  }
+
+  function loadRp() {
+    return apiList().then(function (posts) {
+      rp2Posts = posts.filter(function (p) { return p.category === "repair-visitor"; });
+      rp2Posts.sort(function (a, b) { return ((b.createdAt || 0) > (a.createdAt || 0)) ? 1 : (((b.createdAt || 0) < (a.createdAt || 0)) ? -1 : 0); });
+      renderRp();
+    }).catch(function () { rp2Posts = []; renderRp(); });
+  }
+
+  /* ---------- Repair 등록 폼 ---------- */
+  var rp2FormDlg = $("#rp2FormDialog"),
+      rp2Form = $("#rp2Form"),
+      rp2TitleInput = $("#rp2Title"),
+      rp2DateInput = $("#rp2Date"),
+      rp2ContentInput = $("#rp2Content"),
+      rp2FileInput = $("#rp2Files"),
+      rp2PreviewEl = $("#rp2Preview"),
+      rp2FileCountEl = $("#rp2FileCount"),
+      rp2ErrorEl = $("#rp2FormError"),
+      rp2SubmitBtn = $("#rp2Submit");
+  var rp2Picked = [];
+  var rp2EditingId = null;
+
+  function renderRpPreview() {
+    $$("img", rp2PreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
+    rp2PreviewEl.textContent = "";
+    rp2FileCountEl.textContent = rp2Picked.length ? rp2Picked.length + "개 선택됨" : "선택된 파일 없음";
+    rp2Picked.forEach(function (f, i) {
+      var tile = document.createElement("div");
+      tile.className = "thumb-sm";
+      tile.title = f.name;
+      if (isImageFile(f)) {
+        var im = document.createElement("img");
+        im.src = URL.createObjectURL(f);
+        im.alt = f.name;
+        tile.appendChild(im);
+      } else {
+        tile.style.cssText = "display:grid;place-items:center;font-size:1.6rem;";
+        tile.textContent = "📄";
+      }
+      var rm = document.createElement("button");
+      rm.type = "button";
+      rm.className = "rm";
+      rm.textContent = "×";
+      rm.setAttribute("aria-label", f.name + " 제거");
+      rm.addEventListener("click", function () { rp2Picked.splice(i, 1); renderRpPreview(); });
+      tile.appendChild(rm);
+      rp2PreviewEl.appendChild(tile);
+    });
+  }
+
+  rp2FileInput.addEventListener("change", function () {
+    rp2Picked = rp2Picked.concat(Array.prototype.slice.call(rp2FileInput.files));
+    rp2FileInput.value = "";
+    renderRpPreview();
+  });
+
+  $$(".section-add-btn[data-category='repair-visitor']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      rp2EditingId = null;
+      var pwc = $("#rp2Pw"); if (pwc) pwc.value = "";
+      rp2Form.reset();
+      rp2Picked = [];
+      renderRpPreview();
+      rp2ErrorEl.textContent = "";
+      var _dt = $("#rp2FormDialog .dlg-title"); if (_dt) _dt.textContent = "새 진단 글";
+      rp2SubmitBtn.textContent = "등록";
+      openDlg(rp2FormDlg);
+      rp2TitleInput.focus();
+    });
+  });
+
+  rp2Form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var title = rp2TitleInput.value.trim();
+    if (!title) { rp2ErrorEl.textContent = "제목을 입력하세요."; rp2TitleInput.focus(); return; }
+    var pwValrp = ($("#rp2Pw") ? $("#rp2Pw").value : "").trim();
+    if (pwValrp.length < 4) { $("#rp2FormError").textContent = "수정용 비밀번호(4자 이상)를 입력하세요."; $("#rp2Pw").focus(); return; }
+    rp2ErrorEl.textContent = "";
+    rp2SubmitBtn.disabled = true;
+    rp2SubmitBtn.textContent = rp2EditingId ? "저장 중…" : "등록 중…";
+    var fd = new FormData();
+    if (rp2EditingId) fd.append("id", rp2EditingId);
+    fd.append("title", title);
+    fd.append("content", rp2ContentInput.value);
+    fd.append("pw", pwValrp);
+    fd.append("category", "repair-visitor");
+    fd.append("date", rp2DateInput.value || "");
+    rp2Picked.forEach(function (f) { fd.append("files[]", f); });
+    fetch(rp2EditingId ? "/api?action=update" : "/api?action=create", { method: "POST", body: fd })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        rp2Form.reset();
+        rp2Picked = [];
+        renderRpPreview();
+        closeDlg(rp2FormDlg);
+        rp2EditingId = null;
+        var pwc = $("#rp2Pw"); if (pwc) pwc.value = "";
+        var _dt2 = $("#rp2FormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 진단 글";
+        return loadRp();
+      })
+      .catch(function (err) { rp2ErrorEl.textContent = "실패: " + ((err && err.message) || err); })
+      .then(function () { rp2SubmitBtn.disabled = false; rp2SubmitBtn.textContent = rp2EditingId ? "저장" : "등록"; });
+  });
+
+  /* ---------- Repair 상세 다이얼로그 + 삭제 ---------- */
+  var rp2ViewDlg = $("#rp2ViewDialog"),
+      rp2ViewTitle = $("#rp2ViewTitle"),
+      rp2ViewDate = $("#rp2ViewDate"),
+      rp2ViewPhotos = $("#rp2ViewPhotos"),
+      rp2ViewContent = $("#rp2ViewContent"),
+      rp2ViewFiles = $("#rp2ViewFiles"),
+      rp2DeleteBtn = $("#rp2ViewDelete");
+  var rp2ViewingId = null;
+
+  function openRpView(id) {
+    var p = null;
+    rp2Posts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
+    if (!p) return;
+    rp2ViewingId = p.id;
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = " | 조회수: " + j.views; } }).catch(function () {});
+    var panel = $("#rp2ViewPanel");
+    var t = $("#rp2InlineTitle"), d = $("#rp2InlineDate"), ph = $("#rp2InlinePhotos"), c = $("#rp2InlineContent"), fl = $("#rp2InlineFiles");
+    if (t) t.textContent = p.title || "(제목 없음)";
+    if (d) { var dv = document.createElement("span"); dv.className = "vote-red"; dv.textContent = window.BaiooVote.label(p); d.textContent = ""; d.appendChild(document.createTextNode("🗓 ")); d.appendChild(dv); d.appendChild(document.createTextNode("  " + (postDate(p) || "날짜 미정"))); }
+    if (ph) {
+      ph.textContent = "";
+      (p.files || []).filter(isImageFile).forEach(function (f) {
+        var im = document.createElement("img");
+        im.src = f.url;
+        im.alt = f.originalName || f.name;
+        ph.appendChild(im);
+      });
+      (p.files || []).filter(function (f) { var tt = String(f.type || ""); var nn = String(f.name || f.originalName || "").toLowerCase(); return /^video\//.test(tt) || /\.(mp4|webm|mov|m4v)$/.test(nn); }).forEach(function (f) {
+        var vd = document.createElement("video");
+        vd.src = f.url;
+        vd.controls = true;
+        vd.preload = "metadata";
+        ph.appendChild(vd);
+      });
+    }
+    if (c) c.textContent = p.content || "(내용 없음)";
+    if (fl) {
+      fl.textContent = "";
+      fl.hidden = !(p.files && p.files.length);
+      if (p.files && p.files.length) fl.appendChild(fileLinks(p.files, false));
+    }
+    var rlc = $("#rp2LikeCount"), rdc = $("#rp2DislikeCount");
+    if (rlc) rlc.textContent = (+p.likes) || 0;
+    if (rdc) rdc.textContent = (+p.dislikes) || 0;
+    if (panel) {
+      panel.hidden = false;
+      if (panel.scrollIntoView) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+    rp2ViewTitle.textContent = p.title || "(제목 없음)";
+    rp2ViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    loadRpCmt();
+  }
+
+  rp2BoardBody.addEventListener("click", function (e) {
+    var delBtn = e.target.closest("[data-del]");
+    if (delBtn) {
+      e.stopPropagation();
+      var did = delBtn.getAttribute("data-del");
+      if (!window.confirm("이 글을 삭제할까요?")) return;
+      fetch("/api/" + encodeURIComponent(did), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: did }) })
+        .then(function (res) { return res.json(); })
+        .then(function () { return loadRp(); })
+        .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); });
+      return;
+    }
+    var tr = e.target.closest("tr[data-id]");
+    if (!tr) return;
+    openRpView(tr.getAttribute("data-id"));
+  });
+
+  var rp2ViewClose = $("#rp2ViewClose");
+  if (rp2ViewClose) rp2ViewClose.addEventListener("click", function () { var panel = $("#rp2ViewPanel"); if (panel) panel.hidden = true; });
+  var rp2InlineDelete = $("#rp2InlineDelete");
+  if (rp2InlineDelete) rp2InlineDelete.addEventListener("click", function () { rp2DeleteBtn.click(); });
+  var rp2InlineEdit = $("#rp2InlineEdit");
+  if (rp2InlineEdit) rp2InlineEdit.addEventListener("click", function () { var b = $("#rp2ViewEdit"); if (b) b.click(); });
+  var rp2InlineLike = $("#rp2InlineLike"), rp2InlineDislike = $("#rp2InlineDislike");
+  if (rp2InlineLike) rp2InlineLike.addEventListener("click", function () {
+    if (!rp2ViewingId) return;
+    window.BaiooVote.send(rp2ViewingId, "like", function (data) {
+      var lc = $("#rp2LikeCount"), dc = $("#rp2DislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      rp2Posts.forEach(function (x) { if (String(x.id) === String(rp2ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderRp();
+    });
+  });
+  if (rp2InlineDislike) rp2InlineDislike.addEventListener("click", function () {
+    if (!rp2ViewingId) return;
+    window.BaiooVote.send(rp2ViewingId, "dislike", function (data) {
+      var lc = $("#rp2LikeCount"), dc = $("#rp2DislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      rp2Posts.forEach(function (x) { if (String(x.id) === String(rp2ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderRp();
+    });
+  });
+
+  var rp2CmtList = $("#rp2CmtList"), rp2CmtCount = $("#rp2CmtCount"), rp2CmtToggle = $("#rp2CmtToggle"),
+      rp2CmtAuthor = $("#rp2CmtAuthor"), rp2CmtInput = $("#rp2CmtInput"), rp2CmtSend = $("#rp2CmtSend");
+  var rp2CmtAll = [], rp2CmtOpen = false;
+  function renderRpCmt() {
+    if (!rp2CmtList) return;
+    rp2CmtList.textContent = "";
+    var show = rp2CmtOpen ? rp2CmtAll : rp2CmtAll.slice(0, 10);
+    show.forEach(function (cm) {
+      var d = document.createElement("div");
+      d.className = "cmt-item";
+      var isAdmin = document.body.classList.contains("is-admin");
+      d.innerHTML = "<b>" + window.BaiooCmt.esc(cm.author) + "</b> " + window.BaiooCmt.esc(cm.content) + (isAdmin ? ' <button type="button" class="cmt-del" data-cid="' + cm.id + '">삭제</button>' : "");
+      rp2CmtList.appendChild(d);
+    });
+    if (rp2CmtCount) rp2CmtCount.textContent = rp2CmtAll.length;
+    if (rp2CmtToggle) { rp2CmtToggle.hidden = rp2CmtAll.length <= 10; rp2CmtToggle.textContent = rp2CmtOpen ? "접기" : ("더 보기 (" + rp2CmtAll.length + ")"); }
+  }
+  function loadRpCmt() {
+    if (!rp2ViewingId) return;
+    window.BaiooCmt.list(rp2ViewingId).then(function (rows) { rp2CmtAll = rows || []; rp2CmtOpen = false; renderRpCmt(); }).catch(function () { rp2CmtAll = []; renderRpCmt(); });
+  }
+  if (rp2CmtToggle) rp2CmtToggle.addEventListener("click", function () { rp2CmtOpen = !rp2CmtOpen; renderRpCmt(); });
+  if (rp2CmtSend) rp2CmtSend.addEventListener("click", function () {
+    if (!rp2ViewingId) return;
+    var a = (rp2CmtAuthor && rp2CmtAuthor.value.trim()) || "익명";
+    var c = (rp2CmtInput && rp2CmtInput.value.trim()) || "";
+    if (!c) { window.alert("댓글을 입력하세요."); return; }
+    rp2CmtSend.disabled = true;
+    window.BaiooCmt.create(rp2ViewingId, a, c).then(function (j) {
+      if (!j || !j.ok) throw new Error((j && j.message) || "fail");
+      if (rp2CmtInput) rp2CmtInput.value = "";
+      loadRpCmt();
+    }).catch(function (err) { window.alert("댓글 실패: " + ((err && err.message) || err)); })
+    .then(function () { rp2CmtSend.disabled = false; });
+  });
+  if (rp2CmtList) rp2CmtList.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cid]");
+    if (!b) return;
+    if (!window.confirm("댓글을 삭제할까요?")) return;
+    window.BaiooCmt.remove(b.getAttribute("data-cid")).then(function () { loadRpCmt(); });
+  });
+
+  rp2DeleteBtn.addEventListener("click", function () {
+    if (!rp2ViewingId) return;
+    if (!window.confirm("이 글을 삭제할까요? 첨부 파일도 함께 삭제됩니다.")) return;
+    rp2DeleteBtn.disabled = true;
+    fetch("/api/" + encodeURIComponent(rp2ViewingId), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: rp2ViewingId })
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        closeDlg(rp2ViewDlg);
+        rp2ViewingId = null;
+        var panel = $("#rp2ViewPanel");
+        if (panel) panel.hidden = true;
+        return loadRp();
+      })
+      .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
+      .then(function () { rp2DeleteBtn.disabled = false; });
+  });
+
+  var rp2EditBtn = $("#rp2ViewEdit");
+  if (rp2EditBtn) {
+    rp2EditBtn.addEventListener("click", function () {
+      if (!rp2ViewingId) return;
+      var p = null;
+      rp2Posts.forEach(function (x) { if (x.id === rp2ViewingId) p = x; });
+      if (!p) return;
+      rp2EditingId = rp2ViewingId;
+      var pwc = $("#rp2Pw"); if (pwc) pwc.value = "";
+      rp2TitleInput.value = p.title || "";
+      rp2DateInput.value = p.date || "";
+      rp2ContentInput.value = p.content || "";
+      rp2Picked = [];
+      renderRpPreview();
+      rp2ErrorEl.textContent = "";
+      var rdt = $("#rp2FormDialog .dlg-title"); if (rdt) rdt.textContent = "진단 글 수정";
+      rp2SubmitBtn.textContent = "저장";
+      if (rp2ViewDlg && rp2ViewDlg.open) closeDlg(rp2ViewDlg);
+      openDlg(rp2FormDlg);
+      rp2TitleInput.focus();
+    });
+  }
+
+  loadRp();
+
   /* ---------- Pets 자유게시판 (Repair 패턴 미러) ---------- */
   var petBoardBody = $("#petBoardBody");
   var petPosts = [];
@@ -5987,6 +7041,392 @@ fd.append("pw", pwValtravel);
       if (petViewDlg && petViewDlg.open) closeDlg(petViewDlg);
       openDlg(petFormDlg);
       petTitleInput.focus();
+    });
+  }
+
+  loadPet();
+
+  /* ---------- Pets 방문자게시판 ---------- */
+  var pet2BoardBody = $("#pet2BoardBody");
+  var pet2Posts = [];
+  var pet2PageBar = $("#pet2PageBar");
+  var pet2Page = 1;
+  var PET2_PAGE_SIZE = 10;
+
+  function renderPetPages(total) {
+    if (!pet2PageBar) return;
+    pet2PageBar.textContent = "";
+    var maxPage = Math.max(1, Math.ceil(total / PET2_PAGE_SIZE));
+    if (pet2Page > maxPage) pet2Page = maxPage;
+    if (pet2Page < 1) pet2Page = 1;
+    function mk(label, page, active, disabled) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "ai-cat-btn" + (active ? " active" : "");
+      b.textContent = label;
+      if (disabled) b.disabled = true;
+      else b.addEventListener("click", function () { pet2Page = page; renderPet(); });
+      pet2PageBar.appendChild(b);
+    }
+    mk("‹ 이전", pet2Page - 1, false, pet2Page === 1);
+    var start = Math.max(1, pet2Page - 2);
+    var end = Math.min(maxPage, start + 4);
+    start = Math.max(1, end - 4);
+    for (var p = start; p <= end; p++) mk(String(p), p, p === pet2Page, false);
+    mk("› 다음", pet2Page + 1, false, pet2Page === maxPage);
+  }
+
+  function makePetRow(p, i) {
+    var tr = document.createElement("tr");
+    tr.setAttribute("data-id", p.id);
+    var no = document.createElement("td");
+    no.textContent = String(i);
+    var ti = document.createElement("td");
+    ti.className = "board-title";
+    ti.textContent = p.title || "(제목 없음)";
+    var vw = document.createElement("span");
+    vw.className = "board-views";
+    vw.textContent = " | 조회수: " + String((+p.views) || 0);
+    ti.appendChild(vw);
+    var dt = document.createElement("td");
+    dt.textContent = "";
+    var vs = document.createElement("span");
+    vs.className = "vote-red";
+    vs.textContent = window.BaiooVote.label(p);
+    dt.appendChild(vs);
+    dt.appendChild(document.createTextNode(" "));
+    dt.appendChild(document.createTextNode(postDate(p) || "—"));
+    var del = document.createElement("button");
+    del.type = "button";
+    del.className = "row-del admin-only";
+    del.textContent = "🗑️";
+    del.setAttribute("data-del", p.id);
+    del.setAttribute("aria-label", "삭제");
+    dt.appendChild(del);
+    tr.appendChild(no);
+    tr.appendChild(ti);
+    tr.appendChild(dt);
+    return tr;
+  }
+
+  function renderPet() {
+    var maxPage = Math.max(1, Math.ceil(pet2Posts.length / PET2_PAGE_SIZE));
+    if (pet2Page > maxPage) pet2Page = maxPage;
+    if (pet2Page < 1) pet2Page = 1;
+    pet2BoardBody.textContent = "";
+    if (!pet2Posts.length) {
+      var tr = document.createElement("tr");
+      var td = document.createElement("td");
+      td.colSpan = 3;
+      td.className = "board-empty";
+      td.style.cssText = "text-align:center;color:var(--muted)";
+      td.textContent = "등록된 글이 없습니다.";
+      tr.appendChild(td);
+      pet2BoardBody.appendChild(tr);
+      renderPetPages(0);
+      return;
+    }
+    var startIdx = (pet2Page - 1) * PET2_PAGE_SIZE;
+    pet2Posts.slice(startIdx, startIdx + PET2_PAGE_SIZE).forEach(function (p, i) { pet2BoardBody.appendChild(makePetRow(p, pet2Posts.length - (startIdx + i))); });
+    renderPetPages(pet2Posts.length);
+  }
+
+  function loadPet() {
+    return apiList().then(function (posts) {
+      pet2Posts = posts.filter(function (p) { return p.category === "bunny-visitor"; });
+      pet2Posts.sort(function (a, b) { return ((b.createdAt || 0) > (a.createdAt || 0)) ? 1 : (((b.createdAt || 0) < (a.createdAt || 0)) ? -1 : 0); });
+      renderPet();
+    }).catch(function () { pet2Posts = []; renderPet(); });
+  }
+
+  /* ---------- Pets 등록 폼 ---------- */
+  var pet2FormDlg = $("#pet2FormDialog"),
+      pet2Form = $("#pet2Form"),
+      pet2TitleInput = $("#pet2Title"),
+      pet2DateInput = $("#pet2Date"),
+      pet2ContentInput = $("#pet2Content"),
+      pet2FileInput = $("#pet2Files"),
+      pet2PreviewEl = $("#pet2Preview"),
+      pet2FileCountEl = $("#pet2FileCount"),
+      pet2ErrorEl = $("#pet2FormError"),
+      pet2SubmitBtn = $("#pet2Submit");
+  var pet2Picked = [];
+  var pet2EditingId = null;
+
+  function renderPetPreview() {
+    $$("img", pet2PreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
+    pet2PreviewEl.textContent = "";
+    pet2FileCountEl.textContent = pet2Picked.length ? pet2Picked.length + "개 선택됨" : "선택된 파일 없음";
+    pet2Picked.forEach(function (f, i) {
+      var tile = document.createElement("div");
+      tile.className = "thumb-sm";
+      tile.title = f.name;
+      if (isImageFile(f)) {
+        var im = document.createElement("img");
+        im.src = URL.createObjectURL(f);
+        im.alt = f.name;
+        tile.appendChild(im);
+      } else {
+        tile.style.cssText = "display:grid;place-items:center;font-size:1.6rem;";
+        tile.textContent = "📄";
+      }
+      var rm = document.createElement("button");
+      rm.type = "button";
+      rm.className = "rm";
+      rm.textContent = "×";
+      rm.setAttribute("aria-label", f.name + " 제거");
+      rm.addEventListener("click", function () { pet2Picked.splice(i, 1); renderPetPreview(); });
+      tile.appendChild(rm);
+      pet2PreviewEl.appendChild(tile);
+    });
+  }
+
+  pet2FileInput.addEventListener("change", function () {
+    pet2Picked = pet2Picked.concat(Array.prototype.slice.call(pet2FileInput.files));
+    pet2FileInput.value = "";
+    renderPetPreview();
+  });
+
+  $$(".section-add-btn[data-category='bunny-visitor']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      pet2EditingId = null;
+      var pwc = $("#pet2Pw"); if (pwc) pwc.value = "";
+      pet2Form.reset();
+      pet2Picked = [];
+      renderPetPreview();
+      pet2ErrorEl.textContent = "";
+      var _dt = $("#pet2FormDialog .dlg-title"); if (_dt) _dt.textContent = "새 펫 글";
+      pet2SubmitBtn.textContent = "등록";
+      openDlg(pet2FormDlg);
+      pet2TitleInput.focus();
+    });
+  });
+
+  pet2Form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var title = pet2TitleInput.value.trim();
+    if (!title) { pet2ErrorEl.textContent = "제목을 입력하세요."; pet2TitleInput.focus(); return; }
+    var pwValpet = ($("#pet2Pw") ? $("#pet2Pw").value : "").trim();
+    if (pwValpet.length < 4) { $("#pet2FormError").textContent = "수정용 비밀번호(4자 이상)를 입력하세요."; $("#pet2Pw").focus(); return; }
+    pet2ErrorEl.textContent = "";
+    pet2SubmitBtn.disabled = true;
+    pet2SubmitBtn.textContent = pet2EditingId ? "저장 중…" : "등록 중…";
+    var fd = new FormData();
+    if (pet2EditingId) fd.append("id", pet2EditingId);
+    fd.append("title", title);
+    fd.append("content", pet2ContentInput.value);
+    fd.append("pw", pwValpet);
+    fd.append("category", "bunny-visitor");
+    fd.append("date", pet2DateInput.value || "");
+    pet2Picked.forEach(function (f) { fd.append("files[]", f); });
+    fetch(pet2EditingId ? "/api?action=update" : "/api?action=create", { method: "POST", body: fd })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        pet2Form.reset();
+        pet2Picked = [];
+        renderPetPreview();
+        closeDlg(pet2FormDlg);
+        pet2EditingId = null;
+        var pwc = $("#pet2Pw"); if (pwc) pwc.value = "";
+        var _dt2 = $("#pet2FormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 펫 글";
+        return loadPet();
+      })
+      .catch(function (err) { pet2ErrorEl.textContent = "실패: " + ((err && err.message) || err); })
+      .then(function () { pet2SubmitBtn.disabled = false; pet2SubmitBtn.textContent = pet2EditingId ? "저장" : "등록"; });
+  });
+
+  /* ---------- Pets 상세 다이얼로그 + 삭제 ---------- */
+  var pet2ViewDlg = $("#pet2ViewDialog"),
+      pet2ViewTitle = $("#pet2ViewTitle"),
+      pet2ViewDate = $("#pet2ViewDate"),
+      pet2ViewPhotos = $("#pet2ViewPhotos"),
+      pet2ViewContent = $("#pet2ViewContent"),
+      pet2ViewFiles = $("#pet2ViewFiles"),
+      pet2DeleteBtn = $("#pet2ViewDelete");
+  var pet2ViewingId = null;
+
+  function openPetView(id) {
+    var p = null;
+    pet2Posts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
+    if (!p) return;
+    pet2ViewingId = p.id;
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = " | 조회수: " + j.views; } }).catch(function () {});
+    var panel = $("#pet2ViewPanel");
+    var t = $("#pet2InlineTitle"), d = $("#pet2InlineDate"), ph = $("#pet2InlinePhotos"), c = $("#pet2InlineContent"), fl = $("#pet2InlineFiles");
+    if (t) t.textContent = p.title || "(제목 없음)";
+    if (d) { var dv = document.createElement("span"); dv.className = "vote-red"; dv.textContent = window.BaiooVote.label(p); d.textContent = ""; d.appendChild(document.createTextNode("🗓 ")); d.appendChild(dv); d.appendChild(document.createTextNode("  " + (postDate(p) || "날짜 미정"))); }
+    if (ph) {
+      ph.textContent = "";
+      (p.files || []).filter(isImageFile).forEach(function (f) {
+        var im = document.createElement("img");
+        im.src = f.url;
+        im.alt = f.originalName || f.name;
+        ph.appendChild(im);
+      });
+      (p.files || []).filter(function (f) { var tt = String(f.type || ""); var nn = String(f.name || f.originalName || "").toLowerCase(); return /^video\//.test(tt) || /\.(mp4|webm|mov|m4v)$/.test(nn); }).forEach(function (f) {
+        var vd = document.createElement("video");
+        vd.src = f.url;
+        vd.controls = true;
+        vd.preload = "metadata";
+        ph.appendChild(vd);
+      });
+    }
+    if (c) c.textContent = p.content || "(내용 없음)";
+    if (fl) {
+      fl.textContent = "";
+      fl.hidden = !(p.files && p.files.length);
+      if (p.files && p.files.length) fl.appendChild(fileLinks(p.files, false));
+    }
+    var plc = $("#pet2LikeCount"), pdc = $("#pet2DislikeCount");
+    if (plc) plc.textContent = (+p.likes) || 0;
+    if (pdc) pdc.textContent = (+p.dislikes) || 0;
+    if (panel) {
+      panel.hidden = false;
+      if (panel.scrollIntoView) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+    pet2ViewTitle.textContent = p.title || "(제목 없음)";
+    pet2ViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    loadPetCmt();
+  }
+
+  pet2BoardBody.addEventListener("click", function (e) {
+    var delBtn = e.target.closest("[data-del]");
+    if (delBtn) {
+      e.stopPropagation();
+      var did = delBtn.getAttribute("data-del");
+      if (!window.confirm("이 글을 삭제할까요?")) return;
+      fetch("/api/" + encodeURIComponent(did), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: did }) })
+        .then(function (res) { return res.json(); })
+        .then(function () { return loadPet(); })
+        .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); });
+      return;
+    }
+    var tr = e.target.closest("tr[data-id]");
+    if (!tr) return;
+    openPetView(tr.getAttribute("data-id"));
+  });
+
+  var pet2ViewClose = $("#pet2ViewClose");
+  if (pet2ViewClose) pet2ViewClose.addEventListener("click", function () { var panel = $("#pet2ViewPanel"); if (panel) panel.hidden = true; });
+  var pet2InlineDelete = $("#pet2InlineDelete");
+  if (pet2InlineDelete) pet2InlineDelete.addEventListener("click", function () { pet2DeleteBtn.click(); });
+  var pet2InlineEdit = $("#pet2InlineEdit");
+  if (pet2InlineEdit) pet2InlineEdit.addEventListener("click", function () { var b = $("#pet2ViewEdit"); if (b) b.click(); });
+  var pet2InlineLike = $("#pet2InlineLike"), pet2InlineDislike = $("#pet2InlineDislike");
+  if (pet2InlineLike) pet2InlineLike.addEventListener("click", function () {
+    if (!pet2ViewingId) return;
+    window.BaiooVote.send(pet2ViewingId, "like", function (data) {
+      var lc = $("#pet2LikeCount"), dc = $("#pet2DislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      pet2Posts.forEach(function (x) { if (String(x.id) === String(pet2ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderPet();
+    });
+  });
+  if (pet2InlineDislike) pet2InlineDislike.addEventListener("click", function () {
+    if (!pet2ViewingId) return;
+    window.BaiooVote.send(pet2ViewingId, "dislike", function (data) {
+      var lc = $("#pet2LikeCount"), dc = $("#pet2DislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      pet2Posts.forEach(function (x) { if (String(x.id) === String(pet2ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderPet();
+    });
+  });
+
+  var pet2CmtList = $("#pet2CmtList"), pet2CmtCount = $("#pet2CmtCount"), pet2CmtToggle = $("#pet2CmtToggle"),
+      pet2CmtAuthor = $("#pet2CmtAuthor"), pet2CmtInput = $("#pet2CmtInput"), pet2CmtSend = $("#pet2CmtSend");
+  var pet2CmtAll = [], pet2CmtOpen = false;
+  function renderPetCmt() {
+    if (!pet2CmtList) return;
+    pet2CmtList.textContent = "";
+    var show = pet2CmtOpen ? pet2CmtAll : pet2CmtAll.slice(0, 10);
+    show.forEach(function (cm) {
+      var d = document.createElement("div");
+      d.className = "cmt-item";
+      var isAdmin = document.body.classList.contains("is-admin");
+      d.innerHTML = "<b>" + window.BaiooCmt.esc(cm.author) + "</b> " + window.BaiooCmt.esc(cm.content) + (isAdmin ? ' <button type="button" class="cmt-del" data-cid="' + cm.id + '">삭제</button>' : "");
+      pet2CmtList.appendChild(d);
+    });
+    if (pet2CmtCount) pet2CmtCount.textContent = pet2CmtAll.length;
+    if (pet2CmtToggle) { pet2CmtToggle.hidden = pet2CmtAll.length <= 10; pet2CmtToggle.textContent = pet2CmtOpen ? "접기" : ("더 보기 (" + pet2CmtAll.length + ")"); }
+  }
+  function loadPetCmt() {
+    if (!pet2ViewingId) return;
+    window.BaiooCmt.list(pet2ViewingId).then(function (rows) { pet2CmtAll = rows || []; pet2CmtOpen = false; renderPetCmt(); }).catch(function () { pet2CmtAll = []; renderPetCmt(); });
+  }
+  if (pet2CmtToggle) pet2CmtToggle.addEventListener("click", function () { pet2CmtOpen = !pet2CmtOpen; renderPetCmt(); });
+  if (pet2CmtSend) pet2CmtSend.addEventListener("click", function () {
+    if (!pet2ViewingId) return;
+    var a = (pet2CmtAuthor && pet2CmtAuthor.value.trim()) || "익명";
+    var c = (pet2CmtInput && pet2CmtInput.value.trim()) || "";
+    if (!c) { window.alert("댓글을 입력하세요."); return; }
+    pet2CmtSend.disabled = true;
+    window.BaiooCmt.create(pet2ViewingId, a, c).then(function (j) {
+      if (!j || !j.ok) throw new Error((j && j.message) || "fail");
+      if (pet2CmtInput) pet2CmtInput.value = "";
+      loadPetCmt();
+    }).catch(function (err) { window.alert("댓글 실패: " + ((err && err.message) || err)); })
+    .then(function () { pet2CmtSend.disabled = false; });
+  });
+  if (pet2CmtList) pet2CmtList.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cid]");
+    if (!b) return;
+    if (!window.confirm("댓글을 삭제할까요?")) return;
+    window.BaiooCmt.remove(b.getAttribute("data-cid")).then(function () { loadPetCmt(); });
+  });
+
+  pet2DeleteBtn.addEventListener("click", function () {
+    if (!pet2ViewingId) return;
+    if (!window.confirm("이 글을 삭제할까요? 첨부 파일도 함께 삭제됩니다.")) return;
+    pet2DeleteBtn.disabled = true;
+    fetch("/api/" + encodeURIComponent(pet2ViewingId), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: pet2ViewingId })
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        closeDlg(pet2ViewDlg);
+        pet2ViewingId = null;
+        var panel = $("#pet2ViewPanel");
+        if (panel) panel.hidden = true;
+        return loadPet();
+      })
+      .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
+      .then(function () { pet2DeleteBtn.disabled = false; });
+  });
+
+  var pet2EditBtn = $("#pet2ViewEdit");
+  if (pet2EditBtn) {
+    pet2EditBtn.addEventListener("click", function () {
+      if (!pet2ViewingId) return;
+      var p = null;
+      pet2Posts.forEach(function (x) { if (x.id === pet2ViewingId) p = x; });
+      if (!p) return;
+      pet2EditingId = pet2ViewingId;
+      var pwc = $("#pet2Pw"); if (pwc) pwc.value = "";
+      pet2TitleInput.value = p.title || "";
+      pet2DateInput.value = p.date || "";
+      pet2ContentInput.value = p.content || "";
+      pet2Picked = [];
+      renderPetPreview();
+      pet2ErrorEl.textContent = "";
+      var edt = $("#pet2FormDialog .dlg-title"); if (edt) edt.textContent = "펫 글 수정";
+      pet2SubmitBtn.textContent = "저장";
+      if (pet2ViewDlg && pet2ViewDlg.open) closeDlg(pet2ViewDlg);
+      openDlg(pet2FormDlg);
+      pet2TitleInput.focus();
     });
   }
 
