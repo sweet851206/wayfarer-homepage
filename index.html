@@ -12702,7 +12702,7 @@ function renderRecoTicker() {
   half.style.display = "inline-flex"; half.style.alignItems = "center";
   half2.style.display = "inline-flex"; half2.style.alignItems = "center";
   var halfWidth = half.scrollWidth || half.offsetWidth || 1000;
-  var speed = 90;
+  var speed = 60;
   var dur = Math.max(18, Math.min(90, halfWidth / speed));
   track.style.animationDuration = dur + "s";
   var hd = document.querySelector("header"); if (hd) hd.style.top = "32px";
