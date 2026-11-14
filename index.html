@@ -178,6 +178,29 @@
     animation: recoSlide 30s linear infinite;
     will-change: transform;
   }
+  #recoTicker .reco-label {
+    flex: 0 0 auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    font-weight: 800;
+    color: #0F172A;
+    border-right: 1px solid var(--border);
+    background: rgba(15,23,42,.04);
+    z-index: 2;
+  }
+  [data-theme="dark"] #recoTicker .reco-label {
+    color: #FFFFFF;
+    background: rgba(255,255,255,.08);
+  }
+  #recoTicker .reco-view {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
   #recoTicker:hover .reco-track { animation-play-state: paused; }
   #recoTicker a {
     color: #0F172A;
@@ -2532,7 +2555,7 @@
 </head>
 <body>
 
-<div id="recoTicker" aria-label="추천 홈페이지"><div class="reco-track" id="recoTrack"></div></div>
+<div id="recoTicker" aria-label="추천 홈페이지"><span class="reco-label">추천 링크</span><div class="reco-view"><div class="reco-track" id="recoTrack"></div></div></div>
 
 <header>
   <div class="container nav">
@@ -12687,7 +12710,8 @@ function renderRecoTicker() {
   }
   appendSet();
   var halfW = track.scrollWidth || track.offsetWidth || 1000;
-  var vw = bar.clientWidth || window.innerWidth || 1200;
+  var view = track.parentNode;
+  var vw = (view && view.clientWidth) || bar.clientWidth || window.innerWidth || 1200;
   var need = Math.max(2, Math.ceil((vw * 2) / Math.max(1, halfW)) + 1);
   if (need > 6) need = 6;
   for (var i = 1; i < need; i++) appendSet();
