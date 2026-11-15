@@ -12421,7 +12421,6 @@ function baiooHoverVideo(vd, url) {
       if (started) { try { var c = vd.play(); if (c && c.catch) c.catch(function () {}); } catch (e) {} return; }
       started = true;
       try { var p = vd.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {}
-      try { if (io) io.disconnect(); } catch (e) {}
     }
     vd.addEventListener("mouseenter", play);
     vd.addEventListener("focus", play);
@@ -12432,8 +12431,11 @@ function baiooHoverVideo(vd, url) {
     } catch (e) {}
     try {
       io = new IntersectionObserver(function (ents) {
-        ents.forEach(function (en) { if (en.isIntersecting) { load(); try { if (io) io.disconnect(); } catch (e) {} } });
-      }, { rootMargin: "200px 0px" });
+        ents.forEach(function (en) {
+          if (en.isIntersecting) { load(); }
+          else { try { vd.pause(); } catch (e) {} }
+        });
+      }, { threshold: 0.1 });
       io.observe(vd);
     } catch (e) {}
   } catch (e) { try { vd.src = url; } catch (e2) {} }
