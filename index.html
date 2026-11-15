@@ -2602,7 +2602,7 @@
   <div class="overlay"></div>
   <!-- ===== main2 미디어 대문: 영상은 뒤, 문구+물결은 앞 ===== -->
   <div class="m2-stage" id="m2Stage" aria-hidden="true">
-    <video class="m2-video" id="m2Video" muted playsinline preload="metadata"></video>
+    <video class="m2-video" id="m2Video" muted playsinline preload="none"></video>
   </div>
   <div class="wave-wrap" aria-hidden="true">
     <svg class="wave wave-1" viewBox="0 0 2880 120" preserveAspectRatio="none">
@@ -3358,8 +3358,7 @@
     <a href="#home" class="back-btn">← 홈으로</a>
 
     <div class="abv-hero">
-      <video class="abv-video" autoplay muted loop playsinline preload="metadata" id="abvVideo">
-        <source src="about-hero.mp4" type="video/mp4">
+      <video class="abv-video" muted loop playsinline preload="none" id="abvVideo" data-baioo-src="about-hero.mp4">
       </video>
       <div class="abv-copy">
         <span class="abv-kicker" id="abKicker">ABOUT BAIOO — VIDEO MANIFESTO</span>
@@ -4692,7 +4691,7 @@
       var vd0 = document.createElement("video");
       vd0.src = (p.files || []).filter(function (f) { var tt = String(f.type || ""); var nn = String(f.name || f.originalName || "").toLowerCase(); return /^video\//.test(tt) || /\.(mp4|webm|mov|m4v)$/.test(nn); })[0].url;
       vd0.muted = true;
-      vd0.preload = "metadata";
+      vd0.preload = "none"; baiooHoverAttach(vd0);
       vd0.playsInline = true;
       vd0.style.cssText = "width:100%;height:100%;object-fit:cover;border-radius:20px;display:block;background:#000;";
       photo.appendChild(vd0);
@@ -7748,7 +7747,7 @@ fd.append("pw", pwValtravel);
       var vd0 = document.createElement("video");
       vd0.src = (p.files || []).filter(function (f) { var tt = String(f.type || ""); var nn = String(f.name || f.originalName || "").toLowerCase(); return /^video\//.test(tt) || /\.(mp4|webm|mov|m4v)$/.test(nn); })[0].url;
       vd0.muted = true;
-      vd0.preload = "metadata";
+      vd0.preload = "none"; baiooHoverAttach(vd0);
       vd0.playsInline = true;
       vd0.style.cssText = "width:100%;height:100%;object-fit:cover;border-radius:20px;display:block;background:#000;";
       photo.appendChild(vd0);
@@ -8248,19 +8247,14 @@ fd.append("pw", pwValbunny);
     if (videoUrl) {
       visual.style.background = item.gradient || cMeta.gradient;
       var vd = document.createElement("video");
-      vd.src = videoUrl;
       vd.controls = true;
-      vd.preload = "metadata";
-      vd.autoplay = true;
       vd.muted = true;
       vd.loop = true;
-      vd.setAttribute("playsinline", "");
-      vd.setAttribute("muted", "");
-      try { var pp = vd.play(); if (pp && pp.catch) pp.catch(function () {}); } catch (e) {}
+      baiooHoverVideo(vd, videoUrl);
       visual.appendChild(vd);
       var muteBadge = document.createElement("span");
       muteBadge.className = "ai-card-cat-label";
-      muteBadge.textContent = "🔇 음소거";
+      muteBadge.textContent = "🖱올리면 재생·🔇음소거";
       visual.appendChild(muteBadge);
       visual.appendChild(catLabel);
     } else if (photoUrl) {
@@ -9353,15 +9347,10 @@ fd.append("pw", pwValbunny);
     if (videoUrl) {
       visual.style.background = item.gradient || cMeta.gradient;
       var vd = document.createElement("video");
-      vd.src = videoUrl;
       vd.controls = true;
-      vd.preload = "metadata";
-      vd.autoplay = true;
       vd.muted = true;
       vd.loop = true;
-      vd.setAttribute("playsinline", "");
-      vd.setAttribute("muted", "");
-      try { var pp = vd.play(); if (pp && pp.catch) pp.catch(function () {}); } catch (e) {}
+      baiooHoverVideo(vd, videoUrl);
       visual.appendChild(vd);
       var catLabel = document.createElement("span");
       catLabel.className = "ai-card-cat-label";
@@ -9369,7 +9358,7 @@ fd.append("pw", pwValbunny);
       visual.appendChild(catLabel);
       var muteBadge = document.createElement("span");
       muteBadge.className = "ai-card-cat-label";
-      muteBadge.textContent = "🔇 음소거";
+      muteBadge.textContent = "🖱올리면 재생·🔇음소거";
       visual.appendChild(muteBadge);
     } else if (photoUrl) {
       visual.style.background = item.gradient || cMeta.gradient;
@@ -10076,15 +10065,10 @@ fd.append("pw", pwValbunny);
     if (videoUrl) {
       visual.style.background = item.gradient || cMeta.gradient;
       var vd = document.createElement("video");
-      vd.src = videoUrl;
       vd.controls = true;
-      vd.preload = "metadata";
-      vd.autoplay = true;
       vd.muted = true;
       vd.loop = true;
-      vd.setAttribute("playsinline", "");
-      vd.setAttribute("muted", "");
-      try { var pp = vd.play(); if (pp && pp.catch) pp.catch(function () {}); } catch (e) {}
+      baiooHoverVideo(vd, videoUrl);
       visual.appendChild(vd);
       var catLabel = document.createElement("span");
       catLabel.className = "ai-card-cat-label";
@@ -10092,7 +10076,7 @@ fd.append("pw", pwValbunny);
       visual.appendChild(catLabel);
       var muteBadge = document.createElement("span");
       muteBadge.className = "ai-card-cat-label";
-      muteBadge.textContent = "🔇 음소거";
+      muteBadge.textContent = "🖱올리면 재생·🔇음소거";
       visual.appendChild(muteBadge);
     } else if (photoUrl) {
       visual.style.background = item.gradient || cMeta.gradient;
@@ -10793,15 +10777,10 @@ fd.append("pw", pwValbunny);
       if (mediaUrl) {
         if (item.video) {
           var mv = document.createElement("video");
-          mv.src = mediaUrl;
           mv.controls = true;
-          mv.preload = "metadata";
-          mv.autoplay = true;
           mv.muted = true;
           mv.loop = true;
-          mv.setAttribute("playsinline", "");
-          mv.setAttribute("muted", "");
-          try { var mpp = mv.play(); if (mpp && mpp.catch) mpp.catch(function () {}); } catch (e) {}
+          baiooHoverVideo(mv, mediaUrl);
           vis.appendChild(mv);
         } else {
           var mimg = document.createElement("img");
@@ -11224,15 +11203,10 @@ fd.append("pw", pwValbunny);
       if (mediaUrl) {
         if (item.video) {
           var mv = document.createElement("video");
-          mv.src = mediaUrl;
           mv.controls = true;
-          mv.preload = "metadata";
-          mv.autoplay = true;
           mv.muted = true;
           mv.loop = true;
-          mv.setAttribute("playsinline", "");
-          mv.setAttribute("muted", "");
-          try { var mpp = mv.play(); if (mpp && mpp.catch) mpp.catch(function () {}); } catch (e) {}
+          baiooHoverVideo(mv, mediaUrl);
           vis.appendChild(mv);
         } else {
           var mimg = document.createElement("img");
@@ -11655,15 +11629,10 @@ fd.append("pw", pwValbunny);
       if (mediaUrl) {
         if (item.video) {
           var mv = document.createElement("video");
-          mv.src = mediaUrl;
           mv.controls = true;
-          mv.preload = "metadata";
-          mv.autoplay = true;
           mv.muted = true;
           mv.loop = true;
-          mv.setAttribute("playsinline", "");
-          mv.setAttribute("muted", "");
-          try { var mpp = mv.play(); if (mpp && mpp.catch) mpp.catch(function () {}); } catch (e) {}
+          baiooHoverVideo(mv, mediaUrl);
           vis.appendChild(mv);
         } else {
           var mimg = document.createElement("img");
@@ -12432,6 +12401,71 @@ async function maintSet(on) {
   } catch (e) { alert("통신 오류"); return; }
   maintCheck();
 }
+
+/* ===== 영상 Hover지연로딩 (느린PC/첫접속 대응: 마우스 올리면 받기, AI섹션→전체 동일) ===== */
+function baiooHoverVideo(vd, url) {
+  try {
+    vd.preload = "none";
+    vd.dataset.baiooSrc = url;
+    vd.setAttribute("playsinline", "");
+    vd.setAttribute("muted", "");
+    var started = false;
+    var io = null;
+    function load() {
+      if (!vd.getAttribute("src") && vd.dataset.baiooSrc) {
+        try { vd.src = vd.dataset.baiooSrc; vd.load(); } catch (e) { try { vd.src = vd.dataset.baiooSrc; } catch (e2) {} }
+      }
+    }
+    function play() {
+      load();
+      if (started) { try { var c = vd.play(); if (c && c.catch) c.catch(function () {}); } catch (e) {} return; }
+      started = true;
+      try { var p = vd.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {}
+      try { if (io) io.disconnect(); } catch (e) {}
+    }
+    vd.addEventListener("mouseenter", play);
+    vd.addEventListener("focus", play);
+    try { vd.addEventListener("touchstart", play, { passive: true }); } catch (e) { vd.addEventListener("touchstart", play); }
+    try {
+      var card = vd.parentNode;
+      if (card && card.addEventListener) card.addEventListener("mouseenter", play);
+    } catch (e) {}
+    try {
+      io = new IntersectionObserver(function (ents) {
+        ents.forEach(function (en) { if (en.isIntersecting) { load(); try { if (io) io.disconnect(); } catch (e) {} } });
+      }, { rootMargin: "200px 0px" });
+      io.observe(vd);
+    } catch (e) {}
+  } catch (e) { try { vd.src = url; } catch (e2) {} }
+}
+/* 이미 src가 지정된 영상용: src를 data로 옮기고 hover시 받기 */
+function baiooHoverAttach(vd) {
+  try {
+    var u = vd.getAttribute("src") || vd.dataset.baiooSrc || "";
+    try { if (!u && vd.src) u = vd.src; } catch (e) {}
+    if (u) {
+      try { vd.removeAttribute("src"); } catch (e) {}
+      try { var s = vd.querySelector("source"); if (s) s.removeAttribute("src"); } catch (e) {}
+      vd.preload = "none";
+      baiooHoverVideo(vd, u);
+    } else { try { vd.preload = "none"; } catch (e) {} }
+  } catch (e) {}
+}
+/* 소개 hero 영상도 hover지연로딩 */
+(function () {
+  function init() {
+    var v = document.getElementById("abvVideo");
+    if (!v) return;
+    var src = v.getAttribute("data-baioo-src") || "about-hero.mp4";
+    try {
+      var s = v.querySelector("source");
+      if (s) { try { s.removeAttribute("src"); } catch (e) {} }
+    } catch (e) {}
+    baiooHoverVideo(v, src);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
 
 /* ===== main2 미디어 대문 (영상 순환, 문구+물결은 그대로 앞) ===== */(function () {
   var M2_VIDEOS = ["m2bg-01.mp4", "m2bg-03.mp4", "m2bg-04b.mp4", "m2bg-02b.mp4"];
