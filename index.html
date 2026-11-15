@@ -3548,7 +3548,7 @@
       <div class="post">
         <div class="icon-large">🔗</div>
         <h3>상단 추천 띠 (이름+주소)</h3>
-        <p class="ai-lead-sub">대문 맨 위 얇은 띠. 이름·주소 수정 후 저장.</p>
+        <p class="ai-lead-sub">대문 맨 위 얇은 띠. 전체공개는 이 파일 기본값 수정+배포. 저장은 내 브라우저 미리보기용.</p>
         <div id="recoAdminList" style="display:flex;flex-direction:column;gap:8px;margin:8px 0;"></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button type="button" class="btn btn-ghost" id="recoAddBtn">＋ 추가</button>
@@ -12681,7 +12681,18 @@ document.addEventListener("change", function (e) {
 });
 
 /* ===== 상단 추천 띠 (헤더 위 고정, 관리자 편집) ===== */
-var RECO_DEFAULTS = [];
+/* 전체공개용 단일 원본: 모든 방문자는 이 값을 봄. localStorage는 내 브라우저 미리보기용일 뿐 */
+var RECO_DEFAULTS = [
+  { name: "OpenCode", url: "https://opencode.ai" },
+  { name: "Claude", url: "https://claude.ai" },
+  { name: "Gemini", url: "https://gemini.google.com" },
+  { name: "Higgsfield", url: "https://higgsfield.ai" },
+  { name: "CapCut", url: "https://www.capcut.com" },
+  { name: "Civitai", url: "https://civitai.com/" },
+  { name: "Hermes", url: "https://huggingface.co/models?search=nous+hermes" },
+  { name: "Ollama", url: "https://ollama.com" },
+  { name: "Blender", url: "https://www.blender.org" }
+];
 function loadRecoList() {
   try {
     var raw = localStorage.getItem("baioo_reco_ticker");
@@ -12787,7 +12798,7 @@ document.addEventListener("click", function (e) {
     if (!out.length) { alert("1개 이상 입력하세요."); return; }
     try { localStorage.setItem("baioo_reco_ticker", JSON.stringify(out)); } catch (err) {}
     renderRecoTicker();
-    alert("저장됨. 대문 맨 위 띠에 바로 반영.");
+    alert("내 브라우저 미리보기 저장됨. 전체공개는 RECO_DEFAULTS 수정+배포 필요.");
   }
   if (e.target && e.target.id === "recoResetBtn") {
     try { localStorage.removeItem("baioo_reco_ticker"); } catch (err) {}
