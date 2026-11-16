@@ -316,7 +316,7 @@
   .nav-links .nav-sub { list-style: none; margin: 0 0 0 25px; padding: 0; display: flex; flex-direction: column; gap: 10px; }
   .nav-links .nav-sub a { font-size: .94rem; font-weight: 900; opacity: 1; padding: 0 2px; line-height: 1.2; }
   .br-gate { margin: 4px 0; font-weight: 900; font-size: clamp(1.9rem, 4vw, 2.8rem); line-height: 1.18; letter-spacing: -.05em; text-align: center; scroll-margin-top: 90px; }
-  #aiGate2, #aiGate3 { margin-top: 50px; margin-bottom: 75px; }
+  #aiGate2, #aiGate3, #aiGate4, #aiGate5 { margin-top: 50px; margin-bottom: 75px; }
   .gate-edit { background: none; border: none; cursor: pointer; font-size: .75rem; padding: 0 2px; }
 
   .theme-toggle,
@@ -1385,7 +1385,7 @@
     object-fit: cover;
     background: #000;
   }
-  #ai2IdeaGrid .ai-card-visual, #ai3IdeaGrid .ai-card-visual { height: auto; aspect-ratio: 1 / 1; padding: 0; }
+  #ai2IdeaGrid .ai-card-visual, #ai3IdeaGrid .ai-card-visual, #ai4IdeaGrid .ai-card-visual, #ai5IdeaGrid .ai-card-visual { height: auto; aspect-ratio: 1 / 1; padding: 0; }
   #br3IdeaGrid .ai-card-visual { height: 248px; }
 
   .about-section {
@@ -2450,7 +2450,7 @@
   .visit-counter b { font-variant-numeric: tabular-nums; letter-spacing: .06em; }
   .admin-only { display: none !important; }
   body.is-admin .admin-only { display: inline-flex !important; }
-  body.board-open-ai #ai2BoardAddBtn, body.board-open-ai #ai2InlineEdit { display: inline-flex !important; }
+  body.board-open-ai #ai2BoardAddBtn, body.board-open-ai #ai2InlineEdit, body.board-open-ai #ai4BoardAddBtn, body.board-open-ai #ai4InlineEdit, body.board-open-ai #ai5BoardAddBtn, body.board-open-ai #ai5InlineEdit { display: inline-flex !important; }
   body.board-open-tr #tr2BoardAddBtn, body.board-open-tr #tr2InlineEdit { display: inline-flex !important; }
   body.board-open-rp #rp2BoardAddBtn, body.board-open-rp #rp2InlineEdit { display: inline-flex !important; }
   body.board-open-pet #pet2BoardAddBtn, body.board-open-pet #pet2InlineEdit { display: inline-flex !important; }
@@ -2571,6 +2571,8 @@
             <li><a href="#ai" id="aiGate1Link">AI Nexus</a></li>
             <li><a href="#aiGate2" id="aiGate2Link">Created AI Video</a> <button type="button" class="gate-edit admin-only" id="aiGate2Edit" aria-label="Created AI Video 이름 수정">✏️</button></li>
             <li><a href="#aiGate3" id="aiGate3Link">Failed AI Creation</a> <button type="button" class="gate-edit admin-only" id="aiGate3Edit" aria-label="Failed AI Creation 이름 수정">✏️</button></li>
+            <li><a href="#aiGate4" id="aiGate4Link">AI Pictures</a> <button type="button" class="gate-edit admin-only" id="aiGate4Edit" aria-label="AI Pictures 이름 수정">✏️</button></li>
+            <li><a href="#aiGate5" id="aiGate5Link">AI Figure</a> <button type="button" class="gate-edit admin-only" id="aiGate5Edit" aria-label="AI Figure 이름 수정">✏️</button></li>
           </ul>
         </li>
         <li><a href="#repair" data-nav="repair">AI Computer</a></li>
@@ -2856,6 +2858,146 @@
     </div>
 
     <div class="ai-idea-grid" id="ai3IdeaGrid"></div>
+
+    <div class="br-gate" id="aiGate4">AI Pictures</div>
+    <div class="pet-diary-subhead">
+      <h3>📝 방문자 게시판</h3>
+      <button type="button" class="section-add-btn ai-add admin-only" id="ai4BoardAddBtn" data-category="ai-picture" style="margin:0;">＋ 새 글 등록</button>
+    </div>
+    <div class="board-table-wrap">
+      <table class="board-table">
+        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:210px">등록일</th></tr></thead>
+        <tbody id="ai4BoardBody"></tbody>
+      </table>
+      <div class="ai-page-bar" id="ai4PageBar"></div>
+    </div>
+    <div class="board-view-panel" id="ai4ViewPanel" hidden>
+      <button type="button" class="x-close" id="ai4ViewClose" aria-label="닫기">×</button>
+      <h3 class="dlg-title" id="ai4InlineTitle"></h3>
+      <div class="post-date" id="ai4InlineDate"></div>
+      <div class="view-photos" id="ai4InlinePhotos"></div>
+      <div id="ai4InlineContent"></div>
+      <div class="file-list" id="ai4InlineFiles" hidden></div>
+      <div class="vote-row">
+        <button type="button" class="vote-btn" id="ai4InlineLike">❤ 추천 <span id="ai4LikeCount">0</span></button>
+        <button type="button" class="vote-btn" id="ai4InlineDislike">💔 비추천 <span id="ai4DislikeCount">0</span></button>
+      </div>
+      <div class="cmt-wrap">
+        <b>💬 댓글 <span id="ai4CmtCount">0</span></b>
+        <div class="cmt-list" id="ai4CmtList"></div>
+        <button type="button" class="cmt-toggle" id="ai4CmtToggle" hidden>더 보기</button>
+        <div class="cmt-form">
+          <input type="text" id="ai4CmtAuthor" maxlength="30" placeholder="이름 (익명 가능)">
+          <input type="text" id="ai4CmtInput" maxlength="500" placeholder="댓글을 입력하세요">
+          <button type="button" class="vote-btn" id="ai4CmtSend">등록</button>
+        </div>
+      </div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-primary admin-only" id="ai4InlineEdit">수정</button>
+        <button type="button" class="btn btn-danger admin-only" id="ai4InlineDelete">삭제</button>
+      </div>
+    </div>
+    <div class="ai-toolbar">
+      <div class="ai-toolbar-top">
+          <button type="button" class="ai-btn-primary admin-only" id="ai4OpenAddBtn">✨ 새 영상 아이디어 배포</button>
+          <button type="button" class="ai-btn-ghost" id="ai4FilterBookmarkedBtn">♥ 관심 영상 모아보기</button>
+        <div class="ai-search-wrap">
+          <span class="ai-search-icon" aria-hidden="true">🔍</span>
+          <input type="search" id="ai4SearchInput" class="ai-search-input" placeholder="영상 제목, 설명, 태그(#숏폼, #스토리 등) 검색..." aria-label="영상 아이디어 검색">
+        </div>
+        <div class="ai-select-group">
+          <select id="ai4StatusSelect" class="ai-select" aria-label="브랜딩 상태 필터">
+            <option value="all">모든 상태 (All)</option>
+            <option value="live">✨ LIVE 확정·배포</option>
+            <option value="beta">🧪 DRAFT 시안·검토</option>
+            <option value="concept">📐 CONCEPT 컨셉</option>
+          </select>
+          <select id="ai4SortSelect" class="ai-select" aria-label="정렬 기준">
+            <option value="newest">최신 등록순</option>
+            <option value="popular">인기·공감순</option>
+            <option value="title">이름순 (가나다)</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="ai-status-bar">
+      <div class="ai-active-chips" id="ai4ActiveChips"></div>
+      <div class="ai-result-count" id="ai4ResultCount">총 0개의 영상 아이디어</div>
+    </div>
+
+    <div class="ai-idea-grid" id="ai4IdeaGrid"></div>
+
+    <div class="br-gate" id="aiGate5">AI Figure</div>
+    <div class="pet-diary-subhead">
+      <h3>📝 방문자 게시판</h3>
+      <button type="button" class="section-add-btn ai-add admin-only" id="ai5BoardAddBtn" data-category="ai-figure" style="margin:0;">＋ 새 글 등록</button>
+    </div>
+    <div class="board-table-wrap">
+      <table class="board-table">
+        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:210px">등록일</th></tr></thead>
+        <tbody id="ai5BoardBody"></tbody>
+      </table>
+      <div class="ai-page-bar" id="ai5PageBar"></div>
+    </div>
+    <div class="board-view-panel" id="ai5ViewPanel" hidden>
+      <button type="button" class="x-close" id="ai5ViewClose" aria-label="닫기">×</button>
+      <h3 class="dlg-title" id="ai5InlineTitle"></h3>
+      <div class="post-date" id="ai5InlineDate"></div>
+      <div class="view-photos" id="ai5InlinePhotos"></div>
+      <div id="ai5InlineContent"></div>
+      <div class="file-list" id="ai5InlineFiles" hidden></div>
+      <div class="vote-row">
+        <button type="button" class="vote-btn" id="ai5InlineLike">❤ 추천 <span id="ai5LikeCount">0</span></button>
+        <button type="button" class="vote-btn" id="ai5InlineDislike">💔 비추천 <span id="ai5DislikeCount">0</span></button>
+      </div>
+      <div class="cmt-wrap">
+        <b>💬 댓글 <span id="ai5CmtCount">0</span></b>
+        <div class="cmt-list" id="ai5CmtList"></div>
+        <button type="button" class="cmt-toggle" id="ai5CmtToggle" hidden>더 보기</button>
+        <div class="cmt-form">
+          <input type="text" id="ai5CmtAuthor" maxlength="30" placeholder="이름 (익명 가능)">
+          <input type="text" id="ai5CmtInput" maxlength="500" placeholder="댓글을 입력하세요">
+          <button type="button" class="vote-btn" id="ai5CmtSend">등록</button>
+        </div>
+      </div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-primary admin-only" id="ai5InlineEdit">수정</button>
+        <button type="button" class="btn btn-danger admin-only" id="ai5InlineDelete">삭제</button>
+      </div>
+    </div>
+    <div class="ai-toolbar">
+      <div class="ai-toolbar-top">
+          <button type="button" class="ai-btn-primary admin-only" id="ai5OpenAddBtn">✨ 새 영상 아이디어 배포</button>
+          <button type="button" class="ai-btn-ghost" id="ai5FilterBookmarkedBtn">♥ 관심 영상 모아보기</button>
+        <div class="ai-search-wrap">
+          <span class="ai-search-icon" aria-hidden="true">🔍</span>
+          <input type="search" id="ai5SearchInput" class="ai-search-input" placeholder="영상 제목, 설명, 태그(#숏폼, #스토리 등) 검색..." aria-label="영상 아이디어 검색">
+        </div>
+        <div class="ai-select-group">
+          <select id="ai5StatusSelect" class="ai-select" aria-label="브랜딩 상태 필터">
+            <option value="all">모든 상태 (All)</option>
+            <option value="live">✨ LIVE 확정·배포</option>
+            <option value="beta">🧪 DRAFT 시안·검토</option>
+            <option value="concept">📐 CONCEPT 컨셉</option>
+          </select>
+          <select id="ai5SortSelect" class="ai-select" aria-label="정렬 기준">
+            <option value="newest">최신 등록순</option>
+            <option value="popular">인기·공감순</option>
+            <option value="title">이름순 (가나다)</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="ai-status-bar">
+      <div class="ai-active-chips" id="ai5ActiveChips"></div>
+      <div class="ai-result-count" id="ai5ResultCount">총 0개의 영상 아이디어</div>
+    </div>
+
+    <div class="ai-idea-grid" id="ai5IdeaGrid"></div>
 
   </div>
 </section>
@@ -4364,6 +4506,300 @@
       <div class="form-error" id="ai2AddError" role="alert"></div>
       <div class="dlg-actions">
         <button type="button" class="btn btn-ghost" data-close="ai2AddDialog">취소</button>
+        <button type="submit" class="btn btn-primary">✨ 즉시 배포</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog id="ai4FormDialog" aria-label="새 Pictures 글 등록">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="ai4FormDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title">새 Pictures 글</h3>
+    <form id="ai4Form" novalidate>
+      <div class="field">
+        <label for="ai4Title">제목 *</label>
+        <input type="text" id="ai4Title" maxlength="120" placeholder="예: 오늘의 영상 기록">
+      </div>
+      <div class="field">
+        <label for="ai4Date">날짜</label>
+        <input type="date" id="ai4Date">
+      </div>
+      <div class="field">
+        <label for="ai4Content">내용</label>
+        <textarea id="ai4Content" placeholder="영상 이야기를 적어주세요"></textarea>
+      </div>
+      <div class="field">
+        <label for="ai4Files">사진·영상·파일 (여러 개)</label>
+        <div class="attach-row">
+          <label class="file-btn" for="ai4Files">파일 선택</label>
+          <input type="file" id="ai4Files" class="sr" multiple>
+          <span id="ai4FileCount">선택된 파일 없음</span>
+        </div>
+        <div class="preview-grid" id="ai4Preview"></div>
+      </div>
+      <div class="field">
+        <label for="ai4Pw">수정용 비밀번호 *</label>
+        <input type="password" id="ai4Pw" maxlength="30" autocomplete="off" placeholder="수정할 때 필요합니다 (4자 이상)">
+      </div>
+      <div class="form-error" id="ai4FormError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="ai4FormDialog">취소</button>
+        <button type="submit" class="btn btn-primary" id="ai4Submit">등록</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog id="ai4ViewDialog" aria-label="Pictures 글 상세">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="ai4ViewDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title" id="ai4ViewTitle"></h3>
+    <div class="post-date" id="ai4ViewDate"></div>
+    <div class="view-photos" id="ai4ViewPhotos"></div>
+    <div id="ai4ViewContent"></div>
+    <div class="file-list" id="ai4ViewFiles" hidden></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-primary admin-only" id="ai4ViewEdit">수정</button>
+      <button type="button" class="btn btn-danger admin-only" id="ai4ViewDelete">삭제</button>
+      <button type="button" class="btn btn-ghost" data-close="ai4ViewDialog">닫기</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="ai4DetailDialog" aria-label="영상 아이디어 상세">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="ai4DetailDialog" aria-label="닫기">×</button>
+    <div class="ai-detail-meta">
+      <span class="ai-status-pill live" id="ai4DetailStatus">✨ LIVE</span>
+      <span class="ai-version-code" id="ai4DetailCode">VIDEO-001 · v1.0</span>
+      <span class="post-date" id="ai4DetailDate" style="margin:0"></span>
+    </div>
+    <h3 class="dlg-title" id="ai4DetailTitle"></h3>
+    <div class="view-photos" id="ai4DetailPhoto" hidden></div>
+    <p id="ai4DetailSummary" style="color:var(--text);line-height:1.8;margin-bottom:14px;"></p>
+    <div class="ai-tag-list" id="ai4DetailTags"></div>
+
+    <div class="ai-prompt-label">
+      <span>🎨 영상 가이드 & 프롬프트</span>
+      <button type="button" class="ai-action-btn" id="ai4CopyKitBtn">📋 영상 키트 복사</button>
+    </div>
+    <pre class="ai-prompt-box" id="ai4DetailPrompt"></pre>
+
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-danger" id="ai4DeleteCustomBtn" hidden>삭제</button>
+      <button type="button" class="btn btn-ghost" id="ai4ShareLinkBtn">🔗 공유 링크 복사</button>
+      <button type="button" class="btn btn-ghost" data-close="ai4DetailDialog">닫기</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="ai4AddDialog" aria-label="새 영상 아이디어 배포하기">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="ai4AddDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title">✨ 새 영상 아이디어 배포</h3>
+    <form id="ai4AddForm" novalidate>
+      <div class="field">
+        <label for="ai4InputTitle">영상명 / 프로젝트 제목 *</label>
+        <input type="text" id="ai4InputTitle" placeholder="예: 세레나 활쏘기 10초 클립" required>
+      </div>
+      <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label for="ai4InputCategory">카테고리</label>
+          <select id="ai4InputCategory">
+            <option value="clip">🎬 숏폼 클립</option>
+            <option value="story">📖 스토리 영상</option>
+            <option value="tutorial">🎓 튜토리얼</option>
+            <option value="lab">💡 실험실 (Lab)</option>
+          </select>
+        </div>
+        <div>
+          <label for="ai4InputStatus">상태</label>
+          <select id="ai4InputStatus">
+            <option value="live">✨ LIVE 확정·배포</option>
+            <option value="beta">🧪 DRAFT 시안·검토</option>
+            <option value="concept">📐 CONCEPT 컨셉</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="ai4InputVideo">영상 파일 (mp4·webm, 20MB 이하)</label>
+        <div class="attach-row">
+          <label class="file-btn" for="ai4InputVideo">영상 선택</label>
+          <input type="file" id="ai4InputVideo" class="sr" accept="video/mp4,video/webm,video/*">
+          <span id="ai4VideoName">선택된 영상 없음</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="ai4InputTags">태그 (쉼표 구분)</label>
+        <input type="text" id="ai4InputTags" placeholder="예: 숏폼, MiniMax, 세레나">
+      </div>
+      <div class="field">
+        <label for="ai4InputSummary">영상 기획 의도 및 요약 *</label>
+        <textarea id="ai4InputSummary" style="min-height:82px;" placeholder="이 영상 아이디어의 탄생 배경과 핵심 컨셉을 적어주세요."></textarea>
+      </div>
+      <div class="field">
+        <label for="ai4InputPrompt">영상 가이드라인 / 네이밍 스펙</label>
+        <textarea id="ai4InputPrompt" style="min-height:110px;" placeholder="복사해서 활용할 수 있는 영상 가이드, 톤앤매너, 프롬프트를 적어주세요."></textarea>
+      </div>
+      <div class="field">
+        <label for="ai4InputPhoto">사진 파일 (8MB 이하)</label>
+        <div class="attach-row">
+          <label class="file-btn" for="ai4InputPhoto">사진 선택</label>
+            <input type="file" id="ai4InputPhoto" class="sr" accept="image/*">
+            <span id="ai4PhotoName">선택된 사진 없음</span>
+        </div>
+      </div>
+      <div class="form-error" id="ai4AddError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="ai4AddDialog">취소</button>
+        <button type="submit" class="btn btn-primary">✨ 즉시 배포</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog id="ai5FormDialog" aria-label="새 Figure 글 등록">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="ai5FormDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title">새 Figure 글</h3>
+    <form id="ai5Form" novalidate>
+      <div class="field">
+        <label for="ai5Title">제목 *</label>
+        <input type="text" id="ai5Title" maxlength="120" placeholder="예: 오늘의 영상 기록">
+      </div>
+      <div class="field">
+        <label for="ai5Date">날짜</label>
+        <input type="date" id="ai5Date">
+      </div>
+      <div class="field">
+        <label for="ai5Content">내용</label>
+        <textarea id="ai5Content" placeholder="영상 이야기를 적어주세요"></textarea>
+      </div>
+      <div class="field">
+        <label for="ai5Files">사진·영상·파일 (여러 개)</label>
+        <div class="attach-row">
+          <label class="file-btn" for="ai5Files">파일 선택</label>
+          <input type="file" id="ai5Files" class="sr" multiple>
+          <span id="ai5FileCount">선택된 파일 없음</span>
+        </div>
+        <div class="preview-grid" id="ai5Preview"></div>
+      </div>
+      <div class="field">
+        <label for="ai5Pw">수정용 비밀번호 *</label>
+        <input type="password" id="ai5Pw" maxlength="30" autocomplete="off" placeholder="수정할 때 필요합니다 (4자 이상)">
+      </div>
+      <div class="form-error" id="ai5FormError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="ai5FormDialog">취소</button>
+        <button type="submit" class="btn btn-primary" id="ai5Submit">등록</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog id="ai5ViewDialog" aria-label="Figure 글 상세">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="ai5ViewDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title" id="ai5ViewTitle"></h3>
+    <div class="post-date" id="ai5ViewDate"></div>
+    <div class="view-photos" id="ai5ViewPhotos"></div>
+    <div id="ai5ViewContent"></div>
+    <div class="file-list" id="ai5ViewFiles" hidden></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-primary admin-only" id="ai5ViewEdit">수정</button>
+      <button type="button" class="btn btn-danger admin-only" id="ai5ViewDelete">삭제</button>
+      <button type="button" class="btn btn-ghost" data-close="ai5ViewDialog">닫기</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="ai5DetailDialog" aria-label="영상 아이디어 상세">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="ai5DetailDialog" aria-label="닫기">×</button>
+    <div class="ai-detail-meta">
+      <span class="ai-status-pill live" id="ai5DetailStatus">✨ LIVE</span>
+      <span class="ai-version-code" id="ai5DetailCode">VIDEO-001 · v1.0</span>
+      <span class="post-date" id="ai5DetailDate" style="margin:0"></span>
+    </div>
+    <h3 class="dlg-title" id="ai5DetailTitle"></h3>
+    <div class="view-photos" id="ai5DetailPhoto" hidden></div>
+    <p id="ai5DetailSummary" style="color:var(--text);line-height:1.8;margin-bottom:14px;"></p>
+    <div class="ai-tag-list" id="ai5DetailTags"></div>
+
+    <div class="ai-prompt-label">
+      <span>🎨 영상 가이드 & 프롬프트</span>
+      <button type="button" class="ai-action-btn" id="ai5CopyKitBtn">📋 영상 키트 복사</button>
+    </div>
+    <pre class="ai-prompt-box" id="ai5DetailPrompt"></pre>
+
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-danger" id="ai5DeleteCustomBtn" hidden>삭제</button>
+      <button type="button" class="btn btn-ghost" id="ai5ShareLinkBtn">🔗 공유 링크 복사</button>
+      <button type="button" class="btn btn-ghost" data-close="ai5DetailDialog">닫기</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="ai5AddDialog" aria-label="새 영상 아이디어 배포하기">
+  <div class="dlg-body">
+    <button type="button" class="x-close" data-close="ai5AddDialog" aria-label="닫기">×</button>
+    <h3 class="dlg-title">✨ 새 영상 아이디어 배포</h3>
+    <form id="ai5AddForm" novalidate>
+      <div class="field">
+        <label for="ai5InputTitle">영상명 / 프로젝트 제목 *</label>
+        <input type="text" id="ai5InputTitle" placeholder="예: 세레나 활쏘기 10초 클립" required>
+      </div>
+      <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label for="ai5InputCategory">카테고리</label>
+          <select id="ai5InputCategory">
+            <option value="clip">🎬 숏폼 클립</option>
+            <option value="story">📖 스토리 영상</option>
+            <option value="tutorial">🎓 튜토리얼</option>
+            <option value="lab">💡 실험실 (Lab)</option>
+          </select>
+        </div>
+        <div>
+          <label for="ai5InputStatus">상태</label>
+          <select id="ai5InputStatus">
+            <option value="live">✨ LIVE 확정·배포</option>
+            <option value="beta">🧪 DRAFT 시안·검토</option>
+            <option value="concept">📐 CONCEPT 컨셉</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="ai5InputVideo">영상 파일 (mp4·webm, 20MB 이하)</label>
+        <div class="attach-row">
+          <label class="file-btn" for="ai5InputVideo">영상 선택</label>
+          <input type="file" id="ai5InputVideo" class="sr" accept="video/mp4,video/webm,video/*">
+          <span id="ai5VideoName">선택된 영상 없음</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="ai5InputTags">태그 (쉼표 구분)</label>
+        <input type="text" id="ai5InputTags" placeholder="예: 숏폼, MiniMax, 세레나">
+      </div>
+      <div class="field">
+        <label for="ai5InputSummary">영상 기획 의도 및 요약 *</label>
+        <textarea id="ai5InputSummary" style="min-height:82px;" placeholder="이 영상 아이디어의 탄생 배경과 핵심 컨셉을 적어주세요."></textarea>
+      </div>
+      <div class="field">
+        <label for="ai5InputPrompt">영상 가이드라인 / 네이밍 스펙</label>
+        <textarea id="ai5InputPrompt" style="min-height:110px;" placeholder="복사해서 활용할 수 있는 영상 가이드, 톤앤매너, 프롬프트를 적어주세요."></textarea>
+      </div>
+      <div class="field">
+        <label for="ai5InputPhoto">사진 파일 (8MB 이하)</label>
+        <div class="attach-row">
+          <label class="file-btn" for="ai5InputPhoto">사진 선택</label>
+            <input type="file" id="ai5InputPhoto" class="sr" accept="image/*">
+            <span id="ai5PhotoName">선택된 사진 없음</span>
+        </div>
+      </div>
+      <div class="form-error" id="ai5AddError" role="alert"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-ghost" data-close="ai5AddDialog">취소</button>
         <button type="submit" class="btn btn-primary">✨ 즉시 배포</button>
       </div>
     </form>
@@ -9102,6 +9538,876 @@ fd.append("pw", pwValbunny);
   loadAi2();
 })();
 
+/* ===== AI Pictures 자유게시판 + 스튜디오 (Pictures 복제) ===== */
+/* ===== Pictures 자유게시판 (AI 패턴 미러) ===== */
+(function () {
+  "use strict";
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+
+  function apiList() {
+    return fetch("/api?action=list", { headers: { Accept: "application/json" } })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        var posts = data && data.posts;
+        if (posts && !Array.isArray(posts)) posts = Array.isArray(posts.value) ? posts.value : (posts.id ? [posts] : []);
+        return Array.isArray(posts) ? posts : [];
+      });
+  }
+  function isImageFile(f) {
+    var n = String(f.name || f.originalName || "").toLowerCase();
+    return /^image\//.test(f.type || "") || /\.(png|jpe?g|gif|webp|bmp|svg)$/.test(n);
+  }
+  function isVideoFile(f) {
+    var n = String(f.name || f.originalName || "").toLowerCase();
+    return /^video\//.test(f.type || "") || /\.(mp4|webm|mov|m4v)$/.test(n);
+  }
+  function postDate(p) {
+    if (p.date) return p.date;
+    if (p.createdAt) { try { return new Date(p.createdAt).toISOString().slice(0, 10); } catch (e) {} }
+    return "";
+  }
+  function fileLinks(files, ev) {
+    var fl = document.createElement("div");
+    fl.className = "file-list";
+    fl.style.marginTop = "12px";
+    files.forEach(function (f) {
+      var a = document.createElement("a");
+      a.href = f.url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.textContent = "📎 " + (f.originalName || f.name);
+      if (ev) a.addEventListener("click", function (e) { e.stopPropagation(); });
+      fl.appendChild(a);
+    });
+    return fl;
+  }
+  function openDlg(d) { if (d && !d.open) d.showModal(); }
+  function closeDlg(d) { if (d && d.open) d.close(); }
+
+  var ai4BoardBody = $("#ai4BoardBody");
+  var ai4Posts = [];
+  var ai4PageBar = $("#ai4PageBar");
+  var ai4Page = 1;
+  var AI4_PAGE_SIZE = 10;
+
+  function renderAi4Pages(total) {
+    if (!ai4PageBar) return;
+    ai4PageBar.textContent = "";
+    var maxPage = Math.max(1, Math.ceil(total / AI4_PAGE_SIZE));
+    if (ai4Page > maxPage) ai4Page = maxPage;
+    if (ai4Page < 1) ai4Page = 1;
+    function mk(label, page, active, disabled) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "ai-cat-btn" + (active ? " active" : "");
+      b.textContent = label;
+      if (disabled) b.disabled = true;
+      else b.addEventListener("click", function () { ai4Page = page; renderAi4(); });
+      ai4PageBar.appendChild(b);
+    }
+    mk("‹ 이전", ai4Page - 1, false, ai4Page === 1);
+    var start = Math.max(1, ai4Page - 2);
+    var end = Math.min(maxPage, start + 4);
+    start = Math.max(1, end - 4);
+    for (var p = start; p <= end; p++) mk(String(p), p, p === ai4Page, false);
+    mk("› 다음", ai4Page + 1, false, ai4Page === maxPage);
+  }
+
+  function makeAi4Row(p, i) {
+    var tr = document.createElement("tr");
+    tr.setAttribute("data-id", p.id);
+    var no = document.createElement("td");
+    no.textContent = String(i);
+    var ti = document.createElement("td");
+    ti.className = "board-title";
+    ti.textContent = p.title || "(제목 없음)";
+    var vw = document.createElement("span");
+    vw.className = "board-views";
+    vw.textContent = " | 조회수: " + String((+p.views) || 0);
+    ti.appendChild(vw);
+    var dt = document.createElement("td");
+    dt.textContent = "";
+    var vs = document.createElement("span");
+    vs.className = "vote-red";
+    vs.textContent = window.BaiooVote.label(p);
+    dt.appendChild(vs);
+    dt.appendChild(document.createTextNode(" "));
+    dt.appendChild(document.createTextNode(postDate(p) || "—"));
+    var del = document.createElement("button");
+    del.type = "button";
+    del.className = "row-del admin-only";
+    del.textContent = "🗑️";
+    del.setAttribute("data-del", p.id);
+    del.setAttribute("aria-label", "삭제");
+    dt.appendChild(del);
+    tr.appendChild(no);
+    tr.appendChild(ti);
+    tr.appendChild(dt);
+    return tr;
+  }
+
+  function renderAi4() {
+    var maxPage = Math.max(1, Math.ceil(ai4Posts.length / AI4_PAGE_SIZE));
+    if (ai4Page > maxPage) ai4Page = maxPage;
+    if (ai4Page < 1) ai4Page = 1;
+    ai4BoardBody.textContent = "";
+    if (!ai4Posts.length) {
+      var tr = document.createElement("tr");
+      var td = document.createElement("td");
+      td.colSpan = 3;
+      td.className = "board-empty";
+      td.style.cssText = "text-align:center;color:var(--muted)";
+      td.textContent = "등록된 글이 없습니다.";
+      tr.appendChild(td);
+      ai4BoardBody.appendChild(tr);
+      renderAi4Pages(0);
+      return;
+    }
+    var startIdx = (ai4Page - 1) * AI4_PAGE_SIZE;
+    ai4Posts.slice(startIdx, startIdx + AI4_PAGE_SIZE).forEach(function (p, i) { ai4BoardBody.appendChild(makeAi4Row(p, ai4Posts.length - (startIdx + i))); });
+    renderAi4Pages(ai4Posts.length);
+  }
+
+  function loadAi4() {
+    return apiList().then(function (posts) {
+      ai4Posts = posts.filter(function (p) { return p.category === "ai-picture"; });
+      ai4Posts.sort(function (a, b) { return ((b.createdAt || 0) > (a.createdAt || 0)) ? 1 : (((b.createdAt || 0) < (a.createdAt || 0)) ? -1 : 0); });
+      renderAi4();
+    }).catch(function () { ai4Posts = []; renderAi4(); });
+  }
+
+  /* ---------- Video 등록 폼 ---------- */
+  var ai4FormDlg = $("#ai4FormDialog"),
+      ai4Form = $("#ai4Form"),
+      ai4TitleInput = $("#ai4Title"),
+      ai4DateInput = $("#ai4Date"),
+      ai4ContentInput = $("#ai4Content"),
+      ai4FileInput = $("#ai4Files"),
+      ai4PreviewEl = $("#ai4Preview"),
+      ai4FileCountEl = $("#ai4FileCount"),
+      ai4ErrorEl = $("#ai4FormError"),
+      ai4SubmitBtn = $("#ai4Submit");
+  var ai4Picked = [];
+  var ai4EditingId = null;
+
+  function renderAi4Preview() {
+    $$("img", ai4PreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
+    ai4PreviewEl.textContent = "";
+    ai4FileCountEl.textContent = ai4Picked.length ? ai4Picked.length + "개 선택됨" : "선택된 파일 없음";
+    ai4Picked.forEach(function (f, i) {
+      var tile = document.createElement("div");
+      tile.className = "thumb-sm";
+      tile.title = f.name;
+      if (isImageFile(f)) {
+        var im = document.createElement("img");
+        im.src = URL.createObjectURL(f);
+        im.alt = f.name;
+        tile.appendChild(im);
+      } else {
+        tile.style.cssText = "display:grid;place-items:center;font-size:1.6rem;";
+        tile.textContent = "📄";
+      }
+      var rm = document.createElement("button");
+      rm.type = "button";
+      rm.className = "rm";
+      rm.textContent = "×";
+      rm.setAttribute("aria-label", f.name + " 제거");
+      rm.addEventListener("click", function () { ai4Picked.splice(i, 1); renderAi4Preview(); });
+      tile.appendChild(rm);
+      ai4PreviewEl.appendChild(tile);
+    });
+  }
+
+  ai4FileInput.addEventListener("change", function () {
+    ai4Picked = ai4Picked.concat(Array.prototype.slice.call(ai4FileInput.files));
+    ai4FileInput.value = "";
+    renderAi4Preview();
+  });
+
+
+  $$(".section-add-btn[data-category='ai-picture']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      ai4EditingId = null;
+      var pwc = $("#ai4Pw"); if (pwc) pwc.value = "";
+      ai4Form.reset();
+      ai4Picked = [];
+      renderAi4Preview();
+      ai4ErrorEl.textContent = "";
+      var _dt = $("#ai4FormDialog .dlg-title"); if (_dt) _dt.textContent = "새 Pictures 글";
+      ai4SubmitBtn.textContent = "등록";
+      openDlg(ai4FormDlg);
+      ai4TitleInput.focus();
+    });
+  });
+
+  ai4Form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var title = ai4TitleInput.value.trim();
+    if (!title) { ai4ErrorEl.textContent = "제목을 입력하세요."; ai4TitleInput.focus(); return; }
+    var pwValai4 = ($("#ai4Pw") ? $("#ai4Pw").value : "").trim();
+    if (pwValai4.length < 4) { $("#ai4FormError").textContent = "수정용 비밀번호(4자 이상)를 입력하세요."; $("#ai4Pw").focus(); return; }
+    ai4ErrorEl.textContent = "";
+    ai4SubmitBtn.disabled = true;
+    ai4SubmitBtn.textContent = ai4EditingId ? "저장 중…" : "등록 중…";
+    var fd = new FormData();
+    if (ai4EditingId) fd.append("id", ai4EditingId);
+    fd.append("title", title);
+    fd.append("content", ai4ContentInput.value);
+    fd.append("pw", pwValai4);
+    fd.append("category", "ai-picture");
+    fd.append("date", ai4DateInput.value || "");
+    ai4Picked.forEach(function (f) { fd.append("files[]", f); });
+        fetch(ai4EditingId ? "/api?action=update" : "/api?action=create", { method: "POST", body: fd })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        ai4Form.reset();
+        ai4Picked = [];
+        renderAi4Preview();
+        closeDlg(ai4FormDlg);
+        ai4EditingId = null;
+        var pwc = $("#ai4Pw"); if (pwc) pwc.value = "";
+        var _dt2 = $("#ai4FormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 Pictures 글";
+        return loadAi4();
+      })
+      .catch(function (err) { ai4ErrorEl.textContent = "실패: " + ((err && err.message) || err); })
+      .then(function () { ai4SubmitBtn.disabled = false; ai4SubmitBtn.textContent = ai4EditingId ? "저장" : "등록"; });
+  });
+
+  /* ---------- Video 상세 다이얼로그 + 삭제 ---------- */
+  var ai4ViewDlg = $("#ai4ViewDialog"),
+      ai4ViewTitle = $("#ai4ViewTitle"),
+      ai4ViewDate = $("#ai4ViewDate"),
+      ai4ViewPhotos = $("#ai4ViewPhotos"),
+      ai4ViewContent = $("#ai4ViewContent"),
+      ai4ViewFiles = $("#ai4ViewFiles"),
+      ai4DeleteBtn = $("#ai4ViewDelete");
+  var ai4ViewingId = null;
+
+  function openAi4View(id) {
+    var p = null;
+    ai4Posts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
+    if (!p) return;
+    ai4ViewingId = p.id;
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = " | 조회수: " + j.views; } }).catch(function () {});
+    var panel = $("#ai4ViewPanel");
+    var t = $("#ai4InlineTitle"), d = $("#ai4InlineDate"), ph = $("#ai4InlinePhotos"), c = $("#ai4InlineContent"), fl = $("#ai4InlineFiles");
+    if (t) t.textContent = p.title || "(제목 없음)";
+    if (d) { var dv = document.createElement("span"); dv.className = "vote-red"; dv.textContent = window.BaiooVote.label(p); d.textContent = ""; d.appendChild(document.createTextNode("🗓 ")); d.appendChild(dv); d.appendChild(document.createTextNode("  " + (postDate(p) || "날짜 미정"))); }
+    if (ph) {
+      ph.textContent = "";
+      (p.files || []).filter(isImageFile).forEach(function (f) {
+        var im = document.createElement("img");
+        im.src = f.url;
+        im.alt = f.originalName || f.name;
+        ph.appendChild(im);
+      });
+      (p.files || []).filter(isVideoFile).forEach(function (f) {
+        var vd = document.createElement("video");
+        vd.src = f.url;
+        vd.controls = true;
+        vd.preload = "metadata";
+        ph.appendChild(vd);
+      });
+    }
+    if (c) c.textContent = p.content || "(내용 없음)";
+    if (fl) {
+      fl.textContent = "";
+      fl.hidden = !(p.files && p.files.length);
+      if (p.files && p.files.length) fl.appendChild(fileLinks(p.files, false));
+    }
+    var blc = $("#ai4LikeCount"), bdc = $("#ai4DislikeCount");
+    if (blc) blc.textContent = (+p.likes) || 0;
+    if (bdc) bdc.textContent = (+p.dislikes) || 0;
+    if (panel) {
+      panel.hidden = false;
+      if (panel.scrollIntoView) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+    ai4ViewTitle.textContent = p.title || "(제목 없음)";
+    ai4ViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    loadAi4Cmt();
+  }
+
+  ai4BoardBody.addEventListener("click", function (e) {
+    var delBtn = e.target.closest("[data-del]");
+    if (delBtn) {
+      e.stopPropagation();
+      var did = delBtn.getAttribute("data-del");
+      if (!window.confirm("이 글을 삭제할까요?")) return;
+      fetch("/api/" + encodeURIComponent(did), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: did }) })
+        .then(function (res) { return res.json(); })
+        .then(function () { return loadAi4(); })
+        .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); });
+      return;
+    }
+    var tr = e.target.closest("tr[data-id]");
+    if (!tr) return;
+    openAi4View(tr.getAttribute("data-id"));
+  });
+
+  var ai4ViewClose = $("#ai4ViewClose");
+  if (ai4ViewClose) ai4ViewClose.addEventListener("click", function () { var panel = $("#ai4ViewPanel"); if (panel) panel.hidden = true; });
+  var ai4InlineDelete = $("#ai4InlineDelete");
+  if (ai4InlineDelete) ai4InlineDelete.addEventListener("click", function () { ai4DeleteBtn.click(); });
+  var ai4InlineEdit = $("#ai4InlineEdit");
+  if (ai4InlineEdit) ai4InlineEdit.addEventListener("click", function () { var b = $("#ai4ViewEdit"); if (b) b.click(); });
+  var ai4InlineLike = $("#ai4InlineLike"), ai4InlineDislike = $("#ai4InlineDislike");
+  if (ai4InlineLike) ai4InlineLike.addEventListener("click", function () {
+    if (!ai4ViewingId) return;
+    window.BaiooVote.send(ai4ViewingId, "like", function (data) {
+      var lc = $("#ai4LikeCount"), dc = $("#ai4DislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      ai4Posts.forEach(function (x) { if (String(x.id) === String(ai4ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderAi4();
+    });
+  });
+  if (ai4InlineDislike) ai4InlineDislike.addEventListener("click", function () {
+    if (!ai4ViewingId) return;
+    window.BaiooVote.send(ai4ViewingId, "dislike", function (data) {
+      var lc = $("#ai4LikeCount"), dc = $("#ai4DislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      ai4Posts.forEach(function (x) { if (String(x.id) === String(ai4ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderAi4();
+    });
+  });
+
+  var ai4CmtList = $("#ai4CmtList"), ai4CmtCount = $("#ai4CmtCount"), ai4CmtToggle = $("#ai4CmtToggle"),
+      ai4CmtAuthor = $("#ai4CmtAuthor"), ai4CmtInput = $("#ai4CmtInput"), ai4CmtSend = $("#ai4CmtSend");
+  var ai4CmtAll = [], ai4CmtOpen = false;
+  function renderAi4Cmt() {
+    if (!ai4CmtList) return;
+    ai4CmtList.textContent = "";
+    var show = ai4CmtOpen ? ai4CmtAll : ai4CmtAll.slice(0, 10);
+    show.forEach(function (cm) {
+      var d = document.createElement("div");
+      d.className = "cmt-item";
+      var isAdmin = document.body.classList.contains("is-admin");
+      d.innerHTML = "<b>" + window.BaiooCmt.esc(cm.author) + "</b> " + window.BaiooCmt.esc(cm.content) + (isAdmin ? ' <button type="button" class="cmt-del" data-cid="' + cm.id + '">삭제</button>' : "");
+      ai4CmtList.appendChild(d);
+    });
+    if (ai4CmtCount) ai4CmtCount.textContent = ai4CmtAll.length;
+    if (ai4CmtToggle) { ai4CmtToggle.hidden = ai4CmtAll.length <= 10; ai4CmtToggle.textContent = ai4CmtOpen ? "접기" : ("더 보기 (" + ai4CmtAll.length + ")"); }
+  }
+  function loadAi4Cmt() {
+    if (!ai4ViewingId) return;
+    window.BaiooCmt.list(ai4ViewingId).then(function (rows) { ai4CmtAll = rows || []; ai4CmtOpen = false; renderAi4Cmt(); }).catch(function () { ai4CmtAll = []; renderAi4Cmt(); });
+  }
+  if (ai4CmtToggle) ai4CmtToggle.addEventListener("click", function () { ai4CmtOpen = !ai4CmtOpen; renderAi4Cmt(); });
+  if (ai4CmtSend) ai4CmtSend.addEventListener("click", function () {
+    if (!ai4ViewingId) return;
+    var a = (ai4CmtAuthor && ai4CmtAuthor.value.trim()) || "익명";
+    var c = (ai4CmtInput && ai4CmtInput.value.trim()) || "";
+    if (!c) { window.alert("댓글을 입력하세요."); return; }
+    ai4CmtSend.disabled = true;
+    window.BaiooCmt.create(ai4ViewingId, a, c).then(function (j) {
+      if (!j || !j.ok) throw new Error((j && j.message) || "fail");
+      if (ai4CmtInput) ai4CmtInput.value = "";
+      loadAi4Cmt();
+    }).catch(function (err) { window.alert("댓글 실패: " + ((err && err.message) || err)); })
+    .then(function () { ai4CmtSend.disabled = false; });
+  });
+  if (ai4CmtList) ai4CmtList.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cid]");
+    if (!b) return;
+    if (!window.confirm("댓글을 삭제할까요?")) return;
+    window.BaiooCmt.remove(b.getAttribute("data-cid")).then(function () { loadAi4Cmt(); });
+  });
+
+  ai4DeleteBtn.addEventListener("click", function () {
+    if (!ai4ViewingId) return;
+    if (!window.confirm("이 글을 삭제할까요? 첨부 파일도 함께 삭제됩니다.")) return;
+    ai4DeleteBtn.disabled = true;
+    fetch("/api/" + encodeURIComponent(ai4ViewingId), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: ai4ViewingId })
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        closeDlg(ai4ViewDlg);
+        ai4ViewingId = null;
+        var panel = $("#ai4ViewPanel");
+        if (panel) panel.hidden = true;
+        return loadAi4();
+      })
+      .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
+      .then(function () { ai4DeleteBtn.disabled = false; });
+  });
+
+  var ai4EditBtn = $("#ai4ViewEdit");
+  if (ai4EditBtn) {
+    ai4EditBtn.addEventListener("click", function () {
+      if (!ai4ViewingId) return;
+      var p = null;
+      ai4Posts.forEach(function (x) { if (x.id === ai4ViewingId) p = x; });
+      if (!p) return;
+      ai4EditingId = ai4ViewingId;
+      var pwc = $("#ai4Pw"); if (pwc) pwc.value = "";
+      ai4TitleInput.value = p.title || "";
+      ai4DateInput.value = p.date || "";
+      ai4ContentInput.value = p.content || "";
+      ai4Picked = [];
+      renderAi4Preview();
+      ai4ErrorEl.textContent = "";
+      var bdt = $("#ai4FormDialog .dlg-title"); if (bdt) bdt.textContent = "Video 글 수정";
+      ai4SubmitBtn.textContent = "저장";
+      if (ai4ViewDlg && ai4ViewDlg.open) closeDlg(ai4ViewDlg);
+      openDlg(ai4FormDlg);
+      ai4TitleInput.focus();
+    });
+  }
+
+  loadAi4();
+})();
+
+/* ===== AI Figure 자유게시판 + 스튜디오 (Figure 복제) ===== */
+/* ===== Figure 자유게시판 (AI 패턴 미러) ===== */
+(function () {
+  "use strict";
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+
+  function apiList() {
+    return fetch("/api?action=list", { headers: { Accept: "application/json" } })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        var posts = data && data.posts;
+        if (posts && !Array.isArray(posts)) posts = Array.isArray(posts.value) ? posts.value : (posts.id ? [posts] : []);
+        return Array.isArray(posts) ? posts : [];
+      });
+  }
+  function isImageFile(f) {
+    var n = String(f.name || f.originalName || "").toLowerCase();
+    return /^image\//.test(f.type || "") || /\.(png|jpe?g|gif|webp|bmp|svg)$/.test(n);
+  }
+  function isVideoFile(f) {
+    var n = String(f.name || f.originalName || "").toLowerCase();
+    return /^video\//.test(f.type || "") || /\.(mp4|webm|mov|m4v)$/.test(n);
+  }
+  function postDate(p) {
+    if (p.date) return p.date;
+    if (p.createdAt) { try { return new Date(p.createdAt).toISOString().slice(0, 10); } catch (e) {} }
+    return "";
+  }
+  function fileLinks(files, ev) {
+    var fl = document.createElement("div");
+    fl.className = "file-list";
+    fl.style.marginTop = "12px";
+    files.forEach(function (f) {
+      var a = document.createElement("a");
+      a.href = f.url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.textContent = "📎 " + (f.originalName || f.name);
+      if (ev) a.addEventListener("click", function (e) { e.stopPropagation(); });
+      fl.appendChild(a);
+    });
+    return fl;
+  }
+  function openDlg(d) { if (d && !d.open) d.showModal(); }
+  function closeDlg(d) { if (d && d.open) d.close(); }
+
+  var ai5BoardBody = $("#ai5BoardBody");
+  var ai5Posts = [];
+  var ai5PageBar = $("#ai5PageBar");
+  var ai5Page = 1;
+  var AI5_PAGE_SIZE = 10;
+
+  function renderAi5Pages(total) {
+    if (!ai5PageBar) return;
+    ai5PageBar.textContent = "";
+    var maxPage = Math.max(1, Math.ceil(total / AI5_PAGE_SIZE));
+    if (ai5Page > maxPage) ai5Page = maxPage;
+    if (ai5Page < 1) ai5Page = 1;
+    function mk(label, page, active, disabled) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "ai-cat-btn" + (active ? " active" : "");
+      b.textContent = label;
+      if (disabled) b.disabled = true;
+      else b.addEventListener("click", function () { ai5Page = page; renderAi5(); });
+      ai5PageBar.appendChild(b);
+    }
+    mk("‹ 이전", ai5Page - 1, false, ai5Page === 1);
+    var start = Math.max(1, ai5Page - 2);
+    var end = Math.min(maxPage, start + 4);
+    start = Math.max(1, end - 4);
+    for (var p = start; p <= end; p++) mk(String(p), p, p === ai5Page, false);
+    mk("› 다음", ai5Page + 1, false, ai5Page === maxPage);
+  }
+
+  function makeAi5Row(p, i) {
+    var tr = document.createElement("tr");
+    tr.setAttribute("data-id", p.id);
+    var no = document.createElement("td");
+    no.textContent = String(i);
+    var ti = document.createElement("td");
+    ti.className = "board-title";
+    ti.textContent = p.title || "(제목 없음)";
+    var vw = document.createElement("span");
+    vw.className = "board-views";
+    vw.textContent = " | 조회수: " + String((+p.views) || 0);
+    ti.appendChild(vw);
+    var dt = document.createElement("td");
+    dt.textContent = "";
+    var vs = document.createElement("span");
+    vs.className = "vote-red";
+    vs.textContent = window.BaiooVote.label(p);
+    dt.appendChild(vs);
+    dt.appendChild(document.createTextNode(" "));
+    dt.appendChild(document.createTextNode(postDate(p) || "—"));
+    var del = document.createElement("button");
+    del.type = "button";
+    del.className = "row-del admin-only";
+    del.textContent = "🗑️";
+    del.setAttribute("data-del", p.id);
+    del.setAttribute("aria-label", "삭제");
+    dt.appendChild(del);
+    tr.appendChild(no);
+    tr.appendChild(ti);
+    tr.appendChild(dt);
+    return tr;
+  }
+
+  function renderAi5() {
+    var maxPage = Math.max(1, Math.ceil(ai5Posts.length / AI5_PAGE_SIZE));
+    if (ai5Page > maxPage) ai5Page = maxPage;
+    if (ai5Page < 1) ai5Page = 1;
+    ai5BoardBody.textContent = "";
+    if (!ai5Posts.length) {
+      var tr = document.createElement("tr");
+      var td = document.createElement("td");
+      td.colSpan = 3;
+      td.className = "board-empty";
+      td.style.cssText = "text-align:center;color:var(--muted)";
+      td.textContent = "등록된 글이 없습니다.";
+      tr.appendChild(td);
+      ai5BoardBody.appendChild(tr);
+      renderAi5Pages(0);
+      return;
+    }
+    var startIdx = (ai5Page - 1) * AI5_PAGE_SIZE;
+    ai5Posts.slice(startIdx, startIdx + AI5_PAGE_SIZE).forEach(function (p, i) { ai5BoardBody.appendChild(makeAi5Row(p, ai5Posts.length - (startIdx + i))); });
+    renderAi5Pages(ai5Posts.length);
+  }
+
+  function loadAi5() {
+    return apiList().then(function (posts) {
+      ai5Posts = posts.filter(function (p) { return p.category === "ai-figure"; });
+      ai5Posts.sort(function (a, b) { return ((b.createdAt || 0) > (a.createdAt || 0)) ? 1 : (((b.createdAt || 0) < (a.createdAt || 0)) ? -1 : 0); });
+      renderAi5();
+    }).catch(function () { ai5Posts = []; renderAi5(); });
+  }
+
+  /* ---------- Video 등록 폼 ---------- */
+  var ai5FormDlg = $("#ai5FormDialog"),
+      ai5Form = $("#ai5Form"),
+      ai5TitleInput = $("#ai5Title"),
+      ai5DateInput = $("#ai5Date"),
+      ai5ContentInput = $("#ai5Content"),
+      ai5FileInput = $("#ai5Files"),
+      ai5PreviewEl = $("#ai5Preview"),
+      ai5FileCountEl = $("#ai5FileCount"),
+      ai5ErrorEl = $("#ai5FormError"),
+      ai5SubmitBtn = $("#ai5Submit");
+  var ai5Picked = [];
+  var ai5EditingId = null;
+
+  function renderAi5Preview() {
+    $$("img", ai5PreviewEl).forEach(function (im) { URL.revokeObjectURL(im.src); });
+    ai5PreviewEl.textContent = "";
+    ai5FileCountEl.textContent = ai5Picked.length ? ai5Picked.length + "개 선택됨" : "선택된 파일 없음";
+    ai5Picked.forEach(function (f, i) {
+      var tile = document.createElement("div");
+      tile.className = "thumb-sm";
+      tile.title = f.name;
+      if (isImageFile(f)) {
+        var im = document.createElement("img");
+        im.src = URL.createObjectURL(f);
+        im.alt = f.name;
+        tile.appendChild(im);
+      } else {
+        tile.style.cssText = "display:grid;place-items:center;font-size:1.6rem;";
+        tile.textContent = "📄";
+      }
+      var rm = document.createElement("button");
+      rm.type = "button";
+      rm.className = "rm";
+      rm.textContent = "×";
+      rm.setAttribute("aria-label", f.name + " 제거");
+      rm.addEventListener("click", function () { ai5Picked.splice(i, 1); renderAi5Preview(); });
+      tile.appendChild(rm);
+      ai5PreviewEl.appendChild(tile);
+    });
+  }
+
+  ai5FileInput.addEventListener("change", function () {
+    ai5Picked = ai5Picked.concat(Array.prototype.slice.call(ai5FileInput.files));
+    ai5FileInput.value = "";
+    renderAi5Preview();
+  });
+
+
+  $$(".section-add-btn[data-category='ai-figure']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      ai5EditingId = null;
+      var pwc = $("#ai5Pw"); if (pwc) pwc.value = "";
+      ai5Form.reset();
+      ai5Picked = [];
+      renderAi5Preview();
+      ai5ErrorEl.textContent = "";
+      var _dt = $("#ai5FormDialog .dlg-title"); if (_dt) _dt.textContent = "새 Figure 글";
+      ai5SubmitBtn.textContent = "등록";
+      openDlg(ai5FormDlg);
+      ai5TitleInput.focus();
+    });
+  });
+
+  ai5Form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var title = ai5TitleInput.value.trim();
+    if (!title) { ai5ErrorEl.textContent = "제목을 입력하세요."; ai5TitleInput.focus(); return; }
+    var pwValai5 = ($("#ai5Pw") ? $("#ai5Pw").value : "").trim();
+    if (pwValai5.length < 4) { $("#ai5FormError").textContent = "수정용 비밀번호(4자 이상)를 입력하세요."; $("#ai5Pw").focus(); return; }
+    ai5ErrorEl.textContent = "";
+    ai5SubmitBtn.disabled = true;
+    ai5SubmitBtn.textContent = ai5EditingId ? "저장 중…" : "등록 중…";
+    var fd = new FormData();
+    if (ai5EditingId) fd.append("id", ai5EditingId);
+    fd.append("title", title);
+    fd.append("content", ai5ContentInput.value);
+    fd.append("pw", pwValai5);
+    fd.append("category", "ai-figure");
+    fd.append("date", ai5DateInput.value || "");
+    ai5Picked.forEach(function (f) { fd.append("files[]", f); });
+        fetch(ai5EditingId ? "/api?action=update" : "/api?action=create", { method: "POST", body: fd })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        ai5Form.reset();
+        ai5Picked = [];
+        renderAi5Preview();
+        closeDlg(ai5FormDlg);
+        ai5EditingId = null;
+        var pwc = $("#ai5Pw"); if (pwc) pwc.value = "";
+        var _dt2 = $("#ai5FormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 Figure 글";
+        return loadAi5();
+      })
+      .catch(function (err) { ai5ErrorEl.textContent = "실패: " + ((err && err.message) || err); })
+      .then(function () { ai5SubmitBtn.disabled = false; ai5SubmitBtn.textContent = ai5EditingId ? "저장" : "등록"; });
+  });
+
+  /* ---------- Video 상세 다이얼로그 + 삭제 ---------- */
+  var ai5ViewDlg = $("#ai5ViewDialog"),
+      ai5ViewTitle = $("#ai5ViewTitle"),
+      ai5ViewDate = $("#ai5ViewDate"),
+      ai5ViewPhotos = $("#ai5ViewPhotos"),
+      ai5ViewContent = $("#ai5ViewContent"),
+      ai5ViewFiles = $("#ai5ViewFiles"),
+      ai5DeleteBtn = $("#ai5ViewDelete");
+  var ai5ViewingId = null;
+
+  function openAi5View(id) {
+    var p = null;
+    ai5Posts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
+    if (!p) return;
+    ai5ViewingId = p.id;
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) { p.views = j.views; var cell = document.querySelector('tr[data-id="' + p.id + '"] .board-views'); if (cell) cell.textContent = " | 조회수: " + j.views; } }).catch(function () {});
+    var panel = $("#ai5ViewPanel");
+    var t = $("#ai5InlineTitle"), d = $("#ai5InlineDate"), ph = $("#ai5InlinePhotos"), c = $("#ai5InlineContent"), fl = $("#ai5InlineFiles");
+    if (t) t.textContent = p.title || "(제목 없음)";
+    if (d) { var dv = document.createElement("span"); dv.className = "vote-red"; dv.textContent = window.BaiooVote.label(p); d.textContent = ""; d.appendChild(document.createTextNode("🗓 ")); d.appendChild(dv); d.appendChild(document.createTextNode("  " + (postDate(p) || "날짜 미정"))); }
+    if (ph) {
+      ph.textContent = "";
+      (p.files || []).filter(isImageFile).forEach(function (f) {
+        var im = document.createElement("img");
+        im.src = f.url;
+        im.alt = f.originalName || f.name;
+        ph.appendChild(im);
+      });
+      (p.files || []).filter(isVideoFile).forEach(function (f) {
+        var vd = document.createElement("video");
+        vd.src = f.url;
+        vd.controls = true;
+        vd.preload = "metadata";
+        ph.appendChild(vd);
+      });
+    }
+    if (c) c.textContent = p.content || "(내용 없음)";
+    if (fl) {
+      fl.textContent = "";
+      fl.hidden = !(p.files && p.files.length);
+      if (p.files && p.files.length) fl.appendChild(fileLinks(p.files, false));
+    }
+    var blc = $("#ai5LikeCount"), bdc = $("#ai5DislikeCount");
+    if (blc) blc.textContent = (+p.likes) || 0;
+    if (bdc) bdc.textContent = (+p.dislikes) || 0;
+    if (panel) {
+      panel.hidden = false;
+      if (panel.scrollIntoView) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+    ai5ViewTitle.textContent = p.title || "(제목 없음)";
+    ai5ViewDate.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    loadAi5Cmt();
+  }
+
+  ai5BoardBody.addEventListener("click", function (e) {
+    var delBtn = e.target.closest("[data-del]");
+    if (delBtn) {
+      e.stopPropagation();
+      var did = delBtn.getAttribute("data-del");
+      if (!window.confirm("이 글을 삭제할까요?")) return;
+      fetch("/api/" + encodeURIComponent(did), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: did }) })
+        .then(function (res) { return res.json(); })
+        .then(function () { return loadAi5(); })
+        .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); });
+      return;
+    }
+    var tr = e.target.closest("tr[data-id]");
+    if (!tr) return;
+    openAi5View(tr.getAttribute("data-id"));
+  });
+
+  var ai5ViewClose = $("#ai5ViewClose");
+  if (ai5ViewClose) ai5ViewClose.addEventListener("click", function () { var panel = $("#ai5ViewPanel"); if (panel) panel.hidden = true; });
+  var ai5InlineDelete = $("#ai5InlineDelete");
+  if (ai5InlineDelete) ai5InlineDelete.addEventListener("click", function () { ai5DeleteBtn.click(); });
+  var ai5InlineEdit = $("#ai5InlineEdit");
+  if (ai5InlineEdit) ai5InlineEdit.addEventListener("click", function () { var b = $("#ai5ViewEdit"); if (b) b.click(); });
+  var ai5InlineLike = $("#ai5InlineLike"), ai5InlineDislike = $("#ai5InlineDislike");
+  if (ai5InlineLike) ai5InlineLike.addEventListener("click", function () {
+    if (!ai5ViewingId) return;
+    window.BaiooVote.send(ai5ViewingId, "like", function (data) {
+      var lc = $("#ai5LikeCount"), dc = $("#ai5DislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      ai5Posts.forEach(function (x) { if (String(x.id) === String(ai5ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderAi5();
+    });
+  });
+  if (ai5InlineDislike) ai5InlineDislike.addEventListener("click", function () {
+    if (!ai5ViewingId) return;
+    window.BaiooVote.send(ai5ViewingId, "dislike", function (data) {
+      var lc = $("#ai5LikeCount"), dc = $("#ai5DislikeCount");
+      if (lc) lc.textContent = data.likes;
+      if (dc) dc.textContent = data.dislikes;
+      ai5Posts.forEach(function (x) { if (String(x.id) === String(ai5ViewingId)) { x.likes = data.likes; x.dislikes = data.dislikes; } });
+      renderAi5();
+    });
+  });
+
+  var ai5CmtList = $("#ai5CmtList"), ai5CmtCount = $("#ai5CmtCount"), ai5CmtToggle = $("#ai5CmtToggle"),
+      ai5CmtAuthor = $("#ai5CmtAuthor"), ai5CmtInput = $("#ai5CmtInput"), ai5CmtSend = $("#ai5CmtSend");
+  var ai5CmtAll = [], ai5CmtOpen = false;
+  function renderAi5Cmt() {
+    if (!ai5CmtList) return;
+    ai5CmtList.textContent = "";
+    var show = ai5CmtOpen ? ai5CmtAll : ai5CmtAll.slice(0, 10);
+    show.forEach(function (cm) {
+      var d = document.createElement("div");
+      d.className = "cmt-item";
+      var isAdmin = document.body.classList.contains("is-admin");
+      d.innerHTML = "<b>" + window.BaiooCmt.esc(cm.author) + "</b> " + window.BaiooCmt.esc(cm.content) + (isAdmin ? ' <button type="button" class="cmt-del" data-cid="' + cm.id + '">삭제</button>' : "");
+      ai5CmtList.appendChild(d);
+    });
+    if (ai5CmtCount) ai5CmtCount.textContent = ai5CmtAll.length;
+    if (ai5CmtToggle) { ai5CmtToggle.hidden = ai5CmtAll.length <= 10; ai5CmtToggle.textContent = ai5CmtOpen ? "접기" : ("더 보기 (" + ai5CmtAll.length + ")"); }
+  }
+  function loadAi5Cmt() {
+    if (!ai5ViewingId) return;
+    window.BaiooCmt.list(ai5ViewingId).then(function (rows) { ai5CmtAll = rows || []; ai5CmtOpen = false; renderAi5Cmt(); }).catch(function () { ai5CmtAll = []; renderAi5Cmt(); });
+  }
+  if (ai5CmtToggle) ai5CmtToggle.addEventListener("click", function () { ai5CmtOpen = !ai5CmtOpen; renderAi5Cmt(); });
+  if (ai5CmtSend) ai5CmtSend.addEventListener("click", function () {
+    if (!ai5ViewingId) return;
+    var a = (ai5CmtAuthor && ai5CmtAuthor.value.trim()) || "익명";
+    var c = (ai5CmtInput && ai5CmtInput.value.trim()) || "";
+    if (!c) { window.alert("댓글을 입력하세요."); return; }
+    ai5CmtSend.disabled = true;
+    window.BaiooCmt.create(ai5ViewingId, a, c).then(function (j) {
+      if (!j || !j.ok) throw new Error((j && j.message) || "fail");
+      if (ai5CmtInput) ai5CmtInput.value = "";
+      loadAi5Cmt();
+    }).catch(function (err) { window.alert("댓글 실패: " + ((err && err.message) || err)); })
+    .then(function () { ai5CmtSend.disabled = false; });
+  });
+  if (ai5CmtList) ai5CmtList.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cid]");
+    if (!b) return;
+    if (!window.confirm("댓글을 삭제할까요?")) return;
+    window.BaiooCmt.remove(b.getAttribute("data-cid")).then(function () { loadAi5Cmt(); });
+  });
+
+  ai5DeleteBtn.addEventListener("click", function () {
+    if (!ai5ViewingId) return;
+    if (!window.confirm("이 글을 삭제할까요? 첨부 파일도 함께 삭제됩니다.")) return;
+    ai5DeleteBtn.disabled = true;
+    fetch("/api/" + encodeURIComponent(ai5ViewingId), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: ai5ViewingId })
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (data) {
+          if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || ("HTTP " + res.status));
+          return data;
+        });
+      })
+      .then(function () {
+        closeDlg(ai5ViewDlg);
+        ai5ViewingId = null;
+        var panel = $("#ai5ViewPanel");
+        if (panel) panel.hidden = true;
+        return loadAi5();
+      })
+      .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); })
+      .then(function () { ai5DeleteBtn.disabled = false; });
+  });
+
+  var ai5EditBtn = $("#ai5ViewEdit");
+  if (ai5EditBtn) {
+    ai5EditBtn.addEventListener("click", function () {
+      if (!ai5ViewingId) return;
+      var p = null;
+      ai5Posts.forEach(function (x) { if (x.id === ai5ViewingId) p = x; });
+      if (!p) return;
+      ai5EditingId = ai5ViewingId;
+      var pwc = $("#ai5Pw"); if (pwc) pwc.value = "";
+      ai5TitleInput.value = p.title || "";
+      ai5DateInput.value = p.date || "";
+      ai5ContentInput.value = p.content || "";
+      ai5Picked = [];
+      renderAi5Preview();
+      ai5ErrorEl.textContent = "";
+      var bdt = $("#ai5FormDialog .dlg-title"); if (bdt) bdt.textContent = "Video 글 수정";
+      ai5SubmitBtn.textContent = "저장";
+      if (ai5ViewDlg && ai5ViewDlg.open) closeDlg(ai5ViewDlg);
+      openDlg(ai5FormDlg);
+      ai5TitleInput.focus();
+    });
+  }
+
+  loadAi5();
+})();
+
 /* ===== BAIOO AI Video 스튜디오 (Video 복제) ===== */
 /* ===== BAIOO AI Video 스튜디오 (영상 필터·등록) ===== */
 (function () {
@@ -9819,6 +11125,1440 @@ fd.append("pw", pwValbunny);
   });
 })();
 
+
+/* ===== BAIOO AI Pictures 스튜디오 (Video 복제) ===== */
+/* ===== BAIOO AI Pictures 스튜디오 (영상 필터·등록) ===== */
+(function () {
+  "use strict";
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+
+  var STORAGE_CUSTOM = "baioo_ai4_custom_ideas_v1";
+  var STORAGE_LIKES = "baioo_ai4_likes_v1";
+
+  var CATEGORY_META = {
+    clip:    { label: "숏폼 클립",  emoji: "🎬", gradient: "linear-gradient(135deg, #F43F5E 0%, #E11D48 100%)" },
+    story:   { label: "스토리 영상", emoji: "📖", gradient: "linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%)" },
+    tutorial:{ label: "튜토리얼",   emoji: "🎓", gradient: "linear-gradient(135deg, #0EA5E9 0%, #3B82F6 100%)" },
+    lab:     { label: "실험실",     emoji: "💡", gradient: "linear-gradient(135deg, #F59E0B 0%, #EA580C 100%)" }
+  };
+
+  var STATUS_META = {
+    live:    { label: "✨ LIVE 확정",   cls: "live" },
+    beta:    { label: "🧪 DRAFT 시안",  cls: "beta" },
+    concept: { label: "📐 CONCEPT",     cls: "concept" }
+  };
+
+  var state = {
+    category: "all",
+    status: "all",
+    sort: "newest",
+    query: "",
+    bookmarkedOnly: false,
+    activeBrandId: null
+  };
+
+  function loadJson(key, fallback) {
+    try {
+      var raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  function saveJson(key, val) {
+    try {
+      localStorage.setItem(key, JSON.stringify(val));
+    } catch (e) {}
+  }
+
+  var customBrands = loadJson(STORAGE_CUSTOM, []);
+  var editingBrandId = null;
+  if (!Array.isArray(customBrands)) customBrands = [];
+  var likedMap = loadJson(STORAGE_LIKES, {});
+  if (!likedMap || typeof likedMap !== "object") likedMap = {};
+
+  function getAllBrands() {
+    return customBrands.slice();
+  }
+
+  function getLikeCount(item) {
+    return Number(item.baseLikes || 0) + (likedMap[item.id] ? 1 : 0);
+  }
+
+  var gridEl = $("#ai4IdeaGrid");
+  var searchInput = $("#ai4SearchInput");
+  var statusSelect = $("#ai4StatusSelect");
+  var sortSelect = $("#ai4SortSelect");
+  var catBar = $("#ai4CategoryBar");
+  var chipsEl = $("#ai4ActiveChips");
+  var countEl = $("#ai4ResultCount");
+  var statTotalEl = $("#ai4StatTotal");
+  var statLiveEl = $("#ai4StatLive");
+  var statLikesEl = $("#ai4StatLikes");
+  var bookmarkFilterBtn = $("#ai4FilterBookmarkedBtn");
+  var openAddBtn = $("#ai4OpenAddBtn");
+  var toastEl = $("#aiToast");
+  var toastTimer = null;
+
+  function showToast(msg) {
+    if (!toastEl) return;
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toastEl.classList.remove("show");
+    }, 2400);
+  }
+
+  function copyText(text, successMsg) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        showToast(successMsg || "✨ 클립보드에 복사되었습니다!");
+      }).catch(function () {
+        fallbackCopy(text, successMsg);
+      });
+    } else {
+      fallbackCopy(text, successMsg);
+    }
+  }
+
+  function fallbackCopy(text, successMsg) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.cssText = "position:fixed;left:-9999px;top:0;";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      showToast(successMsg || "✨ 클립보드에 복사되었습니다!");
+    } catch (e) {
+      showToast("복사에 실패했습니다.");
+    }
+  }
+
+
+  function updateStats() {
+    var all = getAllBrands();
+    var liveCount = 0;
+    var totalLikes = 0;
+    all.forEach(function (item) {
+      if (item.status === "live") liveCount += 1;
+      totalLikes += getLikeCount(item);
+    });
+    if (statTotalEl) statTotalEl.textContent = String(all.length);
+    if (statLiveEl) statLiveEl.textContent = String(liveCount);
+    if (statLikesEl) statLikesEl.textContent = String(totalLikes);
+  }
+
+  function syncControls() {
+    if (searchInput && searchInput.value !== state.query) searchInput.value = state.query;
+    if (statusSelect) statusSelect.value = state.status;
+    if (sortSelect) sortSelect.value = state.sort;
+    if (bookmarkFilterBtn) bookmarkFilterBtn.classList.toggle("active", state.bookmarkedOnly);
+    if (catBar) {
+      $$(".ai-cat-btn", catBar).forEach(function (b) {
+        b.classList.toggle("active", b.getAttribute("data-cat") === state.category);
+      });
+    }
+  }
+
+  function renderChips() {
+    if (!chipsEl) return;
+    chipsEl.textContent = "";
+
+    function addChip(label, onRemove) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "ai-chip";
+      btn.textContent = label + " ×";
+      btn.addEventListener("click", onRemove);
+      chipsEl.appendChild(btn);
+    }
+
+    if (state.category !== "all") {
+      var cMeta = CATEGORY_META[state.category];
+      addChip("카테고리: " + (cMeta ? cMeta.label : state.category), function () {
+        state.category = "all";
+        syncControls();
+        renderAll();
+      });
+    }
+    if (state.status !== "all") {
+      var sMeta = STATUS_META[state.status];
+      addChip("상태: " + (sMeta ? sMeta.label : state.status), function () {
+        state.status = "all";
+        syncControls();
+        renderAll();
+      });
+    }
+    if (state.bookmarkedOnly) {
+      addChip("♥ 관심 영상", function () {
+        state.bookmarkedOnly = false;
+        syncControls();
+        renderAll();
+      });
+    }
+    if (state.query.trim()) {
+      addChip("검색: \"" + state.query.trim() + "\"", function () {
+        state.query = "";
+        syncControls();
+        renderAll();
+      });
+    }
+  }
+
+  function filterAndSortBrands() {
+    var q = state.query.trim().toLowerCase();
+    var filtered = getAllBrands().filter(function (item) {
+      if (state.category !== "all" && item.category !== state.category) return false;
+      if (state.status !== "all" && item.status !== state.status) return false;
+      if (state.bookmarkedOnly && !likedMap[item.id]) return false;
+      if (q) {
+        var hay = [
+          item.title,
+          item.summary,
+          item.code,
+          (item.colors || []).join(" "),
+          (item.tags || []).join(" ")
+        ].join(" ").toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+
+    filtered.sort(function (a, b) {
+      if (state.sort === "popular") return getLikeCount(b) - getLikeCount(a);
+      if (state.sort === "title") return String(a.title).localeCompare(String(b.title), "ko");
+      return String(b.date || "").localeCompare(String(a.date || ""));
+    });
+
+    return filtered;
+  }
+
+  function createBrandCard(item) {
+    var card = document.createElement("article");
+    card.className = "ai-card";
+    card.tabIndex = 0;
+
+    card.addEventListener("mousemove", function (e) {
+      var rect = card.getBoundingClientRect();
+      card.style.setProperty("--mx", (e.clientX - rect.left) + "px");
+      card.style.setProperty("--my", (e.clientY - rect.top) + "px");
+    });
+
+    var sMeta = STATUS_META[item.status] || STATUS_META.live;
+    var cMeta = CATEGORY_META[item.category] || CATEGORY_META.clip;
+
+    var top = document.createElement("div");
+    top.className = "ai-card-top";
+    var pill = document.createElement("span");
+    pill.className = "ai-status-pill " + sMeta.cls;
+    pill.textContent = sMeta.label;
+    var ver = document.createElement("span");
+    ver.className = "ai-version-code";
+    ver.textContent = (item.code || "BRAND") + " · " + (item.version || "v1.0");
+    top.appendChild(pill);
+    top.appendChild(ver);
+
+    var visual = document.createElement("div");
+    visual.className = "ai-card-visual";
+    var videoUrl = item.video || "";
+    var photoUrl = item.photo || item.image || item.cover || ((item.photos && item.photos[0]) ? (item.photos[0].url || item.photos[0]) : "");
+    if (videoUrl) {
+      visual.style.background = item.gradient || cMeta.gradient;
+      var vd = document.createElement("video");
+      vd.controls = true;
+      vd.muted = true;
+      vd.loop = true;
+      baiooHoverVideo(vd, videoUrl);
+      visual.appendChild(vd);
+      var catLabel = document.createElement("span");
+      catLabel.className = "ai-card-cat-label";
+      catLabel.textContent = cMeta.label;
+      visual.appendChild(catLabel);
+      var muteBadge = document.createElement("span");
+      muteBadge.className = "ai-card-cat-label";
+      muteBadge.textContent = "🖱올리면 재생·🔇음소거";
+      visual.appendChild(muteBadge);
+    } else if (photoUrl) {
+      visual.style.background = item.gradient || cMeta.gradient;
+      var photo = document.createElement("img");
+      photo.src = photoUrl;
+      photo.alt = item.title || "";
+      photo.loading = "lazy";
+      visual.appendChild(photo);
+      var catLabel2 = document.createElement("span");
+      catLabel2.className = "ai-card-cat-label";
+      catLabel2.textContent = cMeta.label;
+      visual.appendChild(catLabel2);
+    } else {
+      visual.style.display = "none";
+    }
+
+    var title = document.createElement("h3");
+    title.className = "ai-card-title";
+    title.textContent = item.title;
+
+    var desc = document.createElement("p");
+    desc.className = "ai-card-desc";
+    desc.textContent = item.summary;
+
+
+    var tagList = document.createElement("div");
+    tagList.className = "ai-tag-list";
+    (item.tags || []).forEach(function (t) {
+      var tg = document.createElement("span");
+      tg.className = "ai-tag-item";
+      tg.textContent = "#" + t;
+      tagList.appendChild(tg);
+    });
+
+    var foot = document.createElement("div");
+    foot.className = "ai-card-foot";
+
+    var likeBtn = document.createElement("button");
+    likeBtn.type = "button";
+    var isLiked = Boolean(likedMap[item.id]);
+    likeBtn.className = "ai-like-btn" + (isLiked ? " liked" : "");
+    likeBtn.textContent = (isLiked ? "♥ " : "♡ ") + getLikeCount(item);
+    likeBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (likedMap[item.id]) {
+        delete likedMap[item.id];
+        showToast("관심 영상에서 해제했습니다.");
+      } else {
+        likedMap[item.id] = true;
+        showToast("♥ 관심 영상으로 저장했습니다!");
+      }
+      saveJson(STORAGE_LIKES, likedMap);
+      renderAll();
+    });
+
+    var actions = document.createElement("div");
+    actions.className = "ai-card-actions";
+
+    var copyBtn = document.createElement("button");
+    copyBtn.type = "button";
+    copyBtn.className = "ai-action-btn";
+    copyBtn.textContent = "📋 영상킷 복사";
+    copyBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      copyText(item.prompt || item.summary, "✨ [" + item.title + "] 영상 키트가 복사되었습니다!");
+    });
+
+    var detailBtn = document.createElement("button");
+    detailBtn.type = "button";
+    detailBtn.className = "ai-action-btn";
+    detailBtn.textContent = "상세 열기 →";
+    detailBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      openDetailModal(item.id);
+    });
+
+    actions.appendChild(copyBtn);
+    actions.appendChild(detailBtn);
+    if (String(item.id || "").indexOf("baioo-ai4-") === 0) {
+      var ai4EdB = document.createElement("button");
+      ai4EdB.type = "button";
+      ai4EdB.className = "ai-action-btn admin-only";
+      ai4EdB.textContent = "✏️ 수정";
+      ai4EdB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        editingBrandId = item.id;
+        if (inputTitle) inputTitle.value = item.title || "";
+        if (inputCategory) inputCategory.value = item.category || "clip";
+        if (inputStatus) inputStatus.value = item.status || "live";
+        if (inputTags) inputTags.value = (item.tags || []).join(", ");
+        if (inputSummary) inputSummary.value = item.summary || "";
+        if (inputPrompt) inputPrompt.value = item.prompt || "";
+        if (addError) addError.textContent = "";
+        if (addDlg && !addDlg.open) addDlg.showModal();
+        if (inputTitle) inputTitle.focus();
+      });
+      var ai4DelB = document.createElement("button");
+      ai4DelB.type = "button";
+      ai4DelB.className = "ai-action-btn admin-only";
+      ai4DelB.textContent = "🗑️ 삭제";
+      ai4DelB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (!window.confirm("이 아이디어를 삭제할까요?")) return;
+        customBrands = customBrands.filter(function (c) { return c.id !== item.id; });
+        saveJson(STORAGE_CUSTOM, customBrands);
+        ideaServerDelete("ai4", item.id);
+        showToast("삭제되었습니다!");
+        renderAll();
+      });
+      actions.appendChild(ai4EdB);
+      actions.appendChild(ai4DelB);
+    }
+    foot.appendChild(likeBtn);
+    foot.appendChild(actions);
+
+    card.appendChild(top);
+    card.appendChild(visual);
+    card.appendChild(title);
+    card.appendChild(desc);
+    card.appendChild(tagList);
+    card.appendChild(foot);
+
+    card.addEventListener("click", function () { openDetailModal(item.id); });
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openDetailModal(item.id);
+      }
+    });
+
+    return card;
+  }
+
+  function renderAll() {
+    if (!gridEl) return;
+    updateStats();
+    renderChips();
+
+    var list = filterAndSortBrands();
+    if (countEl) countEl.textContent = "총 " + list.length + "개의 영상 아이디어";
+
+    gridEl.textContent = "";
+    if (!list.length) {
+      var empty = document.createElement("div");
+      empty.className = "ai-empty-state";
+      var p = document.createElement("p");
+      p.textContent = "조건에 맞는 영상 프로젝트가 없습니다.";
+      var resetBtn = document.createElement("button");
+      resetBtn.type = "button";
+      resetBtn.className = "ai-btn-primary";
+      resetBtn.textContent = "필터 전체 초기화";
+      resetBtn.addEventListener("click", function () {
+        state.category = "all";
+        state.status = "all";
+        state.query = "";
+        state.bookmarkedOnly = false;
+        syncControls();
+        renderAll();
+      });
+      empty.appendChild(p);
+      empty.appendChild(resetBtn);
+      gridEl.appendChild(empty);
+      return;
+    }
+
+    baiooCardPage(gridEl, state, renderAll, list).forEach(function (item) {
+      gridEl.appendChild(createBrandCard(item));
+    });
+  }
+
+  var detailDlg = $("#ai4DetailDialog");
+  var detailStatus = $("#ai4DetailStatus");
+  var detailCode = $("#ai4DetailCode");
+  var detailDate = $("#ai4DetailDate");
+  var detailTitle = $("#ai4DetailTitle");
+  var detailSummary = $("#ai4DetailSummary");
+  var detailTags = $("#ai4DetailTags");
+  var detailPrompt = $("#ai4DetailPrompt");
+  var detailPhoto = $("#ai4DetailPhoto");
+  var copyKitBtn = $("#ai4CopyKitBtn");
+  var shareLinkBtn = $("#ai4ShareLinkBtn");
+  var deleteCustomBtn = $("#ai4DeleteCustomBtn");
+
+  function openDetailModal(id) {
+    var target = null;
+    getAllBrands().forEach(function (x) { if (x.id === id) target = x; });
+    if (!target || !detailDlg) return;
+
+    state.activeBrandId = id;
+    var sMeta = STATUS_META[target.status] || STATUS_META.live;
+    if (detailStatus) {
+      detailStatus.className = "ai-status-pill " + sMeta.cls;
+      detailStatus.textContent = sMeta.label;
+    }
+    if (detailCode) detailCode.textContent = (target.code || "BRAND") + " · " + (target.version || "v1.0");
+    if (detailDate) detailDate.textContent = "🗓 " + (target.date || "2026-10-19");
+    if (detailTitle) detailTitle.textContent = target.title;
+    if (detailSummary) detailSummary.textContent = target.summary;
+    if (detailTags) {
+      detailTags.textContent = "";
+      (target.tags || []).forEach(function (t) {
+        var tg = document.createElement("span");
+        tg.className = "ai-tag-item";
+        tg.textContent = "#" + t;
+        detailTags.appendChild(tg);
+      });
+    }
+    if (detailPrompt) detailPrompt.textContent = target.prompt || target.summary;
+    if (detailPhoto) {
+      detailPhoto.textContent = "";
+      var videoUrl = target.video || "";
+      var photoUrl = target.photo || target.image || target.cover || ((target.photos && target.photos[0]) ? (target.photos[0].url || target.photos[0]) : "");
+      if (videoUrl) {
+        var vd2 = document.createElement("video");
+        vd2.src = videoUrl;
+        vd2.controls = true;
+        vd2.preload = "metadata";
+        detailPhoto.appendChild(vd2);
+        detailPhoto.hidden = false;
+      } else if (photoUrl) {
+        var img = document.createElement("img");
+        img.src = photoUrl;
+        img.alt = target.title || "";
+        img.loading = "lazy";
+        detailPhoto.appendChild(img);
+        detailPhoto.hidden = false;
+      } else {
+        detailPhoto.hidden = true;
+      }
+    }
+    if (deleteCustomBtn) {
+      var isCustom = customBrands.some(function (c) { return c.id === id; });
+      deleteCustomBtn.hidden = !isCustom;
+    }
+    if (!detailDlg.open) detailDlg.showModal();
+  }
+
+  if (copyKitBtn) {
+    copyKitBtn.addEventListener("click", function () {
+      var target = null;
+      getAllBrands().forEach(function (x) { if (x.id === state.activeBrandId) target = x; });
+      if (!target) return;
+      copyText(target.prompt || target.summary, "✨ 영상 키트가 클립보드에 복사되었습니다!");
+    });
+  }
+
+  if (shareLinkBtn) {
+    shareLinkBtn.addEventListener("click", function () {
+      var target = null;
+      getAllBrands().forEach(function (x) { if (x.id === state.activeBrandId) target = x; });
+      var shareText = target
+        ? "[BAIOO Video] " + target.title + " - " + location.origin + location.pathname + "#branding"
+        : location.href;
+      copyText(shareText, "🔗 영상 공유 링크가 복사되었습니다!");
+    });
+  }
+
+  if (deleteCustomBtn) {
+    deleteCustomBtn.addEventListener("click", function () {
+      if (!state.activeBrandId) return;
+      customBrands = customBrands.filter(function (c) { return c.id !== state.activeBrandId; });
+      saveJson(STORAGE_CUSTOM, customBrands);
+      ideaServerDelete("ai4", state.activeBrandId);
+      if (detailDlg && detailDlg.open) detailDlg.close();
+      showToast("영상 아이디어가 삭제되었습니다.");
+      renderAll();
+    });
+  }
+
+  var addDlg = $("#ai4AddDialog");
+  var addForm = $("#ai4AddForm");
+  var inputTitle = $("#ai4InputTitle");
+  var inputCategory = $("#ai4InputCategory");
+  var inputStatus = $("#ai4InputStatus");
+  var inputTags = $("#ai4InputTags");
+  var inputSummary = $("#ai4InputSummary");
+  var inputPrompt = $("#ai4InputPrompt");
+  var addError = $("#ai4AddError");
+  var inputVideo = $("#ai4InputVideo");
+  var videoNameEl = $("#ai4VideoName");
+  var pickedVideo = null;
+  var inputPhoto = $("#ai4InputPhoto");
+  var photoNameEl = $("#ai4PhotoName");
+  var pickedPhoto = null;
+  if (inputPhoto) {
+    inputPhoto.addEventListener("change", function () {
+      pickedPhoto = null;
+      var f = inputPhoto.files && inputPhoto.files[0];
+      inputPhoto.value = "";
+      if (!f) { if (photoNameEl) photoNameEl.textContent = "선택된 사진 없음"; return; }
+      if (f.size > 8 * 1024 * 1024) { if (addError) addError.textContent = "사진은 8MB 이하만 올릴 수 있습니다."; if (photoNameEl) photoNameEl.textContent = "선택된 사진 없음"; return; }
+      if (addError) addError.textContent = "";
+      var rd = new FileReader();
+      rd.onload = function () { pickedPhoto = String(rd.result || ""); if (photoNameEl) photoNameEl.textContent = f.name; };
+      rd.onerror = function () { if (addError) addError.textContent = "사진을 읽지 못했습니다."; };
+      rd.readAsDataURL(f);
+    });
+  }
+  if (inputVideo) {
+    inputVideo.addEventListener("change", function () {
+      pickedVideo = null;
+      var f = inputVideo.files && inputVideo.files[0];
+      inputVideo.value = "";
+      if (!f) { if (videoNameEl) videoNameEl.textContent = "선택된 영상 없음"; return; }
+      if (f.size > 20 * 1024 * 1024) { if (addError) addError.textContent = "영상은 20MB 이하만 올릴 수 있습니다."; if (videoNameEl) videoNameEl.textContent = "선택된 영상 없음"; return; }
+      if (addError) addError.textContent = "";
+      var rd = new FileReader();
+      rd.onload = function () { pickedVideo = String(rd.result || ""); if (videoNameEl) videoNameEl.textContent = f.name; };
+      rd.onerror = function () { if (addError) addError.textContent = "영상을 읽지 못했습니다."; };
+      rd.readAsDataURL(f);
+    });
+  }
+
+  if (openAddBtn && addDlg) {
+    openAddBtn.addEventListener("click", function () {
+      editingBrandId = null;
+      if (addForm) addForm.reset();
+      pickedVideo = null; if (videoNameEl) videoNameEl.textContent = "선택된 영상 없음"; if (inputVideo) inputVideo.value = ""; pickedPhoto = null; if (photoNameEl) photoNameEl.textContent = "선택된 사진 없음"; if (inputPhoto) inputPhoto.value = "";
+      if (addError) addError.textContent = "";
+      if (!addDlg.open) addDlg.showModal();
+      if (inputTitle) inputTitle.focus();
+    });
+  }
+
+  if (addForm) {
+    addForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var titleVal = (inputTitle && inputTitle.value || "").trim();
+      var summaryVal = (inputSummary && inputSummary.value || "").trim();
+      if (!titleVal) {
+        if (addError) addError.textContent = "영상명 / 프로젝트 제목을 입력해 주세요.";
+        if (inputTitle) inputTitle.focus();
+        return;
+      }
+      if (!summaryVal) {
+        if (addError) addError.textContent = "영상 기획 의도 및 요약을 입력해 주세요.";
+        if (inputSummary) inputSummary.focus();
+        return;
+      }
+
+      var catVal = (inputCategory && inputCategory.value) || "clip";
+      var cMeta = CATEGORY_META[catVal] || CATEGORY_META.clip;
+
+
+      var rawTags = (inputTags && inputTags.value || "").split(",");
+      var cleanTags = [];
+      rawTags.forEach(function (t) {
+        var trimmed = t.trim().replace(/^#/, "");
+        if (trimmed) cleanTags.push(trimmed);
+      });
+      if (!cleanTags.length) cleanTags = ["BAIOO", cMeta.label];
+
+      if (editingBrandId) {
+        var bTarget = null;
+        customBrands.forEach(function (x) { if (x.id === editingBrandId) bTarget = x; });
+        if (bTarget) {
+          bTarget.title = titleVal;
+          bTarget.category = catVal;
+          bTarget.status = (inputStatus && inputStatus.value) || bTarget.status;
+          bTarget.colors = [];
+          bTarget.tags = cleanTags;
+          bTarget.summary = summaryVal;
+          bTarget.prompt = (inputPrompt && inputPrompt.value.trim()) || ("[" + titleVal + "]\n- 설명: " + summaryVal);
+          bTarget.emoji = cMeta.emoji;
+          bTarget.gradient = cMeta.gradient;
+          if (pickedPhoto) bTarget.photoData = pickedPhoto;
+          if (pickedVideo) bTarget.videoData = pickedVideo;
+          var upEdit = ideaServerUpsert("ai4", bTarget);
+          delete bTarget.photoData; delete bTarget.videoData;
+          saveJson(STORAGE_CUSTOM, customBrands);
+          if (upEdit && upEdit.then) { upEdit.then(function () { ideaServerSync("ai4", function () { return customBrands; }, function (items) { customBrands = items; saveJson(STORAGE_CUSTOM, customBrands); renderAll(); }); }).catch(function () {}); }
+          showToast("✨ 수정되었습니다!");
+          pickedVideo = null;
+        }
+        editingBrandId = null;
+      } else {
+        var newBrand = {
+          id: "baioo-ai4-" + Date.now(),
+          code: "VIDEO-" + String(getAllBrands().length + 1).padStart(3, "0"),
+          version: "v1.0",
+          status: (inputStatus && inputStatus.value) || "live",
+          category: catVal,
+          emoji: cMeta.emoji,
+          gradient: cMeta.gradient,
+          title: titleVal,
+          colors: [],
+          summary: summaryVal,
+          tags: cleanTags,
+          date: new Date().toISOString().slice(0, 10),
+          baseLikes: 1,
+          prompt: (inputPrompt && inputPrompt.value.trim()) || ("[" + titleVal + "]\n- 설명: " + summaryVal)
+        };
+
+        if (pickedPhoto) newBrand.photoData = pickedPhoto;
+        if (pickedVideo) newBrand.videoData = pickedVideo;
+        customBrands.unshift(newBrand);
+        var upNew = ideaServerUpsert("ai4", newBrand);
+        delete newBrand.photoData; delete newBrand.videoData;
+        saveJson(STORAGE_CUSTOM, customBrands);
+        if (upNew && upNew.then) { upNew.then(function () { ideaServerSync("ai4", function () { return customBrands; }, function (items) { customBrands = items; saveJson(STORAGE_CUSTOM, customBrands); renderAll(); }); }).catch(function () {}); }
+        showToast(pickedVideo ? "✨ 영상 업로드 중… 곧 재생됩니다!" : "✨ 새 영상 아이디어가 스튜디오에 배포되었습니다!");
+        pickedVideo = null;
+        if (inputVideo) inputVideo.value = ""; if (videoNameEl) videoNameEl.textContent = "선택된 영상 없음";
+      }
+      addForm.reset();
+      if (addDlg && addDlg.open) addDlg.close();
+      renderAll();
+    });
+  }
+
+  if (catBar) {
+    $$(".ai-cat-btn", catBar).forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        state.category = btn.getAttribute("data-cat") || "all";
+        syncControls();
+        renderAll();
+      });
+    });
+  }
+  if (statusSelect) {
+    statusSelect.addEventListener("change", function () {
+      state.status = statusSelect.value || "all";
+      renderAll();
+    });
+  }
+  if (sortSelect) {
+    sortSelect.addEventListener("change", function () {
+      state.sort = sortSelect.value || "newest";
+      renderAll();
+    });
+  }
+  if (searchInput) {
+    searchInput.addEventListener("input", function () {
+      state.query = searchInput.value || "";
+      renderAll();
+    });
+  }
+  if (bookmarkFilterBtn) {
+    bookmarkFilterBtn.addEventListener("click", function () {
+      state.bookmarkedOnly = !state.bookmarkedOnly;
+      syncControls();
+      renderAll();
+    });
+  }
+
+  $$("[data-close='ai4DetailDialog'], [data-close='ai4AddDialog']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var d = document.getElementById(b.getAttribute("data-close"));
+      if (d && d.open) d.close();
+    });
+  });
+
+  renderAll();
+  ideaServerSync("ai4", function () { return customBrands; }, function (items) {
+    customBrands = items;
+    saveJson(STORAGE_CUSTOM, customBrands);
+    renderAll();
+  });
+})();
+
+/* ===== BAIOO AI Figure 스튜디오 (Video 복제) ===== */
+/* ===== BAIOO AI Figure 스튜디오 (영상 필터·등록) ===== */
+(function () {
+  "use strict";
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+
+  var STORAGE_CUSTOM = "baioo_ai5_custom_ideas_v1";
+  var STORAGE_LIKES = "baioo_ai5_likes_v1";
+
+  var CATEGORY_META = {
+    clip:    { label: "숏폼 클립",  emoji: "🎬", gradient: "linear-gradient(135deg, #F43F5E 0%, #E11D48 100%)" },
+    story:   { label: "스토리 영상", emoji: "📖", gradient: "linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%)" },
+    tutorial:{ label: "튜토리얼",   emoji: "🎓", gradient: "linear-gradient(135deg, #0EA5E9 0%, #3B82F6 100%)" },
+    lab:     { label: "실험실",     emoji: "💡", gradient: "linear-gradient(135deg, #F59E0B 0%, #EA580C 100%)" }
+  };
+
+  var STATUS_META = {
+    live:    { label: "✨ LIVE 확정",   cls: "live" },
+    beta:    { label: "🧪 DRAFT 시안",  cls: "beta" },
+    concept: { label: "📐 CONCEPT",     cls: "concept" }
+  };
+
+  var state = {
+    category: "all",
+    status: "all",
+    sort: "newest",
+    query: "",
+    bookmarkedOnly: false,
+    activeBrandId: null
+  };
+
+  function loadJson(key, fallback) {
+    try {
+      var raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  function saveJson(key, val) {
+    try {
+      localStorage.setItem(key, JSON.stringify(val));
+    } catch (e) {}
+  }
+
+  var customBrands = loadJson(STORAGE_CUSTOM, []);
+  var editingBrandId = null;
+  if (!Array.isArray(customBrands)) customBrands = [];
+  var likedMap = loadJson(STORAGE_LIKES, {});
+  if (!likedMap || typeof likedMap !== "object") likedMap = {};
+
+  function getAllBrands() {
+    return customBrands.slice();
+  }
+
+  function getLikeCount(item) {
+    return Number(item.baseLikes || 0) + (likedMap[item.id] ? 1 : 0);
+  }
+
+  var gridEl = $("#ai5IdeaGrid");
+  var searchInput = $("#ai5SearchInput");
+  var statusSelect = $("#ai5StatusSelect");
+  var sortSelect = $("#ai5SortSelect");
+  var catBar = $("#ai5CategoryBar");
+  var chipsEl = $("#ai5ActiveChips");
+  var countEl = $("#ai5ResultCount");
+  var statTotalEl = $("#ai5StatTotal");
+  var statLiveEl = $("#ai5StatLive");
+  var statLikesEl = $("#ai5StatLikes");
+  var bookmarkFilterBtn = $("#ai5FilterBookmarkedBtn");
+  var openAddBtn = $("#ai5OpenAddBtn");
+  var toastEl = $("#aiToast");
+  var toastTimer = null;
+
+  function showToast(msg) {
+    if (!toastEl) return;
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toastEl.classList.remove("show");
+    }, 2400);
+  }
+
+  function copyText(text, successMsg) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        showToast(successMsg || "✨ 클립보드에 복사되었습니다!");
+      }).catch(function () {
+        fallbackCopy(text, successMsg);
+      });
+    } else {
+      fallbackCopy(text, successMsg);
+    }
+  }
+
+  function fallbackCopy(text, successMsg) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.cssText = "position:fixed;left:-9999px;top:0;";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      showToast(successMsg || "✨ 클립보드에 복사되었습니다!");
+    } catch (e) {
+      showToast("복사에 실패했습니다.");
+    }
+  }
+
+
+  function updateStats() {
+    var all = getAllBrands();
+    var liveCount = 0;
+    var totalLikes = 0;
+    all.forEach(function (item) {
+      if (item.status === "live") liveCount += 1;
+      totalLikes += getLikeCount(item);
+    });
+    if (statTotalEl) statTotalEl.textContent = String(all.length);
+    if (statLiveEl) statLiveEl.textContent = String(liveCount);
+    if (statLikesEl) statLikesEl.textContent = String(totalLikes);
+  }
+
+  function syncControls() {
+    if (searchInput && searchInput.value !== state.query) searchInput.value = state.query;
+    if (statusSelect) statusSelect.value = state.status;
+    if (sortSelect) sortSelect.value = state.sort;
+    if (bookmarkFilterBtn) bookmarkFilterBtn.classList.toggle("active", state.bookmarkedOnly);
+    if (catBar) {
+      $$(".ai-cat-btn", catBar).forEach(function (b) {
+        b.classList.toggle("active", b.getAttribute("data-cat") === state.category);
+      });
+    }
+  }
+
+  function renderChips() {
+    if (!chipsEl) return;
+    chipsEl.textContent = "";
+
+    function addChip(label, onRemove) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "ai-chip";
+      btn.textContent = label + " ×";
+      btn.addEventListener("click", onRemove);
+      chipsEl.appendChild(btn);
+    }
+
+    if (state.category !== "all") {
+      var cMeta = CATEGORY_META[state.category];
+      addChip("카테고리: " + (cMeta ? cMeta.label : state.category), function () {
+        state.category = "all";
+        syncControls();
+        renderAll();
+      });
+    }
+    if (state.status !== "all") {
+      var sMeta = STATUS_META[state.status];
+      addChip("상태: " + (sMeta ? sMeta.label : state.status), function () {
+        state.status = "all";
+        syncControls();
+        renderAll();
+      });
+    }
+    if (state.bookmarkedOnly) {
+      addChip("♥ 관심 영상", function () {
+        state.bookmarkedOnly = false;
+        syncControls();
+        renderAll();
+      });
+    }
+    if (state.query.trim()) {
+      addChip("검색: \"" + state.query.trim() + "\"", function () {
+        state.query = "";
+        syncControls();
+        renderAll();
+      });
+    }
+  }
+
+  function filterAndSortBrands() {
+    var q = state.query.trim().toLowerCase();
+    var filtered = getAllBrands().filter(function (item) {
+      if (state.category !== "all" && item.category !== state.category) return false;
+      if (state.status !== "all" && item.status !== state.status) return false;
+      if (state.bookmarkedOnly && !likedMap[item.id]) return false;
+      if (q) {
+        var hay = [
+          item.title,
+          item.summary,
+          item.code,
+          (item.colors || []).join(" "),
+          (item.tags || []).join(" ")
+        ].join(" ").toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+
+    filtered.sort(function (a, b) {
+      if (state.sort === "popular") return getLikeCount(b) - getLikeCount(a);
+      if (state.sort === "title") return String(a.title).localeCompare(String(b.title), "ko");
+      return String(b.date || "").localeCompare(String(a.date || ""));
+    });
+
+    return filtered;
+  }
+
+  function createBrandCard(item) {
+    var card = document.createElement("article");
+    card.className = "ai-card";
+    card.tabIndex = 0;
+
+    card.addEventListener("mousemove", function (e) {
+      var rect = card.getBoundingClientRect();
+      card.style.setProperty("--mx", (e.clientX - rect.left) + "px");
+      card.style.setProperty("--my", (e.clientY - rect.top) + "px");
+    });
+
+    var sMeta = STATUS_META[item.status] || STATUS_META.live;
+    var cMeta = CATEGORY_META[item.category] || CATEGORY_META.clip;
+
+    var top = document.createElement("div");
+    top.className = "ai-card-top";
+    var pill = document.createElement("span");
+    pill.className = "ai-status-pill " + sMeta.cls;
+    pill.textContent = sMeta.label;
+    var ver = document.createElement("span");
+    ver.className = "ai-version-code";
+    ver.textContent = (item.code || "BRAND") + " · " + (item.version || "v1.0");
+    top.appendChild(pill);
+    top.appendChild(ver);
+
+    var visual = document.createElement("div");
+    visual.className = "ai-card-visual";
+    var videoUrl = item.video || "";
+    var photoUrl = item.photo || item.image || item.cover || ((item.photos && item.photos[0]) ? (item.photos[0].url || item.photos[0]) : "");
+    if (videoUrl) {
+      visual.style.background = item.gradient || cMeta.gradient;
+      var vd = document.createElement("video");
+      vd.controls = true;
+      vd.muted = true;
+      vd.loop = true;
+      baiooHoverVideo(vd, videoUrl);
+      visual.appendChild(vd);
+      var catLabel = document.createElement("span");
+      catLabel.className = "ai-card-cat-label";
+      catLabel.textContent = cMeta.label;
+      visual.appendChild(catLabel);
+      var muteBadge = document.createElement("span");
+      muteBadge.className = "ai-card-cat-label";
+      muteBadge.textContent = "🖱올리면 재생·🔇음소거";
+      visual.appendChild(muteBadge);
+    } else if (photoUrl) {
+      visual.style.background = item.gradient || cMeta.gradient;
+      var photo = document.createElement("img");
+      photo.src = photoUrl;
+      photo.alt = item.title || "";
+      photo.loading = "lazy";
+      visual.appendChild(photo);
+      var catLabel2 = document.createElement("span");
+      catLabel2.className = "ai-card-cat-label";
+      catLabel2.textContent = cMeta.label;
+      visual.appendChild(catLabel2);
+    } else {
+      visual.style.display = "none";
+    }
+
+    var title = document.createElement("h3");
+    title.className = "ai-card-title";
+    title.textContent = item.title;
+
+    var desc = document.createElement("p");
+    desc.className = "ai-card-desc";
+    desc.textContent = item.summary;
+
+
+    var tagList = document.createElement("div");
+    tagList.className = "ai-tag-list";
+    (item.tags || []).forEach(function (t) {
+      var tg = document.createElement("span");
+      tg.className = "ai-tag-item";
+      tg.textContent = "#" + t;
+      tagList.appendChild(tg);
+    });
+
+    var foot = document.createElement("div");
+    foot.className = "ai-card-foot";
+
+    var likeBtn = document.createElement("button");
+    likeBtn.type = "button";
+    var isLiked = Boolean(likedMap[item.id]);
+    likeBtn.className = "ai-like-btn" + (isLiked ? " liked" : "");
+    likeBtn.textContent = (isLiked ? "♥ " : "♡ ") + getLikeCount(item);
+    likeBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (likedMap[item.id]) {
+        delete likedMap[item.id];
+        showToast("관심 영상에서 해제했습니다.");
+      } else {
+        likedMap[item.id] = true;
+        showToast("♥ 관심 영상으로 저장했습니다!");
+      }
+      saveJson(STORAGE_LIKES, likedMap);
+      renderAll();
+    });
+
+    var actions = document.createElement("div");
+    actions.className = "ai-card-actions";
+
+    var copyBtn = document.createElement("button");
+    copyBtn.type = "button";
+    copyBtn.className = "ai-action-btn";
+    copyBtn.textContent = "📋 영상킷 복사";
+    copyBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      copyText(item.prompt || item.summary, "✨ [" + item.title + "] 영상 키트가 복사되었습니다!");
+    });
+
+    var detailBtn = document.createElement("button");
+    detailBtn.type = "button";
+    detailBtn.className = "ai-action-btn";
+    detailBtn.textContent = "상세 열기 →";
+    detailBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      openDetailModal(item.id);
+    });
+
+    actions.appendChild(copyBtn);
+    actions.appendChild(detailBtn);
+    if (String(item.id || "").indexOf("baioo-ai5-") === 0) {
+      var ai5EdB = document.createElement("button");
+      ai5EdB.type = "button";
+      ai5EdB.className = "ai-action-btn admin-only";
+      ai5EdB.textContent = "✏️ 수정";
+      ai5EdB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        editingBrandId = item.id;
+        if (inputTitle) inputTitle.value = item.title || "";
+        if (inputCategory) inputCategory.value = item.category || "clip";
+        if (inputStatus) inputStatus.value = item.status || "live";
+        if (inputTags) inputTags.value = (item.tags || []).join(", ");
+        if (inputSummary) inputSummary.value = item.summary || "";
+        if (inputPrompt) inputPrompt.value = item.prompt || "";
+        if (addError) addError.textContent = "";
+        if (addDlg && !addDlg.open) addDlg.showModal();
+        if (inputTitle) inputTitle.focus();
+      });
+      var ai5DelB = document.createElement("button");
+      ai5DelB.type = "button";
+      ai5DelB.className = "ai-action-btn admin-only";
+      ai5DelB.textContent = "🗑️ 삭제";
+      ai5DelB.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (!window.confirm("이 아이디어를 삭제할까요?")) return;
+        customBrands = customBrands.filter(function (c) { return c.id !== item.id; });
+        saveJson(STORAGE_CUSTOM, customBrands);
+        ideaServerDelete("ai5", item.id);
+        showToast("삭제되었습니다!");
+        renderAll();
+      });
+      actions.appendChild(ai5EdB);
+      actions.appendChild(ai5DelB);
+    }
+    foot.appendChild(likeBtn);
+    foot.appendChild(actions);
+
+    card.appendChild(top);
+    card.appendChild(visual);
+    card.appendChild(title);
+    card.appendChild(desc);
+    card.appendChild(tagList);
+    card.appendChild(foot);
+
+    card.addEventListener("click", function () { openDetailModal(item.id); });
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openDetailModal(item.id);
+      }
+    });
+
+    return card;
+  }
+
+  function renderAll() {
+    if (!gridEl) return;
+    updateStats();
+    renderChips();
+
+    var list = filterAndSortBrands();
+    if (countEl) countEl.textContent = "총 " + list.length + "개의 영상 아이디어";
+
+    gridEl.textContent = "";
+    if (!list.length) {
+      var empty = document.createElement("div");
+      empty.className = "ai-empty-state";
+      var p = document.createElement("p");
+      p.textContent = "조건에 맞는 영상 프로젝트가 없습니다.";
+      var resetBtn = document.createElement("button");
+      resetBtn.type = "button";
+      resetBtn.className = "ai-btn-primary";
+      resetBtn.textContent = "필터 전체 초기화";
+      resetBtn.addEventListener("click", function () {
+        state.category = "all";
+        state.status = "all";
+        state.query = "";
+        state.bookmarkedOnly = false;
+        syncControls();
+        renderAll();
+      });
+      empty.appendChild(p);
+      empty.appendChild(resetBtn);
+      gridEl.appendChild(empty);
+      return;
+    }
+
+    baiooCardPage(gridEl, state, renderAll, list).forEach(function (item) {
+      gridEl.appendChild(createBrandCard(item));
+    });
+  }
+
+  var detailDlg = $("#ai5DetailDialog");
+  var detailStatus = $("#ai5DetailStatus");
+  var detailCode = $("#ai5DetailCode");
+  var detailDate = $("#ai5DetailDate");
+  var detailTitle = $("#ai5DetailTitle");
+  var detailSummary = $("#ai5DetailSummary");
+  var detailTags = $("#ai5DetailTags");
+  var detailPrompt = $("#ai5DetailPrompt");
+  var detailPhoto = $("#ai5DetailPhoto");
+  var copyKitBtn = $("#ai5CopyKitBtn");
+  var shareLinkBtn = $("#ai5ShareLinkBtn");
+  var deleteCustomBtn = $("#ai5DeleteCustomBtn");
+
+  function openDetailModal(id) {
+    var target = null;
+    getAllBrands().forEach(function (x) { if (x.id === id) target = x; });
+    if (!target || !detailDlg) return;
+
+    state.activeBrandId = id;
+    var sMeta = STATUS_META[target.status] || STATUS_META.live;
+    if (detailStatus) {
+      detailStatus.className = "ai-status-pill " + sMeta.cls;
+      detailStatus.textContent = sMeta.label;
+    }
+    if (detailCode) detailCode.textContent = (target.code || "BRAND") + " · " + (target.version || "v1.0");
+    if (detailDate) detailDate.textContent = "🗓 " + (target.date || "2026-10-19");
+    if (detailTitle) detailTitle.textContent = target.title;
+    if (detailSummary) detailSummary.textContent = target.summary;
+    if (detailTags) {
+      detailTags.textContent = "";
+      (target.tags || []).forEach(function (t) {
+        var tg = document.createElement("span");
+        tg.className = "ai-tag-item";
+        tg.textContent = "#" + t;
+        detailTags.appendChild(tg);
+      });
+    }
+    if (detailPrompt) detailPrompt.textContent = target.prompt || target.summary;
+    if (detailPhoto) {
+      detailPhoto.textContent = "";
+      var videoUrl = target.video || "";
+      var photoUrl = target.photo || target.image || target.cover || ((target.photos && target.photos[0]) ? (target.photos[0].url || target.photos[0]) : "");
+      if (videoUrl) {
+        var vd2 = document.createElement("video");
+        vd2.src = videoUrl;
+        vd2.controls = true;
+        vd2.preload = "metadata";
+        detailPhoto.appendChild(vd2);
+        detailPhoto.hidden = false;
+      } else if (photoUrl) {
+        var img = document.createElement("img");
+        img.src = photoUrl;
+        img.alt = target.title || "";
+        img.loading = "lazy";
+        detailPhoto.appendChild(img);
+        detailPhoto.hidden = false;
+      } else {
+        detailPhoto.hidden = true;
+      }
+    }
+    if (deleteCustomBtn) {
+      var isCustom = customBrands.some(function (c) { return c.id === id; });
+      deleteCustomBtn.hidden = !isCustom;
+    }
+    if (!detailDlg.open) detailDlg.showModal();
+  }
+
+  if (copyKitBtn) {
+    copyKitBtn.addEventListener("click", function () {
+      var target = null;
+      getAllBrands().forEach(function (x) { if (x.id === state.activeBrandId) target = x; });
+      if (!target) return;
+      copyText(target.prompt || target.summary, "✨ 영상 키트가 클립보드에 복사되었습니다!");
+    });
+  }
+
+  if (shareLinkBtn) {
+    shareLinkBtn.addEventListener("click", function () {
+      var target = null;
+      getAllBrands().forEach(function (x) { if (x.id === state.activeBrandId) target = x; });
+      var shareText = target
+        ? "[BAIOO Video] " + target.title + " - " + location.origin + location.pathname + "#branding"
+        : location.href;
+      copyText(shareText, "🔗 영상 공유 링크가 복사되었습니다!");
+    });
+  }
+
+  if (deleteCustomBtn) {
+    deleteCustomBtn.addEventListener("click", function () {
+      if (!state.activeBrandId) return;
+      customBrands = customBrands.filter(function (c) { return c.id !== state.activeBrandId; });
+      saveJson(STORAGE_CUSTOM, customBrands);
+      ideaServerDelete("ai5", state.activeBrandId);
+      if (detailDlg && detailDlg.open) detailDlg.close();
+      showToast("영상 아이디어가 삭제되었습니다.");
+      renderAll();
+    });
+  }
+
+  var addDlg = $("#ai5AddDialog");
+  var addForm = $("#ai5AddForm");
+  var inputTitle = $("#ai5InputTitle");
+  var inputCategory = $("#ai5InputCategory");
+  var inputStatus = $("#ai5InputStatus");
+  var inputTags = $("#ai5InputTags");
+  var inputSummary = $("#ai5InputSummary");
+  var inputPrompt = $("#ai5InputPrompt");
+  var addError = $("#ai5AddError");
+  var inputVideo = $("#ai5InputVideo");
+  var videoNameEl = $("#ai5VideoName");
+  var pickedVideo = null;
+  var inputPhoto = $("#ai5InputPhoto");
+  var photoNameEl = $("#ai5PhotoName");
+  var pickedPhoto = null;
+  if (inputPhoto) {
+    inputPhoto.addEventListener("change", function () {
+      pickedPhoto = null;
+      var f = inputPhoto.files && inputPhoto.files[0];
+      inputPhoto.value = "";
+      if (!f) { if (photoNameEl) photoNameEl.textContent = "선택된 사진 없음"; return; }
+      if (f.size > 8 * 1024 * 1024) { if (addError) addError.textContent = "사진은 8MB 이하만 올릴 수 있습니다."; if (photoNameEl) photoNameEl.textContent = "선택된 사진 없음"; return; }
+      if (addError) addError.textContent = "";
+      var rd = new FileReader();
+      rd.onload = function () { pickedPhoto = String(rd.result || ""); if (photoNameEl) photoNameEl.textContent = f.name; };
+      rd.onerror = function () { if (addError) addError.textContent = "사진을 읽지 못했습니다."; };
+      rd.readAsDataURL(f);
+    });
+  }
+  if (inputVideo) {
+    inputVideo.addEventListener("change", function () {
+      pickedVideo = null;
+      var f = inputVideo.files && inputVideo.files[0];
+      inputVideo.value = "";
+      if (!f) { if (videoNameEl) videoNameEl.textContent = "선택된 영상 없음"; return; }
+      if (f.size > 20 * 1024 * 1024) { if (addError) addError.textContent = "영상은 20MB 이하만 올릴 수 있습니다."; if (videoNameEl) videoNameEl.textContent = "선택된 영상 없음"; return; }
+      if (addError) addError.textContent = "";
+      var rd = new FileReader();
+      rd.onload = function () { pickedVideo = String(rd.result || ""); if (videoNameEl) videoNameEl.textContent = f.name; };
+      rd.onerror = function () { if (addError) addError.textContent = "영상을 읽지 못했습니다."; };
+      rd.readAsDataURL(f);
+    });
+  }
+
+  if (openAddBtn && addDlg) {
+    openAddBtn.addEventListener("click", function () {
+      editingBrandId = null;
+      if (addForm) addForm.reset();
+      pickedVideo = null; if (videoNameEl) videoNameEl.textContent = "선택된 영상 없음"; if (inputVideo) inputVideo.value = ""; pickedPhoto = null; if (photoNameEl) photoNameEl.textContent = "선택된 사진 없음"; if (inputPhoto) inputPhoto.value = "";
+      if (addError) addError.textContent = "";
+      if (!addDlg.open) addDlg.showModal();
+      if (inputTitle) inputTitle.focus();
+    });
+  }
+
+  if (addForm) {
+    addForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var titleVal = (inputTitle && inputTitle.value || "").trim();
+      var summaryVal = (inputSummary && inputSummary.value || "").trim();
+      if (!titleVal) {
+        if (addError) addError.textContent = "영상명 / 프로젝트 제목을 입력해 주세요.";
+        if (inputTitle) inputTitle.focus();
+        return;
+      }
+      if (!summaryVal) {
+        if (addError) addError.textContent = "영상 기획 의도 및 요약을 입력해 주세요.";
+        if (inputSummary) inputSummary.focus();
+        return;
+      }
+
+      var catVal = (inputCategory && inputCategory.value) || "clip";
+      var cMeta = CATEGORY_META[catVal] || CATEGORY_META.clip;
+
+
+      var rawTags = (inputTags && inputTags.value || "").split(",");
+      var cleanTags = [];
+      rawTags.forEach(function (t) {
+        var trimmed = t.trim().replace(/^#/, "");
+        if (trimmed) cleanTags.push(trimmed);
+      });
+      if (!cleanTags.length) cleanTags = ["BAIOO", cMeta.label];
+
+      if (editingBrandId) {
+        var bTarget = null;
+        customBrands.forEach(function (x) { if (x.id === editingBrandId) bTarget = x; });
+        if (bTarget) {
+          bTarget.title = titleVal;
+          bTarget.category = catVal;
+          bTarget.status = (inputStatus && inputStatus.value) || bTarget.status;
+          bTarget.colors = [];
+          bTarget.tags = cleanTags;
+          bTarget.summary = summaryVal;
+          bTarget.prompt = (inputPrompt && inputPrompt.value.trim()) || ("[" + titleVal + "]\n- 설명: " + summaryVal);
+          bTarget.emoji = cMeta.emoji;
+          bTarget.gradient = cMeta.gradient;
+          if (pickedPhoto) bTarget.photoData = pickedPhoto;
+          if (pickedVideo) bTarget.videoData = pickedVideo;
+          var upEdit = ideaServerUpsert("ai5", bTarget);
+          delete bTarget.photoData; delete bTarget.videoData;
+          saveJson(STORAGE_CUSTOM, customBrands);
+          if (upEdit && upEdit.then) { upEdit.then(function () { ideaServerSync("ai5", function () { return customBrands; }, function (items) { customBrands = items; saveJson(STORAGE_CUSTOM, customBrands); renderAll(); }); }).catch(function () {}); }
+          showToast("✨ 수정되었습니다!");
+          pickedVideo = null;
+        }
+        editingBrandId = null;
+      } else {
+        var newBrand = {
+          id: "baioo-ai5-" + Date.now(),
+          code: "VIDEO-" + String(getAllBrands().length + 1).padStart(3, "0"),
+          version: "v1.0",
+          status: (inputStatus && inputStatus.value) || "live",
+          category: catVal,
+          emoji: cMeta.emoji,
+          gradient: cMeta.gradient,
+          title: titleVal,
+          colors: [],
+          summary: summaryVal,
+          tags: cleanTags,
+          date: new Date().toISOString().slice(0, 10),
+          baseLikes: 1,
+          prompt: (inputPrompt && inputPrompt.value.trim()) || ("[" + titleVal + "]\n- 설명: " + summaryVal)
+        };
+
+        if (pickedPhoto) newBrand.photoData = pickedPhoto;
+        if (pickedVideo) newBrand.videoData = pickedVideo;
+        customBrands.unshift(newBrand);
+        var upNew = ideaServerUpsert("ai5", newBrand);
+        delete newBrand.photoData; delete newBrand.videoData;
+        saveJson(STORAGE_CUSTOM, customBrands);
+        if (upNew && upNew.then) { upNew.then(function () { ideaServerSync("ai5", function () { return customBrands; }, function (items) { customBrands = items; saveJson(STORAGE_CUSTOM, customBrands); renderAll(); }); }).catch(function () {}); }
+        showToast(pickedVideo ? "✨ 영상 업로드 중… 곧 재생됩니다!" : "✨ 새 영상 아이디어가 스튜디오에 배포되었습니다!");
+        pickedVideo = null;
+        if (inputVideo) inputVideo.value = ""; if (videoNameEl) videoNameEl.textContent = "선택된 영상 없음";
+      }
+      addForm.reset();
+      if (addDlg && addDlg.open) addDlg.close();
+      renderAll();
+    });
+  }
+
+  if (catBar) {
+    $$(".ai-cat-btn", catBar).forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        state.category = btn.getAttribute("data-cat") || "all";
+        syncControls();
+        renderAll();
+      });
+    });
+  }
+  if (statusSelect) {
+    statusSelect.addEventListener("change", function () {
+      state.status = statusSelect.value || "all";
+      renderAll();
+    });
+  }
+  if (sortSelect) {
+    sortSelect.addEventListener("change", function () {
+      state.sort = sortSelect.value || "newest";
+      renderAll();
+    });
+  }
+  if (searchInput) {
+    searchInput.addEventListener("input", function () {
+      state.query = searchInput.value || "";
+      renderAll();
+    });
+  }
+  if (bookmarkFilterBtn) {
+    bookmarkFilterBtn.addEventListener("click", function () {
+      state.bookmarkedOnly = !state.bookmarkedOnly;
+      syncControls();
+      renderAll();
+    });
+  }
+
+  $$("[data-close='ai5DetailDialog'], [data-close='ai5AddDialog']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var d = document.getElementById(b.getAttribute("data-close"));
+      if (d && d.open) d.close();
+    });
+  });
+
+  renderAll();
+  ideaServerSync("ai5", function () { return customBrands; }, function (items) {
+    customBrands = items;
+    saveJson(STORAGE_CUSTOM, customBrands);
+    renderAll();
+  });
+})();
 
 /* ===== BAIOO Failed AI Creation 스튜디오 (Video 복제) ===== */
 /* ===== BAIOO Failed AI Creation 스튜디오 (영상 필터·등록) ===== */
@@ -13143,7 +15883,7 @@ function openIdeaForm(ctx) {
   });
 })();
 /* ===== AI Video 대문명 관리자 수정 (네비+섹션 동기화+localStorage) ===== */(function () {
-  [["aiGate2", "aiGate2Link", "aiGate2Edit", "baioo_aiGate2NameV3"], ["aiGate3", "aiGate3Link", "aiGate3Edit", "baioo_aiGate3NameV1"]].forEach(function (c) {
+  [["aiGate2", "aiGate2Link", "aiGate2Edit", "baioo_aiGate2NameV3"], ["aiGate3", "aiGate3Link", "aiGate3Edit", "baioo_aiGate3NameV1"], ["aiGate4", "aiGate4Link", "aiGate4Edit", "baioo_aiGate4NameV1"], ["aiGate5", "aiGate5Link", "aiGate5Edit", "baioo_aiGate5NameV1"]].forEach(function (c) {
     var gate = document.getElementById(c[0]);
     var link = document.getElementById(c[1]);
     var btn = document.getElementById(c[2]);
