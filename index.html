@@ -4921,7 +4921,7 @@
   }
   function route() {
     var h = (location.hash || "#home").replace("#", "") || "home";
-    if (h === "aiGate2" || h === "aiGate3") {
+    if (h === "aiGate2" || h === "aiGate3" || h === "aiGate4" || h === "aiGate5") {
       showView("ai");
       $$(".nav-links a").forEach(function (a) {
         var href = a.getAttribute("href");
