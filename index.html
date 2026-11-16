@@ -2571,8 +2571,8 @@
             <li><a href="#ai" id="aiGate1Link">AI Nexus</a></li>
             <li><a href="#aiGate2" id="aiGate2Link">Created AI Video</a> <button type="button" class="gate-edit admin-only" id="aiGate2Edit" aria-label="Created AI Video 이름 수정">✏️</button></li>
             <li><a href="#aiGate3" id="aiGate3Link">Failed AI Creation</a> <button type="button" class="gate-edit admin-only" id="aiGate3Edit" aria-label="Failed AI Creation 이름 수정">✏️</button></li>
-            <li><a href="#aiGate4" id="aiGate4Link">AI Pictures</a> <button type="button" class="gate-edit admin-only" id="aiGate4Edit" aria-label="AI Pictures 이름 수정">✏️</button></li>
-            <li><a href="#aiGate5" id="aiGate5Link">AI Figure</a> <button type="button" class="gate-edit admin-only" id="aiGate5Edit" aria-label="AI Figure 이름 수정">✏️</button></li>
+            <li><a href="#aiPictures" id="aiGate4Link" data-nav="aiPictures">AI Pictures</a> <button type="button" class="gate-edit admin-only" id="aiGate4Edit" aria-label="AI Pictures 이름 수정">✏️</button></li>
+            <li><a href="#aiFigure" id="aiGate5Link" data-nav="aiFigure">AI Figure</a> <button type="button" class="gate-edit admin-only" id="aiGate5Edit" aria-label="AI Figure 이름 수정">✏️</button></li>
           </ul>
         </li>
         <li><a href="#repair" data-nav="repair">AI Computer</a></li>
@@ -2859,6 +2859,23 @@
 
     <div class="ai-idea-grid" id="ai3IdeaGrid"></div>
 
+
+
+  </div>
+</section>
+
+<section id="aiPictures" class="parallax-section page-view" data-view="aiPictures" hidden>
+  <div class="overlay"></div>
+  <div class="container">
+    <p class="visit-counter">홈페이지 방문자(Web visitor): <b data-visit-count>000000</b></p>
+    <a href="#home" class="back-btn">← 홈으로</a>
+
+    <div class="sec-head">
+      <span class="tag ai-tag">AI PICTURES</span>
+      <h2>AI Pictures</h2>
+      <p class="ai-lead-sub">AI 사진·피규어 영상 아이디어를 보고 프롬프트를 가져가세요</p>
+    </div>
+
     <div class="br-gate" id="aiGate4">AI Pictures</div>
     <div class="pet-diary-subhead">
       <h3>📝 방문자 게시판</h3>
@@ -2928,6 +2945,21 @@
     </div>
 
     <div class="ai-idea-grid" id="ai4IdeaGrid"></div>
+
+  </div>
+</section>
+
+<section id="aiFigure" class="parallax-section page-view" data-view="aiFigure" hidden>
+  <div class="overlay"></div>
+  <div class="container">
+    <p class="visit-counter">홈페이지 방문자(Web visitor): <b data-visit-count>000000</b></p>
+    <a href="#home" class="back-btn">← 홈으로</a>
+
+    <div class="sec-head">
+      <span class="tag ai-tag">AI FIGURE</span>
+      <h2>AI Figure</h2>
+      <p class="ai-lead-sub">AI 피규어 영상 아이디어를 보고 프롬프트를 가져가세요</p>
+    </div>
 
     <div class="br-gate" id="aiGate5">AI Figure</div>
     <div class="pet-diary-subhead">
@@ -4921,7 +4953,7 @@
   }
   function route() {
     var h = (location.hash || "#home").replace("#", "") || "home";
-    if (h === "aiGate2" || h === "aiGate3" || h === "aiGate4" || h === "aiGate5") {
+    if (h === "aiGate2" || h === "aiGate3") {
       showView("ai");
       $$(".nav-links a").forEach(function (a) {
         var href = a.getAttribute("href");
@@ -4929,6 +4961,12 @@
       });
       var g = document.getElementById(h);
       if (g) { try { g.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) { g.scrollIntoView(); } }
+      return;
+    }
+    if (h === "aiGate4" || h === "aiGate5") {
+      showView(h === "aiGate4" ? "aiPictures" : "aiFigure");
+      var g2 = document.getElementById(h);
+      if (g2) { try { g2.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) { g2.scrollIntoView(); } }
       return;
     }
     showView(h);
