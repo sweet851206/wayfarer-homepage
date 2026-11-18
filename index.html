@@ -2587,6 +2587,7 @@
         <li class="has-sub"><a href="#repair" data-nav="repair">AI Computer</a>
           <ul class="nav-sub">
             <li><a href="#freeRelease" data-nav="freeRelease">Free Release</a></li>
+            <li><a href="#freeReleaseGames" data-nav="freeReleaseGames">Free Release Games</a></li>
           </ul>
         </li>
         <li class="nav-div" aria-hidden="true"></li>
@@ -3351,6 +3352,44 @@
       <div class="dlg-actions">
         <button type="button" class="btn btn-danger admin-only" id="frInlineDelete">삭제</button>
         <button type="button" class="btn btn-ghost" id="frInlineClose">닫기</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="freeReleaseGames" class="parallax-section page-view" data-view="freeReleaseGames" hidden>
+  <div class="overlay"></div>
+  <div class="container">
+    <p class="visit-counter">홈페이지 방문자(Web visitor): <b data-visit-count>000000</b></p>
+    <a href="#repair" class="back-btn">← AI Computer</a>
+
+    <div class="sec-head">
+      <span class="tag repair">FREE RELEASE GAMES</span>
+      <h2>Free Release Games</h2>
+      <p class="ai-lead-sub">직접 만든 무료 게임을 그대로 배포합니다. 누구나 다운로드해서 플레이할 수 있고, 등록은 관리자만 가능합니다.</p>
+    </div>
+
+    <div class="pet-diary-subhead">
+      <h3>🎮 게임 배포 목록</h3>
+      <button type="button" class="section-add-btn admin-only" id="fgAddBtn" style="margin:0;">＋ 새 게임 등록</button>
+    </div>
+    <div class="board-table-wrap">
+      <table class="board-table">
+        <thead><tr><th style="width:48px">No</th><th>제목</th><th style="width:210px">등록일</th></tr></thead>
+        <tbody id="fgBoardBody"></tbody>
+      </table>
+      <div class="ai-page-bar" id="fgPageBar"></div>
+    </div>
+    <div class="board-view-panel" id="fgViewPanel" hidden>
+      <button type="button" class="x-close" id="fgViewClose" aria-label="닫기">×</button>
+      <h3 class="dlg-title" id="fgInlineTitle"></h3>
+      <div class="post-date" id="fgInlineDate"></div>
+      <div class="view-photos" id="fgInlinePhotos"></div>
+      <div id="fgInlineContent"></div>
+      <div class="file-list" id="fgInlineFiles" hidden></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn btn-danger admin-only" id="fgInlineDelete">삭제</button>
+        <button type="button" class="btn btn-ghost" id="fgInlineClose">닫기</button>
       </div>
     </div>
   </div>
@@ -4942,10 +4981,10 @@
       if (g2) { try { g2.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) { g2.scrollIntoView(); } }
       return;
     }
-    if (h === "freeRelease") {
-      showView("freeRelease");
+    if (h === "freeRelease" || h === "freeReleaseGames") {
+      showView(h);
       $$(".nav-links a").forEach(function (a) {
-        a.classList.toggle("active", a.dataset.nav === "freeRelease" || a.dataset.nav === "repair");
+        a.classList.toggle("active", a.dataset.nav === h || a.dataset.nav === "repair");
       });
       return;
     }
@@ -6783,7 +6822,8 @@ fd.append("pw", pwValtravel);
         var pwc = $("#rpPw"); if (pwc) pwc.value = "";
         var _dt2 = $("#rpFormDialog .dlg-title"); if (_dt2) _dt2.textContent = "새 Repair 글";
         loadRp();
-        return loadFr();
+        loadFr();
+        return loadFg();
       })
       .catch(function (err) { rpErrorEl.textContent = "실패: " + ((err && err.message) || err); })
       .then(function () { rpSubmitBtn.disabled = false; rpSubmitBtn.textContent = rpEditingId ? "저장" : "등록"; });
@@ -8631,6 +8671,192 @@ fd.append("pw", pwValbunny);
   }
 
   loadFr();
+
+  /* ---------- Free Release Games 게시판 (AI Computer 하위 · 관리자 배포 목록) ---------- */
+  var fgBody = $("#fgBoardBody");
+  var fgPageBar = $("#fgPageBar");
+  var fgPosts = [];
+  var fgPage = 1;
+  var FG_PAGE_SIZE = 10;
+  var fgViewingId = null;
+
+  function fgPages(total) {
+    if (!fgPageBar) return;
+    fgPageBar.textContent = "";
+    var maxPage = Math.max(1, Math.ceil(total / FG_PAGE_SIZE));
+    if (fgPage > maxPage) fgPage = maxPage;
+    if (fgPage < 1) fgPage = 1;
+    function mk(label, page, active, disabled) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "ai-cat-btn" + (active ? " active" : "");
+      b.textContent = label;
+      if (disabled) b.disabled = true;
+      else b.addEventListener("click", function () { fgPage = page; fgRender(); });
+      fgPageBar.appendChild(b);
+    }
+    mk("‹ 이전", fgPage - 1, false, fgPage === 1);
+    var start = Math.max(1, fgPage - 2);
+    var end = Math.min(maxPage, start + 4);
+    start = Math.max(1, end - 4);
+    for (var p = start; p <= end; p++) mk(String(p), p, p === fgPage, false);
+    mk("› 다음", fgPage + 1, false, fgPage === maxPage);
+  }
+
+  function fgRow(p, i) {
+    var tr = document.createElement("tr");
+    tr.setAttribute("data-id", p.id);
+    var no = document.createElement("td");
+    no.textContent = String(i);
+    var ti = document.createElement("td");
+    ti.className = "board-title";
+    ti.textContent = p.title || "(제목 없음)";
+    var vw = document.createElement("span");
+    vw.className = "board-views";
+    vw.textContent = " | 조회수: " + String((+p.views) || 0);
+    ti.appendChild(vw);
+    var dt = document.createElement("td");
+    dt.appendChild(document.createTextNode(postDate(p) || "—"));
+    var del = document.createElement("button");
+    del.type = "button";
+    del.className = "row-del admin-only";
+    del.textContent = "🗑️";
+    del.setAttribute("data-fgdel", p.id);
+    del.setAttribute("aria-label", "삭제");
+    dt.appendChild(del);
+    tr.appendChild(no);
+    tr.appendChild(ti);
+    tr.appendChild(dt);
+    return tr;
+  }
+
+  function fgRender() {
+    if (!fgBody) return;
+    var maxPage = Math.max(1, Math.ceil(fgPosts.length / FG_PAGE_SIZE));
+    if (fgPage > maxPage) fgPage = maxPage;
+    if (fgPage < 1) fgPage = 1;
+    fgBody.textContent = "";
+    if (!fgPosts.length) {
+      var tr = document.createElement("tr");
+      var td = document.createElement("td");
+      td.colSpan = 3;
+      td.className = "board-empty";
+      td.style.cssText = "text-align:center;color:var(--muted)";
+      td.textContent = "아직 등록된 게임이 없습니다.";
+      tr.appendChild(td);
+      fgBody.appendChild(tr);
+      fgPages(0);
+      return;
+    }
+    var startIdx = (fgPage - 1) * FG_PAGE_SIZE;
+    fgPosts.slice(startIdx, startIdx + FG_PAGE_SIZE).forEach(function (p, i) {
+      fgBody.appendChild(fgRow(p, fgPosts.length - (startIdx + i)));
+    });
+    fgPages(fgPosts.length);
+  }
+
+  function loadFg() {
+    return apiList().then(function (posts) {
+      fgPosts = posts.filter(function (p) { return p.category === "free-games"; });
+      fgPosts.sort(function (a, b) { return ((b.createdAt || 0) > (a.createdAt || 0)) ? 1 : (((b.createdAt || 0) < (a.createdAt || 0)) ? -1 : 0); });
+      fgRender();
+    }).catch(function () { fgPosts = []; fgRender(); });
+  }
+
+  function fgOpenView(id) {
+    var p = null;
+    fgPosts.forEach(function (x) { if (String(x.id) === String(id)) p = x; });
+    if (!p) return;
+    fgViewingId = p.id;
+    fetch("/api?action=view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: p.id }) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (j && j.ok) {
+          p.views = j.views;
+          var cell = fgBody.querySelector('tr[data-id="' + p.id + '"] .board-views');
+          if (cell) cell.textContent = " | 조회수: " + j.views;
+        }
+      }).catch(function () {});
+    var panel = $("#fgViewPanel");
+    var t = $("#fgInlineTitle"), d = $("#fgInlineDate"), ph = $("#fgInlinePhotos"), c = $("#fgInlineContent"), fl = $("#fgInlineFiles");
+    if (t) t.textContent = p.title || "(제목 없음)";
+    if (d) d.textContent = "🗓 " + (postDate(p) || "날짜 미정");
+    if (ph) {
+      ph.textContent = "";
+      (p.files || []).filter(isImageFile).forEach(function (f) {
+        var im = document.createElement("img");
+        im.src = f.url;
+        im.alt = f.originalName || f.name;
+        ph.appendChild(im);
+      });
+      (p.files || []).filter(isVideoFile).forEach(function (f) {
+        var vd = document.createElement("video");
+        vd.src = f.url;
+        vd.controls = true;
+        vd.preload = "metadata";
+        ph.appendChild(vd);
+      });
+    }
+    if (c) c.textContent = p.content || "(내용 없음)";
+    if (fl) {
+      fl.textContent = "";
+      fl.hidden = !(p.files && p.files.length);
+      if (p.files && p.files.length) fl.appendChild(fileLinks(p.files, false));
+    }
+    if (panel) {
+      panel.hidden = false;
+      if (panel.scrollIntoView) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }
+
+  if (fgBody) {
+    fgBody.addEventListener("click", function (e) {
+      var delBtn = e.target.closest("[data-fgdel]");
+      if (delBtn) {
+        e.stopPropagation();
+        var did = delBtn.getAttribute("data-fgdel");
+        if (!window.confirm("이 게임 배포를 삭제할까요?")) return;
+        fetch("/api/" + encodeURIComponent(did), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: did }) })
+          .then(function (res) { return res.json(); })
+          .then(function () { var panel = $("#fgViewPanel"); if (panel) panel.hidden = true; return loadFg(); })
+          .catch(function (err) { window.alert("삭제 실패: " + ((err && err.message) || err)); });
+        return;
+      }
+      var tr = e.target.closest("tr[data-id]");
+      if (!tr) return;
+      fgOpenView(tr.getAttribute("data-id"));
+    });
+  }
+
+  var fgViewClose = $("#fgViewClose");
+  if (fgViewClose) fgViewClose.addEventListener("click", function () { var panel = $("#fgViewPanel"); if (panel) panel.hidden = true; });
+  var fgInlineClose = $("#fgInlineClose");
+  if (fgInlineClose) fgInlineClose.addEventListener("click", function () { var panel = $("#fgViewPanel"); if (panel) panel.hidden = true; });
+  var fgInlineDelete = $("#fgInlineDelete");
+  if (fgInlineDelete) fgInlineDelete.addEventListener("click", function () {
+    if (!fgViewingId) return;
+    var btn = fgBody.querySelector('[data-fgdel="' + fgViewingId + '"]');
+    if (btn) btn.click();
+  });
+
+  var fgAddBtn = $("#fgAddBtn");
+  if (fgAddBtn) {
+    fgAddBtn.addEventListener("click", function () {
+      rpEditingId = null;
+      rpFormCategory = "free-games";
+      var pwc = $("#rpPw"); if (pwc) pwc.value = "";
+      rpForm.reset();
+      rpPicked = [];
+      renderRpPreview();
+      rpErrorEl.textContent = "";
+      var _gt = $("#rpFormDialog .dlg-title"); if (_gt) _gt.textContent = "새 Free Release Games 배포";
+      rpSubmitBtn.textContent = "등록";
+      openDlg(rpFormDlg);
+      rpTitleInput.focus();
+    });
+  }
+
+  loadFg();
 
   loadBunny();
 })();
